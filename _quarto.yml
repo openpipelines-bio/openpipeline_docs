@@ -3,12 +3,17 @@ project:
   output-dir: _site
   preview:
     port: 4200
+  # Draft site: ship a crawler-blocking robots.txt into the build output.
+  resources:
+    - robots.txt
 
 website:
   title: "OpenPipeline"
   description: "Best-practice workflows for single-cell and spatial multi-omics data"
   image: images/logo.svg
-  site-url: https://openpipelines.bio
+  # Draft rebuild — deploys to its own GitHub Pages project URL, NOT the
+  # production custom domain (openpipelines.bio, served from the `website` repo).
+  site-url: https://openpipelines-bio.github.io/openpipeline_docs/
   repo-url: https://github.com/openpipelines-bio/openpipeline_docs
   repo-actions: [edit, issue]
 
@@ -73,3 +78,8 @@ format:
     toc: true
     grid:
       content-mode: standard
+    # Draft site: ask search engines not to index or follow any page.
+    include-in-header:
+      - text: |
+          <meta name="robots" content="noindex, nofollow">
+
