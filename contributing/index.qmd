@@ -1,0 +1,22 @@
+---
+title: "Build with us"
+description: "Add a component, extend a workflow, or improve the docs."
+order: 0
+---
+
+OpenPipeline is open source. Here is the path in.
+
+| Step | What it covers |
+|---|---|
+| **Getting started** | Clone a package, install Viash, build components locally |
+| **Project structure** | How namespaces, configs, and the `target/` build map together |
+| **Creating components** | Write a `config.vsh.yaml` + script and wire up its container |
+| **Creating pipelines** | Compose components into a VDSL3 Nextflow workflow |
+| **Running tests** | Unit tests per component + integration tests with real data |
+| **Pull requests** | Conventions, review, and how a release publishes docs automatically |
+
+::: {.callout-note appearance="simple"}
+Placeholder index — to be ported from the current `contributing/` section, split
+by package where the workflow differs (e.g. GPU components in
+`openpipeline_rapids`).
+:::

@@ -1,0 +1,673 @@
+<style>
+  :root {
+    --bg: #f5f9f6;
+    --surface: #ffffff;
+    --surface-2: #eef4ef;
+    --border: #dde6df;
+    --ink: #13201a;
+    --muted: #566b5f;
+    --brand: #70d287;              /* the logo green */
+    --accent-ink: #2b8f52;         /* darker green for text/links on light */
+    --accent-soft: #e2f4e7;
+    --logo-ink: #16241c;
+    /* package facets */
+    --core: #2b8f52;
+    --spatial: #6f56e8;
+    --qc: #c9821f;
+    --composed: #2b78c2;
+    --rapids: #cf3c92;
+    --shadow: 0 1px 2px rgba(19,32,26,.05), 0 8px 24px rgba(19,32,26,.06);
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", "JetBrains Mono", Menlo, Consolas, monospace;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --maxw: 1120px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0a1310; --surface: #0f1a14; --surface-2: #14211a; --border: #22342a;
+      --ink: #e7efe9; --muted: #8ba295; --brand: #70d287; --accent-ink: #8ee0a2; --accent-soft: #153a23;
+      --logo-ink: #e8f2ea;
+      --core: #7ed898; --spatial: #9c86ff; --qc: #e0a949; --composed: #5aa2e6; --rapids: #ec6bb4;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 10px 30px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #f5f9f6; --surface: #ffffff; --surface-2: #eef4ef; --border: #dde6df;
+    --ink: #13201a; --muted: #566b5f; --brand: #70d287; --accent-ink: #2b8f52; --accent-soft: #e2f4e7;
+    --logo-ink: #16241c;
+    --core: #2b8f52; --spatial: #6f56e8; --qc: #c9821f; --composed: #2b78c2; --rapids: #cf3c92;
+    --shadow: 0 1px 2px rgba(19,32,26,.05), 0 8px 24px rgba(19,32,26,.06);
+  }
+  :root[data-theme="dark"] {
+    --bg: #0a1310; --surface: #0f1a14; --surface-2: #14211a; --border: #22342a;
+    --ink: #e7efe9; --muted: #8ba295; --brand: #70d287; --accent-ink: #8ee0a2; --accent-soft: #153a23;
+    --logo-ink: #e8f2ea;
+    --core: #7ed898; --spatial: #9c86ff; --qc: #e0a949; --composed: #5aa2e6; --rapids: #ec6bb4;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 10px 30px rgba(0,0,0,.35);
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  h1, h2, h3, h4 { text-wrap: balance; margin: 0; }
+  .mono { font-family: var(--mono); }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+  .kicker { font-family: var(--mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent-ink); font-weight: 600; }
+
+  /* ---------- top bar ---------- */
+  header.bar { position: sticky; top: 0; z-index: 50; background: color-mix(in srgb, var(--surface) 88%, transparent); backdrop-filter: saturate(1.4) blur(10px); border-bottom: 1px solid var(--border); }
+  .bar-inner { display: flex; align-items: center; gap: 20px; height: 62px; }
+  .logo { display: flex; align-items: center; gap: 10px; font-family: var(--mono); font-weight: 700; letter-spacing: -.01em; font-size: 17px; }
+  .logo svg { height: 30px; width: auto; color: var(--logo-ink); display: block; }
+  nav.tabs { display: flex; gap: 2px; margin-left: 6px; flex-wrap: wrap; }
+  nav.tabs button { font-family: var(--mono); font-size: 13px; color: var(--muted); background: none; border: 0; padding: 8px 11px; border-radius: 7px; cursor: pointer; letter-spacing: .02em; }
+  nav.tabs button:hover { color: var(--ink); background: var(--surface-2); }
+  nav.tabs button.active { color: var(--accent-ink); background: var(--accent-soft); }
+  .bar-spacer { flex: 1; }
+  .icon-btn { font-family: var(--mono); font-size: 12px; cursor: pointer; background: var(--surface); border: 1px solid var(--border); color: var(--muted); width: 34px; height: 34px; border-radius: 8px; display: grid; place-items: center; }
+  .icon-btn:hover { color: var(--ink); border-color: var(--brand); }
+
+  .view { display: none; }
+  .view.active { display: block; animation: fade .32s ease; }
+  @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  /* ---------- hero ---------- */
+  .hero { padding: 66px 0 34px; }
+  .hero h1 { font-family: var(--mono); font-weight: 700; letter-spacing: -.02em; font-size: clamp(30px, 5vw, 50px); line-height: 1.05; }
+  .hero h1 em { font-style: normal; color: var(--accent-ink); }
+  .hero p.lede { font-size: clamp(16px, 2vw, 20px); color: var(--muted); max-width: 60ch; margin: 20px 0 0; }
+  .modalities { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+  .modalities .m { font-family: var(--mono); font-size: 12px; padding: 5px 10px; border-radius: 20px; background: var(--surface); border: 1px solid var(--border); color: var(--muted); }
+  .modalities .m b { color: var(--ink); font-weight: 600; }
+  .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+  .btn { font-family: var(--mono); font-size: 14px; font-weight: 600; cursor: pointer; padding: 11px 18px; border-radius: 9px; border: 1px solid transparent; display: inline-flex; gap: 8px; align-items: center; }
+  .btn.primary { background: var(--brand); color: #0b1a10; }
+  .btn.primary:hover { filter: brightness(1.05); }
+  .btn.ghost { background: var(--surface); border-color: var(--border); color: var(--ink); }
+  .btn.ghost:hover { border-color: var(--brand); }
+
+  /* ---------- flow (single-cell vs spatial) ---------- */
+  .flow-card { margin-top: 8px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); padding: 22px; overflow: hidden; }
+  .seg { display: inline-flex; background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 3px; gap: 3px; }
+  .seg button { font-family: var(--mono); font-size: 13px; padding: 7px 16px; border-radius: 7px; border: 0; background: none; color: var(--muted); cursor: pointer; }
+  .seg button.on { background: var(--surface); color: var(--ink); box-shadow: var(--shadow); }
+  .flow-hint { font-size: 13px; color: var(--muted); margin: 14px 0 16px; }
+  .flow-scroll { overflow-x: auto; padding-bottom: 4px; }
+  .flow { display: grid; grid-template-columns: repeat(4, minmax(150px, 1fr)); gap: 12px; min-width: 640px; align-items: stretch; }
+  .stage { background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; padding: 14px; position: relative; }
+  .stage::after { content: "→"; position: absolute; right: -11px; top: 50%; transform: translateY(-50%); color: var(--muted); font-family: var(--mono); z-index: 2; }
+  .stage:last-child::after { display: none; }
+  .stage .num { font-family: var(--mono); font-size: 11px; color: var(--accent-ink); letter-spacing: .1em; }
+  .stage h4 { font-size: 15px; margin: 3px 0 10px; letter-spacing: -.01em; }
+  .stage .tool { font-family: var(--mono); font-size: 11.5px; color: var(--muted); padding: 4px 0; border-top: 1px solid var(--border); }
+  .stage .tool:first-of-type { border-top: 0; }
+
+  /* ---------- generic sections ---------- */
+  section.block { padding: 46px 0; }
+  section.block.alt { background: var(--surface-2); border-block: 1px solid var(--border); }
+  .sec-head { margin-bottom: 24px; }
+  .sec-head h2 { font-size: clamp(22px, 3vw, 30px); letter-spacing: -.02em; font-family: var(--mono); font-weight: 700; }
+  .sec-head p { color: var(--muted); margin: 8px 0 0; max-width: 64ch; }
+
+  .cards3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .rcard { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px; box-shadow: var(--shadow); }
+  .rcard.link { cursor: pointer; transition: transform .16s ease, border-color .16s ease; }
+  .rcard.link:hover { transform: translateY(-3px); border-color: var(--brand); }
+  .rcard .tag { font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+  .rcard h3 { font-size: 18px; margin: 8px 0 6px; letter-spacing: -.01em; }
+  .rcard p { color: var(--muted); font-size: 14px; margin: 0; }
+  .rcard .go { font-family: var(--mono); font-size: 13px; color: var(--accent-ink); margin-top: 14px; display: inline-block; }
+
+  /* run-your-way */
+  .ways { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+  .way { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 18px; box-shadow: var(--shadow); }
+  .way .h { font-family: var(--mono); font-weight: 700; font-size: 15px; display: flex; align-items: center; gap: 8px; }
+  .way .badge { font-family: var(--mono); font-size: 10px; padding: 2px 7px; border-radius: 20px; background: var(--accent-soft); color: var(--accent-ink); letter-spacing: .04em; }
+  .way p { color: var(--muted); font-size: 13.5px; margin: 8px 0 0; }
+  .way .req { font-family: var(--mono); font-size: 11.5px; color: var(--muted); margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
+
+  /* ---------- callout ---------- */
+  .callout { border: 1px solid var(--border); border-left: 3px solid var(--brand); background: var(--surface); border-radius: 10px; padding: 16px 18px; box-shadow: var(--shadow); }
+  .callout .ct { font-family: var(--mono); font-weight: 700; font-size: 14px; margin-bottom: 6px; }
+  .callout p { margin: 0; color: var(--muted); font-size: 14px; }
+
+  /* ---------- get started ---------- */
+  .banner { display: flex; gap: 14px; flex-wrap: wrap; margin: 24px 0 4px; }
+  .route-note { flex: 1 1 260px; border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; background: var(--surface); display: flex; gap: 12px; align-items: flex-start; }
+  .route-note .em { font-size: 22px; line-height: 1; }
+  .route-note h4 { font-size: 15px; margin: 0 0 3px; }
+  .route-note p { margin: 0; color: var(--muted); font-size: 13.5px; }
+  .steps { counter-reset: step; margin-top: 22px; display: grid; gap: 14px; }
+  .step { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px 18px 58px; position: relative; }
+  .step::before { counter-increment: step; content: counter(step); position: absolute; left: 16px; top: 16px; width: 28px; height: 28px; border-radius: 8px; background: var(--accent-soft); color: var(--accent-ink); font-family: var(--mono); font-weight: 700; display: grid; place-items: center; font-size: 14px; }
+  .step h4 { font-size: 16px; margin: 0 0 8px; }
+  .step p.d { color: var(--muted); margin: 0 0 10px; font-size: 14px; }
+  pre { margin: 0; background: #0a1310; color: #d6efdd; border-radius: 10px; padding: 14px 16px; font-family: var(--mono); font-size: 13px; overflow-x: auto; line-height: 1.55; border: 1px solid var(--border); }
+  pre .c { color: #6f9080; }
+  pre .g { color: #70d287; }
+  pre .y { color: #e0a949; }
+
+  /* ---------- reference ---------- */
+  .genbanner { display: flex; gap: 12px; align-items: flex-start; background: var(--accent-soft); border: 1px solid color-mix(in srgb, var(--brand) 40%, var(--border)); border-radius: 12px; padding: 14px 16px; margin-top: 18px; }
+  .genbanner .em { font-size: 20px; }
+  .genbanner p { margin: 0; font-size: 13.5px; color: var(--ink); }
+  .genbanner code { font-family: var(--mono); background: var(--surface); padding: 1px 6px; border-radius: 5px; font-size: 12px; }
+  .search { width: 100%; font-family: var(--mono); font-size: 14px; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); color: var(--ink); margin-top: 16px; }
+  .search:focus { outline: 2px solid var(--brand); outline-offset: 1px; }
+  .facet-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 14px 0 0; }
+  .facet-bar .lbl { font-family: var(--mono); font-size: 12px; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; margin-right: 4px; }
+  .facet { font-family: var(--mono); font-size: 12.5px; cursor: pointer; user-select: none; padding: 6px 11px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); display: inline-flex; align-items: center; gap: 7px; color: var(--ink); }
+  .facet .swatch { width: 9px; height: 9px; border-radius: 50%; }
+  .facet[aria-pressed="false"] { opacity: .4; }
+  .facet:hover { border-color: currentColor; }
+  .tbl-wrap { margin-top: 16px; overflow-x: auto; border: 1px solid var(--border); border-radius: 12px; }
+  table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 14px; }
+  th, td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--border); }
+  th { font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); background: var(--surface-2); }
+  tbody tr:hover { background: var(--surface-2); }
+  td.name { font-family: var(--mono); font-weight: 600; color: var(--accent-ink); }
+  td .kind { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+  .ptag { font-family: var(--mono); font-size: 11px; padding: 3px 8px; border-radius: 20px; display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--border); white-space: nowrap; }
+  .ptag .swatch { width: 7px; height: 7px; border-radius: 50%; }
+  .task-row td { background: var(--bg); font-family: var(--mono); font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  .count-note { font-family: var(--mono); font-size: 12.5px; color: var(--muted); margin-top: 12px; }
+
+  footer { border-top: 1px solid var(--border); padding: 34px 0; color: var(--muted); font-size: 13px; margin-top: 30px; }
+  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .mockup-flag { font-family: var(--mono); font-size: 11px; background: var(--accent-soft); color: var(--accent-ink); padding: 3px 9px; border-radius: 20px; letter-spacing: .04em; }
+
+  @media (max-width: 820px) { .cards3, .ways { grid-template-columns: 1fr; } nav.tabs { display: none; } }
+  @media (prefers-reduced-motion: reduce) { .view.active { animation: none; } * { transition: none !important; } }
+</style>
+
+<header class="bar">
+  <div class="wrap bar-inner">
+    <a class="logo" href="#" onclick="show('home');return false;" aria-label="OpenPipeline home">
+      <svg viewBox="0 0 118 112" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+        <g transform="translate(-73.207093,-27.725369)">
+          <path fill="currentColor" d="m 73.207093,54.637601 q 0,-6.650724 2.32002,-11.754768 2.32002,-5.104044 6.18672,-8.50674 3.712032,-3.248028 8.352072,-4.949376 4.794708,-1.701348 9.589416,-1.701348 4.794709,0 9.434749,1.701348 4.79471,1.701348 8.66141,4.949376 3.71203,3.402696 6.03205,8.50674 2.32002,5.104044 2.32002,11.754768 v 58.155169 q 0,6.96006 -2.32002,11.90943 -2.32002,4.94938 -6.03205,8.19741 -3.8667,3.40269 -8.66141,5.10404 -4.64004,1.70135 -9.434749,1.70135 -4.794708,0 -9.589416,-1.70135 -4.64004,-1.70135 -8.352072,-5.10404 -3.8667,-3.24803 -6.18672,-8.19741 -2.32002,-4.94937 -2.32002,-11.90943 z m 15.776136,58.155169 q 0,5.72271 3.09336,8.50674 3.248028,2.62935 7.578732,2.62935 4.330699,0 7.424059,-2.62935 3.24803,-2.78403 3.24803,-8.50674 V 54.637601 q 0,-5.722716 -3.24803,-8.352072 -3.09336,-2.784024 -7.424059,-2.784024 -4.330704,0 -7.578732,2.784024 -3.09336,2.629356 -3.09336,8.352072 z"/>
+          <path fill="currentColor" d="M 140.02376,138.77699 V 28.653377 h 23.6642 q 6.49606,0 11.44543,1.701348 4.94938,1.701348 8.97075,6.032052 4.02137,4.330704 5.56805,10.208088 1.54668,5.722716 1.54668,15.621468 0,7.424064 -0.92801,12.528108 -0.77334,5.104044 -3.55737,9.589416 -3.24802,5.41338 -8.6614,8.50674 -5.41338,2.938692 -14.22946,2.938692 h -8.04274 v 42.997701 z m 15.77613,-95.275485 v 37.429656 h 7.57874 q 4.7947,0 7.42406,-1.392012 2.62936,-1.392012 3.8667,-3.8667 1.23734,-2.32002 1.39201,-5.722716 0.30934,-3.402696 0.30934,-7.578732 0,-3.8667 -0.15467,-7.269396 -0.15467,-3.557364 -1.39201,-6.18672 -1.23735,-2.629356 -3.71203,-4.021368 -2.47469,-1.392012 -7.11473,-1.392012 z"/>
+          <path fill="none" stroke="#70d287" stroke-width="15.7213" stroke-linejoin="round" d="m 110.29608,81.548369 c 0,0 37.38146,0.177459 37.5901,-52.92486"/>
+          <circle fill="#70d287" cx="99.879967" cy="35.926937" r="3.97"/>
+          <circle fill="#70d287" cx="147.90039" cy="131.38319" r="3.97"/>
+          <circle fill="#70d287" cx="99.818604" cy="131.38319" r="3.97"/>
+          <circle fill="currentColor" cx="117.9662" cy="79.998024" r="3.97"/>
+          <circle fill="currentColor" cx="147.5262" cy="36.032192" r="3.97"/>
+        </g>
+      </svg>
+      <span>OpenPipeline</span>
+    </a>
+    <nav class="tabs" id="tabs">
+      <button data-view="home" class="active">home</button>
+      <button data-view="start">get&nbsp;started</button>
+      <button data-view="guides">guides</button>
+      <button data-view="concepts">concepts</button>
+      <button data-view="reference">reference</button>
+      <button data-view="contributing">contributing</button>
+    </nav>
+    <span class="bar-spacer"></span>
+    <button class="icon-btn" id="theme" title="Toggle theme" aria-label="Toggle theme">◐</button>
+    <button class="icon-btn" title="GitHub" aria-label="GitHub">gh</button>
+  </div>
+</header>
+
+<!-- ============================ HOME ============================ -->
+<div class="view active" id="view-home">
+  <div class="wrap hero">
+    <span class="kicker">Single-cell &amp; spatial · reproducible at scale</span>
+    <h1>Best-practice pipelines for<br><em>single-cell and spatial</em> data.</h1>
+    <p class="lede">Modular, containerized components and reproducible Nextflow workflows — from raw counts to an integrated, annotated object.</p>
+    <div class="modalities">
+      <span class="m"><b>RNA</b></span>
+      <span class="m"><b>Protein</b> (ADT)</span>
+      <span class="m"><b>ATAC</b></span>
+      <span class="m"><b>VDJ</b></span>
+      <span class="m"><b>GDO</b></span>
+      <span class="m"><b>Spatial</b></span>
+    </div>
+    <div class="cta-row">
+      <button class="btn primary" onclick="show('start')">▸ Run your first pipeline</button>
+      <button class="btn ghost" onclick="show('concepts')">How it works</button>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="flow-card">
+      <div class="seg" id="flow-seg">
+        <button class="on" data-flow="sc">Single-cell</button>
+        <button data-flow="sp">Spatial</button>
+      </div>
+      <div class="flow-hint" id="flow-hint"></div>
+      <div class="flow-scroll"><div class="flow" id="flow"></div></div>
+    </div>
+  </div>
+
+  <section class="block">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="kicker">Start where you are</span>
+        <h2>Three ways in</h2>
+        <p>The same docs serve first-time single-cell analysts and pipeline veterans. Pick an entry point — every page is tagged so you can go deeper or skip ahead.</p>
+      </div>
+      <div class="cards3">
+        <div class="rcard link" onclick="show('start')">
+          <div class="tag">🧪 New to single-cell</div>
+          <h3>Guided first run</h3>
+          <p>Install, run a real pipeline on provided test data, and learn to read the output — no prior Nextflow needed.</p>
+          <span class="go">Get started →</span>
+        </div>
+        <div class="rcard link" onclick="show('guides')">
+          <div class="tag">🔬 Bioinformatician</div>
+          <h3>Task recipes</h3>
+          <p>Copy-paste how-tos: ingest 10x or Xenium, integrate with Harmony, run QC reports, tune resources.</p>
+          <span class="go">Browse guides →</span>
+        </div>
+        <div class="rcard link" onclick="show('reference')">
+          <div class="tag">⚡ Power user</div>
+          <h3>Component reference</h3>
+          <p>Every workflow and module, grouped by task, with full parameter listings — generated from source.</p>
+          <span class="go">Open reference →</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block alt">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="kicker">Run it your way</span>
+        <h2>Local, cloud, or no-code</h2>
+        <p>Every workflow is a <b>Viash</b>-built, containerized Nextflow pipeline — so the same run works on your laptop, on Seqera, or through the Viash Hub web interface.</p>
+      </div>
+      <div class="ways">
+        <div class="way">
+          <div class="h">Local <span class="badge">Nextflow</span></div>
+          <p>Run on your own machine or HPC with Nextflow + Docker. Full control, offline-capable.</p>
+          <div class="req">requires: nextflow · docker</div>
+        </div>
+        <div class="way">
+          <div class="h">Seqera Platform <span class="badge">cloud</span></div>
+          <p>Launch and monitor runs on managed cloud compute (AWS/Azure/GCP) from the Seqera UI or CLI.</p>
+          <div class="req">requires: a compute environment</div>
+        </div>
+        <div class="way">
+          <div class="h">Viash Hub <span class="badge">no-code</span></div>
+          <p>Browse the component catalog and launch workflows through a guided web form — no command line.</p>
+          <div class="req">requires: a browser</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============================ GET STARTED ============================ -->
+<div class="view" id="view-start">
+  <section class="block">
+    <div class="wrap" style="max-width: 880px;">
+      <span class="kicker">Tutorial · ~20 min</span>
+      <h2 style="font-family:var(--mono);font-size:clamp(24px,4vw,34px);letter-spacing:-.02em;margin-top:6px;">Run your first pipeline</h2>
+      <p style="color:var(--muted);max-width:64ch;">Process a real 3-sample dataset from raw counts to an integrated object. First, choose how you want to run it — the steps adapt to your choice.</p>
+
+      <div class="banner">
+        <div class="route-note"><span class="em">🧪</span><div><h4>New here?</h4><p>Pick <b>Local</b> and follow every step top to bottom.</p></div></div>
+        <div class="route-note"><span class="em">⚡</span><div><h4>Already have compute?</h4><p>Pick <b>Seqera</b> or <b>Viash&nbsp;Hub</b> — no install needed.</p></div></div>
+      </div>
+
+      <div class="seg" id="route-seg" style="margin-top:22px;">
+        <button class="on" data-route="local">Local (Nextflow)</button>
+        <button data-route="seqera">Seqera</button>
+        <button data-route="hub">Viash&nbsp;Hub</button>
+      </div>
+
+      <div class="steps" id="start-steps"></div>
+
+      <div class="callout" style="margin-top:22px;">
+        <div class="ct">One run, many samples — the <span class="mono">param_list</span></div>
+        <p>To process a whole cohort in a single command, pass a <span class="mono">param_list</span>: a list where <b>each entry is one sample</b> with its own arguments (<span class="mono">id</span>, <span class="mono">input</span>, and any per-sample thresholds). Arguments you set <b>outside</b> the list apply to <b>every</b> sample. So shared settings stay global, while per-sample overrides live next to their sample — no scripting, no repeated commands.</p>
+      </div>
+      <pre style="margin-top:14px;"><span class="c"># params.yaml — two samples, per-sample filter + a shared setting</span>
+param_list:
+  - id: <span class="g">sample_1</span>
+    input: <span class="g">data/sample_1.h5mu</span>
+    rna_min_counts: <span class="y">2</span>          <span class="c"># only for sample_1</span>
+  - id: <span class="g">sample_2</span>
+    input: <span class="g">data/sample_2.h5mu</span>
+    rna_min_counts: <span class="y">1</span>          <span class="c"># only for sample_2</span>
+rna_max_counts: <span class="y">1000000</span>          <span class="c"># applied to every sample</span></pre>
+
+      <div class="cta-row">
+        <button class="btn primary" onclick="show('guides')">Next: task guides →</button>
+        <button class="btn ghost" onclick="show('reference')">See every parameter</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============================ GUIDES ============================ -->
+<div class="view" id="view-guides">
+  <section class="block">
+    <div class="wrap">
+      <span class="kicker">How-to</span>
+      <h2 style="font-family:var(--mono);font-size:clamp(24px,4vw,32px);letter-spacing:-.02em;margin:6px 0 0;">Task guides</h2>
+      <p style="color:var(--muted);max-width:62ch;">Goal-oriented recipes. Each is standalone and links into the reference. Filter by topic.</p>
+      <div class="facet-bar" id="guide-facets">
+        <span class="lbl">package</span>
+        <button class="facet" data-pkg="core" aria-pressed="true"><span class="swatch" style="background:var(--core)"></span>openpipeline</button>
+        <button class="facet" data-pkg="spatial" aria-pressed="true"><span class="swatch" style="background:var(--spatial)"></span>openpipeline_spatial</button>
+        <button class="facet" data-pkg="qc" aria-pressed="true"><span class="swatch" style="background:var(--qc)"></span>openpipeline_qc</button>
+        <button class="facet" data-pkg="rapids" aria-pressed="true"><span class="swatch" style="background:var(--rapids)"></span>openpipeline_rapids</button>
+        <button class="facet" data-pkg="composed" aria-pressed="true"><span class="swatch" style="background:var(--composed)"></span>openpipeline_composed</button>
+      </div>
+      <div class="cards3" id="guide-grid" style="margin-top:22px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ============================ CONCEPTS ============================ -->
+<div class="view" id="view-concepts">
+  <section class="block">
+    <div class="wrap" style="max-width:840px;">
+      <span class="kicker">Explanation</span>
+      <h2 style="font-family:var(--mono);font-size:clamp(24px,4vw,32px);letter-spacing:-.02em;margin:6px 0 0;">How it works</h2>
+      <p style="color:var(--muted);">The concepts that make everything else make sense — read once, apply everywhere.</p>
+      <div class="pkg-grid" style="margin-top:22px;display:grid;gap:14px;">
+        <div class="callout">
+          <div class="ct">One data format: MuData</div>
+          <p>Every component reads and writes the same HDF5-based MuData object — modalities under <span class="mono">.mod</span>, cells in <span class="mono">.obs</span>, features in <span class="mono">.var</span>. That shared format is why components snap together without conversion.</p>
+        </div>
+        <div class="callout">
+          <div class="ct">Components &amp; workflows</div>
+          <p>A <b>module</b> does one job (normalize, cluster). A <b>workflow</b> chains modules into a pipeline. Both are built with <b>Viash</b> and containerized, so a local run and a cloud run behave identically.</p>
+        </div>
+        <div class="callout">
+          <div class="ct">Built with Viash · run on Viash Hub</div>
+          <p><b>Viash</b> turns a config + script into a containerized component and a Nextflow module. <b>Viash Hub</b> is the web catalog where those components live — browse them, read their parameters, and launch workflows through a GUI or connect to Seqera, without touching the CLI.</p>
+        </div>
+        <div class="callout">
+          <div class="ct">The pipeline model</div>
+          <p>Ingestion → Process samples → Integration → Downstream. Spatial data follows the same shape with spatial-aware steps; GPU and QC components slot into existing steps; turnkey pipelines wrap the whole thing.</p>
+        </div>
+        <div class="callout">
+          <div class="ct">Many samples at once: the param_list</div>
+          <p>A <span class="mono">param_list</span> processes a cohort in one run: each entry is a sample with its own arguments, while settings outside the list apply to all samples. See it in action in <a class="mono" style="color:var(--accent-ink)" href="#" onclick="show('start');return false;">Get started →</a></p>
+        </div>
+        <div class="callout" style="border-left-color:var(--composed)">
+          <div class="ct">Advanced: the data-state view</div>
+          <p>Under the hood, processing is organized by the <em>state of the data</em> (single-sample → multi-sample → merged → integrated). An optional deep-dive for pipeline authors.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============================ REFERENCE ============================ -->
+<div class="view" id="view-reference">
+  <section class="block">
+    <div class="wrap">
+      <span class="kicker">Reference</span>
+      <h2 style="font-family:var(--mono);font-size:clamp(24px,4vw,32px);letter-spacing:-.02em;margin:6px 0 0;">Components &amp; workflows</h2>
+      <p style="color:var(--muted);max-width:62ch;">Grouped by the task they perform. Filter by package or search by name.</p>
+
+      <div class="genbanner">
+        <span class="em">⚙️</span>
+        <p><b>Auto-generated.</b> Every page here is produced from each package's <code>config.vsh.yaml</code> on release — descriptions, parameters and examples come straight from source, so the reference can never drift from the code. This table is a representative sample.</p>
+      </div>
+
+      <input class="search" id="ref-search" placeholder="Search components…  e.g. normalize, harmony, spatial" aria-label="Search components">
+      <div class="facet-bar" id="ref-facets">
+        <span class="lbl">package</span>
+        <button class="facet" data-pkg="core" aria-pressed="true"><span class="swatch" style="background:var(--core)"></span>openpipeline</button>
+        <button class="facet" data-pkg="spatial" aria-pressed="true"><span class="swatch" style="background:var(--spatial)"></span>openpipeline_spatial</button>
+        <button class="facet" data-pkg="qc" aria-pressed="true"><span class="swatch" style="background:var(--qc)"></span>openpipeline_qc</button>
+        <button class="facet" data-pkg="rapids" aria-pressed="true"><span class="swatch" style="background:var(--rapids)"></span>openpipeline_rapids</button>
+        <button class="facet" data-pkg="composed" aria-pressed="true"><span class="swatch" style="background:var(--composed)"></span>openpipeline_composed</button>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Name</th><th>Type</th><th>Package</th><th>Does</th></tr></thead>
+          <tbody id="ref-body"></tbody>
+        </table>
+      </div>
+      <div class="count-note" id="ref-count"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ============================ CONTRIBUTING ============================ -->
+<div class="view" id="view-contributing">
+  <section class="block">
+    <div class="wrap">
+      <span class="kicker">Contributing</span>
+      <h2 style="font-family:var(--mono);font-size:clamp(24px,4vw,32px);letter-spacing:-.02em;margin:6px 0 0;">Build with us</h2>
+      <p style="color:var(--muted);max-width:62ch;">OpenPipeline is open source. Add a component, extend a workflow, or improve the docs — here's the path in.</p>
+      <div class="cards3" style="margin-top:22px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));">
+        <div class="rcard"><div class="tag">setup</div><h3 style="font-size:16px">Getting started</h3><p>Clone a package, install Viash, and build components locally.</p></div>
+        <div class="rcard"><div class="tag">layout</div><h3 style="font-size:16px">Project structure</h3><p>How namespaces, configs, and the <span class="mono">target/</span> build map together.</p></div>
+        <div class="rcard"><div class="tag">build</div><h3 style="font-size:16px">Creating components</h3><p>Write a <span class="mono">config.vsh.yaml</span> + script and wire up its container.</p></div>
+        <div class="rcard"><div class="tag">build</div><h3 style="font-size:16px">Creating pipelines</h3><p>Compose components into a VDSL3 Nextflow workflow.</p></div>
+        <div class="rcard"><div class="tag">verify</div><h3 style="font-size:16px">Running tests</h3><p>Unit tests per component and integration tests with real data.</p></div>
+        <div class="rcard"><div class="tag">ship</div><h3 style="font-size:16px">Pull requests</h3><p>Conventions, review, and how a release publishes docs automatically.</p></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>© OpenPipeline — <span class="mockup-flag">DRAFT MOCKUP</span> structure prototype, placeholder copy</span>
+    <span class="mono">viash · nextflow · mudata</span>
+  </div>
+</footer>
+
+<script>
+  const PKG_LABEL = { core:'openpipeline', spatial:'openpipeline_spatial', qc:'openpipeline_qc', rapids:'openpipeline_rapids', composed:'openpipeline_composed' };
+  const PKG_REF = PKG_LABEL;
+
+  function show(v){
+    document.querySelectorAll('.view').forEach(el=>el.classList.remove('active'));
+    document.getElementById('view-'+v).classList.add('active');
+    document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('active', b.dataset.view===v));
+    window.scrollTo({top:0});
+  }
+  document.querySelectorAll('#tabs button').forEach(b=> b.onclick=()=>show(b.dataset.view));
+
+  document.getElementById('theme').onclick = ()=>{
+    const cur = document.documentElement.getAttribute('data-theme');
+    const isDark = cur ? cur==='dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+    document.documentElement.setAttribute('data-theme', isDark?'light':'dark');
+  };
+
+  // ---- home flow: single-cell vs spatial ----
+  const FLOWS = {
+    sc: { hint: 'The single-cell path — RNA, protein, ATAC, VDJ and GDO share one flow.', stages: [
+      ['STEP 01','Ingestion',['cellranger_multi','demux → fastq','make_reference']],
+      ['STEP 02','Process samples',['filter cells + doublets','normalize + log1p','highly variable genes']],
+      ['STEP 03','Integration',['harmony · scVI · bbknn','totalVI (RNA+protein)','neighbors → leiden → umap']],
+      ['STEP 04','Downstream',['cell-type annotation','differential expression','label transfer']],
+    ]},
+    sp: { hint: 'The spatial path — same shape, spatial-aware steps (Visium / Xenium).', stages: [
+      ['STEP 01','Ingestion',['spaceranger_mapping','convert → mudata']],
+      ['STEP 02','Process samples',['spatial_process_samples','filter + normalize','feature annotation']],
+      ['STEP 03','Neighbors',['find_neighbors','leiden clustering']],
+      ['STEP 04','Niches',['nichecompass','spatial domains']],
+    ]},
+  };
+  const flowEl = document.getElementById('flow'), flowHint = document.getElementById('flow-hint');
+  function renderFlow(which){
+    const f = FLOWS[which];
+    flowHint.textContent = f.hint;
+    flowEl.innerHTML = f.stages.map(([num,h,tools])=>`
+      <div class="stage"><div class="num">${num}</div><h4>${h}</h4>
+        ${tools.map(t=>`<div class="tool">${t}</div>`).join('')}
+      </div>`).join('');
+  }
+  document.querySelectorAll('#flow-seg button').forEach(b=> b.onclick=()=>{
+    document.querySelectorAll('#flow-seg button').forEach(x=>x.classList.toggle('on', x===b));
+    renderFlow(b.dataset.flow);
+  });
+  renderFlow('sc');
+
+  // ---- get started: route-dependent steps ----
+  const OUTPUT_STEP = ['Open &amp; read the output',
+    'The result is one <span class="mono">.h5mu</span> file. Here is what the pipeline wrote:',
+    `<pre><span class="c"># results/…output.h5mu</span>
+MuData
+ &#9500;&#9472; .mod
+ &#9474;   &#9492;&#9472; rna  <span class="c"># filtered, normalized, log1p</span>
+ &#9474;       &#9500;&#9472; .X                <span class="c"># normalized counts</span>
+ &#9474;       &#9500;&#9472; .obsm["X_pca"]    <span class="c"># dimensionality reduction</span>
+ &#9474;       &#9492;&#9472; .obs["leiden"]    <span class="c"># cell clusters</span>
+ &#9492;&#9472; .obs["sample_id"]              <span class="c"># which sample each cell came from</span></pre>`];
+
+  const ROUTES = {
+    local: [
+      ['Install the runtime','You need Nextflow and Docker. Everything else ships inside containers — you install nothing per pipeline.',
+       `<pre><span class="c"># install nextflow</span>
+curl -s https://get.nextflow.io | bash
+<span class="c"># check docker is running</span>
+docker --version</pre>`],
+      ['Get the example data','A tiny public dataset from S3 — three PBMC samples, already in MuData format.',
+       `<pre>aws s3 cp <span class="g">s3://openpipelines-data/pbmc_1k_protein_v3/</span> ./data --recursive</pre>`],
+      ['Run <span class="mono">process_samples</span>','Point Nextflow at the workflow and your params file.',
+       `<pre>nextflow run <span class="g">openpipelines-bio/openpipeline</span> \\
+  -r <span class="y">4.2.0</span> -latest -profile docker \\
+  -main-script target/nextflow/workflows/multiomics/process_samples/main.nf \\
+  -params-file <span class="g">params.yaml</span> --publish_dir <span class="g">results/</span></pre>`],
+      OUTPUT_STEP,
+    ],
+    seqera: [
+      ['Connect a compute environment','No local install. In Seqera Platform, set up a compute environment (AWS / Azure / GCP) once — then every run uses it.',
+       `<pre><span class="c"># one-time, in the Seqera UI:</span>
+<span class="c"># Compute Environments → Add → pick your cloud</span></pre>`],
+      ['Get the example data','Point at the same public S3 dataset — Seqera reads it directly.',
+       `<pre>s3://openpipelines-data/pbmc_1k_protein_v3/</pre>`],
+      ['Launch with <span class="mono">tw</span>','Use the Seqera CLI (or the Launchpad web form) to start the run.',
+       `<pre>tw launch <span class="g">openpipelines-bio/openpipeline</span> \\
+  --revision <span class="y">4.2.0</span> --pull-latest \\
+  --main-script .../workflows/multiomics/process_samples/main.nf \\
+  --compute-env <span class="g">&lt;your-env-id&gt;</span> --params-file <span class="g">params.yaml</span></pre>`],
+      OUTPUT_STEP,
+    ],
+    hub: [
+      ['Open the workflow on Viash Hub','No install, no CLI. Find <span class="mono">openpipeline</span> in the Viash Hub catalog and open <span class="mono">process_samples</span>.',
+       `<pre><span class="c"># viash-hub.com → packages → openpipeline</span>
+<span class="c"># → process_samples → Launch</span></pre>`],
+      ['Fill in the form','The GUI renders every parameter with its description — set your input and thresholds, no YAML required.',
+       `<pre><span class="c"># input:        data/*.h5mu</span>
+<span class="c"># rna_min_counts: 2</span>
+<span class="c"># publish_dir:  results/</span></pre>`],
+      ['Pick compute &amp; run','Choose local execution or a connected Seqera environment, then press <b>Launch</b>.',
+       `<pre><span class="c"># Compute → local | seqera</span>
+<span class="c"># → Launch run</span></pre>`],
+      OUTPUT_STEP,
+    ],
+  };
+  const stepsEl = document.getElementById('start-steps');
+  function renderRoute(route){
+    stepsEl.innerHTML = ROUTES[route].map(([h,d,code])=>`
+      <div class="step"><h4>${h}</h4><p class="d">${d}</p>${code}</div>`).join('');
+  }
+  document.querySelectorAll('#route-seg button').forEach(b=> b.onclick=()=>{
+    document.querySelectorAll('#route-seg button').forEach(x=>x.classList.toggle('on', x===b));
+    renderRoute(b.dataset.route);
+  });
+  renderRoute('local');
+
+  // ---- facet helpers ----
+  function activePkgs(bar){ return [...bar.querySelectorAll('.facet')].filter(f=>f.getAttribute('aria-pressed')==='true').map(f=>f.dataset.pkg); }
+  function bindFacetBar(barId, onChange){
+    const bar = document.getElementById(barId);
+    bar.querySelectorAll('.facet').forEach(f=> f.onclick=()=>{
+      f.setAttribute('aria-pressed', f.getAttribute('aria-pressed')==='true'?'false':'true');
+      onChange(activePkgs(bar));
+    });
+  }
+
+  // ---- guides ----
+  const GUIDES = [
+    {t:'Ingest 10x Genomics data', p:'From FASTQ or raw counts to a MuData object with Cell Ranger.', pkg:'core'},
+    {t:'Ingest Xenium / Visium', p:'Space Ranger mapping and spatial ingestion.', pkg:'spatial'},
+    {t:'Process &amp; filter samples', p:'Cell filtering, doublets, normalization, HVG selection.', pkg:'core'},
+    {t:'Integrate with Harmony or scVI', p:'Batch-correct and cluster across samples.', pkg:'core'},
+    {t:'Annotate cell types', p:'CellTypist, scANVI and KNN label transfer.', pkg:'core'},
+    {t:'Generate a QC report', p:'Standalone quality-control report for ingested data.', pkg:'qc'},
+    {t:'Speed up with GPUs', p:'Swap in rapids-singlecell components for large datasets.', pkg:'rapids'},
+    {t:'Find spatial niches', p:'NicheCompass niche identification on spatial data.', pkg:'spatial'},
+    {t:'Run a turnkey pipeline', p:'End-to-end composed workflow for a standard design.', pkg:'composed'},
+    {t:'Tune compute resources', p:'Nextflow labels for CPU, memory and disk.', pkg:'core'},
+    {t:'Process many samples with param_list', p:'Per-sample arguments plus shared settings in one run.', pkg:'core'},
+  ];
+  const gGrid = document.getElementById('guide-grid');
+  function renderGuides(pkgs){
+    gGrid.innerHTML = GUIDES.filter(g=>pkgs.includes(g.pkg)).map(g=>`
+      <div class="rcard">
+        <div class="tag"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--${g.pkg})"></span>${PKG_LABEL[g.pkg]}</div>
+        <h3 style="font-size:16px">${g.t}</h3><p>${g.p}</p>
+      </div>`).join('');
+  }
+  bindFacetBar('guide-facets', renderGuides);
+  renderGuides(['core','spatial','qc','rapids','composed']);
+
+  // ---- reference ----
+  const REF = [
+    ['Ingestion', [
+      ['cellranger_multi','workflow','core','Map 10x multi libraries and build a MuData'],
+      ['spaceranger_mapping','workflow','spatial','Map Visium/Xenium spatial data'],
+      ['demux','workflow','core','Demultiplex BCL → FASTQ'],
+      ['ingestion_qc','module','qc','Compute per-sample ingestion QC metrics'],
+    ]],
+    ['Filtering & QC', [
+      ['filter_with_counts','module','core','Flag cells by count/gene/mito thresholds'],
+      ['filter_with_scrublet','module','core','Doublet detection'],
+      ['generate_qc_report','workflow','qc','Produce an HTML quality-control report'],
+      ['calculate_qc_metrics','module','core','Per-cell and per-gene QC statistics'],
+    ]],
+    ['Transformation', [
+      ['normalize_total','module','core','Total-count normalization'],
+      ['log1p','module','core','Log(x+1) transform'],
+      ['log_normalize','workflow','rapids','GPU normalize + log in one pass'],
+    ]],
+    ['Dimensionality reduction', [
+      ['pca','module','core','Principal component analysis'],
+      ['umap','module','core','UMAP embedding'],
+      ['preprocessing/pca','module','rapids','GPU-accelerated PCA'],
+    ]],
+    ['Clustering & neighbors', [
+      ['leiden','module','core','Leiden community clustering'],
+      ['find_neighbors','module','core','k-NN neighborhood graph'],
+      ['neighbors_leiden_umap','workflow','rapids','GPU neighbors → Leiden → UMAP'],
+    ]],
+    ['Integration', [
+      ['harmony_leiden','workflow','core','Harmony batch integration + clustering'],
+      ['scvi_leiden','workflow','core','scVI integration + clustering'],
+      ['totalvi_leiden','workflow','core','Multimodal RNA+protein integration'],
+    ]],
+    ['Annotation', [
+      ['celltypist','workflow','core','Automated cell-type annotation'],
+      ['scanvi_scarches','workflow','core','Reference-based label transfer'],
+    ]],
+    ['Spatial', [
+      ['spatial_process_samples','workflow','spatial','Process spatial samples'],
+      ['nichecompass_leiden','workflow','spatial','Identify spatial niches'],
+    ]],
+    ['Composed pipelines', [
+      ['single_cell','workflow','composed','Turnkey end-to-end single-cell pipeline'],
+    ]],
+  ];
+  const body = document.getElementById('ref-body'), countEl = document.getElementById('ref-count');
+  function renderRef(){
+    const q = document.getElementById('ref-search').value.trim().toLowerCase();
+    const pkgs = activePkgs(document.getElementById('ref-facets'));
+    let rows='', shown=0, total=0;
+    for(const [task, items] of REF){
+      const matched = items.filter(([n,k,p,d])=>{ total++; if(!pkgs.includes(p)) return false; if(q && !(n+d).toLowerCase().includes(q)) return false; return true; });
+      if(!matched.length) continue;
+      rows += `<tr class="task-row"><td colspan="4">${task}</td></tr>`;
+      for(const [n,k,p,d] of matched){ shown++; rows += `<tr><td class="name">${n}</td><td><span class="kind">${k}</span></td><td><span class="ptag"><span class="swatch" style="background:var(--${p})"></span>${PKG_REF[p]}</span></td><td style="color:var(--muted)">${d}</td></tr>`; }
+    }
+    body.innerHTML = rows || `<tr><td colspan="4" style="padding:22px;color:var(--muted)">No components match. Clear the search or enable more packages.</td></tr>`;
+    countEl.textContent = `Showing ${shown} of ${total} — sample of the full catalogue (real: ~190 across all packages).`;
+  }
+  document.getElementById('ref-search').addEventListener('input', renderRef);
+  bindFacetBar('ref-facets', renderRef);
+  renderRef();
+</script>

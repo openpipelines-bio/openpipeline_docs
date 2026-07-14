@@ -1,0 +1,36 @@
+---
+title: "Reference"
+description: "Every workflow and module, grouped by task and filterable by package."
+order: 0
+listing:
+  - id: ref-listing
+    contents:
+      - "openpipeline/*/*.qmd"
+      - "openpipeline_spatial/*/*.qmd"
+      - "openpipeline_qc/*/*.qmd"
+      - "openpipeline_rapids/*/*.qmd"
+      - "openpipeline_composed/*/*.qmd"
+    type: table
+    fields: [title, namespace, description]
+    field-display-names:
+      title: "Name"
+      namespace: "Package / namespace"
+      description: "Does"
+    filter-ui: true
+    sort-ui: true
+    sort: "title"
+---
+
+::: {.callout-important appearance="simple"}
+**Auto-generated.** Every page here is produced from each package's
+`config.vsh.yaml` on release — descriptions, parameters, and examples come
+straight from source, so the reference can never drift from the code. Do not edit
+these pages by hand.
+:::
+
+The five packages each publish into their own folder under `reference/`:
+`openpipeline`, `openpipeline_spatial`, `openpipeline_qc`, `openpipeline_rapids`,
+`openpipeline_composed`. Use the filter box to narrow by name or package.
+
+:::{#ref-listing}
+:::

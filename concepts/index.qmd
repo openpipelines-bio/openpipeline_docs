@@ -1,0 +1,28 @@
+---
+title: "How it works"
+description: "The concepts that make everything else make sense — read once, apply everywhere."
+order: 0
+---
+
+- [One data format: MuData](mudata.qmd) — why components snap together.
+- [Built with Viash · run on Viash Hub](viash.qmd) — how components are packaged and launched.
+- [Many samples at once: the `param_list`](param-list.qmd) — process a cohort in one run.
+- [The pipeline model](pipeline-model.qmd) — the four-step shape, and how packages extend it.
+
+## The four-step model
+
+```{mermaid}
+flowchart LR
+  A[Ingestion] --> B[Process samples] --> C[Integration] --> D[Downstream]
+```
+
+Spatial data follows the same shape with spatial-aware steps; GPU
+(`openpipeline_rapids`) and QC (`openpipeline_qc`) components slot into existing
+steps; turnkey pipelines (`openpipeline_composed`) wrap the whole thing.
+
+::: {.callout-note collapse="true"}
+## Advanced: the data-state view
+Under the hood, processing is organized by the *state of the data*
+(single-sample → multi-sample → merged → integrated). An optional deep-dive for
+pipeline authors — to be ported from the current architecture page.
+:::

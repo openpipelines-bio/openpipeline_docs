@@ -1,0 +1,28 @@
+---
+title: "Many samples at once: the param_list"
+order: 30
+---
+
+A **`param_list`** processes a whole cohort in a single run. It is a list where
+**each entry is one sample**, carrying that sample's own arguments. Any argument
+set **outside** the list applies to **every** sample.
+
+```yaml
+param_list:
+  - id: sample_1
+    input: data/sample_1.h5mu
+    rna_min_counts: 2          # per-sample override
+  - id: sample_2
+    input: data/sample_2.h5mu
+    rna_min_counts: 1          # per-sample override
+rna_max_counts: 1000000        # shared: applied to all samples
+```
+
+Why it matters:
+
+- **Global vs. per-sample is explicit** — shared defaults stay in one place;
+  overrides sit next to the sample they affect.
+- **One command, many samples** — no shell loops, no repeated invocations.
+- **Parallelism** — Nextflow runs the entries concurrently.
+
+See it end-to-end in the [Get started](../get-started/index.qmd) tutorial.

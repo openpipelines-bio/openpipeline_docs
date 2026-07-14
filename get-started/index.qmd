@@ -1,0 +1,109 @@
+---
+title: "Run your first pipeline"
+description: "From raw counts to an integrated object — in about 20 minutes."
+order: 0
+---
+
+Process a real 3-sample dataset from raw counts to an integrated object. First,
+choose **how** you want to run it — the steps adapt to your choice.
+
+::: {.callout-tip appearance="simple"}
+**New here?** Pick **Local** and follow every step top to bottom.
+**Already have compute?** Pick **Seqera** or **Viash Hub** — no install needed.
+:::
+
+::: {.panel-tabset}
+
+## Local (Nextflow)
+
+**1 · Install the runtime.** You need Nextflow and Docker. Everything else ships
+inside containers — you install nothing per pipeline.
+
+```bash
+# install nextflow
+curl -s https://get.nextflow.io | bash
+# check docker is running
+docker --version
+```
+
+**2 · Get the example data.** A tiny public dataset — three PBMC samples, already
+in MuData format.
+
+```bash
+aws s3 cp s3://openpipelines-data/pbmc_1k_protein_v3/ ./data --recursive
+```
+
+**3 · Run `process_samples`.**
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r 4.2.0 -latest -profile docker \
+  -main-script target/nextflow/workflows/multiomics/process_samples/main.nf \
+  -params-file params.yaml --publish_dir results/
+```
+
+## Seqera
+
+**1 · Connect a compute environment.** No local install. In Seqera Platform, set
+up a compute environment (AWS / Azure / GCP) once — every run reuses it.
+
+**2 · Get the example data.** Point at the same public S3 dataset; Seqera reads
+it directly: `s3://openpipelines-data/pbmc_1k_protein_v3/`.
+
+**3 · Launch with `tw`** (or the Launchpad web form):
+
+```bash
+tw launch openpipelines-bio/openpipeline \
+  --revision 4.2.0 --pull-latest \
+  --main-script .../workflows/multiomics/process_samples/main.nf \
+  --compute-env <your-env-id> --params-file params.yaml
+```
+
+## Viash Hub
+
+**1 · Open the workflow.** No install, no CLI. Find `openpipeline` in the
+[Viash Hub](https://www.viash-hub.com) catalog and open `process_samples`.
+
+**2 · Fill in the form.** The GUI renders every parameter with its description —
+set your input and thresholds, no YAML required.
+
+**3 · Pick compute & run.** Choose local execution or a connected Seqera
+environment, then press **Launch**.
+
+:::
+
+## One run, many samples — the `param_list`
+
+To process a whole cohort in a single command, pass a **`param_list`**: a list
+where **each entry is one sample** with its own arguments (`id`, `input`, and any
+per-sample thresholds). Arguments you set **outside** the list apply to **every**
+sample. Shared settings stay global; per-sample overrides live next to their
+sample — no scripting, no repeated commands.
+
+```yaml
+# params.yaml — two samples, per-sample filter + a shared setting
+param_list:
+  - id: sample_1
+    input: data/sample_1.h5mu
+    rna_min_counts: 2          # only for sample_1
+  - id: sample_2
+    input: data/sample_2.h5mu
+    rna_min_counts: 1          # only for sample_2
+rna_max_counts: 1000000        # applied to every sample
+```
+
+## Read the output
+
+The result is one `.h5mu` file:
+
+```
+MuData
+ ├─ .mod
+ │   └─ rna                  # filtered, normalized, log1p
+ │       ├─ .X               # normalized counts
+ │       ├─ .obsm["X_pca"]   # dimensionality reduction
+ │       └─ .obs["leiden"]   # cell clusters
+ └─ .obs["sample_id"]        # which sample each cell came from
+```
+
+**Next:** [task guides →](../guides/index.qmd) · [every parameter →](../reference/index.qmd)

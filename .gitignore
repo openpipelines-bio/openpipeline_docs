@@ -1,0 +1,4 @@
+/_site/
+/.quarto/
+*.html.bak
+.DS_Store

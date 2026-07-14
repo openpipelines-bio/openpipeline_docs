@@ -1,0 +1,16 @@
+---
+title: "openpipeline_rapids"
+description: "Auto-generated reference — populated on release."
+listing:
+  contents: "*/*.qmd"
+  type: table
+  fields: [title, namespace, description]
+  filter-ui: true
+  sort-ui: true
+---
+
+::: {.callout-important appearance="simple"}
+**Auto-generated.** Pages under `reference/openpipeline_rapids/` are produced from the
+[`openpipeline_rapids`](https://github.com/openpipelines-bio/openpipeline_rapids) package's `config.vsh.yaml`
+files on release. This folder is empty until the generation workflow runs.
+:::

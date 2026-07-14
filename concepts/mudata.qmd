@@ -1,0 +1,28 @@
+---
+title: "One data format: MuData"
+order: 10
+---
+
+Every component reads and writes the same HDF5-based
+[MuData](https://mudata.readthedocs.io/) object — modalities under `.mod`, cells
+in `.obs`, features in `.var`. That shared format is why components snap together
+without conversion.
+
+```
+MuData
+├─ .mod
+│  ├─ rna  (AnnData)
+│  │   ├─ .X          # expression matrix
+│  │   ├─ .layers     # alternative matrices
+│  │   ├─ .obs / .var # cell & feature annotation
+│  │   └─ .obsm/.varm # embeddings, loadings
+│  └─ prot (AnnData)
+├─ .obs   # cross-modality cell annotation (e.g. sample_id)
+└─ .var
+```
+
+MuData is the multimodal extension of [AnnData](https://anndata.readthedocs.io).
+If you are new to it, read up on AnnData first — MuData is roughly a collection
+of AnnData objects, one per modality.
+
+*Content to be ported and expanded from the current `fundamentals/concepts` page.*

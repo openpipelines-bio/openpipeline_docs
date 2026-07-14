@@ -1,0 +1,75 @@
+project:
+  type: website
+  output-dir: _site
+  preview:
+    port: 4200
+
+website:
+  title: "OpenPipeline"
+  description: "Best-practice workflows for single-cell and spatial multi-omics data"
+  image: images/logo.svg
+  site-url: https://openpipelines.bio
+  repo-url: https://github.com/openpipelines-bio/openpipeline_docs
+  repo-actions: [edit, issue]
+
+  page-footer:
+    left: "© OpenPipeline"
+    right: "viash · nextflow · mudata"
+
+  navbar:
+    logo: images/logo.svg
+    title: false
+    left:
+      - href: index.qmd
+        text: Home
+      - href: get-started/index.qmd
+        text: Get started
+      - href: guides/index.qmd
+        text: Guides
+      - href: concepts/index.qmd
+        text: Concepts
+      - href: reference/index.qmd
+        text: Reference
+      - href: contributing/index.qmd
+        text: Contributing
+    right:
+      - icon: github
+        href: https://github.com/openpipelines-bio
+        aria-label: GitHub
+
+  sidebar:
+    - id: get-started
+      title: "Get started"
+      contents: get-started/*
+    - id: guides
+      title: "Guides"
+      contents: guides/*
+    - id: concepts
+      title: "Concepts"
+      contents: concepts/*
+    - id: contributing
+      title: "Contributing"
+      contents: contributing/*
+    # Reference is auto-generated per package; grouped by package so the
+    # facet/filter in the mockup maps onto real sidebar sections.
+    - id: reference
+      title: "Reference"
+      collapse-level: 2
+      contents:
+        - section: "openpipeline"
+          contents: reference/openpipeline/*
+        - section: "openpipeline_spatial"
+          contents: reference/openpipeline_spatial/*
+        - section: "openpipeline_qc"
+          contents: reference/openpipeline_qc/*
+        - section: "openpipeline_rapids"
+          contents: reference/openpipeline_rapids/*
+        - section: "openpipeline_composed"
+          contents: reference/openpipeline_composed/*
+
+format:
+  html:
+    theme: [cosmo, theme.scss]
+    toc: true
+    grid:
+      content-mode: standard

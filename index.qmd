@@ -1,0 +1,84 @@
+---
+title: "OpenPipeline"
+subtitle: "Best-practice pipelines for single-cell and spatial data."
+toc: false
+page-layout: full
+---
+
+Modular, containerized components and reproducible Nextflow workflows — from raw
+counts to an integrated, annotated object.
+
+**Modalities:** RNA · Protein (ADT) · ATAC · VDJ · GDO · Spatial
+
+[▸ Run your first pipeline](get-started/index.qmd){.btn .btn-primary}
+[How it works](concepts/index.qmd){.btn .btn-outline-primary}
+
+## The pipeline
+
+Every workflow follows the same shape. Single-cell and spatial share it; the
+satellite packages extend a step or wrap the whole thing.
+
+### Single-cell
+
+```{mermaid}
+flowchart LR
+  A["1 · Ingestion<br/>cellranger_multi · demux"] -->
+  B["2 · Process samples<br/>filter · normalize · HVG"] -->
+  C["3 · Integration<br/>harmony · scVI · totalVI"] -->
+  D["4 · Downstream<br/>annotation · diff. expression"]
+```
+
+### Spatial
+
+```{mermaid}
+flowchart LR
+  A["1 · Ingestion<br/>spaceranger_mapping"] -->
+  B["2 · Process samples<br/>spatial_process_samples"] -->
+  C["3 · Neighbors<br/>find_neighbors · leiden"] -->
+  D["4 · Niches<br/>nichecompass"]
+```
+
+## Three ways in
+
+::: {layout-ncol=3}
+
+::: {.card}
+#### 🧪 New to single-cell
+Install, run a real pipeline on provided test data, and learn to read the output.
+[Get started →](get-started/index.qmd)
+:::
+
+::: {.card}
+#### 🔬 Bioinformatician
+Copy-paste how-tos: ingest 10x or Xenium, integrate with Harmony, run QC reports.
+[Browse guides →](guides/index.qmd)
+:::
+
+::: {.card}
+#### ⚡ Power user
+Every workflow and module, grouped by task, with full parameter listings.
+[Open reference →](reference/index.qmd)
+:::
+
+:::
+
+## Run it your way
+
+Every workflow is a [Viash](https://viash.io)-built, containerized Nextflow
+pipeline — so the same run works on your laptop, on Seqera, or through the
+[Viash Hub](https://www.viash-hub.com) web interface.
+
+| Where | How | Requires |
+|---|---|---|
+| **Local** | Nextflow + Docker on your machine or HPC | nextflow · docker |
+| **Seqera Platform** | Managed cloud runs (AWS/Azure/GCP) | a compute environment |
+| **Viash Hub** | Launch from a guided web form — no CLI | a browser |
+
+: {tbl-colwidths="[20,55,25]"}
+
+---
+
+::: {.callout-note appearance="simple"}
+This site is a **draft rebuild** of the OpenPipeline documentation. A clickable
+design mockup lives in [`design/mockup.html`](design/mockup.html).
+:::

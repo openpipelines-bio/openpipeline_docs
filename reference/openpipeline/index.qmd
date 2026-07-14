@@ -1,0 +1,16 @@
+---
+title: "openpipeline"
+description: "Auto-generated reference — populated on release."
+listing:
+  contents: "*/*.qmd"
+  type: table
+  fields: [title, namespace, description]
+  filter-ui: true
+  sort-ui: true
+---
+
+::: {.callout-important appearance="simple"}
+**Auto-generated.** Pages under `reference/openpipeline/` are produced from the
+[`openpipeline`](https://github.com/openpipelines-bio/openpipeline) package's `config.vsh.yaml`
+files on release. This folder is empty until the generation workflow runs.
+:::
