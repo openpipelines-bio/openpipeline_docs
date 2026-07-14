@@ -1,0 +1,131 @@
+name: Generate reference
+
+# Auto-generates the reference documentation for the whole OpenPipeline
+# ecosystem from source. This repo pulls each package, runs the Viash
+# documentation generator over its configs, and opens a PR with the result —
+# so the reference can never drift from the code, and no package repo needs a
+# workflow of its own.
+#
+# Requires repo secret VIASH_PRO_TOKEN (viash-hub pro access, same token the
+# production website workflow uses).
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: "Branch or tag to generate from for every package (default: main)."
+        type: string
+        default: main
+  schedule:
+    - cron: "0 6 * * 1" # Mondays 06:00 UTC
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout docs
+        uses: actions/checkout@v4
+        with:
+          path: openpipeline_docs
+
+      - name: Checkout openpipeline
+        uses: actions/checkout@v4
+        with: { repository: openpipelines-bio/openpipeline, ref: "${{ inputs.ref || 'main' }}", path: openpipeline }
+      - name: Checkout openpipeline_spatial
+        uses: actions/checkout@v4
+        with: { repository: openpipelines-bio/openpipeline_spatial, ref: "${{ inputs.ref || 'main' }}", path: openpipeline_spatial }
+      - name: Checkout openpipeline_qc
+        uses: actions/checkout@v4
+        with: { repository: openpipelines-bio/openpipeline_qc, ref: "${{ inputs.ref || 'main' }}", path: openpipeline_qc }
+      - name: Checkout openpipeline_rapids
+        uses: actions/checkout@v4
+        with: { repository: openpipelines-bio/openpipeline_rapids, ref: "${{ inputs.ref || 'main' }}", path: openpipeline_rapids }
+      - name: Checkout openpipeline_composed
+        uses: actions/checkout@v4
+        with: { repository: openpipelines-bio/openpipeline_composed, ref: "${{ inputs.ref || 'main' }}", path: openpipeline_composed }
+
+      - uses: viash-io/viash-actions/setup@v6
+
+      # One generation pass per package. Modules + workflows land together under
+      # reference/<package>/<namespace>/<name>.qmd (the docs-site IA).
+      # test_workflows namespaces are skipped. clean:true prunes stale pages.
+      - name: Generate — openpipeline
+        uses: viash-io/viash-actions/pro/generate-documentation-qmd@v6
+        with:
+          project_directory: openpipeline
+          src: src
+          query: '^(?!test_workflows)'
+          output_dir: openpipeline_docs/reference/openpipeline/
+          dest_path: "{namespace}/{name}.qmd"
+          viash_pro_token: ${{ secrets.VIASH_PRO_TOKEN }}
+          tools_version: main_build
+          clean: true
+      - name: Generate — openpipeline_spatial
+        uses: viash-io/viash-actions/pro/generate-documentation-qmd@v6
+        with:
+          project_directory: openpipeline_spatial
+          src: src
+          query: '^(?!test_workflows)'
+          output_dir: openpipeline_docs/reference/openpipeline_spatial/
+          dest_path: "{namespace}/{name}.qmd"
+          viash_pro_token: ${{ secrets.VIASH_PRO_TOKEN }}
+          tools_version: main_build
+          clean: true
+      - name: Generate — openpipeline_qc
+        uses: viash-io/viash-actions/pro/generate-documentation-qmd@v6
+        with:
+          project_directory: openpipeline_qc
+          src: src
+          query: '^(?!test_workflows)'
+          output_dir: openpipeline_docs/reference/openpipeline_qc/
+          dest_path: "{namespace}/{name}.qmd"
+          viash_pro_token: ${{ secrets.VIASH_PRO_TOKEN }}
+          tools_version: main_build
+          clean: true
+      - name: Generate — openpipeline_rapids
+        uses: viash-io/viash-actions/pro/generate-documentation-qmd@v6
+        with:
+          project_directory: openpipeline_rapids
+          src: src
+          query: '^(?!test_workflows)'
+          output_dir: openpipeline_docs/reference/openpipeline_rapids/
+          dest_path: "{namespace}/{name}.qmd"
+          viash_pro_token: ${{ secrets.VIASH_PRO_TOKEN }}
+          tools_version: main_build
+          clean: true
+      - name: Generate — openpipeline_composed
+        uses: viash-io/viash-actions/pro/generate-documentation-qmd@v6
+        with:
+          project_directory: openpipeline_composed
+          src: src
+          query: '^(?!test_workflows)'
+          output_dir: openpipeline_docs/reference/openpipeline_composed/
+          dest_path: "{namespace}/{name}.qmd"
+          viash_pro_token: ${{ secrets.VIASH_PRO_TOKEN }}
+          tools_version: main_build
+          clean: true
+
+      - name: Open PR
+        working-directory: openpipeline_docs
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add reference
+          if git diff --cached --quiet; then
+            echo "Reference already up to date — nothing to propose."
+            exit 0
+          fi
+          BRANCH="reference/update-${{ inputs.ref || 'main' }}"
+          git checkout -B "$BRANCH"
+          git commit -m "Regenerate reference from ${{ inputs.ref || 'main' }}"
+          git push --force-with-lease --set-upstream origin "$BRANCH"
+          gh pr create --title "Regenerate reference (${{ inputs.ref || 'main' }})" \
+            --base main --head "$BRANCH" \
+            --body "Auto-generated from all five packages' Viash configs. Do not hand-edit \`reference/<package>/\`." \
+            || echo "PR already open for $BRANCH; branch updated."

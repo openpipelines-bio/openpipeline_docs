@@ -1,7 +1,6 @@
 name: Publish docs
 
 # Builds the Quarto site and deploys to GitHub Pages.
-# Enable Pages (Settings → Pages → Source: GitHub Actions) before first run.
 
 on:
   push:
