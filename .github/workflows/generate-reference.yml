@@ -50,49 +50,93 @@ jobs:
 
       - uses: viash-io/viash-actions/setup@v6
 
-      # One generation pass per package. Modules + workflows land together under
-      # reference/<package>/<namespace>/<name>.qmd (the docs-site IA).
-      # test_workflows namespaces are skipped. clean:true prunes stale pages.
-      - name: Generate — openpipeline
+      # Two passes per package (the proven openpipeline→website recipe): modules
+      # first (clean:true wipes stale pages), then workflows (clean:false appends).
+      # Both land under reference/<package>/<namespace>/<name>.qmd. A single
+      # combined query returned zero components, so mirror the working split.
+      - name: Generate — openpipeline (modules)
         uses: viash-io/viash-actions/pro/generate-documentation-qmd@v6
         with:
           project_directory: openpipeline
-          query: '^(?!test_workflows)'
+          query: '^(?!workflows|test_workflows)'
           output_dir: ../openpipeline_docs/reference/openpipeline/
           dest_path: "{namespace}/{name}.qmd"
           viash_pro_token: ${{ secrets.GTHB_PAT }}
           tools_version: main_build
           clean: true
-      - name: Generate — openpipeline_spatial
+      - name: Generate — openpipeline (workflows)
+        uses: viash-io/viash-actions/pro/generate-documentation-qmd@v6
+        with:
+          project_directory: openpipeline
+          query: '^workflows'
+          output_dir: ../openpipeline_docs/reference/openpipeline/
+          dest_path: "{namespace}/{name}.qmd"
+          viash_pro_token: ${{ secrets.GTHB_PAT }}
+          tools_version: main_build
+          clean: false
+
+      - name: Generate — openpipeline_spatial (modules)
         uses: viash-io/viash-actions/pro/generate-documentation-qmd@v6
         with:
           project_directory: openpipeline_spatial
-          query: '^(?!test_workflows)'
+          query: '^(?!workflows|test_workflows)'
           output_dir: ../openpipeline_docs/reference/openpipeline_spatial/
           dest_path: "{namespace}/{name}.qmd"
           viash_pro_token: ${{ secrets.GTHB_PAT }}
           tools_version: main_build
           clean: true
-      - name: Generate — openpipeline_qc
+      - name: Generate — openpipeline_spatial (workflows)
+        uses: viash-io/viash-actions/pro/generate-documentation-qmd@v6
+        with:
+          project_directory: openpipeline_spatial
+          query: '^workflows'
+          output_dir: ../openpipeline_docs/reference/openpipeline_spatial/
+          dest_path: "{namespace}/{name}.qmd"
+          viash_pro_token: ${{ secrets.GTHB_PAT }}
+          tools_version: main_build
+          clean: false
+
+      - name: Generate — openpipeline_qc (modules)
         uses: viash-io/viash-actions/pro/generate-documentation-qmd@v6
         with:
           project_directory: openpipeline_qc
-          query: '^(?!test_workflows)'
+          query: '^(?!workflows|test_workflows)'
           output_dir: ../openpipeline_docs/reference/openpipeline_qc/
           dest_path: "{namespace}/{name}.qmd"
           viash_pro_token: ${{ secrets.GTHB_PAT }}
           tools_version: main_build
           clean: true
-      - name: Generate — openpipeline_composed
+      - name: Generate — openpipeline_qc (workflows)
+        uses: viash-io/viash-actions/pro/generate-documentation-qmd@v6
+        with:
+          project_directory: openpipeline_qc
+          query: '^workflows'
+          output_dir: ../openpipeline_docs/reference/openpipeline_qc/
+          dest_path: "{namespace}/{name}.qmd"
+          viash_pro_token: ${{ secrets.GTHB_PAT }}
+          tools_version: main_build
+          clean: false
+
+      - name: Generate — openpipeline_composed (modules)
         uses: viash-io/viash-actions/pro/generate-documentation-qmd@v6
         with:
           project_directory: openpipeline_composed
-          query: '^(?!test_workflows)'
+          query: '^(?!workflows|test_workflows)'
           output_dir: ../openpipeline_docs/reference/openpipeline_composed/
           dest_path: "{namespace}/{name}.qmd"
           viash_pro_token: ${{ secrets.GTHB_PAT }}
           tools_version: main_build
           clean: true
+      - name: Generate — openpipeline_composed (workflows)
+        uses: viash-io/viash-actions/pro/generate-documentation-qmd@v6
+        with:
+          project_directory: openpipeline_composed
+          query: '^workflows'
+          output_dir: ../openpipeline_docs/reference/openpipeline_composed/
+          dest_path: "{namespace}/{name}.qmd"
+          viash_pro_token: ${{ secrets.GTHB_PAT }}
+          tools_version: main_build
+          clean: false
 
       - name: Open PR
         working-directory: openpipeline_docs

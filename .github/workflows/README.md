@@ -15,10 +15,11 @@ dispatch (or a weekly schedule) it:
    (`openpipeline`, `openpipeline_spatial`, `openpipeline_qc`,
    `openpipeline_composed`; `openpipeline_rapids` is excluded for now — not
    ready — and is also the only private package),
-2. runs `viash-io/viash-actions/pro/generate-documentation-qmd` once per
-   package with `output_dir: reference/<package>/` and
-   `dest_path: "{namespace}/{name}.qmd"` — one unified pass per package
-   (modules + workflows by namespace; `test_workflows` skipped),
+2. runs `viash-io/viash-actions/pro/generate-documentation-qmd` per package
+   with `output_dir: reference/<package>/` and
+   `dest_path: "{namespace}/{name}.qmd"` — two passes each (modules via
+   `^(?!workflows|test_workflows)`, then workflows via `^workflows`), the same
+   split the production website workflow uses,
 3. opens a PR against `main` with the regenerated reference.
 
 This is a **pull model**: the docs repo owns generation, so the reference stays
