@@ -6,8 +6,8 @@ name: Generate reference
 # so the reference can never drift from the code, and no package repo needs a
 # workflow of its own.
 #
-# Requires repo secret VIASH_PRO_TOKEN (viash-hub pro access, same token the
-# production website workflow uses).
+# Requires repo secret GTHB_PAT: a GitHub PAT with viash-hub pro access (and
+# read access to any private package repo). 
 
 on:
   workflow_dispatch:
@@ -31,22 +31,22 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: openpipeline_docs
+          token: ${{ secrets.GTHB_PAT }}
 
+      # Package checkouts pass the PAT so private repos resolve and so the same
+      # token is available for a re-added private package later.
       - name: Checkout openpipeline
         uses: actions/checkout@v4
-        with: { repository: openpipelines-bio/openpipeline, ref: "${{ inputs.ref || 'main' }}", path: openpipeline }
+        with: { repository: openpipelines-bio/openpipeline, ref: "${{ inputs.ref || 'main' }}", path: openpipeline, token: "${{ secrets.GTHB_PAT }}" }
       - name: Checkout openpipeline_spatial
         uses: actions/checkout@v4
-        with: { repository: openpipelines-bio/openpipeline_spatial, ref: "${{ inputs.ref || 'main' }}", path: openpipeline_spatial }
+        with: { repository: openpipelines-bio/openpipeline_spatial, ref: "${{ inputs.ref || 'main' }}", path: openpipeline_spatial, token: "${{ secrets.GTHB_PAT }}" }
       - name: Checkout openpipeline_qc
         uses: actions/checkout@v4
-        with: { repository: openpipelines-bio/openpipeline_qc, ref: "${{ inputs.ref || 'main' }}", path: openpipeline_qc }
-      - name: Checkout openpipeline_rapids
-        uses: actions/checkout@v4
-        with: { repository: openpipelines-bio/openpipeline_rapids, ref: "${{ inputs.ref || 'main' }}", path: openpipeline_rapids }
+        with: { repository: openpipelines-bio/openpipeline_qc, ref: "${{ inputs.ref || 'main' }}", path: openpipeline_qc, token: "${{ secrets.GTHB_PAT }}" }
       - name: Checkout openpipeline_composed
         uses: actions/checkout@v4
-        with: { repository: openpipelines-bio/openpipeline_composed, ref: "${{ inputs.ref || 'main' }}", path: openpipeline_composed }
+        with: { repository: openpipelines-bio/openpipeline_composed, ref: "${{ inputs.ref || 'main' }}", path: openpipeline_composed, token: "${{ secrets.GTHB_PAT }}" }
 
       - uses: viash-io/viash-actions/setup@v6
 
@@ -61,7 +61,7 @@ jobs:
           query: '^(?!test_workflows)'
           output_dir: openpipeline_docs/reference/openpipeline/
           dest_path: "{namespace}/{name}.qmd"
-          viash_pro_token: ${{ secrets.VIASH_PRO_TOKEN }}
+          viash_pro_token: ${{ secrets.GTHB_PAT }}
           tools_version: main_build
           clean: true
       - name: Generate — openpipeline_spatial
@@ -72,7 +72,7 @@ jobs:
           query: '^(?!test_workflows)'
           output_dir: openpipeline_docs/reference/openpipeline_spatial/
           dest_path: "{namespace}/{name}.qmd"
-          viash_pro_token: ${{ secrets.VIASH_PRO_TOKEN }}
+          viash_pro_token: ${{ secrets.GTHB_PAT }}
           tools_version: main_build
           clean: true
       - name: Generate — openpipeline_qc
@@ -83,18 +83,7 @@ jobs:
           query: '^(?!test_workflows)'
           output_dir: openpipeline_docs/reference/openpipeline_qc/
           dest_path: "{namespace}/{name}.qmd"
-          viash_pro_token: ${{ secrets.VIASH_PRO_TOKEN }}
-          tools_version: main_build
-          clean: true
-      - name: Generate — openpipeline_rapids
-        uses: viash-io/viash-actions/pro/generate-documentation-qmd@v6
-        with:
-          project_directory: openpipeline_rapids
-          src: src
-          query: '^(?!test_workflows)'
-          output_dir: openpipeline_docs/reference/openpipeline_rapids/
-          dest_path: "{namespace}/{name}.qmd"
-          viash_pro_token: ${{ secrets.VIASH_PRO_TOKEN }}
+          viash_pro_token: ${{ secrets.GTHB_PAT }}
           tools_version: main_build
           clean: true
       - name: Generate — openpipeline_composed
@@ -105,14 +94,14 @@ jobs:
           query: '^(?!test_workflows)'
           output_dir: openpipeline_docs/reference/openpipeline_composed/
           dest_path: "{namespace}/{name}.qmd"
-          viash_pro_token: ${{ secrets.VIASH_PRO_TOKEN }}
+          viash_pro_token: ${{ secrets.GTHB_PAT }}
           tools_version: main_build
           clean: true
 
       - name: Open PR
         working-directory: openpipeline_docs
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ secrets.GTHB_PAT }}
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
