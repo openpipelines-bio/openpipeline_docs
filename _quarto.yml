@@ -6,6 +6,10 @@ project:
   # Draft site: ship a crawler-blocking robots.txt into the build output.
   resources:
     - robots.txt
+  # Generate the Team page from the openpipeline (core) author registry before
+  # rendering. See scripts/generate_team.py.
+  pre-render:
+    - scripts/generate_team.py
 
 website:
   title: "OpenPipeline"
@@ -25,8 +29,6 @@ website:
     logo: images/logo.svg
     title: false
     left:
-      - href: index.qmd
-        text: Home
       - href: get-started/index.qmd
         text: Get started
       - href: guides/index.qmd
@@ -37,6 +39,8 @@ website:
         text: Reference
       - href: contributing/index.qmd
         text: Contributing
+      - href: team/index.qmd
+        text: Team
     right:
       - icon: github
         href: https://github.com/openpipelines-bio

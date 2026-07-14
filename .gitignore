@@ -2,3 +2,7 @@
 /.quarto/
 *.html.bak
 .DS_Store
+
+# Team member pages are generated from openpipeline core at render time
+# (see scripts/generate_team.py). Only the listing machinery is tracked.
+/team/*/

@@ -1,0 +1,18 @@
+---
+pagetitle: "Team — OpenPipeline"
+title: "Team"
+description: "The people building and maintaining OpenPipeline."
+toc: false
+page-layout: full
+anchor-sections: false
+listing:
+  - id: authors
+    contents: "*/index.qmd"
+    type: custom
+    template: members.ejs
+    sort: "title"
+css: team.css
+---
+
+:::{#authors}
+:::

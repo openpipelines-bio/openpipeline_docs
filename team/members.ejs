@@ -1,0 +1,33 @@
+```{=html}
+<div class="people-widget justify-content-evenly">
+  <% for (const item of items) { %>
+  <div class="people-person">
+    <% if (item.image) { %>
+    <img loading="lazy" class="avatar avatar-circle" src="<%- item.image %>" alt="<%= item.title %>" />
+    <% } %>
+    <div class="portrait-title">
+      <h4><%= item.title %></h4>
+      <% for (const organization of item.organizations || []) { %>
+      <h6>
+        <i>
+          <%= organization.role %>
+          <% if (organization.name) { %> at
+            <% if (organization.href) { %><a href="<%= organization.href %>"><% } %>
+              <%= organization.name %>
+            <% if (organization.href) { %></a><% } %>
+          <% } %>
+        </i>
+      </h6>
+      <% } %>
+      <div class="network">
+      <% for (const link of item.links || []) { %>
+        <a class="network-icon" href="<%- link.href %>" title="<%= link.text %>">
+          <% if (link.icon && link.icon.indexOf('bi-') === 0) { %><i class="bi <%- link.icon %>"></i><% } else { %><span class="link-text"><%= link.text %></span><% } %>
+        </a>
+      <% } %>
+      </div>
+    </div>
+  </div>
+  <% } %>
+</div>
+```

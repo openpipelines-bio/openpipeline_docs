@@ -69,3 +69,119 @@ h1, h2, h3 { letter-spacing: -0.02em; }
 // primary buttons use the brand green with dark text
 .btn-primary { background: var(--op-brand); border-color: var(--op-brand); color: #0b1a10; }
 .btn-primary:hover { filter: brightness(1.05); background: var(--op-brand); border-color: var(--op-brand); color: #0b1a10; }
+
+// ---------------------------------------------------------------------------
+// Landing page — ported from design/mockup.html, scoped under .op-home so the
+// mockup's generic class names never collide with Bootstrap or other pages.
+// ---------------------------------------------------------------------------
+:root {
+  --bg:          #{$op-bg};
+  --surface:     #{$op-surface};
+  --surface-2:   #eef4ef;
+  --border:      #{$op-border};
+  --ink:         #{$op-ink};
+  --muted:       #{$op-muted};
+  --brand:       #{$op-brand};
+  --accent-ink:  #{$op-accent-ink};
+  --accent-soft: #{$op-accent-soft};
+  --core:     #{$pkg-openpipeline};
+  --spatial:  #{$pkg-openpipeline_spatial};
+  --qc:       #{$pkg-openpipeline_qc};
+  --rapids:   #{$pkg-openpipeline_rapids};
+  --composed: #{$pkg-openpipeline_composed};
+  --shadow: 0 1px 2px rgba(19, 32, 26, .05), 0 8px 24px rgba(19, 32, 26, .06);
+  --mono: ui-monospace, "SF Mono", "Cascadia Code", "JetBrains Mono", Menlo, Consolas, monospace;
+  --maxw: 1120px;
+}
+
+.op-home {
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+  .mono { font-family: var(--mono); }
+  .kicker { font-family: var(--mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent-ink); font-weight: 600; }
+
+  // hero
+  .hero { padding: 66px 0 34px; }
+  .hero h1 { font-family: var(--mono); font-weight: 700; letter-spacing: -.02em; font-size: clamp(30px, 5vw, 50px); line-height: 1.05; margin: 14px 0 0; }
+  .hero h1 em { font-style: normal; color: var(--accent-ink); }
+  .hero p.lede { font-size: clamp(16px, 2vw, 20px); color: var(--muted); max-width: 60ch; margin: 20px 0 0; }
+  .modalities { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+  .modalities .m { font-family: var(--mono); font-size: 12px; padding: 5px 10px; border-radius: 20px; background: var(--surface); border: 1px solid var(--border); color: var(--muted); }
+  .modalities .m b { color: var(--ink); font-weight: 600; }
+  .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+  .btn { font-family: var(--mono); font-size: 14px; font-weight: 600; cursor: pointer; padding: 11px 18px; border-radius: 9px; border: 1px solid transparent; display: inline-flex; gap: 8px; align-items: center; text-decoration: none; }
+  .btn.primary { background: var(--brand); color: #0b1a10; }
+  .btn.primary:hover { filter: brightness(1.05); }
+  .btn.ghost { background: var(--surface); border-color: var(--border); color: var(--ink); }
+  .btn.ghost:hover { border-color: var(--brand); }
+
+  // flow (single-cell vs spatial)
+  .flow-card { margin-top: 8px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); padding: 22px; overflow: hidden; }
+  .seg { display: inline-flex; background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 3px; gap: 3px; }
+  .seg button { font-family: var(--mono); font-size: 13px; padding: 7px 16px; border-radius: 7px; border: 0; background: none; color: var(--muted); cursor: pointer; }
+  .seg button.on { background: var(--surface); color: var(--ink); box-shadow: var(--shadow); }
+  .flow-hint { font-size: 13px; color: var(--muted); margin: 14px 0 16px; }
+  .flow-scroll { overflow-x: auto; padding-bottom: 4px; }
+  .flow { display: grid; grid-template-columns: repeat(4, minmax(150px, 1fr)); gap: 12px; min-width: 640px; align-items: stretch; }
+  .stage { background: var(--surface-2); border: 1px solid var(--border); border-top: 2px solid var(--path, var(--accent-ink)); border-radius: 12px; padding: 16px 14px 14px; position: relative; }
+  .stage::after { content: "\2192"; position: absolute; right: -11px; top: 24px; color: var(--path, var(--muted)); font-family: var(--mono); z-index: 2; }
+  .stage:last-child::after { display: none; }
+  // station dot — the stages' colored top borders + these dots read as a rail
+  .station { position: absolute; top: -6px; left: 16px; width: 10px; height: 10px; border-radius: 50%; background: var(--path, var(--accent-ink)); box-shadow: 0 0 0 3px var(--surface-2); }
+  .stage .num { font-family: var(--mono); font-size: 11px; color: var(--path, var(--accent-ink)); letter-spacing: .1em; }
+  .stage h4 { font-size: 15px; margin: 3px 0 10px; letter-spacing: -.01em; }
+
+  // caption under each stage title — states the stage's semantics
+  .pick { font-family: var(--mono); font-size: 10px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); margin: 0 0 9px; }
+
+  // tool chips
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { font-family: var(--mono); font-size: 11px; line-height: 1.4; padding: 3px 8px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); color: var(--muted); white-space: nowrap; }
+  // choice options carry a bullet — they read as "pick from these alternatives"
+  .chip.alt::before { content: ""; display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--path, var(--accent-ink)); margin-right: 6px; vertical-align: middle; opacity: .75; }
+  .chip.more { cursor: pointer; user-select: none; color: var(--accent-ink); background: var(--accent-soft); border-color: color-mix(in srgb, var(--brand) 45%, var(--border)); }
+  .chip.more:hover { border-color: var(--brand); }
+  .chip.link { color: var(--accent-ink); text-decoration: none; }
+  .chip.link:hover { border-color: var(--brand); }
+  .more-wrap { display: contents; }
+  .more-wrap[hidden] { display: none; }
+
+  // workflow stage — a single workflow whose steps run in sequence.
+  // Grouped in a dashed box, joined by arrows, so it reads as one unit
+  // rather than a menu of alternatives.
+  .seq { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 8px; border: 1px dashed color-mix(in srgb, var(--path, var(--accent-ink)) 45%, var(--border)); border-radius: 10px; }
+  .seq-arrow { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+  // optional step — only meaningful inside a workflow sequence
+  .chip.opt { border-style: dashed; }
+  .chip.opt em { font-style: normal; opacity: .6; margin-left: 5px; font-size: 9.5px; text-transform: uppercase; letter-spacing: .06em; }
+
+  // generic sections
+  section.block { padding: 46px 0; }
+  section.block.alt { background: var(--surface-2); border-block: 1px solid var(--border); }
+  .sec-head { margin-bottom: 24px; }
+  .sec-head h2 { font-size: clamp(22px, 3vw, 30px); letter-spacing: -.02em; font-family: var(--mono); font-weight: 700; margin: 6px 0 0; }
+  .sec-head p { color: var(--muted); margin: 8px 0 0; max-width: 64ch; }
+
+  .cards3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .rcard { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px; box-shadow: var(--shadow); }
+  .rcard.link { cursor: pointer; transition: transform .16s ease, border-color .16s ease; }
+  .rcard.link:hover { transform: translateY(-3px); border-color: var(--brand); }
+  .rcard .tag { font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+  .rcard h3 { font-size: 18px; margin: 8px 0 6px; letter-spacing: -.01em; }
+  .rcard p { color: var(--muted); font-size: 14px; margin: 0; }
+  .rcard .go { font-family: var(--mono); font-size: 13px; color: var(--accent-ink); margin-top: 14px; display: inline-block; }
+
+  // run-your-way
+  .ways { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .way { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 18px; box-shadow: var(--shadow); }
+  .way .h { font-family: var(--mono); font-weight: 700; font-size: 15px; display: flex; align-items: center; gap: 8px; }
+  .way .badge { font-family: var(--mono); font-size: 10px; padding: 2px 7px; border-radius: 20px; background: var(--accent-soft); color: var(--accent-ink); letter-spacing: .04em; }
+  .way p { color: var(--muted); font-size: 13.5px; margin: 8px 0 0; }
+  .way .req { font-family: var(--mono); font-size: 11.5px; color: var(--muted); margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
+
+  @media (max-width: 820px) {
+    .cards3, .ways { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+}

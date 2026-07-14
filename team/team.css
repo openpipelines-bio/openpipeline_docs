@@ -1,0 +1,62 @@
+/* Team member grid — one flat list, no core/contributor divide. */
+
+.people-widget {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.8em;
+  padding-top: 1.5em;
+  text-align: center;
+}
+
+.people-person {
+  background: none;
+  border: none;
+  flex-basis: 200px;
+  max-width: 220px;
+}
+
+.people-widget .avatar {
+  width: 92px;
+  height: 92px;
+  object-fit: cover;
+  margin: 0 auto;
+  display: block;
+  border: 2px solid var(--op-border);
+}
+
+.avatar-circle { border-radius: 50%; }
+
+.portrait-title h4 {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: -0.01em;
+  margin: 12px 0 2px;
+}
+
+.portrait-title h6 {
+  font-weight: 400;
+  font-size: 0.8rem;
+  color: var(--op-muted);
+  margin: 0 0 4px;
+}
+
+.portrait-title h6 i { font-style: normal; }
+.portrait-title h6 a { color: var(--op-accent-ink); text-decoration: none; }
+.portrait-title h6 a:hover { text-decoration: underline; }
+
+.network {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.network-icon {
+  color: var(--op-muted);
+  text-decoration: none;
+  font-size: 1.05rem;
+  line-height: 1;
+}
+.network-icon:hover { color: var(--op-accent-ink); }
+.network-icon .link-text { font-size: 0.72rem; }

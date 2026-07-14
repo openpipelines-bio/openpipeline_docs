@@ -24,8 +24,18 @@ jobs:
 
       - uses: quarto-dev/quarto-actions/setup@v2
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install team-generator deps
+        run: pip install pyyaml
+
       - name: Render site
         run: quarto render
+        env:
+          # Used by scripts/generate_team.py to authenticate the GitHub API call.
+          GITHUB_TOKEN: ${{ github.token }}
 
       - uses: actions/upload-pages-artifact@v3
         with:
