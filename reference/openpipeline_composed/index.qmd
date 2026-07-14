@@ -1,16 +1,32 @@
 ---
-title: "openpipeline_composed"
-description: "Auto-generated reference — populated on release."
+title: "Reference"
+description: An overview of the workflows and modules in OpenPipelines
 listing:
-  contents: "*/*.qmd"
-  type: table
-  fields: [title, namespace, description]
-  filter-ui: true
-  sort-ui: true
+  - id: workflows
+    type: table
+    contents: "workflows/**/*.qmd"
+    fields: [title, namespace, description]
+    field-display-names: 
+        title: Name
+        namespace: Namespace
+        description: Description
+  - id: modules
+    type: table
+    contents: "modules/**/*.qmd"
+    fields: [title, namespace, description]
+    field-display-names: 
+        title: Name
+        namespace: Namespace
+        description: Description
 ---
 
-::: {.callout-important appearance="simple"}
-**Auto-generated.** Pages under `reference/openpipeline_composed/` are produced from the
-[`openpipeline_composed`](https://github.com/openpipelines-bio/openpipeline_composed) package's `config.vsh.yaml`
-files on release. This folder is empty until the generation workflow runs.
+
+## Workflows
+
+:::{#workflows}
+:::
+
+## Modules
+
+:::{#modules}
 :::
