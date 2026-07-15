@@ -1,12 +1,17 @@
 name: Generate reference
 
-# Auto-generates the reference documentation for the OpenPipeline ecosystem.
-# Packages are pulled from packages.viash-hub.com (open source, no credentials)
-# at their latest release tag — viash-hub always ships the built `target/`,
-# which the documentation generator reads. The generated pages are opened as a
-# PR against this repo, so the reference can never drift from released code.
+# Auto-generates versioned reference documentation for the OpenPipeline
+# ecosystem. Each package release lands under reference/<package>/<version>/,
+# so users can browse multiple versions.
 #
-# openpipeline_rapids is intentionally excluded for now (not ready).
+# Incremental + cached: the workflow scans packages.viash-hub.com for each
+# package's latest release and only builds it if reference/<package>/<version>/
+# does not already exist. Already-generated versions are never rebuilt — so a
+# run does nothing unless a new release has appeared ("latest forward").
+#
+# Packages are cloned from viash-hub (public, no credentials) at the tag, which
+# ships the built target/ the generator reads. openpipeline_rapids is excluded
+# for now (not ready).
 #
 # Requires repo secret GTHB_PAT only for `viash_pro_token`: the generator clones
 # the private viash-io/viash_tools repo with it. Package fetching needs no auth.
@@ -30,19 +35,27 @@ jobs:
           path: openpipeline_docs
           token: ${{ secrets.GTHB_PAT }}
 
-      # Clone each package from viash-hub at its highest semver tag. viash-hub
-      # is public, so no token is needed. The tag per package is exported to
-      # $GITHUB_ENV as <package>_tag for the generate steps below.
-      - name: Fetch packages from viash-hub
+      # Scan viash-hub for each package's latest tag. If reference/<pkg>/<tag>/
+      # already exists, skip it (cached); otherwise clone that tag for the
+      # generate steps below. Per-package build flag + tag go to $GITHUB_OUTPUT.
+      - name: Plan versions
+        id: plan
         env:
           GIT_TERMINAL_PROMPT: "0"
         run: |
           set -euo pipefail
           for pkg in openpipeline openpipeline_spatial openpipeline_qc openpipeline_composed; do
-            tag=$(curl -sf "https://packages.viash-hub.com/api/v1/repos/vsh/$pkg/tags?limit=100" \
+            latest=$(curl -sf "https://packages.viash-hub.com/api/v1/repos/vsh/$pkg/tags?limit=100" \
               | python3 -c "import sys,json,re; ts=[t['name'] for t in json.load(sys.stdin) if re.match(r'v?\d+\.\d+', t['name'])]; print(sorted(ts, key=lambda v:[int(x) for x in re.findall(r'\d+', v)])[-1])")
-            echo "$pkg -> $tag"
-            git clone --quiet --depth 1 --branch "$tag" "https://packages.viash-hub.com/vsh/$pkg.git" "$pkg"
+            echo "${pkg}_tag=$latest" >> "$GITHUB_OUTPUT"
+            if [ -d "openpipeline_docs/reference/$pkg/$latest" ]; then
+              echo "$pkg: $latest already in docs — skipping (cached)"
+              echo "${pkg}_build=false" >> "$GITHUB_OUTPUT"
+              continue
+            fi
+            echo "$pkg: new version $latest — will build"
+            echo "${pkg}_build=true" >> "$GITHUB_OUTPUT"
+            git clone --quiet --depth 1 --branch "$latest" "https://packages.viash-hub.com/vsh/$pkg.git" "$pkg"
             # Drop vendored dependencies (craftbox/biobox/base openpipeline components):
             # they are external/base libs we only mention, not document, and some of
             # their configs carry no `namespace`, which crashes the qmd generator
@@ -52,113 +65,138 @@ jobs:
             # Viash builds these into target/_private/, and they must not surface in
             # the public reference.
             rm -rf "$pkg/target/_private"
-            echo "${pkg}_tag=$tag" >> "$GITHUB_ENV"
+          done
+
+      # One-time migration: drop any legacy flat (non-versioned) reference so
+      # only reference/<package>/<version>/ remains. Version dirs (v1.2.3) are
+      # kept; a namespace dir like "velocity" is not matched by v[0-9]*.
+      - name: Drop legacy flat reference
+        working-directory: openpipeline_docs
+        run: |
+          for pkg in openpipeline openpipeline_spatial openpipeline_qc openpipeline_composed; do
+            [ -d "reference/$pkg" ] || continue
+            find "reference/$pkg" -mindepth 1 -maxdepth 1 -type d ! -name 'v[0-9]*' -exec rm -rf {} +
           done
 
       - uses: viash-io/viash-actions/setup@v6
 
-      # Two passes per package (the proven website recipe): modules first
-      # (clean:true wipes stale pages), then workflows (clean:false appends).
-      # `ref`/`repository` point source links at the package's GitHub repo+tag.
+      # Two passes per package (modules, then workflows) into the version folder.
+      # Only runs when Plan flagged a new version for that package.
       - name: Generate — openpipeline (modules)
+        if: steps.plan.outputs.openpipeline_build == 'true'
         uses: viash-io/viash-actions/pro/generate-documentation-qmd@v6
         with:
           project_directory: openpipeline
           query: '^(?!workflows|test_workflows)'
-          output_dir: ../openpipeline_docs/reference/openpipeline/
+          output_dir: ../openpipeline_docs/reference/openpipeline/${{ steps.plan.outputs.openpipeline_tag }}/
           dest_path: "{namespace}/{name}.qmd"
           viash_pro_token: ${{ secrets.GTHB_PAT }}
           tools_version: main_build
           repository: openpipelines-bio/openpipeline
-          ref: ${{ env.openpipeline_tag }}
+          ref: ${{ steps.plan.outputs.openpipeline_tag }}
           clean: true
       - name: Generate — openpipeline (workflows)
+        if: steps.plan.outputs.openpipeline_build == 'true'
         uses: viash-io/viash-actions/pro/generate-documentation-qmd@v6
         with:
           project_directory: openpipeline
           query: '^workflows'
-          output_dir: ../openpipeline_docs/reference/openpipeline/
+          output_dir: ../openpipeline_docs/reference/openpipeline/${{ steps.plan.outputs.openpipeline_tag }}/
           dest_path: "{namespace}/{name}.qmd"
           viash_pro_token: ${{ secrets.GTHB_PAT }}
           tools_version: main_build
           repository: openpipelines-bio/openpipeline
-          ref: ${{ env.openpipeline_tag }}
+          ref: ${{ steps.plan.outputs.openpipeline_tag }}
           clean: false
 
       - name: Generate — openpipeline_spatial (modules)
+        if: steps.plan.outputs.openpipeline_spatial_build == 'true'
         uses: viash-io/viash-actions/pro/generate-documentation-qmd@v6
         with:
           project_directory: openpipeline_spatial
           query: '^(?!workflows|test_workflows)'
-          output_dir: ../openpipeline_docs/reference/openpipeline_spatial/
+          output_dir: ../openpipeline_docs/reference/openpipeline_spatial/${{ steps.plan.outputs.openpipeline_spatial_tag }}/
           dest_path: "{namespace}/{name}.qmd"
           viash_pro_token: ${{ secrets.GTHB_PAT }}
           tools_version: main_build
           repository: openpipelines-bio/openpipeline_spatial
-          ref: ${{ env.openpipeline_spatial_tag }}
+          ref: ${{ steps.plan.outputs.openpipeline_spatial_tag }}
           clean: true
       - name: Generate — openpipeline_spatial (workflows)
+        if: steps.plan.outputs.openpipeline_spatial_build == 'true'
         uses: viash-io/viash-actions/pro/generate-documentation-qmd@v6
         with:
           project_directory: openpipeline_spatial
           query: '^workflows'
-          output_dir: ../openpipeline_docs/reference/openpipeline_spatial/
+          output_dir: ../openpipeline_docs/reference/openpipeline_spatial/${{ steps.plan.outputs.openpipeline_spatial_tag }}/
           dest_path: "{namespace}/{name}.qmd"
           viash_pro_token: ${{ secrets.GTHB_PAT }}
           tools_version: main_build
           repository: openpipelines-bio/openpipeline_spatial
-          ref: ${{ env.openpipeline_spatial_tag }}
+          ref: ${{ steps.plan.outputs.openpipeline_spatial_tag }}
           clean: false
 
       - name: Generate — openpipeline_qc (modules)
+        if: steps.plan.outputs.openpipeline_qc_build == 'true'
         uses: viash-io/viash-actions/pro/generate-documentation-qmd@v6
         with:
           project_directory: openpipeline_qc
           query: '^(?!workflows|test_workflows)'
-          output_dir: ../openpipeline_docs/reference/openpipeline_qc/
+          output_dir: ../openpipeline_docs/reference/openpipeline_qc/${{ steps.plan.outputs.openpipeline_qc_tag }}/
           dest_path: "{namespace}/{name}.qmd"
           viash_pro_token: ${{ secrets.GTHB_PAT }}
           tools_version: main_build
           repository: openpipelines-bio/openpipeline_qc
-          ref: ${{ env.openpipeline_qc_tag }}
+          ref: ${{ steps.plan.outputs.openpipeline_qc_tag }}
           clean: true
       - name: Generate — openpipeline_qc (workflows)
+        if: steps.plan.outputs.openpipeline_qc_build == 'true'
         uses: viash-io/viash-actions/pro/generate-documentation-qmd@v6
         with:
           project_directory: openpipeline_qc
           query: '^workflows'
-          output_dir: ../openpipeline_docs/reference/openpipeline_qc/
+          output_dir: ../openpipeline_docs/reference/openpipeline_qc/${{ steps.plan.outputs.openpipeline_qc_tag }}/
           dest_path: "{namespace}/{name}.qmd"
           viash_pro_token: ${{ secrets.GTHB_PAT }}
           tools_version: main_build
           repository: openpipelines-bio/openpipeline_qc
-          ref: ${{ env.openpipeline_qc_tag }}
+          ref: ${{ steps.plan.outputs.openpipeline_qc_tag }}
           clean: false
 
       - name: Generate — openpipeline_composed (modules)
+        if: steps.plan.outputs.openpipeline_composed_build == 'true'
         uses: viash-io/viash-actions/pro/generate-documentation-qmd@v6
         with:
           project_directory: openpipeline_composed
           query: '^(?!workflows|test_workflows)'
-          output_dir: ../openpipeline_docs/reference/openpipeline_composed/
+          output_dir: ../openpipeline_docs/reference/openpipeline_composed/${{ steps.plan.outputs.openpipeline_composed_tag }}/
           dest_path: "{namespace}/{name}.qmd"
           viash_pro_token: ${{ secrets.GTHB_PAT }}
           tools_version: main_build
           repository: openpipelines-bio/openpipeline_composed
-          ref: ${{ env.openpipeline_composed_tag }}
+          ref: ${{ steps.plan.outputs.openpipeline_composed_tag }}
           clean: true
       - name: Generate — openpipeline_composed (workflows)
+        if: steps.plan.outputs.openpipeline_composed_build == 'true'
         uses: viash-io/viash-actions/pro/generate-documentation-qmd@v6
         with:
           project_directory: openpipeline_composed
           query: '^workflows'
-          output_dir: ../openpipeline_docs/reference/openpipeline_composed/
+          output_dir: ../openpipeline_docs/reference/openpipeline_composed/${{ steps.plan.outputs.openpipeline_composed_tag }}/
           dest_path: "{namespace}/{name}.qmd"
           viash_pro_token: ${{ secrets.GTHB_PAT }}
           tools_version: main_build
           repository: openpipelines-bio/openpipeline_composed
-          ref: ${{ env.openpipeline_composed_tag }}
+          ref: ${{ steps.plan.outputs.openpipeline_composed_tag }}
           clean: false
+
+      # The generator double-quotes descriptions whose source text contains
+      # literal quote chars, producing invalid YAML (description: ""x…").
+      # Repair those in place; genuinely empty descriptions ("") are left alone.
+      - name: Sanitize generated frontmatter
+        working-directory: openpipeline_docs
+        run: |
+          find reference -name '*.qmd' -exec sed -i -E 's/^(description: )""([^"])/\1"\2/' {} +
 
       - name: Open PR
         working-directory: openpipeline_docs
@@ -169,14 +207,14 @@ jobs:
           git config user.email github-actions@github.com
           git add reference
           if git diff --cached --quiet; then
-            echo "Reference already up to date — nothing to propose."
+            echo "No new package versions — reference already up to date."
             exit 0
           fi
-          BRANCH="reference/update"
+          BRANCH="reference/new-versions"
           git checkout -B "$BRANCH"
-          git commit -m "Regenerate reference from viash-hub"
+          git commit -m "Add reference for new package versions"
           git push --force-with-lease --set-upstream origin "$BRANCH"
-          gh pr create --title "Regenerate reference" \
+          gh pr create --title "Add reference for new package versions" \
             --base main --head "$BRANCH" \
-            --body "Auto-generated from packages.viash-hub.com (latest release of each package). Do not hand-edit \`reference/<package>/\`." \
+            --body "New versioned reference pages generated from packages.viash-hub.com. Existing versions are untouched. Do not hand-edit \`reference/<package>/<version>/\`." \
             || echo "PR already open for $BRANCH; branch updated."

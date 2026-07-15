@@ -5,11 +5,11 @@ order: 0
 listing:
   - id: ref-listing
     contents:
-      - "openpipeline/*/*.qmd"
-      - "openpipeline_spatial/*/*.qmd"
-      - "openpipeline_qc/*/*.qmd"
-      - "openpipeline_rapids/*/*.qmd"
-      - "openpipeline_composed/*/*.qmd"
+      - "openpipeline/*/*/*.qmd"
+      - "openpipeline_spatial/*/*/*.qmd"
+      - "openpipeline_qc/*/*/*.qmd"
+      - "openpipeline_rapids/*/*/*.qmd"
+      - "openpipeline_composed/*/*/*.qmd"
     type: table
     fields: [title, namespace, description]
     field-display-names:
