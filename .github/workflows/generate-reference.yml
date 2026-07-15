@@ -48,6 +48,10 @@ jobs:
             # their configs carry no `namespace`, which crashes the qmd generator
             # (firstup(config$namespace) -> substr<- on a non-character object).
             rm -rf "$pkg/target/dependencies"
+            # Drop private-scoped components (`scope: private` in config.vsh.yaml):
+            # Viash builds these into target/_private/, and they must not surface in
+            # the public reference.
+            rm -rf "$pkg/target/_private"
             echo "${pkg}_tag=$tag" >> "$GITHUB_ENV"
           done
 
