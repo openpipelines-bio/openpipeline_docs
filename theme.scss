@@ -121,7 +121,7 @@ h1, h2, h3 { letter-spacing: -0.02em; }
   .seg button.on { background: var(--surface); color: var(--ink); box-shadow: var(--shadow); }
   .flow-hint { font-size: 13px; color: var(--muted); margin: 14px 0 16px; }
   .flow-scroll { overflow-x: auto; padding-bottom: 4px; }
-  .flow { display: grid; grid-template-columns: repeat(4, minmax(150px, 1fr)); gap: 12px; min-width: 640px; align-items: stretch; }
+  .flow { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(160px, 1fr); gap: 12px; align-items: stretch; }
   .stage { background: var(--surface-2); border: 1px solid var(--border); border-top: 2px solid var(--path, var(--accent-ink)); border-radius: 12px; padding: 16px 14px 14px; position: relative; }
   .stage::after { content: "\2192"; position: absolute; right: -11px; top: 24px; color: var(--path, var(--muted)); font-family: var(--mono); z-index: 2; }
   .stage:last-child::after { display: none; }
@@ -132,6 +132,7 @@ h1, h2, h3 { letter-spacing: -0.02em; }
 
   // caption under each stage title — states the stage's semantics
   .pick { font-family: var(--mono); font-size: 10px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); margin: 0 0 9px; }
+  .stage-note { font-size: 11px; font-style: italic; color: var(--muted); margin-top: 9px; }
 
   // tool chips
   .chips { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -150,6 +151,10 @@ h1, h2, h3 { letter-spacing: -0.02em; }
   // rather than a menu of alternatives.
   .seq { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 8px; border: 1px dashed color-mix(in srgb, var(--path, var(--accent-ink)) 45%, var(--border)); border-radius: 10px; }
   .seq-arrow { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+  // a choice step inside a workflow sequence (e.g. "integrate" — pick a method — within the integration workflow)
+  .substep { display: inline-flex; flex-direction: column; gap: 5px; }
+  .substep-label { font-family: var(--mono); font-size: 9.5px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+  .substep .chips { gap: 5px; }
   // optional step — only meaningful inside a workflow sequence
   .chip.opt { border-style: dashed; }
   .chip.opt em { font-style: normal; opacity: .6; margin-left: 5px; font-size: 9.5px; text-transform: uppercase; letter-spacing: .06em; }

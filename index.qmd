@@ -116,16 +116,23 @@ design mockup lives in [`design/mockup.html`](design/mockup.html).
       hint: 'The single-cell path — RNA, protein, ATAC, VDJ and GDO share one flow.',
       stages: [
         { num: 'STEP 01', title: 'Ingestion', kind: 'choice', pick: 'pick one for your data',
-          options: ['cellranger_multi', 'demux → fastq'],
-          more: ['cellranger_count', 'bcl_convert', 'make_reference', 'cellranger_atac'] },
+          options: ['cellranger_multi', 'cellranger_count', 'cellranger_count_atac', 'bd_rhapsody'],
+          note: 'or bring your own count matrix' },
         { num: 'STEP 02', title: 'Process samples', kind: 'workflow', pick: 'single workflow',
-          steps: [{ name: 'filter cells' }, { name: 'doublet removal', opt: true }, { name: 'normalize + log1p' }, { name: 'highly variable genes' }] },
-        { num: 'STEP 03', title: 'Integration', kind: 'choice', pick: 'pick one or more',
-          options: ['harmony', 'scVI', 'totalVI'],
-          more: ['bbknn', 'scANVI', 'combat', 'scArches'], href: 'reference/index.html' },
+          steps: [{ name: 'filter cells' }, { name: 'doublet removal', opt: true }, { name: 'normalize + log1p' }, { name: 'highly variable genes' }],
+          note: 'filtering thresholds set from a QC report' },
+        { num: 'STEP 03', title: 'Integration', kind: 'workflow', pick: 'single workflow',
+          href: 'reference/index.html',
+          steps: [
+            { name: 'integrate', options: ['scVI', 'harmony', 'totalVI'], more: ['scanvi', 'scanorama', 'bbknn'], moreLabel: 'methods' },
+            { name: 'find_neighbors' },
+            { name: 'leiden' },
+            { name: 'umap' },
+          ] },
         { num: 'STEP 04', title: 'Downstream', kind: 'choice', pick: 'pick any',
-          options: ['cell-type annotation', 'differential expression'],
-          more: ['label transfer', 'clustering (leiden)', 'pseudobulk'], href: 'guides/index.html' },
+          options: ['cell-type annotation', 'differential expression', 'cell–cell communication'],
+          more: ['scanvi', 'celltypist', 'singler', 'onclass', 'popv'], moreLabel: 'annotation methods',
+          href: 'guides/index.html' },
       ],
     },
     sp: {
@@ -153,6 +160,14 @@ design mockup lives in [`design/mockup.html`](design/mockup.html).
     return '<span class="' + cls + '">' + t.name +
       (t.opt ? ' <em>optional</em>' : '') + '</span>';
   }
+  // "+N more" chip that expands its hidden alternatives in place
+  function moreCluster(items, href, label) {
+    var hidden = items.map(function (n) { return chip({ name: n, alt: true }); }).join('');
+    var link = href ? '<a class="chip link" href="' + href + '">all →</a>' : '';
+    var lbl = label || 'more';
+    return '<span class="chip more" data-count="' + items.length + '" data-label="' + lbl + '">+' + items.length + ' ' + lbl + '</span>' +
+      '<span class="more-wrap" hidden>' + hidden + link + '</span>';
+  }
   function renderStage(s) {
     var head = '<span class="station"></span>' +
       '<div class="num">' + s.num + '</div><h4>' + s.title + '</h4>' +
@@ -161,19 +176,23 @@ design mockup lives in [`design/mockup.html`](design/mockup.html).
       var parts = [];
       s.steps.forEach(function (st, i) {
         if (i) parts.push('<span class="seq-arrow">→</span>');
-        parts.push(chip(st));
+        if (st.options) {
+          // a choice step within the sequence (e.g. "integrate")
+          var optChips = st.options.map(function (n) { return chip({ name: n, alt: true }); }).join('');
+          var m = (st.more && st.more.length) ? moreCluster(st.more, s.href, st.moreLabel) : '';
+          parts.push('<span class="substep"><span class="substep-label">' + st.name + '</span>' +
+            '<span class="chips">' + optChips + m + '</span></span>');
+        } else {
+          parts.push(chip(st));
+        }
       });
-      return '<div class="stage">' + head + '<div class="seq">' + parts.join('') + '</div></div>';
+      var wfNote = s.note ? '<div class="stage-note">' + s.note + '</div>' : '';
+      return '<div class="stage">' + head + '<div class="seq">' + parts.join('') + '</div>' + wfNote + '</div>';
     }
     var opts = s.options.map(function (n) { return chip({ name: n, alt: true }); }).join('');
-    var more = '';
-    if (s.more && s.more.length) {
-      var hidden = s.more.map(function (n) { return chip({ name: n, alt: true }); }).join('');
-      var link = s.href ? '<a class="chip link" href="' + s.href + '">all →</a>' : '';
-      more = '<span class="chip more" data-count="' + s.more.length + '">+' + s.more.length + ' more</span>' +
-        '<span class="more-wrap" hidden>' + hidden + link + '</span>';
-    }
-    return '<div class="stage">' + head + '<div class="chips">' + opts + more + '</div></div>';
+    var more = (s.more && s.more.length) ? moreCluster(s.more, s.href, s.moreLabel) : '';
+    var note = s.note ? '<div class="stage-note">' + s.note + '</div>' : '';
+    return '<div class="stage">' + head + '<div class="chips">' + opts + more + '</div>' + note + '</div>';
   }
   function renderFlow(which) {
     const f = FLOWS[which];
@@ -185,7 +204,7 @@ design mockup lives in [`design/mockup.html`](design/mockup.html).
         var wrap = m.nextElementSibling;
         var open = !wrap.hidden;
         wrap.hidden = open;
-        m.textContent = open ? ('+' + m.dataset.count + ' more') : 'show less';
+        m.textContent = open ? ('+' + m.dataset.count + ' ' + m.dataset.label) : 'show less';
       };
     });
   }
