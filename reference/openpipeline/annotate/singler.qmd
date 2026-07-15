@@ -1,0 +1,127 @@
+---
+title: "Singler"
+namespace: "Annotate"
+description: "SingleR performs reference-based cell type annotation for single-cell RNA-seq data  by computing Spearman correlations between test cells and reference samples with known labels,  using marker genes to assign the most similar cell type label to each new cell"
+type: "module"
+toc: false
+---
+
+::: {.column-margin}
+
+### Info
+
+ID: `singler`  
+Namespace: `annotate`
+
+### Links
+[Source](https://github.com/openpipelines-bio/openpipeline/blob/v4.2.0/src/annotate/singler/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+:::
+
+
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -main-script target/nextflow/annotate/singler/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+```yaml
+
+```
+</details>
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/annotate/singler/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+## Argument groups
+
+### Inputs
+
+Input dataset (query) arguments
+
+
+|Name                             |Description                                                                                                                                                                                                         |Attributes                                |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`                        |The input (query) data to be labeled. Should be a .h5mu file.                                                                                                                                                       |`file`, required, example: `"input.h5mu"` |
+|`--modality`                     |Which modality to process.                                                                                                                                                                                          |`string`, default: `"rna"`                |
+|`--input_layer`                  |The layer in the input data containing log normalized counts to be used for cell type annotation if .X is not to be used.                                                                                           |`string`, default: `"log_normalized"`     |
+|`--input_var_gene_names`         |The name of the adata .var column in the input data containing gene names; when no gene_name_layer is provided, the var index will be used.                                                                         |`string`                                  |
+|`--input_obs_clusters`           |The name of the adata .obs column containing cluster identities of the observations.  If provided, annoation is performed on the aggregated cluster profiles,  otherwise it defaults to annotation per observation. |`string`                                  |
+|`--input_reference_gene_overlap` |The minimum number of genes present in both the reference and query datasets.                                                                                                                                       |`integer`, default: `100`                 |
+
+
+### Reference
+
+Arguments related to the reference dataset.
+
+
+|Name                         |Description                                                                                                                                                                                                 |Attributes                                    |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--reference`                |The reference data to train the CellTypist classifiers on. Only required if a pre-trained --model is not provided.                                                                                          |`file`, required, example: `"reference.h5mu"` |
+|`--reference_layer`          |The layer in the reference data containing lognormalized couns to be used for cell type annotation if .X is not to be used. Data are expected to be processed in the same way as the --input query dataset. |`string`                                      |
+|`--reference_obs_target`     |The name of the adata obs column in the reference data containing cell type annotations.                                                                                                                    |`string`, required                            |
+|`--reference_var_gene_names` |The name of the adata var column in the reference data containing gene names; when no gene_name_layer is provided, the var index will be used.                                                              |`string`                                      |
+|`--reference_var_input`      |.var column containing a boolean mask corresponding to genes to be used for marker selection. If not provided, genes will not be subset.                                                                    |`string`, default: `"filter_with_hvg"`        |
+
+
+### Arguments
+
+Arguments related to the training of and classification with the SingleR model
+
+
+|Name                      |Description                                                                                                                                                                                                                                                                                                                                                                                                           |Attributes                     |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--de_n_genes`            |The number of differentially expressed genes across labels to be calculated from the reference. Defaults to 500 * (2/3) ^ log2(N) where N is the number of unique labels when if `--de_method` is set to `classic`, otherwise, defaults to 10.                                                                                                                                                                        |`integer`                      |
+|`--de_method`             |Method to detect differentially expressed genes between pairs of labels.                                                                                                                                                                                                                                                                                                                                              |`string`, default: `"classic"` |
+|`--quantile`              |The quantile of the correlation distribution to use to compute the score per label.                                                                                                                                                                                                                                                                                                                                   |`double`, default: `0.8`       |
+|`--fine_tune`             |Whether finetuning should be performed to improve the resolution.  If set to True, an additional finetuning step is performed after initial classification,  new marker genes are calculated based on all cells with a score higher then the maximum score minus `--fine_tuning_thershold`, and the calculation of the scores is repeated.                                                                            |`boolean`, default: `TRUE`     |
+|`--fine_tuning_threshold` |The maximum difference from the maximum correlation to use in fine-tuning                                                                                                                                                                                                                                                                                                                                             |`double`, default: `0.05`      |
+|`--prune`                 |Whether label pruning should be performed. If set to True, an additional output .obs field `--output_obs_pruned_predictions` will be added to the `--output`, containing labels where 'low-quality' labels are replaced with NA's. Labels are considered 'low-quality' when their delta score (stored in `--output_obs_delta_next`) fall more than 3 median absolute deviations below the median for that label type. |`boolean`, default: `TRUE`     |
+|`--sanitize_ensembl_ids`  |Whether to sanitize ensembl ids by removing version numbers.                                                                                                                                                                                                                                                                                                                                                          |`boolean`, default: `TRUE`     |
+
+
+### Outputs
+
+Output arguments.
+
+
+|Name                              |Description                                                                                                                                         |Attributes                                   |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output`                        |Output h5mu file.                                                                                                                                   |`file`, example: `"output.h5mu"`             |
+|`--output_obs_predictions`        |In which `.obs` slot to store the predicted labels. If `--fine_tune False`, this is based only on the maximum entry in `--output_obsm_scores`.      |`string`, default: `"singler_pred"`          |
+|`--output_obs_probability`        |In which `.obs` slots to store the probability of the predicted labels.                                                                             |`string`, default: `"singler_probability"`   |
+|`--output_obs_delta_next`         |In which `.obs` slot to store the delta between the best and next-best score. If `--fine_tune True`, this is reported for scores after fine-tuning. |`string`, default: `"singler_delta_next"`    |
+|`--output_obs_pruned_predictions` |In which `.obs` slot to store the pruned labels, where low-quality labels are replaced with NA's. Only added if `--prune True`.                     |`string`, default: `"singler_pruned_labels"` |
+|`--output_obsm_scores`            |In which `.obsm` slot to store the matrix of prediction correlations at the specified quantile for each label (column) in each cell (row).          |`string`, default: `"singler_scores"`        |
+|`--output_compression`            |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied.                                      |`string`, example: `"gzip"`                  |
+
+## Authors
+
+
+  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author)
+
+  * Weiwei Schultz (contributor)
+

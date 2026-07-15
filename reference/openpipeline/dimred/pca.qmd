@@ -1,0 +1,102 @@
+---
+title: "Pca"
+namespace: "Dimred"
+description: "Computes PCA coordinates, loadings and variance decomposition"
+type: "module"
+toc: false
+---
+
+::: {.column-margin}
+
+### Info
+
+ID: `pca`  
+Namespace: `dimred`
+
+### Links
+[Source](https://github.com/openpipelines-bio/openpipeline/blob/v4.2.0/src/dimred/pca/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+:::
+
+
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -main-script target/nextflow/dimred/pca/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+```yaml
+
+```
+</details>
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/dimred/pca/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+## Argument groups
+
+### Arguments
+
+|Name                   |Description                                                                                                    |Attributes                  |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied. |`string`, example: `"gzip"` |
+
+
+### inputs
+
+|Name          |Description                                                                           |Attributes                                |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`     |Input h5mu file                                                                       |`file`, required, example: `"input.h5mu"` |
+|`--modality`  |Which modality from the input MuData file to process.                                 |`string`, default: `"rna"`                |
+|`--layer`     |Use specified layer for expression values instead of the .X object from the modality. |`string`                                  |
+|`--var_input` |Column name in .var matrix that will be used to select which genes to run the PCA on. |`string`, example: `"filter_with_hvg"`    |
+
+
+### Options
+
+|Name               |Description                                                                                                                                                                 |Attributes               |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--num_components` |Number of principal components to compute. Defaults to 50, or 1 - minimum dimension size of selected representation.                                                        |`integer`, example: `25` |
+|`--chunked`        |If True, perform an incremental PCA on segments of a predefined size. Setting this flag automatically implies zero centering. Must be specified together with --chunk_size. |`boolean_true`           |
+|`--chunk_size`     |Number of observations to include in each chunk. Required if chunked=True was passed.                                                                                       |`integer`                |
+|`--seed`           |Used to set the initial states for the optimization.                                                                                                                        |`integer`                |
+
+
+### Outputs
+
+|Name            |Description                                                 |Attributes                                 |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output`      |Output h5mu file.                                           |`file`, required, example: `"output.h5mu"` |
+|`--obsm_output` |In which .obsm slot to store the resulting embedding.       |`string`, default: `"X_pca"`               |
+|`--varm_output` |In which .varm slot to store the resulting loadings matrix. |`string`, default: `"pca_loadings"`        |
+|`--uns_output`  |In which .uns slot to store the resulting variance objects. |`string`, default: `"pca_variance"`        |
+|`--overwrite`   |Allow overwriting .obsm, .varm and .uns slots.              |`boolean_true`                             |
+
+## Authors
+
+
+  * Dries De Maeyer [{{< fa brands github >}}](https://github.com/ddemaeyer) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-de-maeyer-b46a814) (maintainer)
+

@@ -1,0 +1,74 @@
+---
+title: "From h5mu to spatialexperiment"
+namespace: "Convert"
+description: "Converts an h5mu file into a SpatialExperiment object"
+type: "module"
+toc: false
+---
+
+::: {.column-margin}
+
+### Info
+
+ID: `from_h5mu_to_spatialexperiment`  
+Namespace: `convert`
+
+### Links
+[Source](https://github.com/openpipelines-bio/openpipeline_spatial/blob/v0.5.0/src/convert/from_h5mu_to_spatialexperiment/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+:::
+
+
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline_spatial \
+  -r v0.5.0 -latest \
+  -main-script target/nextflow/convert/from_h5mu_to_spatialexperiment/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+```yaml
+
+```
+</details>
+
+```bash
+nextflow run openpipelines-bio/openpipeline_spatial \
+  -r v0.5.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/convert/from_h5mu_to_spatialexperiment/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+## Argument group
+
+### Arguments
+
+|Name                         |Description                                                                                                                     |Attributes                                |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`                    |Input h5mu file                                                                                                                 |`file`, required, example: `"input.h5mu"` |
+|`--modality`                 |Name of the modality to be converted.                                                                                           |`string`, required, default: `"rna"`      |
+|`--obsm_spatial_coordinates` |Key in the .obsm field that contains the spatial coordinates.  Will be mapped to spatialCoords in the SpatialExperiment object. |`string`                                  |
+|`--output`                   |Output SpatialExperiment file                                                                                                   |`file`, required, example: `"output.rds"` |
+
+## Authors
+
+
+  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author)
+

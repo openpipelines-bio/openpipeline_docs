@@ -1,0 +1,187 @@
+---
+title: "SpaceRanger mapping"
+namespace: "Workflows/ingestion"
+description: "A pipeline for running SpaceRanger mapping."
+type: "workflow"
+toc: false
+---
+
+::: {.column-margin}
+
+### Info
+
+ID: `spaceranger_mapping`  
+Namespace: `workflows/ingestion`
+
+### Links
+[Source](https://github.com/openpipelines-bio/openpipeline_spatial/blob/v0.5.0/src/workflows/ingestion/spaceranger_mapping/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+:::
+
+
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline_spatial \
+  -r v0.5.0 -latest \
+  -main-script target/nextflow/workflows/ingestion/spaceranger_mapping/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+```yaml
+
+```
+</details>
+
+```bash
+nextflow run openpipelines-bio/openpipeline_spatial \
+  -r v0.5.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/workflows/ingestion/spaceranger_mapping/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+## Argument groups
+
+### Inputs
+
+|Name              |Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |Attributes                                                                                                                   |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--id`            |ID of the sample.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |`string`, required, example: `"foo"`                                                                                         |
+|`--input`         |The fastq.gz files to align. Can also be a single directory containing fastq.gz files.  Individual FASTQ files should follow the naming convention of 10x Genomics: [Sample Name]_S[Sample Number]_L[Lane Number]_[Read Type]_001.fastq.gz  Where: [Sample Name] is the name assigned during sample preparation/sequencing S[Sample Number] is the sample index (usually S1, S2, etc.) L[Lane Number] identifies the sequencing lane (L001, L002, etc.)  [Read Type] will be one of: R1 - Read 1 (contains the spatial barcode and UMI) R2 - Read 2 (contains the actual cDNA sequence) |List of `file`, required, example: `"sample_S1_L001_R1_001.fastq.gz", "sample_S1_L001_R2_001.fastq.gz"`, multiple_sep: `";"` |
+|`--gex_reference` |Path of folder containing 10x-compatible reference                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |`file`, required, example: `"/path/to/refdata-gex-GRCh38-2020-A"`                                                            |
+|`--probe_set`     |CSV file specifying the probe set used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |`file`, required, example: `"Visium_Human_Transcriptome_Probe_Set_v2.0_GRCh38-2020-A.csv"`                                   |
+|`--cytaimage`     |Brightfield image generated by the CytAssist instrument.  When using CytAssist workflow, either this or --image must be provided.                                                                                                                                                                                                                                                                                                                                                                                                                                                       |`file`, example: `"cyta_image.tif"`                                                                                          |
+|`--image`         |H&E or fluorescence microscope image in TIFF or JPG format.  Required for standard Visium workflow, optional when using --cytaimage for CytAssist workflow.                                                                                                                                                                                                                                                                                                                                                                                                                             |`file`, example: `"brightfield.tif"`                                                                                         |
+
+
+### Outputs
+
+|Name                   |Description                                                                |Attributes                                 |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output_raw`         |Location where the output folder from Cell Ranger will be stored.          |`file`, required, example: `"output_dir"`  |
+|`--output_h5mu`        |The output from Cell Ranger, converted to h5mu.                            |`file`, required, example: `"output.h5mu"` |
+|`--output_type`        |Which Cell Ranger output to use for converting to h5mu.                    |`string`, default: `"raw"`                 |
+|`--uns_metrics`        |Name of the .uns slot under which to QC metrics (if any).                  |`string`, default: `"metrics_summary"`     |
+|`--uns_probe_set`      |Name of the .uns slot under which to store probe set information (if any). |`string`, default: `"probe_set"`           |
+|`--obsm_coordinates`   |Name of the .obsm slot under which to store the cell centroid coordinates. |`string`, default: `"spatial"`             |
+|`--output_compression` |Compression to use when writing the h5mu file.                             |`string`                                   |
+
+
+### Image Options
+
+|Name                |Description                                                              |Attributes                                    |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--darkimage`       |Multi-channel, dark-background fluorescence image                        |`file`, example: `"fluorescence.tif"`         |
+|`--colorizedimage`  |Color image representing pre-colored dark-background fluorescence images |`file`, example: `"colored_fluorescence.tif"` |
+|`--dapi_index`      |Index of DAPI channel (1-indexed) of fluorescence image                  |`integer`, example: `1`                       |
+|`--image_scale`     |Microns per microscope image pixel                                       |`double`, example: `0.65`                     |
+|`--reorient_images` |Whether to rotate and mirror image to align fiducial pattern             |`boolean`, default: `TRUE`                    |
+
+
+### Slide Information
+
+|Name              |Description                                                                                                                                                                                                 |Attributes                            |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--slide`         |Visium slide serial number (e.g., 'V10J25-015')                                                                                                                                                             |`string`, example: `"V10J25-015"`     |
+|`--area`          |Visium capture area identifier (e.g., 'A1')                                                                                                                                                                 |`string`, example: `"A1"`             |
+|`--unknown_slide` |Use this option if the slide serial number and area were entered incorrectly on the CytAssist  instrument and the correct values are unknown. Not compatible with --slide, --area, or  --slide-file options |`string`                              |
+|`--slidefile`     |Slide design file for offline use                                                                                                                                                                           |`file`, example: `"slide_design.gpr"` |
+|`--override_id`   |Overrides the slide serial number and capture area provided in the Cytassist image metadata                                                                                                                 |`boolean_true`                        |
+
+
+### SpaceRanger arguments
+
+|Name                |Description                                                                                                                            |Attributes                           |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--create_bam`      |Enable or disable BAM file generation                                                                                                  |`boolean`, required, default: `TRUE` |
+|`--nosecondary`     |Disable secondary analysis (e.g., clustering)                                                                                          |`boolean_true`                       |
+|`--r1_length`       |Hard trim the input Read 1 to this length before analysis                                                                              |`integer`                            |
+|`--r2_length`       |Hard trim the input Read 2 to this length before analysis                                                                              |`integer`                            |
+|`--filter_probes`   |Whether to filter the probe set using the "included" column                                                                            |`boolean`, default: `TRUE`           |
+|`--custom_bin_size` |Bin Visium HD data to specified size in microns (4-100, even values only) in addition to the standard binning size (2 µm, 8 µm, 16 µm) |`integer`                            |
+
+## Authors
+
+
+  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (maintainer)
+
+  * Weiwei Schultz (contributor)
+
+## Visualisation
+
+```{mermaid}
+flowchart TB
+    v0(Channel.fromList)
+    v2(filter)
+    v9(filter)
+    v17(spaceranger_count)
+    v24(cross)
+    v34(cross)
+    v40(filter)
+    v70(concat)
+    v48(from_spaceranger_to_h5mu)
+    v55(cross)
+    v65(cross)
+    v77(cross)
+    v84(cross)
+    v96(cross)
+    v103(cross)
+    v107(Output)
+    v0-->v2
+    v2-->v9
+    v9-->v17
+    v17-->v24
+    v9-->v24
+    v9-->v34
+    v40-->v48
+    v48-->v55
+    v40-->v55
+    v40-->v65
+    v65-->v70
+    v70-->v77
+    v2-->v77
+    v77-->v84
+    v2-->v84
+    v2-->v96
+    v96-->v103
+    v2-->v103
+    v103-->v107
+    v34-->v40
+    v17-->v34
+    v48-->v65
+    v70-->v96
+    style v0 fill:#e3dcea,stroke:#7a4baa;
+    style v2 fill:#e3dcea,stroke:#7a4baa;
+    style v9 fill:#e3dcea,stroke:#7a4baa;
+    style v17 fill:#e3dcea,stroke:#7a4baa;
+    style v24 fill:#e3dcea,stroke:#7a4baa;
+    style v34 fill:#e3dcea,stroke:#7a4baa;
+    style v40 fill:#e3dcea,stroke:#7a4baa;
+    style v70 fill:#e3dcea,stroke:#7a4baa;
+    style v48 fill:#e3dcea,stroke:#7a4baa;
+    style v55 fill:#e3dcea,stroke:#7a4baa;
+    style v65 fill:#e3dcea,stroke:#7a4baa;
+    style v77 fill:#e3dcea,stroke:#7a4baa;
+    style v84 fill:#e3dcea,stroke:#7a4baa;
+    style v96 fill:#e3dcea,stroke:#7a4baa;
+    style v103 fill:#e3dcea,stroke:#7a4baa;
+    style v107 fill:#e3dcea,stroke:#7a4baa;
+
+```
+

@@ -1,0 +1,96 @@
+---
+title: "From seurat to h5mu"
+namespace: "Convert"
+description: "Converts a Seurat file into an H5MU file"
+type: "module"
+toc: false
+---
+
+::: {.column-margin}
+
+### Info
+
+ID: `from_seurat_to_h5mu`  
+Namespace: `convert`
+
+### Links
+[Source](https://github.com/openpipelines-bio/openpipeline/blob/v4.2.0/src/convert/from_seurat_to_h5mu/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+:::
+
+
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -main-script target/nextflow/convert/from_seurat_to_h5mu/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+```yaml
+
+```
+</details>
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/convert/from_seurat_to_h5mu/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+## Argument groups
+
+### Inputs
+
+|Name      |Description                     |Attributes                               |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input` |Input Seurat file               |`file`, required, example: `"input.rds"` |
+|`--assay` |Name of the assay to be mapped. |`string`, default: `"RNA"`               |
+
+
+### Conversion parameters
+
+|Name               |Description                                                                                                                                                                                                                                                                |Attributes                                                                    |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--layers_mapping` |Mapping of Seurat's Layers to AnnData layers.  If True, all layers will be mapped by name.  If False, no layers will be mapped. For custom mapping, provide a json key/value array with Seurat fields as values and AnnData fields as keys.                                |`string`, default: `"True"`, example: `"{"layer": "seurat_layer"}"`           |
+|`--obs_mapping`    |Mapping of Seurat's observation columns to AnnData obs columns.  If True, all observation columns will be mapped by name. If False, no columns will be mapped. For custom mapping, provide a json key/value array with Seurat fields as values and AnnData fields as keys. |`string`, default: `"True"`, example: `"{"obs_field": "seurat_observation"}"` |
+|`--var_mapping`    |Mapping of Seurat's feature rows to AnnData var columns. If True, all features will be mapped by name. If False, no features will be mapped. For custom mapping, provide a json key/value array with Seurat fields as values and AnnData fields as keys.                   |`string`, default: `"True"`, example: `"{"var_field": "seurat_feature"}"`     |
+|`--uns_mapping`    |Mapping of Seurat's Misc to AnnData uns.  If True, all fields will be mapped by name. If False, no fields will be mapped. For custom mapping, provide a json key/value array with Seurat fields as values and AnnData fields as keys.                                      |`string`, default: `"True"`, example: `"{"uns_field": "seurat_Misc"}"`        |
+|`--obsm_mapping`   |Mapping of Seurat's Embeddings to AnnData obsm fields.  If True, all fields will be mapped by name. If False, no fields will be mapped. For custom mapping, provide a json key/value array with Seurat fields as values and AnnData fields as keys.                        |`string`, default: `"True"`, example: `"{"obsm_field": "seurat_Embedding"}"`  |
+|`--varm_mapping`   |Mapping of Seurat's Loadings to AnnData varm fields.  If True, all fields will be mapped by name. If False, no fields will be mapped. For custom mapping, provide a json key/value array with Seurat fields as values and AnnData fields as keys.                          |`string`, default: `"True"`, example: `"{"varm_field": "seurat_Loadings"}"`   |
+|`--obsp_mapping`   |Mapping of Seurat's Graphs to AnnData obsp fields. If True, all fields will be mapped by name. If False, no fields will be mapped. For custom mapping, provide a json key/value array with Seurat fields as values and AnnData fields as keys.                             |`string`, default: `"True"`, example: `"{"obsp_field": "seurat_Graph"}"`      |
+|`--varp_mapping`   |Mapping of Seurat's Misc to AnnData varp fields.  If True, all fields will be mapped by name. If False, no fields will be mapped. For custom mapping, provide a json key/value array with Seurat fields as values and AnnData fields as keys.                              |`string`, default: `"True"`, example: `"{"varp_field": "seurat_Misc"}"`       |
+|`--x_mapping`      |A string specifying Seurat's Layer to mapped to the .X slot, If not provided, no data will be copied to the .X slot.                                                                                                                                                       |`string`                                                                      |
+
+
+### Outputs
+
+|Name                   |Description                                                                                                    |Attributes                                 |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--modality`           |Name of the modality to be created.                                                                            |`string`, default: `"rna"`                 |
+|`--output`             |Output H5MU file                                                                                               |`file`, required, example: `"output.h5mu"` |
+|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied. |`string`, example: `"gzip"`                |
+
+## Authors
+
+
+  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author, maintainer)
+

@@ -1,0 +1,154 @@
+---
+title: "Process singlesample"
+namespace: "Workflows/multiomics"
+description: "A pipeline to analyse a single multiomics sample."
+type: "workflow"
+toc: false
+---
+
+::: {.column-margin}
+
+### Info
+
+ID: `process_singlesample`  
+Namespace: `workflows/multiomics`
+
+### Links
+[Source](https://github.com/openpipelines-bio/openpipeline/blob/v4.2.0/src/workflows/multiomics/process_singlesample/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+:::
+
+
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -main-script target/nextflow/workflows/multiomics/process_singlesample/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+```yaml
+
+```
+</details>
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/workflows/multiomics/process_singlesample/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+## Argument groups
+
+### Inputs
+
+|Name           |Description                                                                                 |Attributes                                |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`      |Path to the sample.                                                                         |`file`, required, example: `"input.h5mu"` |
+|`--rna_layer`  |Input layer for the gene expression modality. If not specified, .X is used.                 |`string`                                  |
+|`--prot_layer` |Input layer for the antibody capture modality. If not specified, .X is used.                |`string`                                  |
+|`--gdo_layer`  |Input layer for the guide-derived oligonucleotide (GDO) data. If not specified, .X is used. |`string`                                  |
+
+
+### Outputs
+
+|Name       |Description                     |Attributes                                 |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output` |Destination path to the output. |`file`, required, example: `"output.h5mu"` |
+
+
+### Sample ID options
+
+Options for adding the id to .obs on the MuData object. Having a sample 
+id present in a requirement of several components for this pipeline.
+
+
+
+|Name                                    |Description                                                                                         |Attributes                       |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--add_id_to_obs`                       |Add the value passed with --id to .obs.                                                             |`boolean`, default: `TRUE`       |
+|`--add_id_obs_output`                   |.Obs column to add the sample IDs to. Required and only used when  --add_id_to_obs is set to 'true' |`string`, default: `"sample_id"` |
+|`--add_id_make_observation_keys_unique` |Join the id to the .obs index (.obs_names).  Only used when --add_id_to_obs is set to 'true'.       |`boolean`, default: `TRUE`       |
+
+
+### RNA filtering options
+
+|Name                                |Description                                                                                                                                                                                                    |Attributes                    |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--rna_min_counts`                  |Minimum number of counts captured per cell.                                                                                                                                                                    |`integer`, example: `200`     |
+|`--rna_max_counts`                  |Maximum number of counts captured per cell.                                                                                                                                                                    |`integer`, example: `5000000` |
+|`--rna_min_genes_per_cell`          |Minimum of non-zero values per cell.                                                                                                                                                                           |`integer`, example: `200`     |
+|`--rna_max_genes_per_cell`          |Maximum of non-zero values per cell.                                                                                                                                                                           |`integer`, example: `1500000` |
+|`--rna_min_cells_per_gene`          |Minimum of non-zero values per gene.                                                                                                                                                                           |`integer`, example: `3`       |
+|`--rna_min_fraction_mito`           |Minimum fraction of UMIs that are mitochondrial.                                                                                                                                                               |`double`, example: `0`        |
+|`--rna_max_fraction_mito`           |Maximum fraction of UMIs that are mitochondrial.                                                                                                                                                               |`double`, example: `0.2`      |
+|`--rna_min_fraction_ribo`           |Minimum fraction of UMIs that are mitochondrial.                                                                                                                                                               |`double`, example: `0`        |
+|`--rna_max_fraction_ribo`           |Maximum fraction of UMIs that are mitochondrial.                                                                                                                                                               |`double`, example: `0.2`      |
+|`--skip_scrublet_doublet_detection` |Skip the scrublet doublet detection step.                                                                                                                                                                      |`boolean_true`                |
+|`--scrublet_score_threshold`        |Manual doublet score threshold passed to filter_with_scrublet. Cells with a doublet score above this value are classified as doublets. If not provided, the threshold is determined automatically by Scrublet. |`double`                      |
+
+
+### CITE-seq filtering options
+
+|Name                           |Description                             |Attributes                      |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--prot_min_counts`            |Minimum number of counts per cell.      |`integer`, example: `3`         |
+|`--prot_max_counts`            |Minimum number of counts per cell.      |`integer`, example: `5000000`   |
+|`--prot_min_proteins_per_cell` |Minimum of non-zero values per cell.    |`integer`, example: `200`       |
+|`--prot_max_proteins_per_cell` |Maximum of non-zero values per cell.    |`integer`, example: `100000000` |
+|`--prot_min_cells_per_protein` |Minimum of non-zero values per protein. |`integer`, example: `3`         |
+
+
+### GDO filtering options
+
+|Name                        |Description                           |Attributes                      |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--gdo_min_counts`          |Minimum number of counts per cell.    |`integer`, example: `3`         |
+|`--gdo_max_counts`          |Minimum number of counts per cell.    |`integer`, example: `5000000`   |
+|`--gdo_min_guides_per_cell` |Minimum of non-zero values per cell.  |`integer`, example: `200`       |
+|`--gdo_max_guides_per_cell` |Maximum of non-zero values per cell.  |`integer`, example: `100000000` |
+|`--gdo_min_cells_per_guide` |Minimum of non-zero values per guide. |`integer`, example: `3`         |
+
+
+### Cross-modality filtering
+
+|Name              |Description                                                                                                                                            |Attributes     |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--intersect_obs` |After per-modality filtering, remove observations that are not present in all processed modalities so that each modality shares the same set of cells. |`boolean_true` |
+
+
+### Mitochondrial & Ribosomal Gene Detection
+
+|Name                                |Description                                                                                                                                                                                                                                                                               |Attributes                                  |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--var_gene_names`                  |.var column name to be used to detect mitochondrial/ribosomal genes instead of .var_names (default if not set). Gene names matching with the regex value from --mitochondrial_gene_regex or --ribosomal_gene_regex will be  identified as mitochondrial or ribosomal genes, respectively. |`string`, example: `"gene_symbol"`          |
+|`--var_name_mitochondrial_genes`    |In which .var slot to store a boolean array corresponding the mitochondrial genes.                                                                                                                                                                                                        |`string`                                    |
+|`--obs_name_mitochondrial_fraction` |When specified, write the fraction of counts originating from mitochondrial genes  (based on --mitochondrial_gene_regex) to an .obs column with the specified name. Requires --var_name_mitochondrial_genes.                                                                              |`string`                                    |
+|`--mitochondrial_gene_regex`        |Regex string that identifies mitochondrial genes from --var_gene_names. By default will detect human and mouse mitochondrial genes from a gene symbol.                                                                                                                                    |`string`, default: `"^[mM][tT]-"`           |
+|`--var_name_ribosomal_genes`        |In which .var slot to store a boolean array corresponding the ribosomal genes.                                                                                                                                                                                                            |`string`                                    |
+|`--obs_name_ribosomal_fraction`     |When specified, write the fraction of counts originating from ribosomal genes  (based on --ribosomal_gene_regex) to an .obs column with the specified name. Requires --var_name_ribosomal_genes.                                                                                          |`string`                                    |
+|`--ribosomal_gene_regex`            |Regex string that identifies ribosomal genes from --var_gene_names. By default will detect human and mouse ribosomal genes from a gene symbol.                                                                                                                                            |`string`, default: `"^[Mm]?[Rr][Pp][LlSs]"` |
+
+## Authors
+
+
+  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author)
+

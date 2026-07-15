@@ -1,0 +1,124 @@
+---
+title: "Celltypist"
+namespace: "Annotate"
+description: "Automated cell type annotation tool for scRNA-seq datasets on the basis of logistic regression classifiers optimised by the stochastic gradient descent algorithm."
+type: "module"
+toc: false
+---
+
+::: {.column-margin}
+
+### Info
+
+ID: `celltypist`  
+Namespace: `annotate`
+
+### Links
+[Source](https://github.com/openpipelines-bio/openpipeline/blob/v4.2.0/src/annotate/celltypist/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+:::
+
+
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -main-script target/nextflow/annotate/celltypist/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+```yaml
+
+```
+</details>
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/annotate/celltypist/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+## Argument groups
+
+### Inputs
+
+Input dataset (query) arguments
+
+
+|Name                             |Description                                                                                                                                |Attributes                                |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`                        |The input (query) data to be labeled. Should be a .h5mu file.                                                                              |`file`, required, example: `"input.h5mu"` |
+|`--modality`                     |Which modality to process.                                                                                                                 |`string`, default: `"rna"`                |
+|`--input_layer`                  |The layer in the input data containing counts that are lognormalized to 10000, .X is not to be used.                                       |`string`, default: `"log_normalized"`     |
+|`--input_var_gene_names`         |The name of the adata var column in the input data containing gene names; when no gene_name_layer is provided, the var index will be used. |`string`                                  |
+|`--input_reference_gene_overlap` |The minimum number of genes present in both the reference and query datasets.                                                              |`integer`, default: `100`                 |
+|`--sanitize_ensembl_ids`         |Whether to sanitize ensembl ids by removing version numbers.                                                                               |`boolean`, default: `TRUE`                |
+
+
+### Reference
+
+Arguments related to the reference dataset.
+
+
+|Name                         |Description                                                                                                                                    |Attributes                                 |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--reference`                |The reference data to train the CellTypist classifiers on. Only required if a pre-trained --model is not provided.                             |`file`, example: `"reference.h5mu"`        |
+|`--reference_layer`          |The layer in the reference data containing counts that are lognormalized to 10000, if .X is not to be used.                                    |`string`                                   |
+|`--reference_obs_target`     |The name of the adata obs column in the reference data containing cell type annotations.                                                       |`string`, default: `"cell_ontology_class"` |
+|`--reference_var_input`      |.var column containing highly variable genes. If not provided, genes will not be subset.                                                       |`string`, default: `"filter_with_hvg"`     |
+|`--reference_var_gene_names` |The name of the adata var column in the reference data containing gene names; when no gene_name_layer is provided, the var index will be used. |`string`                                   |
+
+
+### Model arguments
+
+Model arguments.
+
+
+|Name                  |Description                                                                                                                                                                                                                                                                               |Attributes                                |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--model`             |Pretrained model in pkl format. If not provided, the model will be trained on the reference data and --reference should be provided.                                                                                                                                                      |`file`, example: `"pretrained_model.pkl"` |
+|`--feature_selection` |Whether to perform feature selection.                                                                                                                                                                                                                                                     |`boolean`, default: `FALSE`               |
+|`--majority_voting`   |Whether to refine the predicted labels by running the majority voting classifier after over-clustering.                                                                                                                                                                                   |`boolean`, default: `FALSE`               |
+|`--C`                 |Inverse of regularization strength in logistic regression.                                                                                                                                                                                                                                |`double`, default: `1`                    |
+|`--max_iter`          |Maximum number of iterations before reaching the minimum of the cost function.                                                                                                                                                                                                            |`integer`, default: `1000`                |
+|`--use_SGD`           |Whether to use the stochastic gradient descent algorithm.                                                                                                                                                                                                                                 |`boolean_true`                            |
+|`--min_prop`          |"For the dominant cell type within a subcluster, the minimum proportion of cells required to  support naming of the subcluster by this cell type. Ignored if majority_voting is set to False.  Subcluster that fails to pass this proportion threshold will be assigned 'Heterogeneous'." |`double`, default: `0`                    |
+
+
+### Outputs
+
+Output arguments.
+
+
+|Name                       |Description                                                                                                    |Attributes                                    |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output`                 |Output h5mu file.                                                                                              |`file`, example: `"output.h5mu"`              |
+|`--output_obs_predictions` |In which `.obs` slots to store the predicted information.                                                      |`string`, default: `"celltypist_pred"`        |
+|`--output_obs_probability` |In which `.obs` slots to store the probability of the predictions.                                             |`string`, default: `"celltypist_probability"` |
+|`--output_compression`     |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied. |`string`, example: `"gzip"`                   |
+
+## Authors
+
+
+  * Jakub Majercik [{{< fa brands github >}}](https://github.com/jakubmajercik) [{{< fa brands linkedin >}}](https://linkedin.com/in/jakubmajercik) (author)
+
+  * Weiwei Schultz (contributor)
+

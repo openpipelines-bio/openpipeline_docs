@@ -1,0 +1,85 @@
+---
+title: "From cosmx to spatialexperiment"
+namespace: "Convert"
+description: "Creates a SpatialExperiment object from the downloaded unzipped CosMx directory for Nanostring CosMx spatial gene expression data, and saves it as a SpatialExperiment object."
+type: "module"
+toc: false
+---
+
+::: {.column-margin}
+
+### Info
+
+ID: `from_cosmx_to_spatialexperiment`  
+Namespace: `convert`
+
+### Links
+[Source](https://github.com/openpipelines-bio/openpipeline_spatial/blob/v0.5.0/src/convert/from_cosmx_to_spatialexperiment/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+:::
+
+The constructor assumes the downloaded unzipped CosMx Folder has the following structure:
+
+Mandatory files
+· | — *_exprMat_file.csv
+· | — *_metadata_file.csv
+Optional files, by default added to the metadata() as a list of paths (will be converted to parquet):
+· | —*_fov_positions_file.csv
+· | — *_tx_file.csv
+· | — *_polygons.csv
+
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline_spatial \
+  -r v0.5.0 -latest \
+  -main-script target/nextflow/convert/from_cosmx_to_spatialexperiment/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+```yaml
+
+```
+</details>
+
+```bash
+nextflow run openpipelines-bio/openpipeline_spatial \
+  -r v0.5.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/convert/from_cosmx_to_spatialexperiment/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+## Argument group
+
+### Arguments
+
+|Name                                |Description                                                                                                                             |Attributes                                                                                           |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`                           |Input CosMx directory                                                                                                                   |`file`, required, example: `"path/to/cosmx_bundle"`                                                  |
+|`--add_tx_path`                     |Whether to add parquet paths to the metadata.  If True, `*_tx_file.csv` file will be converted to .parquet and added to the metadata.   |`boolean`, default: `TRUE`                                                                           |
+|`--add_polygon_path`                |Whether to add polygon path to the metadata. If True, `*_polygons.csv` file will be converted to .parquet and be added to the metadata. |`boolean`, default: `TRUE`                                                                           |
+|`--add_fov_positions`               |Whether to add fov positions to the metadata. If True, `fov_positions_file.csv` will be added to the metadata.                          |`boolean`, default: `TRUE`                                                                           |
+|`--alternative_experiment_features` |Feature names containing these strings will be moved to altExps(sxe) slots as separate SpatialExperiment objects.                       |List of `string`, default: `"NegPrb", "Negative", "SystemControl", "FalseCode"`, multiple_sep: `";"` |
+|`--output`                          |Output SpatialExperiment file                                                                                                           |`file`, required, example: `"output.rds"`                                                            |
+
+## Authors
+
+
+  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author, maintainer)
+

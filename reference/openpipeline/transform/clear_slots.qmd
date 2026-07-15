@@ -1,0 +1,70 @@
+---
+title: "Clear slots"
+namespace: "Transform"
+description: "Clear one or more AnnData slot containers from a modality in an h5mu file"
+type: "module"
+toc: false
+---
+
+::: {.column-margin}
+
+### Info
+
+ID: `clear_slots`  
+Namespace: `transform`
+
+### Links
+[Source](https://github.com/openpipelines-bio/openpipeline/blob/v4.2.0/src/transform/clear_slots/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+:::
+
+
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -main-script target/nextflow/transform/clear_slots/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+```yaml
+
+```
+</details>
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/transform/clear_slots/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+## Argument group
+
+### Arguments
+
+|Name                   |Description                                                                                                    |Attributes                                      |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`              |Input h5mu file.                                                                                               |`file`, required, example: `"input.h5mu"`       |
+|`--modality`           |Which modality from the input MuData file to process.                                                          |`string`, default: `"rna"`                      |
+|`--slots`              |Names of the AnnData slot families to clear from the selected modality.                                        |List of `string`, required, multiple_sep: `";"` |
+|`--output`             |Output h5mu file.                                                                                              |`file`, required, default: `"output.h5mu"`      |
+|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied. |`string`, example: `"gzip"`                     |
+

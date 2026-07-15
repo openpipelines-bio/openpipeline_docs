@@ -1,0 +1,94 @@
+---
+title: "Join graphs"
+namespace: "Neighbors"
+description: "Combine spatial and expression neighborhood graphs into a single graph for  use in downstream clustering or trajectory analysis."
+type: "module"
+toc: false
+---
+
+::: {.column-margin}
+
+### Info
+
+ID: `join_graphs`  
+Namespace: `neighbors`
+
+### Links
+[Source](https://github.com/openpipelines-bio/openpipeline_spatial/blob/v0.5.0/src/neighbors/join_graphs/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+:::
+
+The fusion is a linear combination of the expression connectivities 
+and spatial connectivities matrices, weighted by `alpha`.
+
+$C_{joint} = (1 - \alpha) \cdot C_{expression} + \alpha \cdot C_{spatial}$
+
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline_spatial \
+  -r v0.5.0 -latest \
+  -main-script target/nextflow/neighbors/join_graphs/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+```yaml
+
+```
+</details>
+
+```bash
+nextflow run openpipelines-bio/openpipeline_spatial \
+  -r v0.5.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/neighbors/join_graphs/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+## Argument groups
+
+### Inputs
+
+|Name                            |Description                                                                   |Attributes                                    |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`                       |Input H5MU file with pre-computed expression and spatial neighborhood graphs. |`file`, required                              |
+|`--modality`                    |Modality from the input MuData file to process.                               |`string`, default: `"rna"`                    |
+|`--input_obsp_expression_graph` |Key in `adata.obsp` containing the expression connectivity matrix.            |`string`, default: `"connectivities"`         |
+|`--input_obsp_spatial_graph`    |Key in `adata.obsp` containing the spatial connectivity matrix.               |`string`, default: `"spatial_connectivities"` |
+
+
+### Parameters
+
+|Name      |Description                                                                                                                                                    |Attributes               |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--alpha` |Weight of the spatial graph in the connection fusion.  A value of 0 results in the original expression graph;  a value of 1 results in the spatial graph only. |`double`, default: `0.5` |
+
+
+### Outputs
+
+|Name                   |Description                                                                                                   |Attributes                                               |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output`             |Output H5MU file path.                                                                                        |`file`, required, example: `"output.h5mu"`               |
+|`--output_obsp_graph`  |Key under which to store the fused connectivity matrix in `adata.obsp`.                                       |`string`, default: `"spatial_expression_connectivities"` |
+|`--output_compression` |Compression format to use for the output AnnData and/or Mudata objects. By default no compression is applied. |`string`, example: `"gzip"`                              |
+
+## Authors
+
+
+  * Jakub Majercik [{{< fa brands github >}}](https://github.com/jakubmajercik) [{{< fa brands linkedin >}}](https://linkedin.com/in/jakubmajercik) (maintainer)
+

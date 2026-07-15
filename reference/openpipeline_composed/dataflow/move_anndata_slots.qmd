@@ -1,0 +1,110 @@
+---
+title: "Move anndata slots"
+namespace: "Dataflow"
+description: "Move slots (.obs, .var, .obsm, .varm, .obsp, .varp, .uns) from a modality in a source MuData file into a modality in a target MuData file."
+type: "module"
+toc: false
+---
+
+::: {.column-margin}
+
+### Info
+
+ID: `move_anndata_slots`  
+Namespace: `dataflow`
+
+### Links
+[Source](https://github.com/openpipelines-bio/openpipeline_composed/blob/v0.3.0/src/dataflow/move_anndata_slots/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+:::
+
+The specified slots are copied from the source modality into the target
+modality. By default, copying to a key that already exists in the target
+raises an error; use --allow_overwrite to overwrite it instead
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline_composed \
+  -r v0.3.0 -latest \
+  -main-script target/nextflow/dataflow/move_anndata_slots/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+```yaml
+
+```
+</details>
+
+```bash
+nextflow run openpipelines-bio/openpipeline_composed \
+  -r v0.3.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/dataflow/move_anndata_slots/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+## Argument groups
+
+### Source
+
+|Name                |Description                                          |Attributes                                 |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input_source`    |Source h5mu file to read slots from.                 |`file`, required, example: `"source.h5mu"` |
+|`--source_modality` |Modality in the source h5mu file to read slots from. |`string`, default: `"rna"`                 |
+
+
+### Target
+
+|Name                |Description                                                                                       |Attributes                                 |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input_target`    |Target h5mu file to write slots into.                                                             |`file`, required, example: `"target.h5mu"` |
+|`--target_modality` |Modality in the target h5mu file to write slots into. Defaults to the value of --source_modality. |`string`                                   |
+
+
+### Slots to move
+
+|Name     |Description                                                                                                         |Attributes                            |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--obs`  |Column names from .obs to move from the source modality to the target modality. If not provided, .obs is not moved. |List of `string`, multiple_sep: `";"` |
+|`--var`  |Column names from .var to move from the source modality to the target modality. If not provided, .var is not moved. |List of `string`, multiple_sep: `";"` |
+|`--obsm` |Keys from .obsm to move from the source modality to the target modality. If not provided, .obsm is not moved.       |List of `string`, multiple_sep: `";"` |
+|`--varm` |Keys from .varm to move from the source modality to the target modality. If not provided, .varm is not moved.       |List of `string`, multiple_sep: `";"` |
+|`--obsp` |Keys from .obsp to move from the source modality to the target modality. If not provided, .obsp is not moved.       |List of `string`, multiple_sep: `";"` |
+|`--varp` |Keys from .varp to move from the source modality to the target modality. If not provided, .varp is not moved.       |List of `string`, multiple_sep: `";"` |
+|`--uns`  |Keys from .uns to move from the source modality to the target modality. If not provided, .uns is not moved.         |List of `string`, multiple_sep: `";"` |
+
+
+### Options
+
+|Name                |Description                                                                                                                                                                                      |Attributes     |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--allow_overwrite` |Allow overwriting keys that already exist in the target modality. By default, the component raises an error if a key already exists. When enabled, existing keys are overwritten with a warning. |`boolean_true` |
+
+
+### Output
+
+|Name                   |Description                                                                                                    |Attributes                                 |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output`             |Output h5mu file (the target with slots added from the source).                                                |`file`, required, example: `"output.h5mu"` |
+|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied. |`string`, example: `"gzip"`                |
+
+## Authors
+
+
+  * Jakub Majercik [{{< fa brands github >}}](https://github.com/jakubmajercik) [{{< fa brands linkedin >}}](https://linkedin.com/in/jakubmajercik) (author)
+

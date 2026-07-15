@@ -1,0 +1,90 @@
+---
+title: "From h5mu to seurat with fov"
+namespace: "Convert"
+description: "Converts a single modality of an h5mu file into a Seurat object with a Field of View (FOV) built from centroid coordinates of spatially-resolved single cells"
+type: "module"
+toc: false
+---
+
+::: {.column-margin}
+
+### Info
+
+ID: `from_h5mu_to_seurat_with_fov`  
+Namespace: `convert`
+
+### Links
+[Source](https://github.com/openpipelines-bio/openpipeline_spatial/blob/v0.5.0/src/convert/from_h5mu_to_seurat_with_fov/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+:::
+
+
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline_spatial \
+  -r v0.5.0 -latest \
+  -main-script target/nextflow/convert/from_h5mu_to_seurat_with_fov/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+```yaml
+
+```
+</details>
+
+```bash
+nextflow run openpipelines-bio/openpipeline_spatial \
+  -r v0.5.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/convert/from_h5mu_to_seurat_with_fov/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+## Argument groups
+
+### Inputs
+
+|Name                          |Description                                                                                    |Attributes                                |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`                     |Input h5mu file                                                                                |`file`, required, example: `"input.h5mu"` |
+|`--modality`                  |Modality of the h5mu file to convert.                                                          |`string`, default: `"rna"`                |
+|`--obsm_centroid_coordinates` |Key name of the .obsm slot in the input file that contains the spatial (centroid) coordinates. |`string`, default: `"spatial"`            |
+
+
+### Centroid arguments
+
+|Name                |Description                                                                                                                                                    |Attributes |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--centroid_nsides` |Number of sides of the polygon to be created around each centroid coordinate to represent the cell shape. If not provided, circles will be created.            |`integer`  |
+|`--centroid_radius` |Radius of the shape around each centroid coordinate to represent the cell shape. If not provided, Seurat computes a default based on the centroid coordinates. |`double`   |
+|`--centroid_theta`  |Angle to adjust the shapes around each centroid when plotting. If not provided, no adjustment will be made (theta = 0)                                         |`double`   |
+
+
+### Outputs
+
+|Name       |Description                      |Attributes                                |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output` |Output Seurat file               |`file`, required, example: `"output.rds"` |
+|`--assay`  |Name of the assay to be created. |`string`, default: `"RNA"`                |
+
+## Authors
+
+
+  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author, maintainer)
+

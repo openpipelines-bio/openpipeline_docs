@@ -1,0 +1,104 @@
+---
+title: "Filter with quantile"
+namespace: "Filter"
+description: "Filter observations or features from an .h5mu file based on quantile thresholds of numeric values."
+type: "module"
+toc: false
+---
+
+::: {.column-margin}
+
+### Info
+
+ID: `filter_with_quantile`  
+Namespace: `filter`
+
+### Links
+[Source](https://github.com/openpipelines-bio/openpipeline/blob/v4.2.0/src/filter/filter_with_quantile/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+:::
+
+This component removes observations or features that fall outside specified quantile ranges in .obs or .var. columns.
+
+For example, you can filter out observations with total UMI counts in the bottom 5% (quantile < 0.05) or 
+top 5% (quantile > 0.95), or retain an intermediate range (0.1 < quantile < 0.9).
+
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -main-script target/nextflow/filter/filter_with_quantile/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+```yaml
+
+```
+</details>
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/filter/filter_with_quantile/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+## Argument groups
+
+### Inputs
+
+|Name           |Description                                                                                                            |Attributes                                |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`      |Input h5mu file                                                                                                        |`file`, required, example: `"input.h5mu"` |
+|`--modality`   |Which modality from the input MuData file to process.                                                                  |`string`, default: `"rna"`                |
+|`--obs_column` |Name of the column in .obs to use for quantile-based filtering. If not specified, no .obs filtering will be performed. |`string`, example: `"total_counts"`       |
+|`--var_column` |Name of the column in .var to use for quantile-based filtering. If not specified, no .var filtering will be performed. |`string`, example: `"mean_counts"`        |
+
+
+### Filters
+
+|Name                        |Description                                                                                                                                                                                                                                                   |Attributes                 |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--do_subset`               |Whether to subset before storing the output.                                                                                                                                                                                                                  |`boolean_true`             |
+|`--obs_log1p_transform`     |Apply log1p transformation to the obs_column values before calculating quantiles. The transformed values will be stored as 'log1p_{obs_column}' in .obs. This is useful for highly skewed data where log transformation can improve quantile-based filtering. |`boolean`, default: `TRUE` |
+|`--obs_min_quantile`        |Minimum quantile threshold for .obs filtering. Observations with values below this quantile will be removed. Value should be between 0.0 and 1.0.                                                                                                             |`double`, example: `0.05`  |
+|`--obs_max_quantile`        |Maximum quantile threshold for .obs filtering. Observations with values above this quantile will be removed. Value should be between 0.0 and 1.0.                                                                                                             |`double`, example: `0.95`  |
+|`--var_log1p_transform`     |Apply log1p transformation to the var_column values before calculating quantiles. The transformed values will be stored as 'log1p_{var_column}' in .var. This is useful for highly skewed data where log transformation can improve quantile-based filtering. |`boolean`, default: `TRUE` |
+|`--var_min_quantile`        |Minimum quantile threshold for .var filtering. Features with values below this quantile will be removed. Value should be between 0.0 and 1.0.                                                                                                                 |`double`, example: `0.01`  |
+|`--var_max_quantile`        |Maximum quantile threshold for .var filtering. Features with values above this quantile will be removed. Value should be between 0.0 and 1.0.                                                                                                                 |`double`, example: `0.99`  |
+|`--min_values_for_quantile` |Minimum number of values required to apply quantile filtering. If fewer values are present, quantile filtering will be skipped to prevent data loss.                                                                                                          |`integer`, default: `10`   |
+
+
+### Outputs
+
+|Name                   |Description                                                                                                               |Attributes                                  |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output`             |Output h5mu file.                                                                                                         |`file`, example: `"output.h5mu"`            |
+|`--obs_name_filter`    |In which .obs slot to store a boolean array corresponding to which observations should be removed.                        |`string`, default: `"filter_with_quantile"` |
+|`--obs_log1p_column`   |Name for the column where log1p transformed obs values will be stored. If not provided, defaults to 'log1p_{obs_column}'. |`string`, example: `"log1p_total_counts"`   |
+|`--var_log1p_column`   |Name for the column where log1p transformed var values will be stored. If not provided, defaults to 'log1p_{var_column}'. |`string`, example: `"log1p_total_counts"`   |
+|`--var_name_filter`    |In which .var slot to store a boolean array corresponding to which variables should be removed.                           |`string`, default: `"filter_with_quantile"` |
+|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied.            |`string`, example: `"gzip"`                 |
+
+## Authors
+
+
+  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author)
+

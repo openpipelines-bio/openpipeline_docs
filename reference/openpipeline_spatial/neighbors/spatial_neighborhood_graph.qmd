@@ -1,0 +1,90 @@
+---
+title: "Spatial neighborhood graph"
+namespace: "Neighbors"
+description: "Calculates a spatial neighborhood graph based on the spatial coordinates."
+type: "module"
+toc: false
+---
+
+::: {.column-margin}
+
+### Info
+
+ID: `spatial_neighborhood_graph`  
+Namespace: `neighbors`
+
+### Links
+[Source](https://github.com/openpipelines-bio/openpipeline_spatial/blob/v0.5.0/src/neighbors/spatial_neighborhood_graph/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+:::
+
+
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline_spatial \
+  -r v0.5.0 -latest \
+  -main-script target/nextflow/neighbors/spatial_neighborhood_graph/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+```yaml
+
+```
+</details>
+
+```bash
+nextflow run openpipelines-bio/openpipeline_spatial \
+  -r v0.5.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/neighbors/spatial_neighborhood_graph/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+## Argument groups
+
+### Inputs
+
+|Name                          |Description                                            |Attributes                     |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`                     |Input H5MU file                                        |`file`, required               |
+|`--modality`                  |Which modality from the input MuData file to process.  |`string`, default: `"rna"`     |
+|`--input_obsm_spatial_coords` |Key in adata.obsm where spatial coordinates are stored |`string`, default: `"spatial"` |
+
+
+### Spatial Neighbors Calculation
+
+|Name                    |Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |Attributes                     |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--coord_type`          |Type of coordinate system. Valid options are: `grid` - grid coordinates. Only relevant for lattice-based layouts (e.g. Visium). Builds a graph assuming a regular grid topology, where neighbors aredefined by grid adjacency rather than distance. `generic` - Generic coordinates. Recommended for imaging-based data. This option is appropriate for irregularly spaced points, such as cell centroids or spot coordinates from imaging-based assays (e.g. Xenium, CosMx). Setting this option avoids grid-assumption artifacts and ensures each node has spatial neighbors as defined by distance. |`string`, default: `"generic"` |
+|`--n_spatial_neighbors` |Depending on `--coord_type`: `grid` - number of neighboring tiles. `generic` - number of neighborhoods for non-grid data. Only used when `--delaunay False`.                                                                                                                                                                                                                                                                                                                                                                                                                                           |`integer`, default: `6`        |
+|`--delaunay`            |Whether to use Delaunay triangulation to determine spatial neighborhood graph. Only used when `--coord_type generic`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |`boolean`, default: `FALSE`    |
+
+
+### Outputs
+
+|Name                   |Description                                                                                                   |Attributes                                 |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output`             |Output H5MU file path.                                                                                        |`file`, required, example: `"output.h5mu"` |
+|`--output_compression` |Compression format to use for the output AnnData and/or Mudata objects. By default no compression is applied. |`string`, example: `"gzip"`                |
+
+## Authors
+
+
+  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (maintainer)
+
