@@ -43,6 +43,11 @@ jobs:
               | python3 -c "import sys,json,re; ts=[t['name'] for t in json.load(sys.stdin) if re.match(r'v?\d+\.\d+', t['name'])]; print(sorted(ts, key=lambda v:[int(x) for x in re.findall(r'\d+', v)])[-1])")
             echo "$pkg -> $tag"
             git clone --quiet --depth 1 --branch "$tag" "https://packages.viash-hub.com/vsh/$pkg.git" "$pkg"
+            # Drop vendored dependencies (craftbox/biobox/base openpipeline components):
+            # they are external/base libs we only mention, not document, and some of
+            # their configs carry no `namespace`, which crashes the qmd generator
+            # (firstup(config$namespace) -> substr<- on a non-character object).
+            rm -rf "$pkg/target/dependencies"
             echo "${pkg}_tag=$tag" >> "$GITHUB_ENV"
           done
 
