@@ -1,21 +1,18 @@
 name: Generate reference
 
-# Auto-generates the reference documentation for the whole OpenPipeline
-# ecosystem from source. This repo pulls each package, runs the Viash
-# documentation generator over its configs, and opens a PR with the result —
-# so the reference can never drift from the code, and no package repo needs a
-# workflow of its own.
+# Auto-generates the reference documentation for the OpenPipeline ecosystem.
+# Packages are pulled from packages.viash-hub.com (open source, no credentials)
+# at their latest release tag — viash-hub always ships the built `target/`,
+# which the documentation generator reads. The generated pages are opened as a
+# PR against this repo, so the reference can never drift from released code.
 #
-# Requires repo secret GTHB_PAT: a GitHub PAT with viash-hub pro access (and
-# read access to any private package repo). 
+# openpipeline_rapids is intentionally excluded for now (not ready).
+#
+# Requires repo secret GTHB_PAT only for `viash_pro_token`: the generator clones
+# the private viash-io/viash_tools repo with it. Package fetching needs no auth.
 
 on:
   workflow_dispatch:
-    inputs:
-      ref:
-        description: "Branch or tag to generate from for every package (default: main)."
-        type: string
-        default: main
   schedule:
     - cron: "0 6 * * 1" # Mondays 06:00 UTC
 
@@ -33,27 +30,27 @@ jobs:
           path: openpipeline_docs
           token: ${{ secrets.GTHB_PAT }}
 
-      # Package checkouts pass the PAT so private repos resolve and so the same
-      # token is available for a re-added private package later.
-      - name: Checkout openpipeline
-        uses: actions/checkout@v4
-        with: { repository: openpipelines-bio/openpipeline, ref: "${{ inputs.ref || 'main' }}", path: openpipeline, token: "${{ secrets.GTHB_PAT }}" }
-      - name: Checkout openpipeline_spatial
-        uses: actions/checkout@v4
-        with: { repository: openpipelines-bio/openpipeline_spatial, ref: "${{ inputs.ref || 'main' }}", path: openpipeline_spatial, token: "${{ secrets.GTHB_PAT }}" }
-      - name: Checkout openpipeline_qc
-        uses: actions/checkout@v4
-        with: { repository: openpipelines-bio/openpipeline_qc, ref: "${{ inputs.ref || 'main' }}", path: openpipeline_qc, token: "${{ secrets.GTHB_PAT }}" }
-      - name: Checkout openpipeline_composed
-        uses: actions/checkout@v4
-        with: { repository: openpipelines-bio/openpipeline_composed, ref: "${{ inputs.ref || 'main' }}", path: openpipeline_composed, token: "${{ secrets.GTHB_PAT }}" }
+      # Clone each package from viash-hub at its highest semver tag. viash-hub
+      # is public, so no token is needed. The tag per package is exported to
+      # $GITHUB_ENV as <package>_tag for the generate steps below.
+      - name: Fetch packages from viash-hub
+        env:
+          GIT_TERMINAL_PROMPT: "0"
+        run: |
+          set -euo pipefail
+          for pkg in openpipeline openpipeline_spatial openpipeline_qc openpipeline_composed; do
+            tag=$(curl -sf "https://packages.viash-hub.com/api/v1/repos/vsh/$pkg/tags?limit=100" \
+              | python3 -c "import sys,json,re; ts=[t['name'] for t in json.load(sys.stdin) if re.match(r'v?\d+\.\d+', t['name'])]; print(sorted(ts, key=lambda v:[int(x) for x in re.findall(r'\d+', v)])[-1])")
+            echo "$pkg -> $tag"
+            git clone --quiet --depth 1 --branch "$tag" "https://packages.viash-hub.com/vsh/$pkg.git" "$pkg"
+            echo "${pkg}_tag=$tag" >> "$GITHUB_ENV"
+          done
 
       - uses: viash-io/viash-actions/setup@v6
 
-      # Two passes per package (the proven openpipeline→website recipe): modules
-      # first (clean:true wipes stale pages), then workflows (clean:false appends).
-      # Both land under reference/<package>/<namespace>/<name>.qmd. A single
-      # combined query returned zero components, so mirror the working split.
+      # Two passes per package (the proven website recipe): modules first
+      # (clean:true wipes stale pages), then workflows (clean:false appends).
+      # `ref`/`repository` point source links at the package's GitHub repo+tag.
       - name: Generate — openpipeline (modules)
         uses: viash-io/viash-actions/pro/generate-documentation-qmd@v6
         with:
@@ -63,6 +60,8 @@ jobs:
           dest_path: "{namespace}/{name}.qmd"
           viash_pro_token: ${{ secrets.GTHB_PAT }}
           tools_version: main_build
+          repository: openpipelines-bio/openpipeline
+          ref: ${{ env.openpipeline_tag }}
           clean: true
       - name: Generate — openpipeline (workflows)
         uses: viash-io/viash-actions/pro/generate-documentation-qmd@v6
@@ -73,6 +72,8 @@ jobs:
           dest_path: "{namespace}/{name}.qmd"
           viash_pro_token: ${{ secrets.GTHB_PAT }}
           tools_version: main_build
+          repository: openpipelines-bio/openpipeline
+          ref: ${{ env.openpipeline_tag }}
           clean: false
 
       - name: Generate — openpipeline_spatial (modules)
@@ -84,6 +85,8 @@ jobs:
           dest_path: "{namespace}/{name}.qmd"
           viash_pro_token: ${{ secrets.GTHB_PAT }}
           tools_version: main_build
+          repository: openpipelines-bio/openpipeline_spatial
+          ref: ${{ env.openpipeline_spatial_tag }}
           clean: true
       - name: Generate — openpipeline_spatial (workflows)
         uses: viash-io/viash-actions/pro/generate-documentation-qmd@v6
@@ -94,6 +97,8 @@ jobs:
           dest_path: "{namespace}/{name}.qmd"
           viash_pro_token: ${{ secrets.GTHB_PAT }}
           tools_version: main_build
+          repository: openpipelines-bio/openpipeline_spatial
+          ref: ${{ env.openpipeline_spatial_tag }}
           clean: false
 
       - name: Generate — openpipeline_qc (modules)
@@ -105,6 +110,8 @@ jobs:
           dest_path: "{namespace}/{name}.qmd"
           viash_pro_token: ${{ secrets.GTHB_PAT }}
           tools_version: main_build
+          repository: openpipelines-bio/openpipeline_qc
+          ref: ${{ env.openpipeline_qc_tag }}
           clean: true
       - name: Generate — openpipeline_qc (workflows)
         uses: viash-io/viash-actions/pro/generate-documentation-qmd@v6
@@ -115,6 +122,8 @@ jobs:
           dest_path: "{namespace}/{name}.qmd"
           viash_pro_token: ${{ secrets.GTHB_PAT }}
           tools_version: main_build
+          repository: openpipelines-bio/openpipeline_qc
+          ref: ${{ env.openpipeline_qc_tag }}
           clean: false
 
       - name: Generate — openpipeline_composed (modules)
@@ -126,6 +135,8 @@ jobs:
           dest_path: "{namespace}/{name}.qmd"
           viash_pro_token: ${{ secrets.GTHB_PAT }}
           tools_version: main_build
+          repository: openpipelines-bio/openpipeline_composed
+          ref: ${{ env.openpipeline_composed_tag }}
           clean: true
       - name: Generate — openpipeline_composed (workflows)
         uses: viash-io/viash-actions/pro/generate-documentation-qmd@v6
@@ -136,6 +147,8 @@ jobs:
           dest_path: "{namespace}/{name}.qmd"
           viash_pro_token: ${{ secrets.GTHB_PAT }}
           tools_version: main_build
+          repository: openpipelines-bio/openpipeline_composed
+          ref: ${{ env.openpipeline_composed_tag }}
           clean: false
 
       - name: Open PR
@@ -150,11 +163,11 @@ jobs:
             echo "Reference already up to date — nothing to propose."
             exit 0
           fi
-          BRANCH="reference/update-${{ inputs.ref || 'main' }}"
+          BRANCH="reference/update"
           git checkout -B "$BRANCH"
-          git commit -m "Regenerate reference from ${{ inputs.ref || 'main' }}"
+          git commit -m "Regenerate reference from viash-hub"
           git push --force-with-lease --set-upstream origin "$BRANCH"
-          gh pr create --title "Regenerate reference (${{ inputs.ref || 'main' }})" \
+          gh pr create --title "Regenerate reference" \
             --base main --head "$BRANCH" \
-            --body "Auto-generated from all five packages' Viash configs. Do not hand-edit \`reference/<package>/\`." \
+            --body "Auto-generated from packages.viash-hub.com (latest release of each package). Do not hand-edit \`reference/<package>/\`." \
             || echo "PR already open for $BRANCH; branch updated."
