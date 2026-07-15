@@ -1,0 +1,84 @@
+---
+title: "Filter with pattern"
+namespace: "Filter"
+description: "Filter a MuData object based on gene names using a regex"
+type: "module"
+toc: false
+---
+
+::: {.column-margin}
+
+### Info
+
+ID: `filter_with_pattern`  
+Namespace: `filter`
+
+### Links
+[Source](https://github.com/openpipelines-bio/openpipeline/blob/v4.2.0/src/filter/filter_with_pattern/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+:::
+
+
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -main-script target/nextflow/filter/filter_with_pattern/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+```yaml
+
+```
+</details>
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/filter/filter_with_pattern/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+## Argument groups
+
+### Inputs
+
+|Name               |Description                                                                                          |Attributes                                                                                                 |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`          |Input h5mu file                                                                                      |`file`, required, example: `"input.h5mu"`                                                                  |
+|`--modality`       |Which modality from the input MuData file to process.                                                |`string`, default: `"rna"`                                                                                 |
+|`--var_gene_names` |The .var field containing the gene names to be filtered. If not provided, `.var.index` will be used. |`string`, example: `"gene_symbol"`                                                                         |
+|`--pattern`        |A regex pattern to filter the gene names.                                                            |List of `string`, required, example: `"MIR\d+", "AL\d+", "LINC\d+", "AC\d+", "AP\d+"`, multiple_sep: `";"` |
+
+
+### Outputs
+
+|Name                   |Description                                                                                                    |Attributes                                 |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output`             |Output h5mu file.                                                                                              |`file`, example: `"output.h5mu"`           |
+|`--do_subset`          |Whether to subset before storing the output.                                                                   |`boolean_true`                             |
+|`--var_name_filter`    |In which .var slot to store a boolean array corresponding to which variables should be removed.                |`string`, default: `"filter_with_pattern"` |
+|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied. |`string`, example: `"gzip"`                |
+
+## Authors
+
+
+  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author)
+

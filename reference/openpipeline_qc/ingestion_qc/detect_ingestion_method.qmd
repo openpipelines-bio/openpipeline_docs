@@ -1,0 +1,82 @@
+---
+title: "Detect ingestion method"
+namespace: "Ingestion qc"
+description: "Detects the ingestion method of a dataset."
+type: "module"
+toc: false
+---
+
+::: {.column-margin}
+
+### Info
+
+ID: `detect_ingestion_method`  
+Namespace: `ingestion_qc`
+
+### Links
+[Source](https://github.com/openpipelines-bio/openpipeline_qc/blob/v0.3.0/src/ingestion_qc/detect_ingestion_method/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+:::
+
+Currently detects either 10X CellRanger Multi, 10X Xenium or Nanostring CosMx, but can be extended to other technologies upon request
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline_qc \
+  -r v0.3.0 -latest \
+  -main-script target/nextflow/ingestion_qc/detect_ingestion_method/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+```yaml
+
+```
+</details>
+
+```bash
+nextflow run openpipelines-bio/openpipeline_qc \
+  -r v0.3.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/ingestion_qc/detect_ingestion_method/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+## Argument groups
+
+### Inputs
+
+|Name         |Description            |Attributes                                       |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`    |The input h5mu file(s) |`file`, required, example: `"path/to/file.h5mu"` |
+|`--modality` |The modality to use    |`string`, default: `"rna"`                       |
+
+
+### Outputs
+
+|Name                            |Description                                                                                                        |Attributes                                       |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output_uns_ingestion_method` |The .uns field in which to store the exprimental setup. Values stored are `cellranger_multi`, `xenium` or `cosmx`. |`string`, default: `"ingestion_method"`          |
+|`--output`                      |The output h5mu file, containing an .uns field with experiment description.                                        |`file`, required, example: `"path/to/file.h5mu"` |
+
+## Authors
+
+
+  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author)
+
+  * Weiwei Schultz (contributor)
+

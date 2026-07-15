@@ -1,0 +1,85 @@
+---
+title: "From xenium to spatialexperiment"
+namespace: "Convert"
+description: "Creates a SpatialExperiment object from the downloaded unzipped Xenium Output Bundle directory for 10x Genomics Xenium spatial gene expression data, and saves it as a SpatialExperiment object."
+type: "module"
+toc: false
+---
+
+::: {.column-margin}
+
+### Info
+
+ID: `from_xenium_to_spatialexperiment`  
+Namespace: `convert`
+
+### Links
+[Source](https://github.com/openpipelines-bio/openpipeline_spatial/blob/v0.5.0/src/convert/from_xenium_to_spatialexperiment/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+:::
+
+The constructor assumes the downloaded unzipped Xenium Output Bundle has the following structure:
+
+Mandatory files
+· | — cell_feature_matrix.h5
+· | — cells.parquet
+Optional files, by default added to the metadata() as a list of paths (will be converted to parquet):
+· | — transcripts.parquet
+· | — cell_boundaries.parquet
+· | — nucleus_boundaries.parquet
+· | — experiment.xenium
+
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline_spatial \
+  -r v0.5.0 -latest \
+  -main-script target/nextflow/convert/from_xenium_to_spatialexperiment/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+```yaml
+
+```
+</details>
+
+```bash
+nextflow run openpipelines-bio/openpipeline_spatial \
+  -r v0.5.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/convert/from_xenium_to_spatialexperiment/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+## Argument group
+
+### Arguments
+
+|Name                                |Description                                                                                                                                                           |Attributes                                                                                                                            |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`                           |Input Xenium Output Bundle                                                                                                                                            |`file`, required, example: `"path/to/xenium_bundle"`                                                                                  |
+|`--add_experiment_xenium`           |Whether to add xenium.experiment parameters to the metadata.                                                                                                          |`boolean`, default: `TRUE`                                                                                                            |
+|`--add_parquet_paths`               |Whether to add parquet paths to the metadata.  If True, `transcripts.parquet`, `cell_boundaries.parquet`, `nucleus_boundaries.parquet` will be added to the metadata. |`boolean`, default: `TRUE`                                                                                                            |
+|`--alternative_experiment_features` |Feature names containing these strings will be moved to altExps(sxe) slots as separate SpatialExperiment objects.                                                     |List of `string`, default: `"NegControlProbe", "UnassignedCodeword", "NegControlCodeword", "antisense", "BLANK"`, multiple_sep: `";"` |
+|`--output`                          |Output SpatialExperiment file                                                                                                                                         |`file`, required, example: `"output.rds"`                                                                                             |
+
+## Authors
+
+
+  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author, maintainer)
+

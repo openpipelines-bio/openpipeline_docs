@@ -1,0 +1,99 @@
+---
+title: "Create pseudobulk"
+namespace: "Differential expression"
+description: "Generation of pseudobulk samples from single-cell transcriptomics data, by aggregating raw gene expression counts from individual cells to create  bulk-like expression profiles suitable for differential expression analysis with methods designed for bulk differential expression analysis."
+type: "module"
+toc: false
+---
+
+::: {.column-margin}
+
+### Info
+
+ID: `create_pseudobulk`  
+Namespace: `differential_expression`
+
+### Links
+[Source](https://github.com/openpipelines-bio/openpipeline/blob/v4.2.0/src/differential_expression/create_pseudobulk/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+:::
+
+Note that this componentonly considers factors as explanatory variables, 
+and excludes covariates from the analysis
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -main-script target/nextflow/differential_expression/create_pseudobulk/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+```yaml
+
+```
+</details>
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/differential_expression/create_pseudobulk/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+## Argument groups
+
+### Inputs
+
+|Name            |Description                                                                                                                         |Attributes                                |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`       |Input h5mu file.                                                                                                                    |`file`, required, example: `"input.h5mu"` |
+|`--modality`    |Which modality from the input MuData file to process.                                                                               |`string`, default: `"rna"`                |
+|`--input_layer` |Input layer to use. If None, X is used. This layer must contain raw counts.                                                         |`string`                                  |
+|`--obs_label`   |.obs field containing the variable to group on. Typically this field contains cell groups such as annotated cell types or clusters. |`string`, required                        |
+|`--obs_groups`  |.obs fields containing the experimental condition(s) to create pseudobulk samples for.                                              |List of `string`, multiple_sep: `";"`     |
+
+
+### Arguments
+
+|Name                   |Description                                                                  |Attributes                     |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--aggregation_method` |Method to aggregate the raw counts for pseudoreplicates. Either sum or mean. |`string`, default: `"sum"`     |
+|`--random_state`       |The random seed for sampling.                                                |`integer`, default: `0`        |
+|`--obs_cell_count`     |The .obs field to store the number of observations per pseudobulk sample.    |`string`, default: `"n_cells"` |
+
+
+### Outputs
+
+|Name                   |Description                                                    |Attributes                                 |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output`             |Output h5mu file containing the aggregated pseudobulk samples. |`file`, required, example: `"output.h5mu"` |
+|`--output_compression` |The compression format to be used on the output h5mu object.   |`string`, example: `"gzip"`                |
+
+## Authors
+
+
+  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author)
+
+  * Jakub Majercik [{{< fa brands github >}}](https://github.com/jakubmajercik) [{{< fa brands linkedin >}}](https://linkedin.com/in/jakubmajercik) (author)
+
+  * Dries De Maeyer [{{< fa brands github >}}](https://github.com/ddemaeyer) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-de-maeyer-b46a814) (contributor)
+
+  * Weiwei Schultz (contributor)
+

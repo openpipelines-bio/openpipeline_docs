@@ -1,0 +1,100 @@
+---
+title: "Cellmapper"
+namespace: "Labels transfer"
+description: "Transfer labels from a reference to a query using CellMapper in a shared embedding space"
+type: "module"
+toc: false
+---
+
+::: {.column-margin}
+
+### Info
+
+ID: `cellmapper`  
+Namespace: `labels_transfer`
+
+### Links
+[Source](https://github.com/openpipelines-bio/openpipeline/blob/v4.2.0/src/labels_transfer/cellmapper/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+:::
+
+
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -main-script target/nextflow/labels_transfer/cellmapper/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+```yaml
+
+```
+</details>
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/labels_transfer/cellmapper/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+## Argument groups
+
+### Input dataset (query) arguments
+
+|Name                    |Description                                                                                                                                                                                                                                              |Attributes                                |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`               |The query data to transfer the labels to. Should be a .h5mu file.                                                                                                                                                                                        |`file`, required, example: `"input.h5mu"` |
+|`--modality`            |Which modality to use.                                                                                                                                                                                                                                   |`string`, default: `"rna"`                |
+|`--input_obsm_features` |The `.obsm` key of the embedding to use for the classifier's inference. If not provided, the `.X` slot will be used instead. Make sure that embedding was obtained in the same way as the reference embedding (e.g. by the same model or preprocessing). |`string`, example: `"X_scvi"`             |
+
+
+### Reference dataset arguments
+
+|Name                        |Description                                                                                                                                                                                                                                         |Attributes                                                                                                                                      |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--reference`               |The reference data to train classifiers on.                                                                                                                                                                                                         |`file`, example: `"reference.h5mu"`                                                                                                             |
+|`--reference_obsm_features` |The `.obsm` key of the embedding to use for the classifier's training. If not provided, the `.X` slot will be used instead. Make sure that embedding was obtained in the same way as the query embedding (e.g. by the same model or preprocessing). |`string`, example: `"X_scvi"`                                                                                                                   |
+|`--reference_obs_targets`   |The `.obs` key(s) of the target labels to transfer.                                                                                                                                                                                                 |List of `string`, default: `"ann_level_1", "ann_level_2", "ann_level_3", "ann_level_4", "ann_level_5", "ann_finest_level"`, multiple_sep: `";"` |
+
+
+### Outputs
+
+|Name                       |Description                                                                                                                                                                                                                              |Attributes                            |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output`                 |The query data in .h5mu format with predicted labels transferred from the reference.                                                                                                                                                     |`file`, required                      |
+|`--output_obs_predictions` |In which `.obs` slots to store the predicted information. If provided, must have the same length as `--reference_obs_targets`. If empty, will default to the `reference_obs_targets` combined with the `"_pred"` suffix.                 |List of `string`, multiple_sep: `";"` |
+|`--output_obs_probability` |In which `.obs` slots to store the probability of the predictions. If provided, must have the same length as `--reference_obs_targets`. If empty, will default to the `reference_obs_targets` combined with the `"_probability"` suffix. |List of `string`, multiple_sep: `";"` |
+|`--output_compression`     |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied.                                                                                                                           |`string`, example: `"gzip"`           |
+
+
+### CellMapper arguments
+
+|Name              |Description                                                |Attributes               |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--n_neighbors`   |Number of neighbors used by CellMapper.                    |`integer`, default: `15` |
+|`--kernel_method` |Method to use for computing the CellMapper mapping matrix. |`string`                 |
+
+## Authors
+
+
+  * Luke Zappia [{{< fa brands github >}}](https://github.com/lazappi) [{{< fa brands orcid >}}](https://orcid.org/0000-0001-7744-8565) [{{< fa brands linkedin >}}](https://linkedin.com/in/lazappi) (author)
+

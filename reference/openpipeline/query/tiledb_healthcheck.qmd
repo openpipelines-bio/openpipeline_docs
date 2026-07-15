@@ -1,0 +1,75 @@
+---
+title: "Tiledb healthcheck"
+namespace: "Query"
+description: "Checks if a provided location can be queried as a TileDB-SOMA database"
+type: "module"
+toc: false
+---
+
+::: {.column-margin}
+
+### Info
+
+ID: `tiledb_healthcheck`  
+Namespace: `query`
+
+### Links
+[Source](https://github.com/openpipelines-bio/openpipeline/blob/v4.2.0/src/query/tiledb_soma_healthcheck/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+:::
+
+
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -main-script target/nextflow/query/tiledb_healthcheck/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+```yaml
+
+```
+</details>
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/query/tiledb_healthcheck/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+## Argument group
+
+### Input database
+
+Open a TileDB SOMA database by URI.
+
+
+|Name          |Description                                             |Attributes                                        |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input_uri` |If specified, a URI containing the TileDB-SOMA objects. |`string`, required, example: `"s3://bucket/path"` |
+|`--s3_region` |Region where the TileDB-SOMA database is hosted.        |`string`, required                                |
+
+## Authors
+
+
+  * Dries Schaumont [{{< fa brands github >}}](https://github.com/DriesSchaumont) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-4389-0440) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-schaumont) (author, maintainer)
+

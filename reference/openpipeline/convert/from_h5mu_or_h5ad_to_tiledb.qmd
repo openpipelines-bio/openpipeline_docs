@@ -1,0 +1,116 @@
+---
+title: "From h5mu or h5ad to tiledb"
+namespace: "Convert"
+description: "Convert a MuData or AnnData object to tiledb."
+type: "module"
+toc: false
+---
+
+::: {.column-margin}
+
+### Info
+
+ID: `from_h5mu_or_h5ad_to_tiledb`  
+Namespace: `convert`
+
+### Links
+[Source](https://github.com/openpipelines-bio/openpipeline/blob/v4.2.0/src/convert/from_h5mu_or_h5ad_to_tiledb/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+:::
+
+Currently, transcriptome and protein modalities are supported.
+
+NOTE: The functionality provided by this component is experimental and may be subject to change. 
+
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -main-script target/nextflow/convert/from_h5mu_or_h5ad_to_tiledb/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+```yaml
+
+```
+</details>
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/convert/from_h5mu_or_h5ad_to_tiledb/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+## Argument groups
+
+### Input
+
+|Name      |Description                                                                                                                   |Attributes                                |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input` |Input AnnData or MuData file. When an AnnData file is provided, it is automatically assumed to  contain transcriptome counts. |`file`, required, example: `"input.h5mu"` |
+
+
+### RNA modality
+
+|Name                           |Description                                                                                                                                                 |Attributes                                      |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--rna_modality`               |The name used for the RNA modality. Used when input file is a MuData object.                                                                                |`string`, default: `"rna"`                      |
+|`--rna_raw_layer_input`        |Location of the layer containing the raw transcriptome counts. Layers are looked for in .layers, except when using the value 'X'; in which case .X is used. |`string`, required, example: `"X"`              |
+|`--rna_normalized_layer_input` |Location of the layer containing the normalized counts. Layers are looked for in .layers, except when using the value 'X'; in which case .X is used.        |`string`, required, example: `"log_normalized"` |
+|`--rna_var_gene_names_input`   |Column in .var that provides the gene names. If not specified, the index from the input is used.                                                            |`string`, example: `"gene_symbol"`              |
+
+
+### Protein modality
+
+|Name                            |Description                                                                                                                                           |Attributes                  |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--prot_modality`               |The name used for the protein modality. Used when input file is a MuData object. When not specified, the protein modality will not be processed.      |`string`, example: `"prot"` |
+|`--prot_raw_layer_input`        |Location of the layer containing the raw protein counts. Layers are looked for in .layers, except when using the value 'X'; in which case .X is used. |`string`, example: `"X"`    |
+|`--prot_normalized_layer_input` |Location of the layer containing the normalized counts. Layers are looked for in .layers, except when using the value 'X'; in which case .X is used.  |`string`, example: `"clr"`  |
+
+
+### Output slots
+
+|Name                             |Description                                                               |Attributes                            |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--rna_modality_output`          |TileDB Measurement name where the RNA modality will be stored.            |`string`, default: `"rna"`            |
+|`--prot_modality_output`         |Name of the TileDB Measurement where the protein modality will be stored. |`string`, default: `"prot"`           |
+|`--obs_index_name_output`        |Name of the index that is used to describe the cells (observations).      |`string`, default: `"cell_id"`        |
+|`--rna_var_index_name_output`    |Output name of the index that is used to describe the genes.              |`string`, default: `"rna_index"`      |
+|`--rna_raw_layer_output`         |Output location for the raw transcriptomics counts.                       |`string`, default: `"X"`              |
+|`--rna_normalized_layer_output`  |Output location for the normalized RNA counts.                            |`string`, default: `"log_normalized"` |
+|`--rna_var_gene_names_output`    |Name of the .var column that specifies the gene games.                    |`string`, default: `"gene_symbol"`    |
+|`--prot_var_index_name_output`   |Output name of the index that is used to describe the proteins.           |`string`, default: `"prot_index"`     |
+|`--prot_raw_layer_output`        |Output location for the raw protein counts.                               |`string`, default: `"X"`              |
+|`--prot_normalized_layer_output` |Output location for the normalized protein counts.                        |`string`, default: `"log_normalized"` |
+
+
+### Output arguments
+
+|Name           |Description                                           |Attributes                              |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--tiledb_dir` |Directory where the TileDB output will be written to. |`file`, example: `"path/to/tiledb_dir"` |
+
+## Authors
+
+
+  * Dries Schaumont [{{< fa brands github >}}](https://github.com/DriesSchaumont) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-4389-0440) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-schaumont) (author, maintainer)
+

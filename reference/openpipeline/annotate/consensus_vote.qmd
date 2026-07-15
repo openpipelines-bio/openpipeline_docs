@@ -1,0 +1,93 @@
+---
+title: "Consensus vote"
+namespace: "Annotate"
+description: "Combines cell type predictions from multiple annotation methods into a single consensus prediction using a weighted majority vote."
+type: "module"
+toc: false
+---
+
+::: {.column-margin}
+
+### Info
+
+ID: `consensus_vote`  
+Namespace: `annotate`
+
+### Links
+[Source](https://github.com/openpipelines-bio/openpipeline/blob/v4.2.0/src/annotate/consensus_vote/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+:::
+
+
+For each cell, each method votes for its predicted cell type, optionally weighted by the probability score and/or a per-method weight. The consensus prediction is the cell type with the highest total weighted vote. Note that this method does not leverage pre-existing ontology or perform any reconciliation of cell type labels across methods, so the same cell type may be represented by different labels in different methods and will be treated as distinct cell types in the vote
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -main-script target/nextflow/annotate/consensus_vote/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+```yaml
+
+```
+</details>
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/annotate/consensus_vote/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+## Argument groups
+
+### Inputs
+
+Input dataset arguments.
+
+
+|Name                        |Description                                                                                                                                                                                                                                                                                          |Attributes                                                                                         |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`                   |Input h5mu file containing cell type predictions in .obs.                                                                                                                                                                                                                                            |`file`, required, example: `"input.h5mu"`                                                          |
+|`--modality`                |Which modality to process.                                                                                                                                                                                                                                                                           |`string`, default: `"rna"`                                                                         |
+|`--input_obs_predictions`   |One or more .obs column names containing cell type predictions (labels) from different annotation methods.                                                                                                                                                                                           |List of `string`, required, example: `"scanvi_pred", "celltypist_pred"`, multiple_sep: `";"`       |
+|`--input_obs_probabilities` |One or more .obs column names containing prediction probability scores, one per method in --input_obs_predictions. When provided, each method's vote is scaled by the probability score for that cell (in addition to any per-method --weights). Must be the same length as --input_obs_predictions. |List of `string`, example: `"scanvi_prob", "celltypist_prob", "singler_prob"`, multiple_sep: `";"` |
+|`--tie_label`               |Label to assign when two or more cell types receive equal votes. If not provided, tied cells are assigned None (missing value).                                                                                                                                                                      |`string`, example: `"Unknown"`                                                                     |
+|`--weights`                 |Per-method weights for the consensus vote. Must be the same length as --input_obs_predictions when provided. Weights are normalized to sum to 1 before use. If not provided, all methods are weighted equally.                                                                                       |List of `double`, example: `1, 2`, multiple_sep: `";"`                                             |
+
+
+### Outputs
+
+Output arguments.
+
+
+|Name                       |Description                                                                                                                   |Attributes                             |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output`                 |Output h5mu file.                                                                                                             |`file`, example: `"output.h5mu"`       |
+|`--output_obs_predictions` |In which `.obs` slot to store the consensus predicted cell type.                                                              |`string`, default: `"consensus_pred"`  |
+|`--output_obs_score`       |In which `.obs` slot to store the consensus score, defined as the fraction of total weight assigned to the winning cell type. |`string`, default: `"consensus_score"` |
+|`--output_compression`     |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied.                |`string`, example: `"gzip"`            |
+
+## Authors
+
+
+  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author)
+

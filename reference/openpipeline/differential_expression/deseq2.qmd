@@ -1,0 +1,100 @@
+---
+title: "Deseq2"
+namespace: "Differential expression"
+description: "Performs differential expression analysis using DESeq2 on bulk samples or pseudobulk samples aggregated from single-cell data."
+type: "module"
+toc: false
+---
+
+::: {.column-margin}
+
+### Info
+
+ID: `deseq2`  
+Namespace: `differential_expression`
+
+### Links
+[Source](https://github.com/openpipelines-bio/openpipeline/blob/v4.2.0/src/differential_expression/deseq2/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+:::
+
+Note that this component only considers factors as explanatory variables, and excludes covariates from the analysis
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -main-script target/nextflow/differential_expression/deseq2/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+```yaml
+
+```
+</details>
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/differential_expression/deseq2/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+## Argument groups
+
+### Inputs
+
+|Name               |Description                                                                                                                                                                  |Attributes                         |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`          |Input h5mu file containing (pseudo-)bulk transcriptomic samples.                                                                                                             |`file`, required                   |
+|`--modality`       |Which modality from the input MuData file to process.                                                                                                                        |`string`, default: `"rna"`         |
+|`--input_layer`    |Input layer to use. If None, X is used. This layer must contain raw counts.                                                                                                  |`string`                           |
+|`--var_gene_names` |Name of the .var field that contains gene symbols. If not provided, .var.index will be used.                                                                                 |`string`, example: `"gene_symbol"` |
+|`--obs_cell_group` |.obs field containing the cell group information, for example per cell type or per cell cluster. If true, performs per-cell-group analysis with cell-group-specific results. |`string`                           |
+
+
+### Arguments
+
+|Name                 |Description                                                                                                                                                                                           |Attributes                                                                 |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--design_formula`   |The formula should be a tilde (~) followed by the variables with plus signs between them.  The design formula is used to estimate the dispersions and to estimate the log2 fold changes of the model. |`string`, required, example: `"~ disease + treatment"`                     |
+|`--contrast_column`  |Column in the metadata to use for the contrast. This column should contain the conditions to compare.                                                                                                 |`string`, required, example: `"treatment"`                                 |
+|`--contrast_values`  |Values to compare in the contrast column. First value is the control group, following values are comparison groups.  Values must be present in the fields specified for the design formula.           |List of `string`, required, example: `"ctrl", "stim"`, multiple_sep: `";"` |
+|`--p_adj_threshold`  |Adjusted p-value threshold for significance, corrected with the Benjamini and Hochberg method. Genes with adjusted p-values below this threshold will be considered significant.                      |`double`, default: `0.05`                                                  |
+|`--log2fc_threshold` |Log2 fold change threshold for significance. Genes with absolute log2 fold change above this threshold will be considered significant.                                                                |`double`, default: `0`                                                     |
+
+
+### Outputs
+
+|Name              |Description                                                                                                                                                                                         |Attributes                             |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output_dir`    |Output directory for DESeq2 results.  If cell groups are defined (using `--obs_cell_group`), the output folder will contain one CSV per cell group, otherwise it will contain a single output file. |`file`, required                       |
+|`--output_prefix` |Prefix for output CSV files.  If no cell groups are specified, the output file will be named "{prefix}.csv". If cell groups are specified, files will be named "{prefix}_{cell_group}.csv".         |`string`, default: `"deseq2_analysis"` |
+
+## Authors
+
+
+  * Jakub Majercik [{{< fa brands github >}}](https://github.com/jakubmajercik) [{{< fa brands linkedin >}}](https://linkedin.com/in/jakubmajercik) (author)
+
+  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author)
+
+  * Dries De Maeyer [{{< fa brands github >}}](https://github.com/ddemaeyer) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-de-maeyer-b46a814) (contributor)
+
+  * Weiwei Schultz (contributor)
+

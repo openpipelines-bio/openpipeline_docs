@@ -1,0 +1,124 @@
+---
+title: "Gene program mask"
+namespace: "Nichecompass"
+description: "Generation of a prior knowledge gene program mask for NicheCompass."
+type: "module"
+toc: false
+---
+
+::: {.column-margin}
+
+### Info
+
+ID: `gene_program_mask`  
+Namespace: `nichecompass`
+
+### Links
+[Source](https://github.com/openpipelines-bio/openpipeline_spatial/blob/v0.5.0/src/nichecompass/gene_program_mask/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+:::
+
+
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline_spatial \
+  -r v0.5.0 -latest \
+  -main-script target/nextflow/nichecompass/gene_program_mask/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+```yaml
+
+```
+</details>
+
+```bash
+nextflow run openpipelines-bio/openpipeline_spatial \
+  -r v0.5.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/nichecompass/gene_program_mask/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+## Argument groups
+
+### Inputs
+
+|Name                                    |Description                                                                                                                                                                                                      |Attributes                                             |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input_gene_orthologs_mapping_file`   |Path to a CSV file mapping human genes to mouse orthologs. Required for the OmniPath and NicheNet masks if `--species mouse`.                                                                                    |`file`                                                 |
+|`--input_metabolite_enzymes`            |Path to the MeBocost metabolite-enzymes TSV file. Required for generating the MeBocost gene program mask.                                                                                                        |`file`                                                 |
+|`--input_metabolite_sensors`            |Path to the MeBocost metabolite-sensors TSV file. Required for generating the MeBocost gene program mask.                                                                                                        |`file`                                                 |
+|`--input_omnipath_lr_network`           |Path to the OmniPath ligand-receptor network CSV file. If provided, the network will be loaded from this file instead of querying the OmniPath API. Cannot be used together with `--output_omnipath_lr_network`. |`file`                                                 |
+|`--input_nichenet_ligand_target_matrix` |Path to the NicheNet ligand-target gene regulatory potential matrix file. If provided, the matrix will be loaded from this file instead of querying the NicheNet API.                                            |`file`, example: `"nichenet_ligand_target_matrix.csv"` |
+|`--input_nichenet_lrt_network`          |Path to the NicheNet ligand-receptor network CSV file. If provided, the network will be loaded from this file instead of querying the NicheNet API.                                                              |`file`                                                 |
+|`--input_collectri_tf_network`          |Path to the CollecTRI TF-target gene regulatory network CSV file. If provided, the network will be loaded from this file instead of querying the CollecTRI API.                                                  |`file`                                                 |
+
+
+### Parameters
+
+|Name                                      |Description                                                                                                                                                                                                |Attributes                   |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--species`                               |Species of the organism (human or mouse).                                                                                                                                                                  |`string`, default: `"human"` |
+|`--create_omnipath_gene_program_mask`     |Whether to create the OmniPath gene program mask.                                                                                                                                                          |`boolean`, default: `TRUE`   |
+|`--create_nichenet_gene_program_mask`     |Whether to create the NicheNet gene program mask.                                                                                                                                                          |`boolean`, default: `TRUE`   |
+|`--create_mebocost_gene_program_mask`     |Whether to create the MeBocost gene program mask.                                                                                                                                                          |`boolean`, default: `TRUE`   |
+|`--create_collectri_tf_gene_program_mask` |Whether to create the CollecTRI TF gene program mask.                                                                                                                                                      |`boolean`, default: `TRUE`   |
+|`--overlap_thresh_target_genes`           |The minimum ratio of target genes that need to overlap between a GP without source genes and another GP for the GP to be dropped. Gene programs with different source genes are never combined or dropped. |`double`, default: `1`       |
+
+
+### Omnipath Parameters
+
+|Name                             |Description                                                                                                                                     |Attributes              |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--omnipath_min_curation_effort` |Minimum number of times an interaction has to be described in a paper and mentioned in a database to be included in the OmniPath gene programs. |`integer`, default: `2` |
+
+
+### NicheNet Parameters
+
+|Name                                   |Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |Attributes                |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--nichenet_version`                   |Version of the NicheNet ligand receptor network and ligand target gene regulatory potential matrix. `v2` is an improved version of `v1`, and has separate files for mouse and human.                                                                                                                                                                                                                                                                                                                                                   |`string`, default: `"v2"` |
+|`--nichenet_keep_target_genes_ratio`   |Ratio of target genes that are kept compared to total target genes. This ratio is applied over the entire matrix (not on gene program level), and determines the `all_gps_score_keep_threshold`, which will be used to filter target genes according to their regulatory potential scores.                                                                                                                                                                                                                                             |`double`, default: `1`    |
+|`--nichenet_max_n_target_genes_per_gp` |Maximum number of target genes per gene program. If a gene program has more target genes than `max_n_target_genes_per_gp`, only the `max_n_target_genes_per_gp` gene programs with the highest regulatory potential scores will be kept. Default value is chosen based on MultiNicheNet specification (s. Browaeys, R. et al. MultiNicheNet: a flexible framework for differential cell-cell communication analysis from multi-sample multi-condition single-cell transcriptomics data. bioRxiv (2023) doi:10.1101/2023.06.13.544751). |`integer`, default: `250` |
+
+
+### Outputs
+
+|Name                                                |Description                                                                                                                                                                                                         |Attributes                                                        |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output`                                          |Path to the output gene program mask JSON file.                                                                                                                                                                     |`file`, required, example: `"gp_mask.json"`                       |
+|`--output_omnipath_lr_network`                      |Path to the output OmniPath ligand-receptor network CSV file. If `--input_omnipath_lr_network` is not provided, the network will be saved to this file after querying the OmniPath API.                             |`file`, example: `"omnipath_lr_network.csv"`                      |
+|`--output_nichenet_lrt_network`                     |Path to the output NicheNet ligand-receptor network CSV file. If `--input_nichenet_lrt_network` is not provided, the network will be saved to this file after querying the NicheNet API.                            |`file`, example: `"nichenet_lrt_network.csv"`                     |
+|`--output_nichenet_ligand_target_matrix`            |Path to the output NicheNet ligand-target gene regulatory potential matrix file. If `--input_nichenet_ligand_target_matrix` is not provided, the matrix will be saved to this file after querying the NicheNet API. |`file`, example: `"nichenet_ligand_target_matrix.csv"`            |
+|`--output_collectri_tf_network`                     |Path to the output CollecTRI TF-target gene regulatory potential network CSV file. If `--input_collectri_tf_network` is not provided, the network will be saved to this file after querying the CollecTRI API.      |`file`, example: `"collectri_tf_network.csv"`                     |
+|`--output_omnipath_gp_gene_count_distributions`     |Path to save the OmniPath gene program gene count distributions plot.                                                                                                                                               |`file`, example: `"omnipath_gp_gene_count_distributions.svg"`     |
+|`--output_nichenet_gp_gene_count_distributions`     |Path to save the NicheNet gene program gene count distributions plot.                                                                                                                                               |`file`, example: `"nichenet_gp_gene_count_distributions.svg"`     |
+|`--output_mebocost_gp_gene_count_distributions`     |Path to save the MeBocost gene program gene count distributions plot.                                                                                                                                               |`file`, example: `"mebocost_gp_gene_count_distributions.svg"`     |
+|`--output_collectri_tf_gp_gene_count_distributions` |Path to save the CollecTRI TF gene program gene count distributions plot.                                                                                                                                           |`file`, example: `"collectri_tf_gp_gene_count_distributions.svg"` |
+
+## Authors
+
+
+  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (maintainer)
+
+  * Jakub Majercik [{{< fa brands github >}}](https://github.com/jakubmajercik) [{{< fa brands linkedin >}}](https://linkedin.com/in/jakubmajercik) (maintainer)
+
+  * Weiwei Schultz (contributor)
+

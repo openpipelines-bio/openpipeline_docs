@@ -1,0 +1,88 @@
+---
+title: "From tiledb to h5mu"
+namespace: "Convert"
+description: ""
+type: "module"
+toc: false
+---
+
+::: {.column-margin}
+
+### Info
+
+ID: `from_tiledb_to_h5mu`  
+Namespace: `convert`
+
+### Links
+[Source](https://github.com/openpipelines-bio/openpipeline/blob/v4.2.0/src/convert/from_tiledb_to_h5mu/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+:::
+
+
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -main-script target/nextflow/convert/from_tiledb_to_h5mu/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+```yaml
+
+```
+</details>
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/convert/from_tiledb_to_h5mu/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+## Argument groups
+
+### Input database
+
+Open a tileDB-SOMA database by URI.
+
+
+|Name                   |Description                                                                           |Attributes                                        |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input_uri`          |A URI pointing to a TileDB-SOMA database.                                             |`string`, required, example: `"s3://bucket/path"` |
+|`--s3_region`          |Region where the TileDB-SOMA database is hosted.                                      |`string`                                          |
+|`--endpoint`           |Custom endpoint to use to connect to S3                                               |`string`                                          |
+|`--s3_no_sign_request` |Do not sign S3 requests. Credentials will not be loaded if this argument is provided. |`boolean`, default: `FALSE`                       |
+|`--input_modality`     |TileDB-SOMA measurement to take the input from.                                       |`string`, required                                |
+|`--input_layers`       |Layers to import from TileDB-SOMA database.                                           |List of `string`, required, multiple_sep: `";"`   |
+
+
+### MuData output
+
+|Name                   |Description                                                                                                    |Attributes                                 |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output`             |The output MuData file.                                                                                        |`file`, required, example: `"output.h5mu"` |
+|`--output_modality`    |Name of the modality to write the results to.                                                                  |`string`, required                         |
+|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied. |`string`, example: `"gzip"`                |
+
+## Authors
+
+
+  * Dries Schaumont [{{< fa brands github >}}](https://github.com/DriesSchaumont) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-4389-0440) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-schaumont) (author, maintainer)
+
