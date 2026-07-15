@@ -1,0 +1,249 @@
+---
+title: "Parallel annotation"
+namespace: "Single cell"
+description: "Run multiple annotation methods from OpenPipeline in parallel on the same preprocessed query h5mu input, then merge each method's predictions (predicted labels and probabilities in .obs, and integrated embeddings in .obsm for the integration-based methods) back into a single output h5mu."
+type: "workflow"
+toc: false
+---
+
+::: {.column-margin}
+
+### Info
+
+ID: `parallel_annotation`  
+Namespace: `single_cell`
+
+### Links
+[Source](https://github.com/openpipelines-bio/openpipeline_composed/blob/v0.3.0/src/single_cell/parallel_annotation/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+:::
+
+These are label-projection (reference-based) methods: they transfer labels from
+a labelled --reference onto the query (CellTypist can alternatively use a
+pretrained --celltypist_model). The reference is expected to be preprocessed in
+the same way as the query.
+
+Available annotation methods: 
+- CellTypist
+- ScanVI with scArches
+- SingleR
+- SCVI integration followed by KNN label transfer
+- Harmony integration followed by KNN label transfer
+
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline_composed \
+  -r v0.3.0 -latest \
+  -main-script target/nextflow/single_cell/parallel_annotation/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+```yaml
+
+```
+</details>
+
+```bash
+nextflow run openpipelines-bio/openpipeline_composed \
+  -r v0.3.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/single_cell/parallel_annotation/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+## Argument groups
+
+### Inputs
+
+|Name                                 |Description                                                                                                                                                                                                                                            |Attributes                                |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--id`                               |ID of the sample.                                                                                                                                                                                                                                      |`string`, required, example: `"foo"`      |
+|`--input`                            |Input query h5mu file. Must be preprocessed in the same way as the reference (raw counts and log-normalized counts available).                                                                                                                         |`file`, required, example: `"input.h5mu"` |
+|`--modality`                         |Which modality to process. Must match the modality in --reference.                                                                                                                                                                                     |`string`, default: `"rna"`                |
+|`--input_layer`                      |The layer of the input query containing raw counts. Required by celltypist (which log-normalizes internally), scanvi_scarches and scvi_knn (which model raw counts directly). If not provided, .X  will be used.                                       |`string`                                  |
+|`--input_layer_lognormalized`        |The layer of the input query containing log-normalized counts. Required by harmony_knn and scvi_knn.                                                                                                                                                   |`string`, default: `"log_normalized"`     |
+|`--input_obs_batch_label`            |.obs column in the input query containing batch labels. Required by harmony_knn, scanvi_scarches and scvi_knn.                                                                                                                                         |`string`, default: `"sample_id"`          |
+|`--input_var_gene_names`             |.var column containing gene names. By default the .var index is used.                                                                                                                                                                                  |`string`                                  |
+|`--input_reference_gene_overlap`     |Minimum number of genes required to overlap between query and reference.                                                                                                                                                                               |`integer`, default: `100`                 |
+|`--sanitize_ensembl_ids`             |Whether to sanitize ensembl gene ids by removing version numbers. Read by celltypist, scanvi_scarches, scvi_knn and singler.                                                                                                                           |`boolean`, default: `TRUE`                |
+|`--input_obs_categorical_covariates` |.obs column(s) in the input query with categorical covariates for scanvi_scarches to correct for in addition to the batch label. Treated as nuisance factors; their order must match --reference_obs_categorical_covariates. None by default.          |List of `string`, multiple_sep: `";"`     |
+|`--input_obs_numerical_covariates`   |.obs column(s) in the input query with continuous (numerical) covariates for scanvi_scarches to correct for in addition to the batch label. Treated as nuisance factors; their order must match --reference_obs_numerical_covariates. None by default. |List of `string`, multiple_sep: `";"`     |
+
+
+### Methods
+
+|Name                   |Description                            |Attributes                                                                              |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--annotation_methods` |Annotation methods to run in parallel. |List of `string`, required, example: `"celltypist", "harmony_knn"`, multiple_sep: `";"` |
+
+
+### Reference
+
+|Name                                       |Description                                                                                                                                                                                                                                      |Attributes                             |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--reference`                              |Reference h5mu file with labeled observations. Required by harmony_knn, scanvi_scarches, scvi_knn, and by celltypist when --celltypist_model is not provided.                                                                                    |`file`, example: `"reference.h5mu"`    |
+|`--reference_layer`                        |Layer of the reference containing raw counts. If not provided, .X will be used.                                                                                                                                                                  |`string`                               |
+|`--reference_layer_lognormalized`          |Layer of the reference containing log-normalized counts.                                                                                                                                                                                         |`string`, default: `"log_normalized"`  |
+|`--reference_obs_target`                   |.obs column in the reference containing the target cell-type labels.                                                                                                                                                                             |`string`, example: `"cell_type"`       |
+|`--reference_obs_batch_label`              |.obs column in the reference containing batch labels.                                                                                                                                                                                            |`string`, default: `"sample_id"`       |
+|`--reference_var_gene_names`               |.var column in the reference containing gene names. Defaults to the .var index.                                                                                                                                                                  |`string`                               |
+|`--reference_var_input`                    |.var column in the reference flagging highly-variable genes (boolean). Used by celltypist (--reference_var_input) and scanvi_scarches (mapped to --reference_var_hvg) to subset features.                                                        |`string`, default: `"filter_with_hvg"` |
+|`--reference_obs_categorical_covariates`   |.obs column(s) in the reference with categorical covariates for scanvi_scarches to correct for in addition to the batch label. Treated as nuisance factors; their order must match --input_obs_categorical_covariates. None by default.          |List of `string`, multiple_sep: `";"`  |
+|`--reference_obs_numerical_covariates`     |.obs column(s) in the reference with continuous (numerical) covariates for scanvi_scarches to correct for in addition to the batch label. Treated as nuisance factors; their order must match --input_obs_numerical_covariates. None by default. |List of `string`, multiple_sep: `";"`  |
+|`--reference_obs_label_unlabeled_category` |Value in --reference_obs_target that indicates unlabeled observations.                                                                                                                                                                           |`string`, default: `"Unknown"`         |
+
+
+### Clustering options
+
+Leiden clustering options shared by harmony_knn, scanvi_scarches, scvi_knn.
+
+
+|Name                  |Description                                                           |Attributes                                          |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--leiden_resolution` |Leiden clustering resolution(s). Higher values lead to more clusters. |List of `double`, default: `1`, multiple_sep: `";"` |
+
+
+### Neighbor classifier options
+
+KNN options shared by harmony_knn, scanvi_scarches, scvi_knn.
+
+
+|Name                |Description                                 |Attributes                     |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--knn_weights`     |Weight function for KNN classifier.         |`string`, default: `"uniform"` |
+|`--knn_n_neighbors` |Number of neighbors for the KNN classifier. |`integer`, default: `15`       |
+
+
+### scVI / scANVI / scArches training options
+
+Training arguments shared by scanvi_scarches and scvi_knn. (scvi_knn maps
+these to its --scvi_* prefixed arguments at dispatch time.)
+
+
+
+|Name                              |Description                                                                 |Attributes                             |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--scvi_early_stopping`           |Whether to perform early stopping with respect to the validation set.       |`boolean`                              |
+|`--scvi_early_stopping_monitor`   |Metric logged during validation set epoch.                                  |`string`, default: `"elbo_validation"` |
+|`--scvi_early_stopping_patience`  |Number of validation epochs with no improvement after which training stops. |`integer`, default: `45`               |
+|`--scvi_early_stopping_min_delta` |Minimum change in the monitored metric to qualify as an improvement.        |`double`, default: `0`                 |
+|`--scvi_max_epochs`               |Number of training passes through the dataset.                              |`integer`                              |
+|`--scvi_reduce_lr_on_plateau`     |Reduce learning rate when validation metric plateaus.                       |`boolean`, default: `TRUE`             |
+|`--scvi_lr_factor`                |Factor by which to reduce learning rate.                                    |`double`, default: `0.6`               |
+|`--scvi_lr_patience`              |Number of epochs with no improvement after which lr is reduced.             |`double`, default: `30`                |
+
+
+### CellTypist options
+
+|Name                             |Description                                                                                                                                |Attributes                                |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--celltypist_model`             |Pretrained CellTypist model in .pkl format. If not provided, the model is trained on --reference.                                          |`file`, example: `"pretrained_model.pkl"` |
+|`--celltypist_majority_voting`   |Refine predicted labels by majority voting after over-clustering.                                                                          |`boolean`, default: `FALSE`               |
+|`--celltypist_feature_selection` |Whether to perform feature selection during training.                                                                                      |`boolean`, default: `FALSE`               |
+|`--celltypist_C`                 |Inverse of regularization strength in logistic regression.                                                                                 |`double`, default: `1`                    |
+|`--celltypist_max_iter`          |Maximum iterations before reaching the cost-function minimum.                                                                              |`integer`, default: `1000`                |
+|`--celltypist_use_SGD`           |Whether to use stochastic gradient descent.                                                                                                |`boolean`, default: `FALSE`               |
+|`--celltypist_min_prop`          |Minimum proportion of cells in a sub-cluster supporting a label for majority voting; only relevant if --celltypist_majority_voting is set. |`double`, default: `0`                    |
+
+
+### harmony_knn options
+
+|Name                               |Description                                                |Attributes                                          |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--harmony_knn_n_hvg`              |Number of highly-variable genes to keep for harmony_knn.   |`integer`, default: `2000`                          |
+|`--harmony_knn_pca_num_components` |Number of principal components to compute for harmony_knn. |`integer`                                           |
+|`--harmony_knn_theta`              |Diversity clustering penalty for harmony.                  |List of `double`, default: `2`, multiple_sep: `";"` |
+
+
+### scvi_knn options
+
+|Name               |Description                                           |Attributes                 |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--scvi_knn_n_hvg` |Number of highly-variable genes to keep for scvi_knn. |`integer`, default: `2000` |
+
+
+### SingleR options
+
+|Name                              |Description                                                                                                                                  |Attributes                     |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--singler_input_obs_clusters`    |.obs column with cluster identities. If provided, SingleR annotates the aggregated cluster profiles; otherwise it annotates per observation. |`string`                       |
+|`--singler_de_method`             |Method to detect differentially expressed genes between pairs of labels.                                                                     |`string`, default: `"classic"` |
+|`--singler_de_n_genes`            |Number of differentially expressed genes per label pair to use as markers. Defaults to a SingleR heuristic based on the number of labels.    |`integer`                      |
+|`--singler_quantile`              |Quantile of the correlation distribution used to score each label.                                                                           |`double`, default: `0.8`       |
+|`--singler_fine_tune`             |Whether to fine-tune label assignment after the initial classification.                                                                      |`boolean`, default: `TRUE`     |
+|`--singler_fine_tuning_threshold` |Maximum difference from the maximum correlation to use in fine-tuning.                                                                       |`double`, default: `0.05`      |
+|`--singler_prune`                 |Whether to prune low-quality labels (replaced with NA in the pruned predictions output).                                                     |`boolean`, default: `TRUE`     |
+
+
+### Output slot naming
+
+Names of the .obs and .obsm slots each method writes into its
+intermediate h5mu and that are subsequently moved into the merged output.
+
+
+
+|Name                                |Description |Attributes                                     |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--celltypist_obs_predictions`      |            |`string`, default: `"celltypist_pred"`         |
+|`--celltypist_obs_probability`      |            |`string`, default: `"celltypist_probability"`  |
+|`--harmony_knn_obs_predictions`     |            |`string`, default: `"harmony_knn_pred"`        |
+|`--harmony_knn_obs_probability`     |            |`string`, default: `"harmony_knn_probability"` |
+|`--harmony_knn_obsm_integrated`     |            |`string`, default: `"X_integrated_harmony"`    |
+|`--scanvi_scarches_obs_predictions` |            |`string`, default: `"scanvi_pred"`             |
+|`--scanvi_scarches_obs_probability` |            |`string`, default: `"scanvi_probability"`      |
+|`--scanvi_scarches_obsm_integrated` |            |`string`, default: `"X_integrated_scanvi"`     |
+|`--scvi_knn_obs_predictions`        |            |`string`, default: `"scvi_knn_pred"`           |
+|`--scvi_knn_obs_probability`        |            |`string`, default: `"scvi_knn_probability"`    |
+|`--scvi_knn_obsm_integrated`        |            |`string`, default: `"X_integrated_scvi"`       |
+|`--singler_obs_predictions`         |            |`string`, default: `"singler_pred"`            |
+|`--singler_obs_probability`         |            |`string`, default: `"singler_probability"`     |
+|`--singler_obs_delta_next`          |            |`string`, default: `"singler_delta_next"`      |
+|`--singler_obs_pruned_predictions`  |            |`string`, default: `"singler_pruned_labels"`   |
+|`--singler_obsm_scores`             |            |`string`, default: `"singler_scores"`          |
+
+
+### Consensus vote options
+
+A final consensus_vote step combines the per-method predictions into a
+single consensus label via a (probability-weighted) majority vote.
+
+
+
+|Name                            |Description                                                                                                                                 |Attributes                             |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--run_consensus`               |Run a final consensus vote combining the per-method predictions. Only takes effect when more than one --annotation_methods is selected.     |`boolean`, default: `TRUE`             |
+|`--consensus_obs_predictions`   |.obs slot in which to store the consensus predicted cell type.                                                                              |`string`, default: `"consensus_pred"`  |
+|`--consensus_obs_score`         |.obs slot in which to store the consensus score, defined as the fraction of total weight assigned to the winning cell type.                 |`string`, default: `"consensus_score"` |
+|`--consensus_use_probabilities` |Scale each method's vote by its per-cell prediction probability. When false, every method votes with equal weight regardless of confidence. |`boolean`, default: `TRUE`             |
+|`--consensus_tie_label`         |Label to assign when two or more cell types receive equal votes. If not provided, tied cells are assigned a missing value.                  |`string`, example: `"Unknown"`         |
+
+
+### Output
+
+|Name                    |Description                                                                                                                          |Attributes                                 |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output`              |Output h5mu file — the input query with each selected method's predictions and embeddings merged into the target modality.           |`file`, required, example: `"output.h5mu"` |
+|`--output_compression`  |Compression format for the output h5mu file.                                                                                         |`string`, example: `"gzip"`                |
+|`--output_scanvi_model` |Output folder with the trained scANVI/scArches model. Only produced when scanvi_scarches is among the selected --annotation_methods. |`file`, example: `"scanvi_model"`          |
+
+## Authors
+
+
+  * Jakub Majercik [{{< fa brands github >}}](https://github.com/jakubmajercik) [{{< fa brands linkedin >}}](https://linkedin.com/in/jakubmajercik) (author, maintainer)
+

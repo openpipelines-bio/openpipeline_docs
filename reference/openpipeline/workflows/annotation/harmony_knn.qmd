@@ -1,0 +1,138 @@
+---
+title: "Harmony integration followed by KNN label transfer"
+namespace: "Workflows/annotation"
+description: "Cell type annotation workflow by performing harmony integration of reference and query dataset followed by KNN label transfer."
+type: "workflow"
+toc: false
+---
+
+::: {.column-margin}
+
+### Info
+
+ID: `harmony_knn`  
+Namespace: `workflows/annotation`
+
+### Links
+[Source](https://github.com/openpipelines-bio/openpipeline/blob/v4.2.0/src/workflows/annotation/harmony_knn/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+:::
+
+
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -main-script target/nextflow/workflows/annotation/harmony_knn/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+```yaml
+
+```
+</details>
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/workflows/annotation/harmony_knn/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+## Argument groups
+
+### Query Input
+
+|Name                             |Description                                                                                                                                 |Attributes                                |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--id`                           |ID of the sample.                                                                                                                           |`string`, required, example: `"foo"`      |
+|`--input`                        |Input dataset consisting of the (unlabeled) query observations. The dataset is expected to be pre-processed in the same way as --reference. |`file`, required, example: `"input.h5mu"` |
+|`--modality`                     |Which modality to process. Should match the modality of the --reference dataset.                                                            |`string`, default: `"rna"`                |
+|`--input_layer`                  |The layer of the input dataset to process if .X is not to be used. Should contain log normalized counts.                                    |`string`                                  |
+|`--input_obs_batch_label`        |The .obs field in the input (query) dataset containing the batch labels.                                                                    |`string`, required, example: `"sample"`   |
+|`--input_var_gene_names`         |The .var field in the input (query) dataset containing gene names; if not provided, the .var index will be used.                            |`string`                                  |
+|`--input_reference_gene_overlap` |The minimum number of genes present in both the reference and query datasets.                                                               |`integer`, default: `100`                 |
+|`--overwrite_existing_key`       |If provided, will overwrite existing fields in the input dataset when data are copied during the reference alignment process.               |`boolean_true`                            |
+
+
+### Reference input
+
+|Name                          |Description                                                                                                                                                                        |Attributes                                    |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--reference`                 |Reference dataset consisting of the labeled observations to train the KNN classifier on. The dataset is expected to be pre-processed in the same way as the --input query dataset. |`file`, required, example: `"reference.h5mu"` |
+|`--reference_layer`           |The layer of the reference dataset to process if .X is not to be used. Should contain log normalized counts.                                                                       |`string`                                      |
+|`--reference_obs_target`      |The `.obs` key of the target cell type labels to transfer.                                                                                                                         |`string`, required, example: `"cell_type"`    |
+|`--reference_var_gene_names`  |The .var field in the reference dataset containing gene names; if not provided, the .var index will be used.                                                                       |`string`                                      |
+|`--reference_obs_batch_label` |The .obs field in the reference dataset containing the batch labels.                                                                                                               |`string`, required, example: `"sample"`       |
+
+
+### HVG subset arguments
+
+|Name      |Description                                    |Attributes                 |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--n_hvg` |Number of highly variable genes to subset for. |`integer`, default: `2000` |
+
+
+### PCA options
+
+|Name                   |Description                                                                                                          |Attributes               |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--pca_num_components` |Number of principal components to compute. Defaults to 50, or 1 - minimum dimension size of selected representation. |`integer`, example: `25` |
+
+
+### Harmony integration options
+
+|Name              |Description                                                                                                                                                                                                                                                                                           |Attributes                                          |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--harmony_theta` |Diversity clustering penalty parameter. Can be set as a single value for all batch observations or as multiple values, one for each observation in the batches defined by --input_obs_batch_label. theta=0 does not encourage any diversity. Larger values of theta result in more diverse clusters." |List of `double`, default: `2`, multiple_sep: `";"` |
+
+
+### Leiden clustering options
+
+|Name                  |Description                                                                    |Attributes                                          |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--leiden_resolution` |Control the coarseness of the clustering. Higher values lead to more clusters. |List of `double`, default: `1`, multiple_sep: `";"` |
+
+
+### Neighbor classifier arguments
+
+|Name                |Description                                                                                                                                                                                                                  |Attributes                     |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--knn_weights`     |Weight function used in prediction. Possible values are: `uniform` (all points in each neighborhood are weighted equally) or  `distance` (weight points by the inverse of their distance)                                    |`string`, default: `"uniform"` |
+|`--knn_n_neighbors` |The number of neighbors to use in k-neighbor graph structure used for fast approximate nearest neighbor search with PyNNDescent.  Larger values will result in more accurate search results at the cost of computation time. |`integer`, default: `15`       |
+
+
+### Outputs
+
+|Name                       |Description                                                                                                                                                                                                                              |Attributes                                  |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output`                 |The annotated output .h5mu file.                                                                                                                                                                                                         |`file`, required, example: `"output.h5mu"`  |
+|`--output_obs_predictions` |In which `.obs` slots to store the predicted cell labels. If provided, must have the same length as `--reference_obs_targets`. If empty, will default to the `reference_obs_targets` combined with the `"_pred"` suffix.                 |List of `string`, multiple_sep: `";"`       |
+|`--output_obs_probability` |In which `.obs` slots to store the probability of the predictions. If provided, must have the same length as `--reference_obs_targets`. If empty, will default to the `reference_obs_targets` combined with the `"_probability"` suffix. |List of `string`, multiple_sep: `";"`       |
+|`--output_obsm_integrated` |In which .obsm slot to store the integrated embedding.                                                                                                                                                                                   |`string`, default: `"X_integrated_harmony"` |
+|`--output_compression`     |The compression format to be used on the output h5mu object.                                                                                                                                                                             |`string`, example: `"gzip"`                 |
+
+## Authors
+
+
+  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author, maintainer)
+
+  * Weiwei Schultz (contributor)
+

@@ -1,0 +1,143 @@
+---
+title: "scVI Annotation"
+namespace: "Workflows/annotation"
+description: ""Cell type annotation workflow that performs scVI integration of reference and query dataset followed by KNN label transfer."
+type: "workflow"
+toc: false
+---
+
+::: {.column-margin}
+
+### Info
+
+ID: `scvi_knn`  
+Namespace: `workflows/annotation`
+
+### Links
+[Source](https://github.com/openpipelines-bio/openpipeline/blob/v4.2.0/src/workflows/annotation/scvi_knn/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+:::
+
+
+The query and reference datasets are expected to be pre-processed in the same way, for example with the `process_samples` workflow of OpenPipeline. Note that this workflow will integrate the reference dataset from scratch and integrate the query dataset in the same embedding space. 
+The workflow does not currently output the trained SCVI reference model."
+
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -main-script target/nextflow/workflows/annotation/scvi_knn/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+```yaml
+
+```
+</details>
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/workflows/annotation/scvi_knn/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+## Argument groups
+
+### Query Input
+
+|Name                             |Description                                                                                                                   |Attributes                                |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--id`                           |ID of the sample.                                                                                                             |`string`, required, example: `"foo"`      |
+|`--input`                        |Input dataset consisting of the (unlabeled) query observations.                                                               |`file`, required, example: `"input.h5mu"` |
+|`--modality`                     |Which modality to process. Should match the modality of the --reference dataset.                                              |`string`, default: `"rna"`                |
+|`--input_layer`                  |The layer of the input dataset containing the raw counts if .X is not to be used.                                             |`string`, example: `"counts"`             |
+|`--input_layer_lognormalized`    |The layer of the input dataset containing the lognormalized counts if .X is not to be used.                                   |`string`, example: `"log_normalized"`     |
+|`--input_obs_batch_label`        |The .obs field in the input (query) dataset containing the batch labels.                                                      |`string`, required, example: `"sample"`   |
+|`--input_var_gene_names`         |The .var field in the input (query) dataset containing gene names; if not provided, the .var index will be used.              |`string`                                  |
+|`--input_reference_gene_overlap` |The minimum number of genes present in both the reference and query datasets.                                                 |`integer`, default: `100`                 |
+|`--overwrite_existing_key`       |If provided, will overwrite existing fields in the input dataset when data are copied during the reference alignment process. |`boolean_true`                            |
+|`--sanitize_ensembl_ids`         |Whether to sanitize ensembl ids by removing version numbers.                                                                  |`boolean`, default: `TRUE`                |
+
+
+### Reference input
+
+|Name                              |Description                                                                                                  |Attributes                                    |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--reference`                     |Reference dataset consisting of the labeled observations.                                                    |`file`, required, example: `"reference.h5mu"` |
+|`--reference_layer`               |The layer of the reference dataset containing the raw counts if .X is not to be used.                        |`string`, example: `"counts"`                 |
+|`--reference_layer_lognormalized` |The layer of the reference dataset containing the lognormalized counts if .X is not to be used.              |`string`, example: `"log_normalized"`         |
+|`--reference_obs_target`          |The `.obs` key(s) of the target labels to transfer.                                                          |`string`, required, example: `"cell_type"`    |
+|`--reference_var_gene_names`      |The .var field in the reference dataset containing gene names; if not provided, the .var index will be used. |`string`                                      |
+|`--reference_obs_batch_label`     |The .obs field in the reference dataset containing the batch labels.                                         |`string`, required, example: `"sample"`       |
+
+
+### HVG subset arguments
+
+|Name      |Description                                    |Attributes                 |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--n_hvg` |Number of highly variable genes to subset for. |`integer`, default: `2000` |
+
+
+### scVI integration options
+
+|Name                              |Description                                                                                                                                          |Attributes                             |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--scvi_early_stopping`           |Whether to perform early stopping with respect to the validation set.                                                                                |`boolean`                              |
+|`--scvi_early_stopping_monitor`   |Metric logged during validation set epoch.                                                                                                           |`string`, default: `"elbo_validation"` |
+|`--scvi_early_stopping_patience`  |Number of validation epochs with no improvement after which training will be stopped.                                                                |`integer`, default: `45`               |
+|`--scvi_early_stopping_min_delta` |Minimum change in the monitored quantity to qualify as an improvement, i.e. an absolute change of less than min_delta, will count as no improvement. |`double`, default: `0`                 |
+|`--scvi_max_epochs`               |Number of passes through the dataset, defaults to (20000 / number of cells) * 400 or 400; whichever is smallest.                                     |`integer`                              |
+|`--scvi_reduce_lr_on_plateau`     |Whether to monitor validation loss and reduce learning rate when validation set `lr_scheduler_metric` plateaus.                                      |`boolean`, default: `TRUE`             |
+|`--scvi_lr_factor`                |Factor to reduce learning rate.                                                                                                                      |`double`, default: `0.6`               |
+|`--scvi_lr_patience`              |Number of epochs with no improvement after which learning rate will be reduced.                                                                      |`double`, default: `30`                |
+
+
+### Leiden clustering options
+
+|Name                  |Description                                                                    |Attributes                                          |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--leiden_resolution` |Control the coarseness of the clustering. Higher values lead to more clusters. |List of `double`, default: `1`, multiple_sep: `";"` |
+
+
+### Neighbor classifier arguments
+
+|Name                |Description                                                                                                                                                                                                                  |Attributes                     |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--knn_weights`     |Weight function used in prediction. Possible values are: `uniform` (all points in each neighborhood are weighted equally) or  `distance` (weight points by the inverse of their distance)                                    |`string`, default: `"uniform"` |
+|`--knn_n_neighbors` |The number of neighbors to use in k-neighbor graph structure used for fast approximate nearest neighbor search with PyNNDescent.  Larger values will result in more accurate search results at the cost of computation time. |`integer`, default: `15`       |
+
+
+### Outputs
+
+|Name                       |Description                                                                                                                                                                                                                              |Attributes                                 |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output`                 |The annotated output .h5mu file.                                                                                                                                                                                                         |`file`, required, example: `"output.h5mu"` |
+|`--output_obs_predictions` |In which `.obs` slots to store the predicted cell labels. If provided, must have the same length as `--reference_obs_targets`. If empty, will default to the `reference_obs_targets` combined with the `"_pred"` suffix.                 |List of `string`, multiple_sep: `";"`      |
+|`--output_obs_probability` |In which `.obs` slots to store the probability of the predictions. If provided, must have the same length as `--reference_obs_targets`. If empty, will default to the `reference_obs_targets` combined with the `"_probability"` suffix. |List of `string`, multiple_sep: `";"`      |
+|`--output_obsm_integrated` |In which .obsm slot to store the integrated embedding.                                                                                                                                                                                   |`string`, default: `"X_integrated_scvi"`   |
+
+## Authors
+
+
+  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author, maintainer)
+
+  * Weiwei Schultz (contributor)
+

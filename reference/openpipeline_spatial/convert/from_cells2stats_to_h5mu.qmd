@@ -1,0 +1,105 @@
+---
+title: "From cells2stats to h5mu"
+namespace: "Convert"
+description: "Convert spatial data resulting from Aviti Teton sequencers that have been processed by the Element Biosciences cells2stats workflow to H5MU format."
+type: "module"
+toc: false
+---
+
+::: {.column-margin}
+
+### Info
+
+ID: `from_cells2stats_to_h5mu`  
+Namespace: `convert`
+
+### Links
+[Source](https://github.com/openpipelines-bio/openpipeline_spatial/blob/v0.5.0/src/convert/from_cells2stats_to_h5mu/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+:::
+
+This component processes cells2stats count matrices to create a standardized H5MU file for downstream analysis.
+
+The component reads:
+- Parquet file containing the count matrix and metadata
+- Panel.json with target and batch information
+
+And outputs an H5MU file with:
+- Count data as the main .X matrix
+- Spatial coordinates in obsm
+- Cell Paint intensities in obsm (optional)
+- Nuclear count data as a layer (optional)
+- CellProfiler morphology metrics in obsm (optional)
+- Unassigned targets in obsm (optional)
+
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline_spatial \
+  -r v0.5.0 -latest \
+  -main-script target/nextflow/convert/from_cells2stats_to_h5mu/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+```yaml
+
+```
+</details>
+
+```bash
+nextflow run openpipelines-bio/openpipeline_spatial \
+  -r v0.5.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/convert/from_cells2stats_to_h5mu/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+## Argument groups
+
+### Inputs
+
+|Name      |Description                                                                                                                                                                             |Attributes                                          |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input` |Path to the cells2stats output bundle.  Expected folder structure (showing required files only): ├── Cytoprofiling/ │   └── Instrument/ │       └── RawCellStats.parquet └── Panel.json |`file`, required, example: `"path/to/aviti_output"` |
+
+
+### Outputs
+
+|Name                   |Description                                                                                                   |Attributes                                 |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output`             |Output H5MU file path.                                                                                        |`file`, required, example: `"output.h5mu"` |
+|`--output_compression` |Compression format to use for the output AnnData and/or Mudata objects. By default no compression is applied. |`string`, example: `"gzip"`                |
+
+
+### Options
+
+|Name                        |Description                                                                                                                                                                                                              |Attributes                                |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--modality`                |The modality to which the processed data will be written to in the H5MU file.                                                                                                                                            |`string`, default: `"rna"`                |
+|`--obsm_coordinates`        |Key name to store the spatial coordinates (in pixels) in obsm. If present, spatial coordinates in micrometers will be stored under {obsm_coordinates}_um. The column names will be stored in uns.                        |`string`, default: `"spatial"`            |
+|`--layer_nuclear_counts`    |Name for nuclear counts layer. If specified, nuclear count data  will be stored as a separate layer in the AnnData object.                                                                                               |`string`, example: `"nuclear_counts"`     |
+|`--obsm_cell_paint`         |Key name for storing Cell Paint target intensities in obsm.  If provided, Cell Paint target intensity data will be stored as a separate matrix in the obsm field. The column names will be stored in uns.                |`string`, example: `"cell_paint"`         |
+|`--obsm_cell_paint_nuclear` |Key name for storing Nuclear Cell Paint target intensities in obsm. If provided, Nuclear Cell Paint target intensity data will be stored as a separate matrix in the obsm field. The column names will be stored in uns. |`string`, example: `"cell_paint_nuclear"` |
+|`--obsm_cell_profiler`      |Key name for storing CellProfiler morphology metrics in obsm. If provided, CellProfiler morphology metrics will be stored as a separate matrix in the obsm field. The column names will be stored in uns.                |`string`, example: `"cell_profiler"`      |
+|`--obsm_unassigned_targets` |Key name for storing any unassigned target data in obsm. If provided, unassigned target data will be stored as a separate matrix in the obsm field. The column names will be stored in uns.                              |`string`, example: `"cell_profiler"`      |
+
+## Authors
+
+
+  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (maintainer)
+

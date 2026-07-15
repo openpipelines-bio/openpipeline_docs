@@ -1,0 +1,77 @@
+---
+title: "From cosmx to h5mu"
+namespace: "Convert"
+description: "Converts the output from NanoString experiment into a MuData objcet."
+type: "module"
+toc: false
+---
+
+::: {.column-margin}
+
+### Info
+
+ID: `from_cosmx_to_h5mu`  
+Namespace: `convert`
+
+### Links
+[Source](https://github.com/openpipelines-bio/openpipeline_spatial/blob/v0.5.0/src/convert/from_cosmx_to_h5mu/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+:::
+
+  - `<dataset_id>_exprMat_file.csv`: File containing the counts.   - `<dataset_id>`_metadata_file: File containing the spatial coordinates and additional cell-level metadata.   - `<dataset_id>_fov_file.csv`: File containing the coordinates of all the fields of view. In addition to reading the regular Nanostring output, it loads CellComposite and CellLabels directories, if present,
+containing the images
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline_spatial \
+  -r v0.5.0 -latest \
+  -main-script target/nextflow/convert/from_cosmx_to_h5mu/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+```yaml
+
+```
+</details>
+
+```bash
+nextflow run openpipelines-bio/openpipeline_spatial \
+  -r v0.5.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/convert/from_cosmx_to_h5mu/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+## Argument group
+
+### Arguments
+
+|Name                   |Description                                                        |Attributes                                |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`              |Input folder. Must contain the output from a NanoString CosMx run. |`file`, required, example: `"cosmx_data"` |
+|`--modality`           |                                                                   |`string`, default: `"rna"`                |
+|`--output`             |The output h5mu file.                                              |`file`, example: `"output.h5mu"`          |
+|`--output_compression` |                                                                   |`string`, example: `"gzip"`               |
+
+## Authors
+
+
+  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (maintainer)
+
+  * Weiwei Schultz (contributor)
+

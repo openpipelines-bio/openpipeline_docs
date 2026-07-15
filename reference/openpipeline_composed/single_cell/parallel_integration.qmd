@@ -1,0 +1,182 @@
+---
+title: "Parallel integration"
+namespace: "Single cell"
+description: "Run multiple integration methods from OpenPipeline in parallel on the same preprocessed h5mu input, then merge each method's annotations (leiden cluster labels in .obs, integrated embeddings and UMAPs in .obsm, neighbor graphs in .obsp and .uns) back into a single output h5mu."
+type: "workflow"
+toc: false
+---
+
+::: {.column-margin}
+
+### Info
+
+ID: `parallel_integration`  
+Namespace: `single_cell`
+
+### Links
+[Source](https://github.com/openpipelines-bio/openpipeline_composed/blob/v0.3.0/src/single_cell/parallel_integration/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+:::
+
+Available integration methods: Harmony, scVI, Scanorama, BBKNN.
+
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline_composed \
+  -r v0.3.0 -latest \
+  -main-script target/nextflow/single_cell/parallel_integration/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+```yaml
+
+```
+</details>
+
+```bash
+nextflow run openpipelines-bio/openpipeline_composed \
+  -r v0.3.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/single_cell/parallel_integration/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+## Argument groups
+
+### Inputs
+
+|Name                            |Description                                                                                                                                                                                                        |Attributes                                                    |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--id`                          |ID of the sample.                                                                                                                                                                                                  |`string`, required, example: `"foo"`                          |
+|`--input`                       |Input preprocessed h5mu file. Must contain a log-normalized layer and a PCA embedding (or the embedding specified via --obsm_embedding).                                                                           |`file`, required, example: `"input.h5mu"`                     |
+|`--modality`                    |Which modality to process.                                                                                                                                                                                         |`string`, default: `"rna"`                                    |
+|`--layer_log_normalized_counts` |Layer with the log-normalized counts. Read by the methods that operate on normalized expression: harmony, scanorama and bbknn.                                                                                     |`string`, default: `"log_normalized"`                         |
+|`--layer_raw_counts`            |Layer with the raw (integer) counts. Read by scVI, which requires raw counts rather than log-normalized data. If left unset, scVI reads the counts from the modality's .X.                                         |`string`                                                      |
+|`--obsm_embedding`              |.obsm slot containing the embedding to use as input for methods that require a pre-computed dimensionality reduction (harmony, scanorama, bbknn).                                                                  |`string`, default: `"X_pca"`                                  |
+|`--obs_batch`                   |.obs column discriminating between batches. Read by scVI, scanorama and bbknn.                                                                                                                                     |`string`, default: `"sample_id"`                              |
+|`--obs_covariates`              |.obs column(s) defining the covariates to regress out. Read by harmony.                                                                                                                                            |List of `string`, default: `"sample_id"`, multiple_sep: `";"` |
+|`--obs_categorical_covariates`  |.obs column(s) with categorical covariates for scVI to correct for in addition to --obs_batch. Treated as nuisance factors, so do not use them for biological signal you want to keep. None by default.            |List of `string`, multiple_sep: `";"`                         |
+|`--obs_numerical_covariates`    |.obs column(s) with continuous (numerical) covariates for scVI to correct for in addition to --obs_batch. Treated as nuisance factors, so do not use them for biological signal you want to keep. None by default. |List of `string`, multiple_sep: `";"`                         |
+|`--var_input`                   |.var column containing highly variable genes to subset to. Read by scVI. By default, scVI uses all genes.                                                                                                          |`string`                                                      |
+
+
+### Methods
+
+|Name                    |Description                             |Attributes                                                                    |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--integration_methods` |Integration methods to run in parallel. |List of `string`, required, example: `"harmony", "scvi"`, multiple_sep: `";"` |
+
+
+### Clustering options
+
+|Name                  |Description                                                                                                                                         |Attributes                                          |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--leiden_resolution` |Leiden clustering resolution(s). Each method will produce one .obs cluster column per resolution, named "{method}_integration_leiden_{resolution}". |List of `double`, default: `1`, multiple_sep: `";"` |
+
+
+### Harmony options
+
+|Name              |Description                                                                |Attributes                                          |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--harmony_theta` |Diversity clustering penalty. Higher values produce more diverse clusters. |List of `double`, default: `2`, multiple_sep: `";"` |
+
+
+### scVI options
+
+|Name                              |Description                                                                 |Attributes                             |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--scvi_early_stopping`           |Whether scVI should perform early stopping on the validation set.           |`boolean`                              |
+|`--scvi_early_stopping_monitor`   |Metric logged during validation set epoch.                                  |`string`, default: `"elbo_validation"` |
+|`--scvi_early_stopping_patience`  |Number of validation epochs with no improvement after which training stops. |`integer`, default: `45`               |
+|`--scvi_early_stopping_min_delta` |Minimum change in the monitored metric to qualify as improvement.           |`double`, default: `0`                 |
+|`--scvi_max_epochs`               |Number of training passes through the dataset.                              |`integer`                              |
+|`--scvi_reduce_lr_on_plateau`     |Reduce learning rate when validation metric plateaus.                       |`boolean`, default: `TRUE`             |
+|`--scvi_lr_factor`                |Factor by which to reduce learning rate.                                    |`double`, default: `0.6`               |
+|`--scvi_lr_patience`              |Number of epochs with no improvement after which lr is reduced.             |`double`, default: `30`                |
+
+
+### Scanorama options
+
+|Name                     |Description                                            |Attributes                 |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--scanorama_knn`        |Number of nearest neighbors used for matching.         |`integer`, default: `20`   |
+|`--scanorama_batch_size` |Batch size used in the alignment vector computation.   |`integer`, default: `5000` |
+|`--scanorama_sigma`      |Correction smoothing parameter on the Gaussian kernel. |`double`, default: `15`    |
+|`--scanorama_approx`     |Use approximate nearest neighbors (annoy).             |`boolean`, default: `TRUE` |
+|`--scanorama_alpha`      |Alignment score minimum cutoff.                        |`double`, default: `0.1`   |
+
+
+### BBKNN options
+
+|Name                               |Description                                                                                                                                                       |Attributes               |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--bbknn_n_neighbors_within_batch` |Top neighbours to report for each batch.                                                                                                                          |`integer`, default: `3`  |
+|`--bbknn_n_pcs`                    |Number of dimensions to use from the input embedding.                                                                                                             |`integer`, default: `50` |
+|`--bbknn_n_trim`                   |Trim each cell's neighbours to these many top connectivities. Set to 0 to skip; leave unset to use the BBKNN default (10 * n_neighbors_within_batch * n_batches). |`integer`                |
+
+
+### Output slot naming
+
+Names of the slots each method writes into its intermediate h5mu and
+that are subsequently moved into the merged output. The per-resolution
+leiden columns are named "{obs_cluster}_{resolution}" (e.g.
+"harmony_integration_leiden_1.0").
+
+
+
+|Name                                       |Description                                           |Attributes                                                           |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--harmony_obsm_integrated`                |.obsm slot for the harmony-integrated embedding.      |`string`, default: `"X_harmony_integrated"`                          |
+|`--harmony_obsm_umap`                      |.obsm slot for the harmony UMAP embedding.            |`string`, default: `"X_harmony_umap"`                                |
+|`--harmony_obs_cluster`                    |.obs prefix for the harmony leiden cluster columns.   |`string`, default: `"harmony_integration_leiden"`                    |
+|`--harmony_uns_neighbors`                  |.uns slot for harmony neighbor graph metadata.        |`string`, default: `"harmony_integration_neighbors"`                 |
+|`--harmony_obsp_neighbor_distances`        |.obsp slot for harmony neighbor distances.            |`string`, default: `"harmony_integration_neighbor_distances"`        |
+|`--harmony_obsp_neighbor_connectivities`   |.obsp slot for harmony neighbor connectivities.       |`string`, default: `"harmony_integration_neighbor_connectivities"`   |
+|`--scvi_obsm_integrated`                   |.obsm slot for the scVI-integrated latent embedding.  |`string`, default: `"X_scvi_integrated"`                             |
+|`--scvi_obsm_umap`                         |.obsm slot for the scVI UMAP embedding.               |`string`, default: `"X_scvi_umap"`                                   |
+|`--scvi_obs_cluster`                       |.obs prefix for the scVI leiden cluster columns.      |`string`, default: `"scvi_integration_leiden"`                       |
+|`--scvi_uns_neighbors`                     |.uns slot for scVI neighbor graph metadata.           |`string`, default: `"scvi_integration_neighbors"`                    |
+|`--scvi_obsp_neighbor_distances`           |.obsp slot for scVI neighbor distances.               |`string`, default: `"scvi_integration_neighbor_distances"`           |
+|`--scvi_obsp_neighbor_connectivities`      |.obsp slot for scVI neighbor connectivities.          |`string`, default: `"scvi_integration_neighbor_connectivities"`      |
+|`--scanorama_obsm_integrated`              |.obsm slot for the scanorama-integrated embedding.    |`string`, default: `"X_scanorama_integrated"`                        |
+|`--scanorama_obsm_umap`                    |.obsm slot for the scanorama UMAP embedding.          |`string`, default: `"X_scanorama_umap"`                              |
+|`--scanorama_obs_cluster`                  |.obs prefix for the scanorama leiden cluster columns. |`string`, default: `"scanorama_integration_leiden"`                  |
+|`--scanorama_uns_neighbors`                |.uns slot for scanorama neighbor graph metadata.      |`string`, default: `"scanorama_integration_neighbors"`               |
+|`--scanorama_obsp_neighbor_distances`      |.obsp slot for scanorama neighbor distances.          |`string`, default: `"scanorama_integration_neighbor_distances"`      |
+|`--scanorama_obsp_neighbor_connectivities` |.obsp slot for scanorama neighbor connectivities.     |`string`, default: `"scanorama_integration_neighbor_connectivities"` |
+|`--bbknn_obsm_umap`                        |.obsm slot for the BBKNN UMAP embedding.              |`string`, default: `"X_bbknn_umap"`                                  |
+|`--bbknn_obs_cluster`                      |.obs prefix for the BBKNN leiden cluster columns.     |`string`, default: `"bbknn_integration_leiden"`                      |
+|`--bbknn_uns_neighbors`                    |.uns slot for BBKNN neighbor graph metadata.          |`string`, default: `"bbknn_integration_neighbors"`                   |
+|`--bbknn_obsp_neighbor_distances`          |.obsp slot for BBKNN neighbor distances.              |`string`, default: `"bbknn_integration_neighbor_distances"`          |
+|`--bbknn_obsp_neighbor_connectivities`     |.obsp slot for BBKNN neighbor connectivities.         |`string`, default: `"bbknn_integration_neighbor_connectivities"`     |
+
+
+### Output
+
+|Name                   |Description                                                                                                             |Attributes                                 |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output`             |Output h5mu file — the input preprocessed file with each selected method's annotations merged into the target modality. |`file`, required, example: `"output.h5mu"` |
+|`--output_compression` |Compression format for the output h5mu file.                                                                            |`string`, example: `"gzip"`                |
+|`--output_scvi_model`  |Output folder with the trained scVI model. Only produced when scVI is among the selected --integration_methods.         |`file`, example: `"scvi_model"`            |
+
+## Authors
+
+
+  * Jakub Majercik [{{< fa brands github >}}](https://github.com/jakubmajercik) [{{< fa brands linkedin >}}](https://linkedin.com/in/jakubmajercik) (author, maintainer)
+

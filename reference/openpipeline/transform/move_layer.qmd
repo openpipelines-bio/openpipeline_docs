@@ -1,0 +1,71 @@
+---
+title: "Move layer"
+namespace: "Transform"
+description: "Move a data matrix stored at the .layers or .X attributes in a MuData object to another layer."
+type: "module"
+toc: false
+---
+
+::: {.column-margin}
+
+### Info
+
+ID: `move_layer`  
+Namespace: `transform`
+
+### Links
+[Source](https://github.com/openpipelines-bio/openpipeline/blob/v4.2.0/src/transform/move_layer/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+:::
+
+
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -main-script target/nextflow/transform/move_layer/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+```yaml
+
+```
+</details>
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/transform/move_layer/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+## Argument group
+
+### Arguments
+
+|Name                   |Description                                                                                                                                           |Attributes                                 |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`              |Input h5mu file                                                                                                                                       |`file`, required, example: `"input.h5mu"`  |
+|`--modality`           |Which modality from the input MuData file to process.                                                                                                 |`string`, default: `"rna"`                 |
+|`--input_layer`        |Input layer to move to a new output location. If specified, will be used to select a key from .layers, otherwise .X is used.                          |`string`                                   |
+|`--output`             |Output h5mu file.                                                                                                                                     |`file`, required, example: `"output.h5mu"` |
+|`--output_layer`       |Destination location for the layer. If not provided, .X will be used, Otherwise, will be the key for the .layers attribute in the output MuData file. |`string`                                   |
+|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied.                                        |`string`, example: `"gzip"`                |
+

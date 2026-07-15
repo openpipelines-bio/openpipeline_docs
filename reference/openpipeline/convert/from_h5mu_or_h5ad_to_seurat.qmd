@@ -1,0 +1,75 @@
+---
+title: "From h5mu or h5ad to seurat"
+namespace: "Convert"
+description: "Converts an h5ad file or a single modality of an h5mu file into a Seurat file"
+type: "module"
+toc: false
+---
+
+::: {.column-margin}
+
+### Info
+
+ID: `from_h5mu_or_h5ad_to_seurat`  
+Namespace: `convert`
+
+### Links
+[Source](https://github.com/openpipelines-bio/openpipeline/blob/v4.2.0/src/convert/from_h5mu_or_h5ad_to_seurat/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+:::
+
+
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -main-script target/nextflow/convert/from_h5mu_or_h5ad_to_seurat/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+```yaml
+
+```
+</details>
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/convert/from_h5mu_or_h5ad_to_seurat/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+## Argument group
+
+### Arguments
+
+|Name          |Description                                                        |Attributes                                |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`     |Input h5ad or h5mu file                                            |`file`, required, example: `"input.h5ad"` |
+|`--modality`  |Modality to be converted if the input file is an h5mu file.        |`string`, default: `"rna"`                |
+|`--assay`     |Name of the assay to be created.                                   |`string`, default: `"RNA"`                |
+|`--x_mapping` |Name of the Seurat layer in which the AnnData .X matrix is stored. |`string`, default: `"counts"`             |
+|`--output`    |Output Seurat file                                                 |`file`, required, example: `"output.rds"` |
+
+## Authors
+
+
+  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author, maintainer)
+

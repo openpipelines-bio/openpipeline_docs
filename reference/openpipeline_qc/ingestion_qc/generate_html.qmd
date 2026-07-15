@@ -1,0 +1,85 @@
+---
+title: "Generate html"
+namespace: "Ingestion qc"
+description: "Generate an HTML report from the QC metrics"
+type: "module"
+toc: false
+---
+
+::: {.column-margin}
+
+### Info
+
+ID: `generate_html`  
+Namespace: `ingestion_qc`
+
+### Links
+[Source](https://github.com/openpipelines-bio/openpipeline_qc/blob/v0.3.0/src/ingestion_qc/generate_html/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+:::
+
+
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline_qc \
+  -r v0.3.0 -latest \
+  -main-script target/nextflow/ingestion_qc/generate_html/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+```yaml
+
+```
+</details>
+
+```bash
+nextflow run openpipelines-bio/openpipeline_qc \
+  -r v0.3.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/ingestion_qc/generate_html/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+## Argument groups
+
+### Inputs
+
+|Name                |Description                                              |Attributes                                       |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input_data`      |The input JSON file containing the QC metrics            |`file`, required, example: `"path/to/file.json"` |
+|`--input_structure` |The input JSON file containing the structure of the data |`file`, required, example: `"path/to/file.json"` |
+
+
+### Outputs
+
+|Name                 |Description            |Attributes                                       |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output_qc_report` |The output HTML report |`file`, required, example: `"path/to/file.html"` |
+
+## Authors
+
+
+  * Jakub Majercik [{{< fa brands github >}}](https://github.com/jakubmajercik) [{{< fa brands linkedin >}}](https://linkedin.com/in/jakubmajercik) (author)
+
+  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author)
+
+  * Robrecht Cannoodt [{{< fa brands github >}}](https://github.com/rcannood) [{{< fa brands orcid >}}](https://orcid.org/0000-0003-3641-729X) [{{< fa brands linkedin >}}](https://linkedin.com/in/robrechtcannoodt) (author)
+
+  * Weiwei Schultz (contributor)
+

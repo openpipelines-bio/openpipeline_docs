@@ -1,0 +1,128 @@
+---
+title: "Generate qc report"
+namespace: "Workflows"
+description: "Run the ingestion QC report generation"
+type: "workflow"
+toc: false
+---
+
+::: {.column-margin}
+
+### Info
+
+ID: `generate_qc_report`  
+Namespace: `workflows`
+
+### Links
+[Source](https://github.com/openpipelines-bio/openpipeline_qc/blob/v0.3.0/src/workflows/generate_qc_report/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+:::
+
+
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline_qc \
+  -r v0.3.0 -latest \
+  -main-script target/nextflow/workflows/generate_qc_report/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+```yaml
+
+```
+</details>
+
+```bash
+nextflow run openpipelines-bio/openpipeline_qc \
+  -r v0.3.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/workflows/generate_qc_report/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+## Argument groups
+
+### Inputs
+
+|Name                       |Description                                                                                                                                                                                     |Attributes                                        |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--id`                     |The sample IDs to include in the report. If not provided, the sample IDs will be extracted from the h5mu files.                                                                                 |`string`, example: `"sample1"`                    |
+|`--input`                  |The input h5mu files.                                                                                                                                                                           |`file`, required, example: `"path/to/file1.h5mu"` |
+|`--ingestion_method`       |                                                                                                                                                                                                |`string`, required                                |
+|`--sample_metadata`        |The sample metadata file corresponding to .obs fields in the h5mu input files, to be used for grouping in the report.                                                                           |`file`, example: `"path/to/file.csv"`             |
+|`--max_samples_per_report` |The maximum number of samples to be included per report.  Multiple reports will be generated (with samples equally divided over all reports) if number of input samples exceeds this threshold. |`integer`, default: `20`                          |
+
+
+### Options
+
+|Name               |Description                                                                                                    |Attributes                                                                                      |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--var_gene_names` |The column name in the .var h5mu files that contains the gene names. If not provided, .var_names will be used. |`string`, example: `"gene_symbol"`                                                              |
+|`--obs_metadata`   |The metadata keys in the h5mu .obs to include in the report.                                                   |List of `string`, example: `"donor_id", "cell_type", "batch", "condition"`, multiple_sep: `";"` |
+
+
+### QC options
+
+|Name                             |Description                                                                        |Attributes                           |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--var_name_mitochondrial_genes` |In which .var slot to store a boolean array corresponding the mitochondrial genes. |`string`, default: `"mitochondrial"` |
+|`--var_name_ribosomal_genes`     |In which .var slot to store a boolean array corresponding the ribosomal genes.     |`string`, default: `"ribosomal"`     |
+|`--min_total_counts`             |Minimum total counts for a cell to be included in the output.                      |`integer`, default: `10`             |
+|`--min_num_nonzero_vars`         |Minimum number of nonzero vars for a cell to be included in the output.            |`integer`, default: `10`             |
+
+
+### Cellbender options
+
+|Name                  |Description                           |Attributes                  |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--run_cellbender`    |Whether to run cellbender or not.     |`boolean`, default: `FALSE` |
+|`--cellbender_epochs` |Number of epochs to train cellbender. |`integer`, default: `150`   |
+
+
+### Options for CosMx reports
+
+|Name                   |Description                                                                 |Attributes                                                                                  |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--obs_area`           |The key in the h5mu .obs field that contains the cell area.                 |`string`, default: `"Area"`                                                                 |
+|`--obs_aspect_ratio`   |The key in the h5mu .obs field that contains the aspect ratio.              |`string`, default: `"AspectRatio"`                                                          |
+|`--obs_dapi_stain`     |The keys in the h5mu .obs field that contains the DAPI stain intensity.     |List of `string`, default: `"Mean.DAPI", "Max.DAPI"`, multiple_sep: `";"`                   |
+|`--obs_membrane_stain` |The keys in the h5mu .obs field that contains the membrane stain intensity. |List of `string`, default: `"Mean.MembraneStain", "Max.MembraneStain"`, multiple_sep: `";"` |
+|`--obs_panck_stain`    |The keys in the h5mu .obs field that contains the PanCK stain intensity.    |List of `string`, default: `"Mean.PanCK", "Max.PanCK"`, multiple_sep: `";"`                 |
+|`--obs_cd45_stain`     |The keys in the h5mu .obs field that contains the CD45 stain intensity.     |List of `string`, default: `"Mean.CD45", "Max.CD45"`, multiple_sep: `";"`                   |
+|`--obs_cd3_stain`      |The keys in the h5mu .obs field that contains the CD3 stain intensity.      |List of `string`, default: `"Mean.CD3", "Max.CD3"`, multiple_sep: `";"`                     |
+
+
+### Outputs
+
+|Name                      |Description                                 |Attributes                                                                    |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output_qc_report`      |The output HTML report                      |List of `file`, required, example: `"path/to/file.html"`, multiple_sep: `";"` |
+|`--output_processed_h5mu` |Folder containing the processed h5mu files. |`file`, required, default: `"qc_h5mu"`                                        |
+
+## Authors
+
+
+  * Jakub Majercik [{{< fa brands github >}}](https://github.com/jakubmajercik) [{{< fa brands linkedin >}}](https://linkedin.com/in/jakubmajercik) (author)
+
+  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author)
+
+  * Robrecht Cannoodt [{{< fa brands github >}}](https://github.com/rcannood) [{{< fa brands orcid >}}](https://orcid.org/0000-0003-3641-729X) [{{< fa brands linkedin >}}](https://linkedin.com/in/robrechtcannoodt) (author)
+
+  * Weiwei Schultz (contributor)
+

@@ -1,0 +1,108 @@
+---
+title: "Concatenate spatialdata"
+namespace: "Dataflow"
+description: "Concatenate multiple SpatialData objects into one SpatialData output"
+type: "module"
+toc: false
+---
+
+::: {.column-margin}
+
+### Info
+
+ID: `concatenate_spatialdata`  
+Namespace: `dataflow`
+
+### Links
+[Source](https://github.com/openpipelines-bio/openpipeline_spatial/blob/v0.5.0/src/dataflow/concatenate_spatialdata/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+:::
+
+
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline_spatial \
+  -r v0.5.0 -latest \
+  -main-script target/nextflow/dataflow/concatenate_spatialdata/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+```yaml
+
+```
+</details>
+
+```bash
+nextflow run openpipelines-bio/openpipeline_spatial \
+  -r v0.5.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/dataflow/concatenate_spatialdata/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+## Argument groups
+
+### Inputs
+
+|Name       |Description                                                             |Attributes                                    |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--inputs` |Paths to Zarr stores containing the SpatialData objects to concatenate. |List of `file`, required, multiple_sep: `","` |
+
+
+### Outputs
+
+|Name       |Description                                                           |Attributes                                 |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output` |The output Zarr store containing the concatenated SpatialData object. |`file`, required, default: `"output.zarr"` |
+
+
+### SpatialData options
+
+Options for how to concatenate the SpatialData objects, passed to
+`spatialdata.concatenate`.
+
+
+
+|Name            |Description                                                                                                                                |Attributes |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--attrs_merge` |The method to use for merging elements in `attrs` when concatenating the SpatialData objects. See `anndata_merge` for options and details. |`string`   |
+
+
+### AnnData options
+
+Options for how to concatenate the AnnData objects when concatenating the
+main tables of the SpatialData objects using `anndata.concat`.
+
+
+
+|Name                  |Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                |Attributes                    |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--anndata_join`      |The type of join to perform on the AnnData objects when concatenating the main tables of the SpatialData objects:  - "inner": Only variables (genes) that are present in all objects are   kept. - "outer": All variables (genes) that are present in any object are   kept. Sparse arrays are padded with zeros, other objects are filled   with missing values.  See `anndata.concat` for details.                                                                       |`string`, default: `"inner"`  |
+|`--anndata_merge`     |The method to use for merging elements that are not aligned with `obs` when concatenating the main tables of the SpatialData objects:  - None: No elements are kept. - "same": Only elements that are the same across all objects are kept. - "unique": Elements for which there is only one possible value are   kept. - "first": The first element at each position is kept. - "only": Elements that are only in one object are kept.  See `anndata.concat` for details. |`string`                      |
+|`--anndata_uns_merge` |The method to use for merging elements in `uns` when concatenating the main tables of the SpatialData objects. See `anndata_merge` for options and details. Merging is applied recursively.                                                                                                                                                                                                                                                                                |`string`                      |
+|`--anndata_label`     |The name of the column in `obs` of the concatenated main table to store batch label information. If not provided, no batch label column is added.                                                                                                                                                                                                                                                                                                                          |`string`, example: `"sample"` |
+|`--anndata_pairwise`  |Whether pairwise elements (`obsp`/`varp`) are concatenated.                                                                                                                                                                                                                                                                                                                                                                                                                |`boolean`, default: `FALSE`   |
+
+## Authors
+
+
+  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (maintainer)
+
+  * Luke Zappia [{{< fa brands github >}}](https://github.com/lazappi) [{{< fa brands orcid >}}](https://orcid.org/0000-0001-7744-8565) [{{< fa brands linkedin >}}](https://linkedin.com/in/lazappi) (author)
+

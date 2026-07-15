@@ -1,0 +1,81 @@
+---
+title: "From xenium to h5mu"
+namespace: "Convert"
+description: "Converts the output from Xenium to a single .h5mu file, where the count matrix is written to the `rna` modality."
+type: "module"
+toc: false
+---
+
+::: {.column-margin}
+
+### Info
+
+ID: `from_xenium_to_h5mu`  
+Namespace: `convert`
+
+### Links
+[Source](https://github.com/openpipelines-bio/openpipeline_spatial/blob/v0.5.0/src/convert/from_xenium_to_h5mu/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+:::
+
+The following files are expected to be present in the Xenium output bundle:
+├── cell_feature_matrix.h5
+├── cells.parquet
+├── experiment.xenium
+└── metrics_summary.csv
+
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline_spatial \
+  -r v0.5.0 -latest \
+  -main-script target/nextflow/convert/from_xenium_to_h5mu/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+```yaml
+
+```
+</details>
+
+```bash
+nextflow run openpipelines-bio/openpipeline_spatial \
+  -r v0.5.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/convert/from_xenium_to_h5mu/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+## Argument group
+
+### Arguments
+
+|Name                   |Description                                                                                                   |Attributes                                          |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`              |Input folder. Must contain the output from a Xenium run.                                                      |`file`, required, example: `"xenium_output_bundle"` |
+|`--output`             |Output .h5mu file.                                                                                            |`file`, example: `"xenium.h5mu"`                    |
+|`--obsm_coordinates`   |Name of the .obsm slot under which to store the cell centroid coordinates.                                    |`string`, default: `"spatial"`                      |
+|`--uns_experiment`     |Name of the .uns slot under which to store the Xenium experiment specifications.                              |`string`, default: `"xenium_experiment"`            |
+|`--uns_metrics`        |Name of the .uns slot under which to store the summary QC metrics.                                            |`string`, default: `"xenium_metrics"`               |
+|`--output_compression` |Compression format to use for the output AnnData and/or Mudata objects. By default no compression is applied. |`string`, example: `"gzip"`                         |
+
+## Authors
+
+
+  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (maintainer)
+
