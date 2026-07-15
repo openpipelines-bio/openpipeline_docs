@@ -19,11 +19,10 @@ website:
   # production custom domain (openpipelines.bio, served from the `website` repo).
   site-url: https://openpipelines-bio.github.io/openpipeline_docs/
   repo-url: https://github.com/openpipelines-bio/openpipeline_docs
-  repo-actions: [edit, issue]
+  repo-actions: none
 
   page-footer:
     left: "© OpenPipeline"
-    right: "viash · nextflow · mudata"
 
   navbar:
     logo: images/logo.svg

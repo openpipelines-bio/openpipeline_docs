@@ -10,7 +10,7 @@ anchor-sections: false
 <div class="op-home">
 
   <div class="wrap hero">
-    <span class="kicker">Single-cell &amp; spatial · reproducible at scale</span>
+    <span class="kicker">Multi-modal omics analysis · reproducible at scale</span>
     <h1>Best-practice pipelines for<br><em>single-cell and spatial</em> data.</h1>
     <p class="lede">Modular, containerized components and reproducible Nextflow workflows: from raw counts to a processed, interpretable data object.</p>
     <div class="modalities">
@@ -41,27 +41,27 @@ anchor-sections: false
   <section class="block">
     <div class="wrap">
       <div class="sec-head">
-        <span class="kicker">Start where you are</span>
+        <span class="kicker">Where to start</span>
         <h2>Three ways in</h2>
-        <p>The same docs serve first-time single-cell analysts and pipeline veterans. Pick an entry point — every page is tagged so you can go deeper or skip ahead.</p>
+        <p>Three entry points — from running a workflow as-is, to assembling your own analysis, to tuning every parameter.</p>
       </div>
       <div class="cards3">
         <a class="rcard link" href="get-started/index.html">
           <div class="tag">🧪 New to single-cell</div>
           <h3>Guided first run</h3>
-          <p>Install, run a real pipeline on provided test data, and learn to read the output — no prior Nextflow needed.</p>
+          <p>Run a best-practice pipeline on provided test data and learn to read the output — no prior Nextflow knowledge needed.</p>
           <span class="go">Get started →</span>
         </a>
         <a class="rcard link" href="guides/index.html">
           <div class="tag">🔬 Bioinformatician</div>
           <h3>Task recipes</h3>
-          <p>Copy-paste how-tos: ingest 10x or Xenium, integrate with Harmony, run QC reports, tune resources.</p>
+          <p>Pick and choose the data processing steps needed for your analysis, and learn to optimize your runs.</p>
           <span class="go">Browse guides →</span>
         </a>
         <a class="rcard link" href="reference/index.html">
           <div class="tag">⚡ Power user</div>
           <h3>Component reference</h3>
-          <p>Every workflow and module, grouped by task, with full parameter listings — generated from source.</p>
+          <p>Every workflow and module, grouped by task, with full parameter listings.</p>
           <span class="go">Open reference →</span>
         </a>
       </div>
@@ -76,32 +76,29 @@ anchor-sections: false
         <p>Every workflow is a <b>Viash</b>-built, containerized Nextflow pipeline — so the same run works on your laptop, on Seqera, or through the Viash Hub web interface.</p>
       </div>
       <div class="ways">
+        <div class="way featured">
+          <span class="way-flag">Recommended</span>
+          <div class="h"><a href="https://www.viash-hub.com" target="_blank" rel="noopener">Viash Hub</a> <span class="badge">no-code</span></div>
+          <p>Fill in a guided web form — no YAML — and it hands you ready-to-run instructions for the Local or Seqera routes.</p>
+          <div class="req">requires: a browser</div>
+        </div>
         <div class="way">
-          <div class="h">Local <span class="badge">Nextflow</span></div>
-          <p>Run on your own machine or HPC with Nextflow + Docker. Full control, offline-capable.</p>
+          <div class="h">Local <span class="badge">self-run</span></div>
+          <p>Run on your own machine, an HPC cluster, or a cloud VM with more compute — using Nextflow and Docker.</p>
           <div class="req">requires: nextflow · docker</div>
         </div>
         <div class="way">
-          <div class="h">Seqera Platform <span class="badge">cloud</span></div>
-          <p>Launch and monitor runs on managed cloud compute (AWS/Azure/GCP) from the Seqera UI or CLI.</p>
-          <div class="req">requires: a compute environment</div>
-        </div>
-        <div class="way">
-          <div class="h">Viash Hub <span class="badge">no-code</span></div>
-          <p>Browse the component catalog and launch workflows through a guided web form — no command line.</p>
-          <div class="req">requires: a browser</div>
+          <div class="h"><a href="https://seqera.io" target="_blank" rel="noopener">Seqera Platform</a> <span class="badge">managed</span></div>
+          <p>Launch and monitor runs on managed compute — cloud (AWS/Azure/GCP), Kubernetes, or an HPC scheduler — from the Seqera UI or CLI.</p>
+          <div class="req">requires: a Seqera compute environment</div>
         </div>
       </div>
+      <p class="ways-note">Step-by-step how-tos for each route live in the <a href="guides/index.html">guides</a>.</p>
     </div>
   </section>
 
 </div>
 ```
-
-::: {.callout-note appearance="simple"}
-This site is a **draft rebuild** of the OpenPipeline documentation. A clickable
-design mockup lives in [`design/mockup.html`](design/mockup.html).
-:::
 
 ```{=html}
 <script>
@@ -136,18 +133,26 @@ design mockup lives in [`design/mockup.html`](design/mockup.html).
       ],
     },
     sp: {
-      hint: 'The spatial path — same shape, spatial-aware steps (Visium / Xenium).',
+      hint: 'The spatial path — same shape, spatial-aware ingestion plus niche analysis (Visium HD · Xenium · CosMx · AVITI).',
       stages: [
         { num: 'STEP 01', title: 'Ingestion', kind: 'choice', pick: 'pick one for your platform',
-          options: ['spaceranger_mapping', 'convert → mudata'],
-          more: ['xenium ingest', 'visium ingest'] },
+          options: ['visium · spaceranger', 'visium HD · spaceranger', 'xenium', 'cosmx', 'aviti'],
+          note: 'or bring your own count matrix' },
         { num: 'STEP 02', title: 'Process samples', kind: 'workflow', pick: 'single workflow',
-          steps: [{ name: 'filter + normalize' }, { name: 'highly variable genes' }, { name: 'feature annotation', opt: true }] },
-        { num: 'STEP 03', title: 'Neighbors', kind: 'workflow', pick: 'single workflow',
-          steps: [{ name: 'find_neighbors' }, { name: 'leiden clustering' }, { name: 'umap' }] },
-        { num: 'STEP 04', title: 'Niches', kind: 'choice', pick: 'pick a method',
-          options: ['nichecompass'],
-          more: ['spatial domains', 'niche annotation'], href: 'guides/index.html' },
+          steps: [{ name: 'filter cells' }, { name: 'normalize + log1p' }, { name: 'highly variable genes' }],
+          note: 'filtering thresholds set from a QC report' },
+        { num: 'STEP 03', title: 'Integration', kind: 'workflow', pick: 'single workflow',
+          href: 'reference/index.html',
+          steps: [
+            { name: 'integrate', options: ['scVI', 'harmony', 'totalVI'], more: ['scanvi', 'scanorama', 'bbknn'], moreLabel: 'methods' },
+            { name: 'find_neighbors' },
+            { name: 'leiden' },
+            { name: 'umap' },
+          ] },
+        { num: 'STEP 04', title: 'Downstream', kind: 'choice', pick: 'pick any',
+          options: ['cell-type annotation', 'differential expression', 'cell–cell communication', 'spatial domains', 'niche domains'],
+          more: ['scanvi', 'celltypist', 'singler', 'onclass', 'popv'], moreLabel: 'annotation methods',
+          href: 'guides/index.html' },
       ],
     },
   };
