@@ -1,9 +1,13 @@
 ---
-title: "Spatial autocorr"
+package: "openpipeline_spatial"
+version: "v0.5.0"
+title: "spatial_autocorr"
 namespace: "Feature annotation"
 description: "Calculate spatial autocorrelation for genes using Moran's I or Geary's C."
 type: "module"
 toc: false
+latest: "true"
+subtitle: "openpipeline_spatial v0.5.0"
 ---
 
 ::: {.column-margin}
@@ -14,7 +18,12 @@ ID: `spatial_autocorr`
 Namespace: `feature_annotation`
 
 ### Links
-[Source](https://github.com/openpipelines-bio/openpipeline_spatial/blob/v0.5.0/src/feature_annotation/spatial_autocorr/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+[{{< fa brands github >}} View source code](https://github.com/openpipelines-bio/openpipeline_spatial/tree/v0.5.0/src/feature_annotation/spatial_autocorr)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Browse all versions](https://www.viash-hub.com/packages/openpipeline_spatial)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline_spatial/v0.5.0/components/feature_annotation/spatial_autocorr)
 
 :::
 
@@ -39,10 +48,12 @@ nextflow run openpipelines-bio/openpipeline_spatial \
 
 <details>
 <summary>Example of `params.yaml`</summary>
-```yaml
 
-```
+Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline_spatial/v0.5.0/components/feature_annotation/spatial_autocorr).
+
 </details>
+
+Run locally with:
 
 ```bash
 nextflow run openpipelines-bio/openpipeline_spatial \
@@ -55,6 +66,8 @@ nextflow run openpipelines-bio/openpipeline_spatial \
 :::{.callout-note}
 Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
 :::
+
+Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
 
 ## Argument groups
 

@@ -1,9 +1,13 @@
 ---
-title: "BD Rhapsody"
+package: "openpipeline"
+version: "v4.2.0"
+title: "bd_rhapsody"
 namespace: "Workflows/ingestion"
 description: "BD Rhapsody Sequence Analysis CWL pipeline v2.2.1"
 type: "workflow"
 toc: false
+latest: "true"
+subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}
@@ -14,7 +18,12 @@ ID: `bd_rhapsody`
 Namespace: `workflows/ingestion`
 
 ### Links
-[Source](https://github.com/openpipelines-bio/openpipeline/blob/v4.2.0/src/workflows/ingestion/bd_rhapsody/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+[{{< fa brands github >}} View source code](https://github.com/openpipelines-bio/openpipeline/tree/v4.2.0/src/workflows/ingestion/bd_rhapsody)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Browse all versions](https://www.viash-hub.com/packages/openpipeline)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/ingestion/bd_rhapsody)
 
 :::
 
@@ -45,10 +54,12 @@ nextflow run openpipelines-bio/openpipeline \
 
 <details>
 <summary>Example of `params.yaml`</summary>
-```yaml
 
-```
+Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/ingestion/bd_rhapsody).
+
 </details>
+
+Run locally with:
 
 ```bash
 nextflow run openpipelines-bio/openpipeline \
@@ -61,6 +72,8 @@ nextflow run openpipelines-bio/openpipeline \
 :::{.callout-note}
 Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
 :::
+
+Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
 
 ## Argument groups
 
@@ -205,61 +218,10 @@ NOTE: Only change these if you are really sure about what you are doing
 
 ```{mermaid}
 flowchart TB
-    v0(Channel.fromList)
-    v2(filter)
-    v9(filter)
-    v17(bd_rhapsody_component)
-    v24(cross)
-    v34(cross)
-    v40(filter)
-    v70(concat)
-    v48(from_bdrhap_to_h5mu)
-    v55(cross)
-    v65(cross)
-    v77(cross)
-    v84(cross)
-    v96(cross)
-    v103(cross)
-    v107(Output)
-    v0-->v2
-    v2-->v9
-    v9-->v17
-    v17-->v24
-    v9-->v24
-    v9-->v34
-    v40-->v48
-    v48-->v55
-    v40-->v55
-    v40-->v65
-    v65-->v70
-    v70-->v77
-    v2-->v77
-    v77-->v84
-    v2-->v84
-    v2-->v96
-    v96-->v103
-    v2-->v103
-    v103-->v107
-    v34-->v40
-    v17-->v34
-    v48-->v65
-    v70-->v96
-    style v0 fill:#e3dcea,stroke:#7a4baa;
-    style v2 fill:#e3dcea,stroke:#7a4baa;
-    style v9 fill:#e3dcea,stroke:#7a4baa;
-    style v17 fill:#e3dcea,stroke:#7a4baa;
-    style v24 fill:#e3dcea,stroke:#7a4baa;
-    style v34 fill:#e3dcea,stroke:#7a4baa;
-    style v40 fill:#e3dcea,stroke:#7a4baa;
-    style v70 fill:#e3dcea,stroke:#7a4baa;
-    style v48 fill:#e3dcea,stroke:#7a4baa;
-    style v55 fill:#e3dcea,stroke:#7a4baa;
-    style v65 fill:#e3dcea,stroke:#7a4baa;
-    style v77 fill:#e3dcea,stroke:#7a4baa;
-    style v84 fill:#e3dcea,stroke:#7a4baa;
-    style v96 fill:#e3dcea,stroke:#7a4baa;
-    style v103 fill:#e3dcea,stroke:#7a4baa;
-    style v107 fill:#e3dcea,stroke:#7a4baa;
-
+    v17["bd_rhapsody_component"]
+    v48["from_bdrhap_to_h5mu"]
+    v17 --> v48
+    style v17 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style v48 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
 ```
 

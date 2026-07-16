@@ -1,36 +1,91 @@
 ---
 title: "Reference"
-description: "Every workflow and module, grouped by task and filterable by package."
-order: 0
+description: "Every component and workflow across the OpenPipeline ecosystem."
+toc: false
+page-layout: full
 listing:
-  - id: ref-listing
-    contents:
-      - "openpipeline/*/*/*.qmd"
-      - "openpipeline_spatial/*/*/*.qmd"
-      - "openpipeline_qc/*/*/*.qmd"
-      - "openpipeline_rapids/*/*/*.qmd"
-      - "openpipeline_composed/*/*/*.qmd"
+  - id: ref
     type: table
-    fields: [title, namespace, description]
+    contents:
+      - "openpipeline/**/*.qmd"
+      - "openpipeline_spatial/**/*.qmd"
+      - "openpipeline_qc/**/*.qmd"
+      - "openpipeline_rapids/**/*.qmd"
+      - "openpipeline_composed/**/*.qmd"
+    include:
+      latest: "true"
+    fields: [title, package, type, namespace, description]
     field-display-names:
       title: "Name"
-      namespace: "Package / namespace"
-      description: "Does"
-    filter-ui: true
-    sort-ui: true
+      package: "Package"
+      type: "Type"
+      namespace: "Namespace"
+      description: "Description"
     sort: "title"
+    filter-ui: false
+    sort-ui: false
 ---
 
-::: {.callout-important appearance="simple"}
-**Auto-generated.** Every page here is produced from each package's
-`config.vsh.yaml` on release — descriptions, parameters, and examples come
-straight from source, so the reference can never drift from the code. Do not edit
-these pages by hand.
+```{=html}
+<div class="ref-controls">
+  <span class="ref-controls-label">Filter</span>
+  <label class="ref-field">
+    <span class="ref-field-label">Package</span>
+    <select class="ref-pkg-select">
+      <option value="">All packages</option>
+      <option value="openpipeline">openpipeline</option>
+      <option value="openpipeline_spatial">openpipeline_spatial</option>
+      <option value="openpipeline_qc">openpipeline_qc</option>
+      <option value="openpipeline_composed">openpipeline_composed</option>
+    </select>
+  </label>
+  <label class="ref-field">
+    <span class="ref-field-label">Type</span>
+    <select class="ref-type-select">
+      <option value="workflow" selected>Workflows</option>
+      <option value="module">Modules</option>
+      <option value="">Modules &amp; workflows</option>
+    </select>
+  </label>
+  <input type="search" class="ref-search" placeholder="Search" aria-label="Search components">
+</div>
+```
+
+:::{#ref}
 :::
 
-The five packages each publish into their own folder under `reference/`:
-`openpipeline`, `openpipeline_spatial`, `openpipeline_qc`, `openpipeline_rapids`,
-`openpipeline_composed`. Use the filter box to narrow by name or package.
+```{=html}
+<script>
+(function () {
+  var listing = document.getElementById("listing-ref");
+  if (!listing) return;
+  var rows = Array.prototype.slice.call(listing.querySelectorAll("tbody tr"));
+  var pkgSel = document.querySelector(".ref-pkg-select");
+  var typeSel = document.querySelector(".ref-type-select");
+  var search = document.querySelector(".ref-search");
+  var count = document.querySelector(".ref-count");
+  function txt(row, cls) { var e = row.querySelector(cls); return e ? e.textContent.trim() : ""; }
+  function apply() {
+    var p = pkgSel.value, t = typeSel.value, q = (search.value || "").trim().toLowerCase(), shown = 0;
+    rows.forEach(function (r) {
+      var okPkg = !p || txt(r, ".listing-package") === p;
+      var okType = !t || txt(r, ".listing-type") === t;
+      var hay = (txt(r, ".listing-title") + " " + txt(r, ".listing-namespace") + " " + txt(r, ".listing-description")).toLowerCase();
+      var okQ = !q || hay.indexOf(q) !== -1;
+      var show = okPkg && okType && okQ;
+      r.style.display = show ? "" : "none";
+      if (show) shown++;
+    });
+    if (count) count.textContent = shown + " component" + (shown === 1 ? "" : "s");
+  }
+  pkgSel.addEventListener("change", apply);
+  typeSel.addEventListener("change", apply);
+  search.addEventListener("input", apply);
+  apply();
+})();
+</script>
+```
 
-:::{#ref-listing}
+::: {.ref-count-wrap}
+[]{.ref-count}
 :::

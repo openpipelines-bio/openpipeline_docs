@@ -1,9 +1,13 @@
 ---
-title: "Highly variable features scanpy"
+package: "openpipeline"
+version: "v4.2.0"
+title: "highly_variable_features_scanpy"
 namespace: "Feature annotation"
 description: "Annotate highly variable features [Satija15] [Zheng17] [Stuart19]."
 type: "module"
 toc: false
+latest: "true"
+subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}
@@ -14,7 +18,12 @@ ID: `highly_variable_features_scanpy`
 Namespace: `feature_annotation`
 
 ### Links
-[Source](https://github.com/openpipelines-bio/openpipeline/blob/v4.2.0/src/feature_annotation/highly_variable_features_scanpy/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+[{{< fa brands github >}} View source code](https://github.com/openpipelines-bio/openpipeline/tree/v4.2.0/src/feature_annotation/highly_variable_features_scanpy)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Browse all versions](https://www.viash-hub.com/packages/openpipeline)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/feature_annotation/highly_variable_features_scanpy)
 
 :::
 
@@ -46,10 +55,12 @@ nextflow run openpipelines-bio/openpipeline \
 
 <details>
 <summary>Example of `params.yaml`</summary>
-```yaml
 
-```
+Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/feature_annotation/highly_variable_features_scanpy).
+
 </details>
+
+Run locally with:
 
 ```bash
 nextflow run openpipelines-bio/openpipeline \
@@ -62,6 +73,8 @@ nextflow run openpipelines-bio/openpipeline \
 :::{.callout-note}
 Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
 :::
+
+Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
 
 ## Argument group
 

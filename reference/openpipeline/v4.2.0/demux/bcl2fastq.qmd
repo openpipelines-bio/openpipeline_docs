@@ -1,9 +1,13 @@
 ---
-title: "Bcl2fastq"
+package: "openpipeline"
+version: "v4.2.0"
+title: "bcl2fastq"
 namespace: "Demux"
 description: "Convert bcl files to fastq files using bcl2fastq"
 type: "module"
 toc: false
+latest: "true"
+subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}
@@ -14,7 +18,12 @@ ID: `bcl2fastq`
 Namespace: `demux`
 
 ### Links
-[Source](https://github.com/openpipelines-bio/openpipeline/blob/v4.2.0/src/demux/bcl2fastq/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+[{{< fa brands github >}} View source code](https://github.com/openpipelines-bio/openpipeline/tree/v4.2.0/src/demux/bcl2fastq)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Browse all versions](https://www.viash-hub.com/packages/openpipeline)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/demux/bcl2fastq)
 
 :::
 
@@ -39,10 +48,12 @@ nextflow run openpipelines-bio/openpipeline \
 
 <details>
 <summary>Example of `params.yaml`</summary>
-```yaml
 
-```
+Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/demux/bcl2fastq).
+
 </details>
+
+Run locally with:
 
 ```bash
 nextflow run openpipelines-bio/openpipeline \
@@ -55,6 +66,8 @@ nextflow run openpipelines-bio/openpipeline \
 :::{.callout-note}
 Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
 :::
+
+Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
 
 ## Argument group
 

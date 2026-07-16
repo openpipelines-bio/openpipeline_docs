@@ -1,9 +1,13 @@
 ---
-title: "Totalvi scarches leiden"
+package: "openpipeline"
+version: "v4.2.0"
+title: "totalvi_scarches_leiden"
 namespace: "Workflows/integration"
 description: "Run totalVI integration by mapping the query dataset to a reference, followed by neighbour calculations, leiden clustering and run umap on the result."
 type: "workflow"
 toc: false
+latest: "true"
+subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}
@@ -14,7 +18,12 @@ ID: `totalvi_scarches_leiden`
 Namespace: `workflows/integration`
 
 ### Links
-[Source](https://github.com/openpipelines-bio/openpipeline/blob/v4.2.0/src/workflows/integration/totalvi_scarches_leiden/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+[{{< fa brands github >}} View source code](https://github.com/openpipelines-bio/openpipeline/tree/v4.2.0/src/workflows/integration/totalvi_scarches_leiden)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Browse all versions](https://www.viash-hub.com/packages/openpipeline)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/integration/totalvi_scarches_leiden)
 
 :::
 
@@ -39,10 +48,12 @@ nextflow run openpipelines-bio/openpipeline \
 
 <details>
 <summary>Example of `params.yaml`</summary>
-```yaml
 
-```
+Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/integration/totalvi_scarches_leiden).
+
 </details>
+
+Run locally with:
 
 ```bash
 nextflow run openpipelines-bio/openpipeline \
@@ -55,6 +66,8 @@ nextflow run openpipelines-bio/openpipeline \
 :::{.callout-note}
 Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
 :::
+
+Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
 
 ## Argument groups
 
@@ -159,211 +172,31 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 
 ```{mermaid}
 flowchart TB
-    v0(Channel.fromList)
-    v2(filter)
-    v10(filter)
-    v18(totalvi_scarches)
-    v25(cross)
-    v35(cross)
-    v41(filter)
-    v50(filter)
-    v65(cross)
-    v75(cross)
-    v84(branch)
-    v111(concat)
-    v96(cross)
-    v106(cross)
-    v115(branch)
-    v142(concat)
-    v127(cross)
-    v137(cross)
-    v146(branch)
-    v173(concat)
-    v158(cross)
-    v168(cross)
-    v180(cross)
-    v190(cross)
-    v196(filter)
-    v350(concat)
-    v205(filter)
-    v220(cross)
-    v230(cross)
-    v239(branch)
-    v266(concat)
-    v251(cross)
-    v261(cross)
-    v270(branch)
-    v297(concat)
-    v282(cross)
-    v292(cross)
-    v301(branch)
-    v328(concat)
-    v313(cross)
-    v323(cross)
-    v335(cross)
-    v345(cross)
-    v357(cross)
-    v364(cross)
-    v376(cross)
-    v383(cross)
-    v387(Output)
-    subgraph group_rna_neighbors_leiden_umap [rna_neighbors_leiden_umap]
-        v58(find_neighbors)
-        v89(leiden)
-        v120(move_obsm_to_obs)
-        v151(umap)
-    end
-    subgraph group_adt_neighbors_leiden_umap [adt_neighbors_leiden_umap]
-        v213(find_neighbors)
-        v244(leiden)
-        v275(move_obsm_to_obs)
-        v306(umap)
-    end
-    v84-->v111
-    v115-->v142
-    v146-->v173
-    v239-->v266
-    v270-->v297
-    v301-->v328
-    v0-->v2
-    v2-->v10
-    v10-->v18
-    v18-->v25
-    v10-->v25
-    v10-->v35
-    v41-->v50
-    v50-->v58
-    v58-->v65
-    v50-->v65
-    v50-->v75
-    v84-->v89
-    v89-->v96
-    v84-->v96
-    v84-->v106
-    v106-->v111
-    v115-->v120
-    v120-->v127
-    v115-->v127
-    v115-->v137
-    v137-->v142
-    v146-->v151
-    v151-->v158
-    v146-->v158
-    v146-->v168
-    v168-->v173
-    v173-->v180
-    v41-->v180
-    v41-->v190
-    v196-->v205
-    v205-->v213
-    v213-->v220
-    v205-->v220
-    v205-->v230
-    v239-->v244
-    v244-->v251
-    v239-->v251
-    v239-->v261
-    v261-->v266
-    v270-->v275
-    v275-->v282
-    v270-->v282
-    v270-->v292
-    v292-->v297
-    v301-->v306
-    v306-->v313
-    v301-->v313
-    v301-->v323
-    v323-->v328
-    v328-->v335
-    v196-->v335
-    v196-->v345
-    v345-->v350
-    v350-->v357
-    v2-->v357
-    v357-->v364
-    v2-->v364
-    v2-->v376
-    v376-->v383
-    v2-->v383
-    v383-->v387
-    v35-->v41
-    v18-->v35
-    v190-->v196
-    v58-->v75
-    v75-->v84
-    v89-->v106
-    v111-->v115
-    v120-->v137
-    v142-->v146
-    v151-->v168
-    v173-->v190
-    v213-->v230
-    v230-->v239
-    v244-->v261
-    v266-->v270
-    v275-->v292
-    v297-->v301
-    v306-->v323
-    v328-->v345
-    v350-->v376
-    style group_rna_neighbors_leiden_umap fill:#F0F0F0,stroke:#969696;
-    style group_adt_neighbors_leiden_umap fill:#F0F0F0,stroke:#969696;
-    style v0 fill:#e3dcea,stroke:#7a4baa;
-    style v2 fill:#e3dcea,stroke:#7a4baa;
-    style v10 fill:#e3dcea,stroke:#7a4baa;
-    style v18 fill:#e3dcea,stroke:#7a4baa;
-    style v25 fill:#e3dcea,stroke:#7a4baa;
-    style v35 fill:#e3dcea,stroke:#7a4baa;
-    style v41 fill:#e3dcea,stroke:#7a4baa;
-    style v50 fill:#e3dcea,stroke:#7a4baa;
-    style v58 fill:#e3dcea,stroke:#7a4baa;
-    style v65 fill:#e3dcea,stroke:#7a4baa;
-    style v75 fill:#e3dcea,stroke:#7a4baa;
-    style v84 fill:#e3dcea,stroke:#7a4baa;
-    style v111 fill:#e3dcea,stroke:#7a4baa;
-    style v89 fill:#e3dcea,stroke:#7a4baa;
-    style v96 fill:#e3dcea,stroke:#7a4baa;
-    style v106 fill:#e3dcea,stroke:#7a4baa;
-    style v115 fill:#e3dcea,stroke:#7a4baa;
-    style v142 fill:#e3dcea,stroke:#7a4baa;
-    style v120 fill:#e3dcea,stroke:#7a4baa;
-    style v127 fill:#e3dcea,stroke:#7a4baa;
-    style v137 fill:#e3dcea,stroke:#7a4baa;
-    style v146 fill:#e3dcea,stroke:#7a4baa;
-    style v173 fill:#e3dcea,stroke:#7a4baa;
-    style v151 fill:#e3dcea,stroke:#7a4baa;
-    style v158 fill:#e3dcea,stroke:#7a4baa;
-    style v168 fill:#e3dcea,stroke:#7a4baa;
-    style v180 fill:#e3dcea,stroke:#7a4baa;
-    style v190 fill:#e3dcea,stroke:#7a4baa;
-    style v196 fill:#e3dcea,stroke:#7a4baa;
-    style v350 fill:#e3dcea,stroke:#7a4baa;
-    style v205 fill:#e3dcea,stroke:#7a4baa;
-    style v213 fill:#e3dcea,stroke:#7a4baa;
-    style v220 fill:#e3dcea,stroke:#7a4baa;
-    style v230 fill:#e3dcea,stroke:#7a4baa;
-    style v239 fill:#e3dcea,stroke:#7a4baa;
-    style v266 fill:#e3dcea,stroke:#7a4baa;
-    style v244 fill:#e3dcea,stroke:#7a4baa;
-    style v251 fill:#e3dcea,stroke:#7a4baa;
-    style v261 fill:#e3dcea,stroke:#7a4baa;
-    style v270 fill:#e3dcea,stroke:#7a4baa;
-    style v297 fill:#e3dcea,stroke:#7a4baa;
-    style v275 fill:#e3dcea,stroke:#7a4baa;
-    style v282 fill:#e3dcea,stroke:#7a4baa;
-    style v292 fill:#e3dcea,stroke:#7a4baa;
-    style v301 fill:#e3dcea,stroke:#7a4baa;
-    style v328 fill:#e3dcea,stroke:#7a4baa;
-    style v306 fill:#e3dcea,stroke:#7a4baa;
-    style v313 fill:#e3dcea,stroke:#7a4baa;
-    style v323 fill:#e3dcea,stroke:#7a4baa;
-    style v335 fill:#e3dcea,stroke:#7a4baa;
-    style v345 fill:#e3dcea,stroke:#7a4baa;
-    style v357 fill:#e3dcea,stroke:#7a4baa;
-    style v364 fill:#e3dcea,stroke:#7a4baa;
-    style v376 fill:#e3dcea,stroke:#7a4baa;
-    style v383 fill:#e3dcea,stroke:#7a4baa;
-    style v387 fill:#e3dcea,stroke:#7a4baa;
-
+    v120["move_obsm_to_obs"]
+    v151["umap"]
+    v18["totalvi_scarches"]
+    v213["find_neighbors"]
+    v244["leiden"]
+    v275["move_obsm_to_obs"]
+    v306["umap"]
+    v58["find_neighbors"]
+    v89["leiden"]
+    v120 --> v151
+    v151 --> v213
+    v18 --> v58
+    v213 --> v244
+    v244 --> v275
+    v275 --> v306
+    v58 --> v89
+    v89 --> v120
+    style v120 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style v151 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style v18 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style v213 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style v244 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style v275 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style v306 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style v58 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style v89 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
 ```
 

@@ -58,22 +58,8 @@ website:
     - id: contributing
       title: "Contributing"
       contents: contributing/*
-    # Reference is auto-generated per package; grouped by package so the
-    # facet/filter in the mockup maps onto real sidebar sections.
-    - id: reference
-      title: "Reference"
-      collapse-level: 2
-      contents:
-        - section: "openpipeline"
-          contents: reference/openpipeline/*
-        - section: "openpipeline_spatial"
-          contents: reference/openpipeline_spatial/*
-        - section: "openpipeline_qc"
-          contents: reference/openpipeline_qc/*
-        - section: "openpipeline_rapids"
-          contents: reference/openpipeline_rapids/*
-        - section: "openpipeline_composed"
-          contents: reference/openpipeline_composed/*
+    # Reference has no sidebar — it's a single full-width catalog
+    # (reference/index.qmd) browsed via its own package filter + search.
 
 format:
   html:

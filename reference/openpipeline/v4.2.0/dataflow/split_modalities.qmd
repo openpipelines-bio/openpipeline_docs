@@ -1,9 +1,13 @@
 ---
-title: "Split modalities"
+package: "openpipeline"
+version: "v4.2.0"
+title: "split_modalities"
 namespace: "Dataflow"
 description: "Split the modalities from a single .h5mu multimodal sample into seperate .h5mu files."
 type: "module"
 toc: false
+latest: "true"
+subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}
@@ -14,7 +18,12 @@ ID: `split_modalities`
 Namespace: `dataflow`
 
 ### Links
-[Source](https://github.com/openpipelines-bio/openpipeline/blob/v4.2.0/src/dataflow/split_modalities/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+[{{< fa brands github >}} View source code](https://github.com/openpipelines-bio/openpipeline/tree/v4.2.0/src/dataflow/split_modalities)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Browse all versions](https://www.viash-hub.com/packages/openpipeline)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/dataflow/split_modalities)
 
 :::
 
@@ -40,10 +49,12 @@ nextflow run openpipelines-bio/openpipeline \
 
 <details>
 <summary>Example of `params.yaml`</summary>
-```yaml
 
-```
+Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/dataflow/split_modalities).
+
 </details>
+
+Run locally with:
 
 ```bash
 nextflow run openpipelines-bio/openpipeline \
@@ -56,6 +67,8 @@ nextflow run openpipelines-bio/openpipeline \
 :::{.callout-note}
 Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
 :::
+
+Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
 
 ## Argument group
 

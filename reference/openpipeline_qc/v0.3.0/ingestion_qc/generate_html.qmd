@@ -1,9 +1,13 @@
 ---
-title: "Generate html"
+package: "openpipeline_qc"
+version: "v0.3.0"
+title: "generate_html"
 namespace: "Ingestion qc"
 description: "Generate an HTML report from the QC metrics"
 type: "module"
 toc: false
+latest: "true"
+subtitle: "openpipeline_qc v0.3.0"
 ---
 
 ::: {.column-margin}
@@ -14,7 +18,12 @@ ID: `generate_html`
 Namespace: `ingestion_qc`
 
 ### Links
-[Source](https://github.com/openpipelines-bio/openpipeline_qc/blob/v0.3.0/src/ingestion_qc/generate_html/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+[{{< fa brands github >}} View source code](https://github.com/openpipelines-bio/openpipeline_qc/tree/v0.3.0/src/ingestion_qc/generate_html)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Browse all versions](https://www.viash-hub.com/packages/openpipeline_qc)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline_qc/v0.3.0/components/ingestion_qc/generate_html)
 
 :::
 
@@ -39,10 +48,12 @@ nextflow run openpipelines-bio/openpipeline_qc \
 
 <details>
 <summary>Example of `params.yaml`</summary>
-```yaml
 
-```
+Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline_qc/v0.3.0/components/ingestion_qc/generate_html).
+
 </details>
+
+Run locally with:
 
 ```bash
 nextflow run openpipelines-bio/openpipeline_qc \
@@ -55,6 +66,8 @@ nextflow run openpipelines-bio/openpipeline_qc \
 :::{.callout-note}
 Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
 :::
+
+Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
 
 ## Argument groups
 

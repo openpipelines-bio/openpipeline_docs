@@ -18,6 +18,11 @@ name: Generate reference
 
 on:
   workflow_dispatch:
+    inputs:
+      force:
+        description: "Force-regenerate the latest version even if already present (dev only)"
+        type: boolean
+        default: false
   schedule:
     - cron: "0 6 * * 1" # Mondays 06:00 UTC
 
@@ -42,13 +47,14 @@ jobs:
         id: plan
         env:
           GIT_TERMINAL_PROMPT: "0"
+          FORCE: ${{ inputs.force }}
         run: |
           set -euo pipefail
           for pkg in openpipeline openpipeline_spatial openpipeline_qc openpipeline_composed; do
             latest=$(curl -sf "https://packages.viash-hub.com/api/v1/repos/vsh/$pkg/tags?limit=100" \
               | python3 -c "import sys,json,re; ts=[t['name'] for t in json.load(sys.stdin) if re.match(r'v?\d+\.\d+', t['name'])]; print(sorted(ts, key=lambda v:[int(x) for x in re.findall(r'\d+', v)])[-1])")
             echo "${pkg}_tag=$latest" >> "$GITHUB_OUTPUT"
-            if [ -d "openpipeline_docs/reference/$pkg/$latest" ]; then
+            if [ "$FORCE" != "true" ] && [ -d "openpipeline_docs/reference/$pkg/$latest" ]; then
               echo "$pkg: $latest already in docs — skipping (cached)"
               echo "${pkg}_build=false" >> "$GITHUB_OUTPUT"
               continue
@@ -190,13 +196,105 @@ jobs:
           ref: ${{ steps.plan.outputs.openpipeline_composed_tag }}
           clean: false
 
-      # The generator double-quotes descriptions whose source text contains
-      # literal quote chars, producing invalid YAML (description: ""x…").
-      # Repair those in place; genuinely empty descriptions ("") are left alone.
-      - name: Sanitize generated frontmatter
+      # Post-process each newly built version: (1) drop the generator's
+      # per-version index.qmd (its globs assume a different layout — we use a
+      # single catalog at reference/index.qmd instead); (2) repair descriptions
+      # the generator double-quoted into invalid YAML (description: ""x…");
+      # (3) inject `package`/`version` frontmatter so the catalog can show and
+      # filter by them (version otherwise lives only in the path).
+      - name: Post-process generated pages
         working-directory: openpipeline_docs
         run: |
-          find reference -name '*.qmd' -exec sed -i -E 's/^(description: )""([^"])/\1"\2/' {} +
+          python3 - <<'PY'
+          import os, glob, re
+          plan = {
+            "openpipeline": ("${{ steps.plan.outputs.openpipeline_build }}", "${{ steps.plan.outputs.openpipeline_tag }}"),
+            "openpipeline_spatial": ("${{ steps.plan.outputs.openpipeline_spatial_build }}", "${{ steps.plan.outputs.openpipeline_spatial_tag }}"),
+            "openpipeline_qc": ("${{ steps.plan.outputs.openpipeline_qc_build }}", "${{ steps.plan.outputs.openpipeline_qc_tag }}"),
+            "openpipeline_composed": ("${{ steps.plan.outputs.openpipeline_composed_build }}", "${{ steps.plan.outputs.openpipeline_composed_tag }}"),
+          }
+          def rewrite(f, pkg, tag):
+              # drop the generator's per-version index (we use one catalog instead)
+              if os.path.basename(f) == "index.qmd":
+                  os.remove(f); return
+              txt = open(f, encoding="utf-8").read()
+              if not txt.startswith("---\n"): return
+              cid = os.path.splitext(os.path.basename(f))[0]  # the actual component name
+              end = txt.index("\n---", 4)
+              fm = re.sub(r'(?m)^(description: )""([^"])', r'\1"\2', txt[4:end])  # fix bad quotes
+              body = txt[end:]
+              rest = f.split(f"reference/{pkg}/{tag}/", 1)[1][:-4]  # namespace/.../name
+              vh_component = ("https://www.viash-hub.com/packages/" + pkg + "/" + tag +
+                              "/components/" + rest)
+              # Keep the Run command, but the generator's params.yaml example is
+              # empty — point to Viash Hub to generate one; give the local launch
+              # command; link the guides for Seqera / Viash Hub instructions.
+              def run_cmd(m):
+                  bash = re.search(r'```bash\n.*?\n```', m.group(0), re.S)
+                  if not bash:
+                      return m.group(0)
+                  return ("### Run command\n\n"
+                          "<details>\n<summary>Example of `params.yaml`</summary>\n\n"
+                          "Generate a `params.yaml` for this component on "
+                          "[Viash Hub](" + vh_component + ").\n\n"
+                          "</details>\n\nRun locally with:\n\n"
+                          + bash.group(0) + "\n\n"
+                          ":::{.callout-note}\nReplace `-profile docker` with `-profile podman` or "
+                          "`-profile singularity` depending on the desired backend.\n:::\n\n"
+                          "Running on Seqera or through Viash Hub is explained in the "
+                          "[guides](/guides/index.qmd).\n")
+              body = re.sub(r'### Run command\n.*?(?=\n## )', run_cmd, body, flags=re.S)
+              # replace the generator's solid-button Links with clean icon links:
+              # GitHub source, plus viash-hub "browse all versions" + "run instructions"
+              def links(m):
+                  src = m.group("src")
+                  # point source at the enclosing component folder, not the
+                  # config.vsh.yaml file itself
+                  src = re.sub(r'/blob/(.+?)/config\.vsh\.ya?ml$', r'/tree/\1', src)
+                  logo = "/images/viash-hub-logo.svg"
+                  base = "https://www.viash-hub.com/packages/" + pkg
+                  return ("### Links\n\n"
+                          "[{{< fa brands github >}} View source code](" + src + ")\n\n"
+                          "[![](" + logo + "){.vh-icon} Browse all versions](" + base + ")\n\n"
+                          "[![](" + logo + "){.vh-icon} Get run instructions](" +
+                          base + "/" + tag + "/components/" + rest + ")")
+              body = re.sub(r'### Links\n\[Source\]\((?P<src>[^)]*)\)\{[^}]*\}', links, body, count=1)
+              # we own these fields; keep everything else the generator emitted
+              keep = [ln for ln in fm.split("\n")
+                      if (ln.split(":", 1)[0].strip() if ":" in ln else "") not in
+                      ("package", "version", "title", "subtitle", "latest")]
+              head = [f'package: "{pkg}"', f'version: "{tag}"', f'title: "{cid}"',
+                      f'subtitle: "{pkg} {tag}"']
+              open(f, "w", encoding="utf-8").write(
+                  "---\n" + "\n".join(head + keep + ['latest: "true"']) + body)
+          for pkg, (build, tag) in plan.items():
+              if build != "true":
+                  continue
+              for f in glob.glob(f"reference/{pkg}/{tag}/**/*.qmd", recursive=True):
+                  rewrite(f, pkg, tag)
+              # the newest version is the only "latest" — flip older ones
+              for vdir in glob.glob(f"reference/{pkg}/v[0-9]*"):
+                  if os.path.basename(vdir) == tag:
+                      continue
+                  for f in glob.glob(f"{vdir}/**/*.qmd", recursive=True):
+                      t = open(f, encoding="utf-8").read()
+                      open(f, "w", encoding="utf-8").write(
+                          re.sub(r'(?m)^latest: "true"$', 'latest: "false"', t))
+          print("post-processed generated pages")
+          PY
+
+      # Replace the generator's channel-level workflow diagrams with a clean
+      # component-only view (see scripts/simplify_viz.py). Idempotent: only
+      # diagrams still in the generated form are rewritten.
+      - name: Simplify workflow diagrams
+        working-directory: openpipeline_docs
+        run: python3 scripts/simplify_viz.py reference
+
+      # Composite workflows (that orchestrate other workflows) get no diagram
+      # from the generator — synthesise a "composed of" one from their deps.
+      - name: Add composed-of diagrams
+        working-directory: openpipeline_docs
+        run: python3 scripts/compose_viz.py reference
 
       - name: Open PR
         working-directory: openpipeline_docs

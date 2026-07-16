@@ -1,9 +1,13 @@
 ---
-title: "Rna singlesample"
+package: "openpipeline"
+version: "v4.2.0"
+title: "rna_singlesample"
 namespace: "Workflows/rna"
 description: "Processing unimodal single-sample RNA transcriptomics data."
 type: "workflow"
 toc: false
+latest: "true"
+subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}
@@ -14,7 +18,12 @@ ID: `rna_singlesample`
 Namespace: `workflows/rna`
 
 ### Links
-[Source](https://github.com/openpipelines-bio/openpipeline/blob/v4.2.0/src/workflows/rna/rna_singlesample/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+[{{< fa brands github >}} View source code](https://github.com/openpipelines-bio/openpipeline/tree/v4.2.0/src/workflows/rna/rna_singlesample)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Browse all versions](https://www.viash-hub.com/packages/openpipeline)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/rna/rna_singlesample)
 
 :::
 
@@ -39,10 +48,12 @@ nextflow run openpipelines-bio/openpipeline \
 
 <details>
 <summary>Example of `params.yaml`</summary>
-```yaml
 
-```
+Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/rna/rna_singlesample).
+
 </details>
+
+Run locally with:
 
 ```bash
 nextflow run openpipelines-bio/openpipeline \
@@ -55,6 +66,8 @@ nextflow run openpipelines-bio/openpipeline \
 :::{.callout-note}
 Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
 :::
+
+Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
 
 ## Argument groups
 
@@ -116,179 +129,28 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 
 ```{mermaid}
 flowchart TB
-    v0(Channel.fromList)
-    v2(filter)
-    v11(filter)
-    v23(branch)
-    v50(concat)
-    v35(cross)
-    v45(cross)
-    v112(concat)
-    v119(cross)
-    v129(cross)
-    v138(branch)
-    v165(concat)
-    v143(delimit_fraction)
-    v150(cross)
-    v160(cross)
-    v169(branch)
-    v196(concat)
-    v174(delimit_fraction)
-    v181(cross)
-    v191(cross)
-    v197(filter)
-    v205(rna_filter_with_counts)
-    v212(cross)
-    v222(cross)
-    v228(filter)
-    v236(rna_do_filter)
-    v243(cross)
-    v253(cross)
-    v262(branch)
-    v289(concat)
-    v267(filter_with_scrublet)
-    v274(cross)
-    v284(cross)
-    v296(cross)
-    v303(cross)
-    v315(cross)
-    v322(cross)
-    v326(Output)
-    subgraph group_qc [qc]
-        v28(grep_mitochondrial_genes)
-        v54(branch)
-        v81(concat)
-        v59(grep_ribosomal_genes)
-        v66(cross)
-        v76(cross)
-        v82(filter)
-        v90(calculate_qc_metrics)
-        v97(cross)
-        v107(cross)
-    end
-    v23-->v50
-    v54-->v81
-    v81-->v82
-    v138-->v165
-    v169-->v196
-    v196-->v197
-    v262-->v289
-    v0-->v2
-    v2-->v11
-    v23-->v28
-    v28-->v35
-    v23-->v35
-    v23-->v45
-    v45-->v50
-    v54-->v59
-    v59-->v66
-    v54-->v66
-    v54-->v76
-    v76-->v81
-    v82-->v90
-    v90-->v97
-    v82-->v97
-    v82-->v107
-    v107-->v112
-    v112-->v119
-    v11-->v119
-    v11-->v129
-    v138-->v143
-    v143-->v150
-    v138-->v150
-    v138-->v160
-    v160-->v165
-    v169-->v174
-    v174-->v181
-    v169-->v181
-    v169-->v191
-    v191-->v196
-    v197-->v205
-    v205-->v212
-    v197-->v212
-    v197-->v222
-    v228-->v236
-    v236-->v243
-    v228-->v243
-    v228-->v253
-    v262-->v267
-    v267-->v274
-    v262-->v274
-    v262-->v284
-    v284-->v289
-    v289-->v296
-    v2-->v296
-    v296-->v303
-    v2-->v303
-    v2-->v315
-    v315-->v322
-    v2-->v322
-    v322-->v326
-    v11-->v23
-    v28-->v45
-    v50-->v54
-    v59-->v76
-    v90-->v107
-    v112-->v129
-    v129-->v138
-    v143-->v160
-    v165-->v169
-    v174-->v191
-    v222-->v228
-    v205-->v222
-    v236-->v253
-    v253-->v262
-    v267-->v284
-    v289-->v315
-    style group_qc fill:#F0F0F0,stroke:#969696;
-    style v0 fill:#e3dcea,stroke:#7a4baa;
-    style v2 fill:#e3dcea,stroke:#7a4baa;
-    style v11 fill:#e3dcea,stroke:#7a4baa;
-    style v23 fill:#e3dcea,stroke:#7a4baa;
-    style v50 fill:#e3dcea,stroke:#7a4baa;
-    style v28 fill:#e3dcea,stroke:#7a4baa;
-    style v35 fill:#e3dcea,stroke:#7a4baa;
-    style v45 fill:#e3dcea,stroke:#7a4baa;
-    style v54 fill:#e3dcea,stroke:#7a4baa;
-    style v81 fill:#e3dcea,stroke:#7a4baa;
-    style v59 fill:#e3dcea,stroke:#7a4baa;
-    style v66 fill:#e3dcea,stroke:#7a4baa;
-    style v76 fill:#e3dcea,stroke:#7a4baa;
-    style v82 fill:#e3dcea,stroke:#7a4baa;
-    style v112 fill:#e3dcea,stroke:#7a4baa;
-    style v90 fill:#e3dcea,stroke:#7a4baa;
-    style v97 fill:#e3dcea,stroke:#7a4baa;
-    style v107 fill:#e3dcea,stroke:#7a4baa;
-    style v119 fill:#e3dcea,stroke:#7a4baa;
-    style v129 fill:#e3dcea,stroke:#7a4baa;
-    style v138 fill:#e3dcea,stroke:#7a4baa;
-    style v165 fill:#e3dcea,stroke:#7a4baa;
-    style v143 fill:#e3dcea,stroke:#7a4baa;
-    style v150 fill:#e3dcea,stroke:#7a4baa;
-    style v160 fill:#e3dcea,stroke:#7a4baa;
-    style v169 fill:#e3dcea,stroke:#7a4baa;
-    style v196 fill:#e3dcea,stroke:#7a4baa;
-    style v174 fill:#e3dcea,stroke:#7a4baa;
-    style v181 fill:#e3dcea,stroke:#7a4baa;
-    style v191 fill:#e3dcea,stroke:#7a4baa;
-    style v197 fill:#e3dcea,stroke:#7a4baa;
-    style v205 fill:#e3dcea,stroke:#7a4baa;
-    style v212 fill:#e3dcea,stroke:#7a4baa;
-    style v222 fill:#e3dcea,stroke:#7a4baa;
-    style v228 fill:#e3dcea,stroke:#7a4baa;
-    style v236 fill:#e3dcea,stroke:#7a4baa;
-    style v243 fill:#e3dcea,stroke:#7a4baa;
-    style v253 fill:#e3dcea,stroke:#7a4baa;
-    style v262 fill:#e3dcea,stroke:#7a4baa;
-    style v289 fill:#e3dcea,stroke:#7a4baa;
-    style v267 fill:#e3dcea,stroke:#7a4baa;
-    style v274 fill:#e3dcea,stroke:#7a4baa;
-    style v284 fill:#e3dcea,stroke:#7a4baa;
-    style v296 fill:#e3dcea,stroke:#7a4baa;
-    style v303 fill:#e3dcea,stroke:#7a4baa;
-    style v315 fill:#e3dcea,stroke:#7a4baa;
-    style v322 fill:#e3dcea,stroke:#7a4baa;
-    style v326 fill:#e3dcea,stroke:#7a4baa;
-
+    v143["delimit_fraction"]
+    v174["delimit_fraction"]
+    v205["rna_filter_with_counts"]
+    v236["rna_do_filter"]
+    v267["filter_with_scrublet"]
+    v28["grep_mitochondrial_genes"]
+    v59["grep_ribosomal_genes"]
+    v90["calculate_qc_metrics"]
+    v143 --> v174
+    v174 --> v205
+    v205 --> v236
+    v236 --> v267
+    v28 --> v59
+    v59 --> v90
+    v90 --> v143
+    style v143 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style v174 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style v205 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style v236 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style v267 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style v28 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style v59 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style v90 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
 ```
 

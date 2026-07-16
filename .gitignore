@@ -3,6 +3,12 @@
 *.html.bak
 .DS_Store
 
+# Rendered HTML belongs in _site/. Stray .html in the source tree are
+# single-file `quarto render` artifacts — never commit them. (The design
+# mockup is the one intentional exception.)
+*.html
+!design/mockup.html
+
 # Team member pages are generated from openpipeline core at render time
 # (see scripts/generate_team.py). Only the listing machinery is tracked.
 /team/*/

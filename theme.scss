@@ -196,3 +196,37 @@ h1, h2, h3 { letter-spacing: -0.02em; }
     * { transition: none !important; }
   }
 }
+
+// ---------------------------------------------------------------------------
+// Reference catalog (reference/index.qmd)
+// ---------------------------------------------------------------------------
+.ref-controls {
+  display: flex; flex-wrap: wrap; gap: 16px; align-items: center;
+  margin: 8px 0 18px; padding: 14px 16px;
+  background: var(--op-surface); border: 1px solid var(--op-border); border-radius: 12px;
+}
+.ref-controls-label { font-family: var(--mono); font-weight: 700; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--op-ink); margin-right: 4px; }
+.ref-field { display: inline-flex; align-items: center; gap: 8px; }
+.ref-field-label { font-family: var(--mono); font-size: 11px; letter-spacing: .07em; text-transform: uppercase; color: var(--op-muted); }
+.ref-field select { font-family: var(--mono); font-size: 13px; padding: 7px 10px; border-radius: 9px; border: 1px solid var(--op-border); background: var(--op-surface); color: var(--op-ink); cursor: pointer; }
+.ref-field select:focus { outline: 2px solid var(--op-brand); outline-offset: 1px; }
+.ref-search { margin-left: auto; flex: 0 1 240px; min-width: 160px; font-family: var(--mono); font-size: 13px; padding: 7px 12px; border-radius: 9px; border: 1px solid var(--op-border); background: var(--op-surface); color: var(--op-ink); }
+.ref-search:focus { outline: 2px solid var(--op-brand); outline-offset: 1px; }
+.ref-count-wrap { margin-top: 10px; }
+.ref-count { font-family: var(--mono); font-size: 12px; color: var(--op-muted); }
+
+#listing-ref table.quarto-listing-table { table-layout: fixed; width: 100%; }
+#listing-ref table th, #listing-ref table td { vertical-align: top; }
+#listing-ref th:nth-child(1), #listing-ref td:nth-child(1) { width: 16%; }
+#listing-ref th:nth-child(2), #listing-ref td:nth-child(2) { width: 15%; }
+#listing-ref th:nth-child(3), #listing-ref td:nth-child(3) { width: 8%; }
+#listing-ref th:nth-child(4), #listing-ref td:nth-child(4) { width: 16%; }
+#listing-ref th:nth-child(5), #listing-ref td:nth-child(5) { width: 45%; }
+#listing-ref .listing-title { font-family: var(--mono); font-weight: 600; white-space: normal; overflow-wrap: anywhere; word-break: break-word; }
+#listing-ref .listing-package { overflow-wrap: anywhere; word-break: break-word; }
+#listing-ref .listing-description { white-space: normal; color: var(--op-muted); }
+#listing-ref .listing-namespace, #listing-ref .listing-type { font-family: var(--mono); font-size: 12px; color: var(--op-muted); }
+
+// Reference component pages — clean icon links (no solid buttons)
+.vh-icon { height: 1em; width: auto; vertical-align: -0.15em; }
+.column-margin .fa, .column-margin .fa-brands { margin-right: 2px; }

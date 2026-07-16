@@ -1,9 +1,13 @@
 ---
-title: "scANVI - scArches workflow"
+package: "openpipeline"
+version: "v4.2.0"
+title: "scanvi_scarches"
 namespace: "Workflows/annotation"
 description: "Cell type annotation workflow using ScanVI with scArches for reference mapping."
 type: "workflow"
 toc: false
+latest: "true"
+subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}
@@ -14,7 +18,12 @@ ID: `scanvi_scarches`
 Namespace: `workflows/annotation`
 
 ### Links
-[Source](https://github.com/openpipelines-bio/openpipeline/blob/v4.2.0/src/workflows/annotation/scanvi_scarches/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+[{{< fa brands github >}} View source code](https://github.com/openpipelines-bio/openpipeline/tree/v4.2.0/src/workflows/annotation/scanvi_scarches)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Browse all versions](https://www.viash-hub.com/packages/openpipeline)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/annotation/scanvi_scarches)
 
 :::
 
@@ -39,10 +48,12 @@ nextflow run openpipelines-bio/openpipeline \
 
 <details>
 <summary>Example of `params.yaml`</summary>
-```yaml
 
-```
+Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/annotation/scanvi_scarches).
+
 </details>
+
+Run locally with:
 
 ```bash
 nextflow run openpipelines-bio/openpipeline \
@@ -55,6 +66,8 @@ nextflow run openpipelines-bio/openpipeline \
 :::{.callout-note}
 Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
 :::
+
+Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
 
 ## Argument groups
 
@@ -140,157 +153,25 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 
 ```{mermaid}
 flowchart TB
-    v0(Channel.fromList)
-    v2(filter)
-    v10(filter)
-    v18(scvi)
-    v25(cross)
-    v35(cross)
-    v41(filter)
-    v49(scanvi)
-    v56(cross)
-    v66(cross)
-    v72(filter)
-    v80(scarches)
-    v87(cross)
-    v97(cross)
-    v104(filter)
-    v258(concat)
-    v113(filter)
-    v128(cross)
-    v138(cross)
-    v147(branch)
-    v174(concat)
-    v159(cross)
-    v169(cross)
-    v178(branch)
-    v205(concat)
-    v190(cross)
-    v200(cross)
-    v209(branch)
-    v236(concat)
-    v221(cross)
-    v231(cross)
-    v243(cross)
-    v253(cross)
-    v265(cross)
-    v272(cross)
-    v284(cross)
-    v291(cross)
-    v295(Output)
-    subgraph group_neighbors_leiden_umap [neighbors_leiden_umap]
-        v121(find_neighbors)
-        v152(leiden)
-        v183(move_obsm_to_obs)
-        v214(umap)
-    end
-    v147-->v174
-    v178-->v205
-    v209-->v236
-    v0-->v2
-    v2-->v10
-    v10-->v18
-    v18-->v25
-    v10-->v25
-    v10-->v35
-    v41-->v49
-    v49-->v56
-    v41-->v56
-    v41-->v66
-    v72-->v80
-    v80-->v87
-    v72-->v87
-    v72-->v97
-    v104-->v113
-    v113-->v121
-    v121-->v128
-    v113-->v128
-    v113-->v138
-    v147-->v152
-    v152-->v159
-    v147-->v159
-    v147-->v169
-    v169-->v174
-    v178-->v183
-    v183-->v190
-    v178-->v190
-    v178-->v200
-    v200-->v205
-    v209-->v214
-    v214-->v221
-    v209-->v221
-    v209-->v231
-    v231-->v236
-    v236-->v243
-    v104-->v243
-    v104-->v253
-    v253-->v258
-    v258-->v265
-    v2-->v265
-    v265-->v272
-    v2-->v272
-    v2-->v284
-    v284-->v291
-    v2-->v291
-    v291-->v295
-    v35-->v41
-    v18-->v35
-    v66-->v72
-    v49-->v66
-    v97-->v104
-    v80-->v97
-    v121-->v138
-    v138-->v147
-    v152-->v169
-    v174-->v178
-    v183-->v200
-    v205-->v209
-    v214-->v231
-    v236-->v253
-    v258-->v284
-    style group_neighbors_leiden_umap fill:#F0F0F0,stroke:#969696;
-    style v0 fill:#e3dcea,stroke:#7a4baa;
-    style v2 fill:#e3dcea,stroke:#7a4baa;
-    style v10 fill:#e3dcea,stroke:#7a4baa;
-    style v18 fill:#e3dcea,stroke:#7a4baa;
-    style v25 fill:#e3dcea,stroke:#7a4baa;
-    style v35 fill:#e3dcea,stroke:#7a4baa;
-    style v41 fill:#e3dcea,stroke:#7a4baa;
-    style v49 fill:#e3dcea,stroke:#7a4baa;
-    style v56 fill:#e3dcea,stroke:#7a4baa;
-    style v66 fill:#e3dcea,stroke:#7a4baa;
-    style v72 fill:#e3dcea,stroke:#7a4baa;
-    style v80 fill:#e3dcea,stroke:#7a4baa;
-    style v87 fill:#e3dcea,stroke:#7a4baa;
-    style v97 fill:#e3dcea,stroke:#7a4baa;
-    style v104 fill:#e3dcea,stroke:#7a4baa;
-    style v258 fill:#e3dcea,stroke:#7a4baa;
-    style v113 fill:#e3dcea,stroke:#7a4baa;
-    style v121 fill:#e3dcea,stroke:#7a4baa;
-    style v128 fill:#e3dcea,stroke:#7a4baa;
-    style v138 fill:#e3dcea,stroke:#7a4baa;
-    style v147 fill:#e3dcea,stroke:#7a4baa;
-    style v174 fill:#e3dcea,stroke:#7a4baa;
-    style v152 fill:#e3dcea,stroke:#7a4baa;
-    style v159 fill:#e3dcea,stroke:#7a4baa;
-    style v169 fill:#e3dcea,stroke:#7a4baa;
-    style v178 fill:#e3dcea,stroke:#7a4baa;
-    style v205 fill:#e3dcea,stroke:#7a4baa;
-    style v183 fill:#e3dcea,stroke:#7a4baa;
-    style v190 fill:#e3dcea,stroke:#7a4baa;
-    style v200 fill:#e3dcea,stroke:#7a4baa;
-    style v209 fill:#e3dcea,stroke:#7a4baa;
-    style v236 fill:#e3dcea,stroke:#7a4baa;
-    style v214 fill:#e3dcea,stroke:#7a4baa;
-    style v221 fill:#e3dcea,stroke:#7a4baa;
-    style v231 fill:#e3dcea,stroke:#7a4baa;
-    style v243 fill:#e3dcea,stroke:#7a4baa;
-    style v253 fill:#e3dcea,stroke:#7a4baa;
-    style v265 fill:#e3dcea,stroke:#7a4baa;
-    style v272 fill:#e3dcea,stroke:#7a4baa;
-    style v284 fill:#e3dcea,stroke:#7a4baa;
-    style v291 fill:#e3dcea,stroke:#7a4baa;
-    style v295 fill:#e3dcea,stroke:#7a4baa;
-
+    v121["find_neighbors"]
+    v152["leiden"]
+    v18["scvi"]
+    v183["move_obsm_to_obs"]
+    v214["umap"]
+    v49["scanvi"]
+    v80["scarches"]
+    v121 --> v152
+    v152 --> v183
+    v18 --> v49
+    v183 --> v214
+    v49 --> v80
+    v80 --> v121
+    style v121 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style v152 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style v18 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style v183 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style v214 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style v49 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style v80 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
 ```
 

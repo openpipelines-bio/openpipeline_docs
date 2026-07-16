@@ -1,9 +1,13 @@
 ---
-title: "Generate qc report"
+package: "openpipeline_qc"
+version: "v0.3.0"
+title: "generate_qc_report"
 namespace: "Workflows"
 description: "Run the ingestion QC report generation"
 type: "workflow"
 toc: false
+latest: "true"
+subtitle: "openpipeline_qc v0.3.0"
 ---
 
 ::: {.column-margin}
@@ -14,7 +18,12 @@ ID: `generate_qc_report`
 Namespace: `workflows`
 
 ### Links
-[Source](https://github.com/openpipelines-bio/openpipeline_qc/blob/v0.3.0/src/workflows/generate_qc_report/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+[{{< fa brands github >}} View source code](https://github.com/openpipelines-bio/openpipeline_qc/tree/v0.3.0/src/workflows/generate_qc_report)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Browse all versions](https://www.viash-hub.com/packages/openpipeline_qc)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline_qc/v0.3.0/components/workflows/generate_qc_report)
 
 :::
 
@@ -39,10 +48,12 @@ nextflow run openpipelines-bio/openpipeline_qc \
 
 <details>
 <summary>Example of `params.yaml`</summary>
-```yaml
 
-```
+Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline_qc/v0.3.0/components/workflows/generate_qc_report).
+
 </details>
+
+Run locally with:
 
 ```bash
 nextflow run openpipelines-bio/openpipeline_qc \
@@ -55,6 +66,8 @@ nextflow run openpipelines-bio/openpipeline_qc \
 :::{.callout-note}
 Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
 :::
+
+Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
 
 ## Argument groups
 
@@ -126,3 +139,27 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 
   * Weiwei Schultz (contributor)
 
+## Visualisation
+
+```{mermaid}
+flowchart TB
+    c_add_id["add_id"]
+    c_cellbender_remove_background["cellbender_remove_background"]
+    c_generate_html["generate_html"]
+    c_h5mu_to_qc_json["h5mu_to_qc_json"]
+    c_move_files_to_directory["move_files_to_directory"]
+    c_qc["qc"]
+    c_add_id --> c_cellbender_remove_background
+    c_cellbender_remove_background --> c_qc
+    c_h5mu_to_qc_json --> c_generate_html
+    c_qc --> c_h5mu_to_qc_json
+    c_qc --> c_move_files_to_directory
+    style c_add_id fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_cellbender_remove_background fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+    style c_generate_html fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_h5mu_to_qc_json fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_move_files_to_directory fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_qc fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+```
+
+*Dashed nodes are optional steps.*

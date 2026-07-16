@@ -1,9 +1,13 @@
 ---
-title: "Parallel subtyping"
+package: "openpipeline_composed"
+version: "v0.3.0"
+title: "parallel_subtyping"
 namespace: "Single cell"
 description: "Cell subtyping of h5mu file annotated with major types."
 type: "workflow"
 toc: false
+latest: "true"
+subtitle: "openpipeline_composed v0.3.0"
 ---
 
 ::: {.column-margin}
@@ -14,7 +18,12 @@ ID: `parallel_subtyping`
 Namespace: `single_cell`
 
 ### Links
-[Source](https://github.com/openpipelines-bio/openpipeline_composed/blob/v0.3.0/src/single_cell/parallel_subtyping/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+[{{< fa brands github >}} View source code](https://github.com/openpipelines-bio/openpipeline_composed/tree/v0.3.0/src/single_cell/parallel_subtyping)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Browse all versions](https://www.viash-hub.com/packages/openpipeline_composed)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline_composed/v0.3.0/components/single_cell/parallel_subtyping)
 
 :::
 
@@ -59,10 +68,12 @@ nextflow run openpipelines-bio/openpipeline_composed \
 
 <details>
 <summary>Example of `params.yaml`</summary>
-```yaml
 
-```
+Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline_composed/v0.3.0/components/single_cell/parallel_subtyping).
+
 </details>
+
+Run locally with:
 
 ```bash
 nextflow run openpipelines-bio/openpipeline_composed \
@@ -75,6 +86,8 @@ nextflow run openpipelines-bio/openpipeline_composed \
 :::{.callout-note}
 Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
 :::
+
+Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
 
 ## Argument groups
 
@@ -261,3 +274,26 @@ Names of the .obs and .obsm slots each method writes to the subtyped output.
 
   * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author, maintainer)
 
+## Visualisation
+
+```{mermaid}
+flowchart TB
+    c_concatenate_h5mu[\concatenate_h5mu/]
+    c_merge[\merge/]
+    c_parallel_annotation["parallel_annotation"]
+    c_split_h5mu[/split_h5mu\]
+    c_split_modalities[/split_modalities\]
+    c_concatenate_h5mu --> c_merge
+    c_parallel_annotation --> c_concatenate_h5mu
+    c_split_h5mu --> c_concatenate_h5mu
+    c_split_h5mu --> c_parallel_annotation
+    c_split_modalities --> c_merge
+    c_split_modalities --> c_split_h5mu
+    style c_concatenate_h5mu fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_merge fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_parallel_annotation fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_split_h5mu fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_split_modalities fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+```
+
+*Trapezoids split or combine data.*

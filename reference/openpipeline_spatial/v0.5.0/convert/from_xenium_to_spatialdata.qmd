@@ -1,9 +1,13 @@
 ---
-title: "From xenium to spatialdata"
+package: "openpipeline_spatial"
+version: "v0.5.0"
+title: "from_xenium_to_spatialdata"
 namespace: "Convert"
 description: "Converts the output from 10X Genomics Xenium dataset into a SpatialData objcet."
 type: "module"
 toc: false
+latest: "true"
+subtitle: "openpipeline_spatial v0.5.0"
 ---
 
 ::: {.column-margin}
@@ -14,7 +18,12 @@ ID: `from_xenium_to_spatialdata`
 Namespace: `convert`
 
 ### Links
-[Source](https://github.com/openpipelines-bio/openpipeline_spatial/blob/v0.5.0/src/convert/from_xenium_to_spatialdata/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+[{{< fa brands github >}} View source code](https://github.com/openpipelines-bio/openpipeline_spatial/tree/v0.5.0/src/convert/from_xenium_to_spatialdata)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Browse all versions](https://www.viash-hub.com/packages/openpipeline_spatial)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline_spatial/v0.5.0/components/convert/from_xenium_to_spatialdata)
 
 :::
 
@@ -40,10 +49,12 @@ nextflow run openpipelines-bio/openpipeline_spatial \
 
 <details>
 <summary>Example of `params.yaml`</summary>
-```yaml
 
-```
+Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline_spatial/v0.5.0/components/convert/from_xenium_to_spatialdata).
+
 </details>
+
+Run locally with:
 
 ```bash
 nextflow run openpipelines-bio/openpipeline_spatial \
@@ -56,6 +67,8 @@ nextflow run openpipelines-bio/openpipeline_spatial \
 :::{.callout-note}
 Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
 :::
+
+Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
 
 ## Argument group
 

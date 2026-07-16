@@ -1,9 +1,13 @@
 ---
-title: "Pseudobulk deseq2"
+package: "openpipeline"
+version: "v4.2.0"
+title: "pseudobulk_deseq2"
 namespace: "Workflows/differential expression"
 description: "Performs pseudobulk generation and subsequent differential expression analysis using DESeq2"
 type: "workflow"
 toc: false
+latest: "true"
+subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}
@@ -14,7 +18,12 @@ ID: `pseudobulk_deseq2`
 Namespace: `workflows/differential_expression`
 
 ### Links
-[Source](https://github.com/openpipelines-bio/openpipeline/blob/v4.2.0/src/workflows/differential_expression/pseudobulk_deseq2/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+[{{< fa brands github >}} View source code](https://github.com/openpipelines-bio/openpipeline/tree/v4.2.0/src/workflows/differential_expression/pseudobulk_deseq2)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Browse all versions](https://www.viash-hub.com/packages/openpipeline)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/differential_expression/pseudobulk_deseq2)
 
 :::
 
@@ -39,10 +48,12 @@ nextflow run openpipelines-bio/openpipeline \
 
 <details>
 <summary>Example of `params.yaml`</summary>
-```yaml
 
-```
+Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/differential_expression/pseudobulk_deseq2).
+
 </details>
+
+Run locally with:
 
 ```bash
 nextflow run openpipelines-bio/openpipeline \
@@ -55,6 +66,8 @@ nextflow run openpipelines-bio/openpipeline \
 :::{.callout-note}
 Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
 :::
+
+Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
 
 ## Argument groups
 
@@ -112,3 +125,24 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 
   * Weiwei Schultz (contributor)
 
+## Visualisation
+
+```{mermaid}
+flowchart TB
+    c_create_pseudobulk["create_pseudobulk"]
+    c_delimit_counts["delimit_counts"]
+    c_deseq2["deseq2"]
+    c_filter_with_counts["filter_with_counts"]
+    c_filter_with_pattern["filter_with_pattern"]
+    c_create_pseudobulk --> c_delimit_counts
+    c_delimit_counts --> c_filter_with_pattern
+    c_filter_with_counts --> c_deseq2
+    c_filter_with_pattern --> c_filter_with_counts
+    style c_create_pseudobulk fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_delimit_counts fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_deseq2 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_filter_with_counts fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_filter_with_pattern fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+```
+
+*Dashed nodes are optional steps.*

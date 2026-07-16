@@ -1,9 +1,13 @@
 ---
-title: "Process singlesample"
+package: "openpipeline"
+version: "v4.2.0"
+title: "process_singlesample"
 namespace: "Workflows/multiomics"
 description: "A pipeline to analyse a single multiomics sample."
 type: "workflow"
 toc: false
+latest: "true"
+subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}
@@ -14,7 +18,12 @@ ID: `process_singlesample`
 Namespace: `workflows/multiomics`
 
 ### Links
-[Source](https://github.com/openpipelines-bio/openpipeline/blob/v4.2.0/src/workflows/multiomics/process_singlesample/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+[{{< fa brands github >}} View source code](https://github.com/openpipelines-bio/openpipeline/tree/v4.2.0/src/workflows/multiomics/process_singlesample)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Browse all versions](https://www.viash-hub.com/packages/openpipeline)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/multiomics/process_singlesample)
 
 :::
 
@@ -39,10 +48,12 @@ nextflow run openpipelines-bio/openpipeline \
 
 <details>
 <summary>Example of `params.yaml`</summary>
-```yaml
 
-```
+Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/multiomics/process_singlesample).
+
 </details>
+
+Run locally with:
 
 ```bash
 nextflow run openpipelines-bio/openpipeline \
@@ -55,6 +66,8 @@ nextflow run openpipelines-bio/openpipeline \
 :::{.callout-note}
 Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
 :::
+
+Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
 
 ## Argument groups
 
@@ -152,3 +165,19 @@ id present in a requirement of several components for this pipeline.
 
   * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author)
 
+## Visualisation
+
+```{mermaid}
+flowchart TB
+    c_intersect_obs["intersect_obs"]
+    c_merge[\merge/]
+    c_process_singlesample_base["process_singlesample_base"]
+    c_merge --> c_intersect_obs
+    c_process_singlesample_base --> c_merge
+    style c_intersect_obs fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+    style c_merge fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_process_singlesample_base fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+```
+
+*Dashed nodes are optional steps.*  
+*Trapezoids split or combine data.*

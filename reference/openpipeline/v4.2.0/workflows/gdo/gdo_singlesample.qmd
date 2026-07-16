@@ -1,9 +1,13 @@
 ---
-title: "GDO Singlesample"
+package: "openpipeline"
+version: "v4.2.0"
+title: "gdo_singlesample"
 namespace: "Workflows/gdo"
 description: "Processing unimodal single-sample guide-derived oligonucleotide (GDO) data."
 type: "workflow"
 toc: false
+latest: "true"
+subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}
@@ -14,7 +18,12 @@ ID: `gdo_singlesample`
 Namespace: `workflows/gdo`
 
 ### Links
-[Source](https://github.com/openpipelines-bio/openpipeline/blob/v4.2.0/src/workflows/gdo/gdo_singlesample/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+[{{< fa brands github >}} View source code](https://github.com/openpipelines-bio/openpipeline/tree/v4.2.0/src/workflows/gdo/gdo_singlesample)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Browse all versions](https://www.viash-hub.com/packages/openpipeline)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/gdo/gdo_singlesample)
 
 :::
 
@@ -39,10 +48,12 @@ nextflow run openpipelines-bio/openpipeline \
 
 <details>
 <summary>Example of `params.yaml`</summary>
-```yaml
 
-```
+Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/gdo/gdo_singlesample).
+
 </details>
+
+Run locally with:
 
 ```bash
 nextflow run openpipelines-bio/openpipeline \
@@ -55,6 +66,8 @@ nextflow run openpipelines-bio/openpipeline \
 :::{.callout-note}
 Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
 :::
+
+Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
 
 ## Argument groups
 
@@ -93,61 +106,10 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 
 ```{mermaid}
 flowchart TB
-    v0(Channel.fromList)
-    v2(filter)
-    v10(filter)
-    v18(gdo_filter_with_counts)
-    v25(cross)
-    v35(cross)
-    v41(filter)
-    v71(concat)
-    v49(gdo_do_filter)
-    v56(cross)
-    v66(cross)
-    v78(cross)
-    v85(cross)
-    v97(cross)
-    v104(cross)
-    v108(Output)
-    v0-->v2
-    v2-->v10
-    v10-->v18
-    v18-->v25
-    v10-->v25
-    v10-->v35
-    v41-->v49
-    v49-->v56
-    v41-->v56
-    v41-->v66
-    v66-->v71
-    v71-->v78
-    v2-->v78
-    v78-->v85
-    v2-->v85
-    v2-->v97
-    v97-->v104
-    v2-->v104
-    v104-->v108
-    v35-->v41
-    v18-->v35
-    v49-->v66
-    v71-->v97
-    style v0 fill:#e3dcea,stroke:#7a4baa;
-    style v2 fill:#e3dcea,stroke:#7a4baa;
-    style v10 fill:#e3dcea,stroke:#7a4baa;
-    style v18 fill:#e3dcea,stroke:#7a4baa;
-    style v25 fill:#e3dcea,stroke:#7a4baa;
-    style v35 fill:#e3dcea,stroke:#7a4baa;
-    style v41 fill:#e3dcea,stroke:#7a4baa;
-    style v71 fill:#e3dcea,stroke:#7a4baa;
-    style v49 fill:#e3dcea,stroke:#7a4baa;
-    style v56 fill:#e3dcea,stroke:#7a4baa;
-    style v66 fill:#e3dcea,stroke:#7a4baa;
-    style v78 fill:#e3dcea,stroke:#7a4baa;
-    style v85 fill:#e3dcea,stroke:#7a4baa;
-    style v97 fill:#e3dcea,stroke:#7a4baa;
-    style v104 fill:#e3dcea,stroke:#7a4baa;
-    style v108 fill:#e3dcea,stroke:#7a4baa;
-
+    v18["gdo_filter_with_counts"]
+    v49["gdo_do_filter"]
+    v18 --> v49
+    style v18 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style v49 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
 ```
 

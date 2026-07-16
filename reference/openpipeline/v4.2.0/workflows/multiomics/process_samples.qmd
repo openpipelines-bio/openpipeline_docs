@@ -1,9 +1,13 @@
 ---
-title: "Process samples"
+package: "openpipeline"
+version: "v4.2.0"
+title: "process_samples"
 namespace: "Workflows/multiomics"
 description: "A pipeline to analyse multiple multiomics samples."
 type: "workflow"
 toc: false
+latest: "true"
+subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}
@@ -14,7 +18,12 @@ ID: `process_samples`
 Namespace: `workflows/multiomics`
 
 ### Links
-[Source](https://github.com/openpipelines-bio/openpipeline/blob/v4.2.0/src/workflows/multiomics/process_samples/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+[{{< fa brands github >}} View source code](https://github.com/openpipelines-bio/openpipeline/tree/v4.2.0/src/workflows/multiomics/process_samples)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Browse all versions](https://www.viash-hub.com/packages/openpipeline)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/multiomics/process_samples)
 
 :::
 
@@ -39,10 +48,12 @@ nextflow run openpipelines-bio/openpipeline \
 
 <details>
 <summary>Example of `params.yaml`</summary>
-```yaml
 
-```
+Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/multiomics/process_samples).
+
 </details>
+
+Run locally with:
 
 ```bash
 nextflow run openpipelines-bio/openpipeline \
@@ -55,6 +66,8 @@ nextflow run openpipelines-bio/openpipeline \
 :::{.callout-note}
 Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
 :::
+
+Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
 
 ## Argument groups
 
@@ -204,3 +217,18 @@ will be created and stored in addition to the non-scaled data.
 
   * Dries Schaumont [{{< fa brands github >}}](https://github.com/DriesSchaumont) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-4389-0440) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-schaumont) (author, maintainer)
 
+## Visualisation
+
+```{mermaid}
+flowchart TB
+    c_concatenate_h5mu[\concatenate_h5mu/]
+    c_process_batches["process_batches"]
+    c_process_singlesample_base["process_singlesample_base"]
+    c_concatenate_h5mu --> c_process_batches
+    c_process_singlesample_base --> c_concatenate_h5mu
+    style c_concatenate_h5mu fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_process_batches fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_process_singlesample_base fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+```
+
+*Trapezoids split or combine data.*

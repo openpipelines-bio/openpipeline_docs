@@ -1,9 +1,13 @@
 ---
-title: "Join graphs"
+package: "openpipeline_spatial"
+version: "v0.5.0"
+title: "join_graphs"
 namespace: "Neighbors"
 description: "Combine spatial and expression neighborhood graphs into a single graph for  use in downstream clustering or trajectory analysis."
 type: "module"
 toc: false
+latest: "true"
+subtitle: "openpipeline_spatial v0.5.0"
 ---
 
 ::: {.column-margin}
@@ -14,7 +18,12 @@ ID: `join_graphs`
 Namespace: `neighbors`
 
 ### Links
-[Source](https://github.com/openpipelines-bio/openpipeline_spatial/blob/v0.5.0/src/neighbors/join_graphs/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+[{{< fa brands github >}} View source code](https://github.com/openpipelines-bio/openpipeline_spatial/tree/v0.5.0/src/neighbors/join_graphs)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Browse all versions](https://www.viash-hub.com/packages/openpipeline_spatial)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline_spatial/v0.5.0/components/neighbors/join_graphs)
 
 :::
 
@@ -43,10 +52,12 @@ nextflow run openpipelines-bio/openpipeline_spatial \
 
 <details>
 <summary>Example of `params.yaml`</summary>
-```yaml
 
-```
+Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline_spatial/v0.5.0/components/neighbors/join_graphs).
+
 </details>
+
+Run locally with:
 
 ```bash
 nextflow run openpipelines-bio/openpipeline_spatial \
@@ -59,6 +70,8 @@ nextflow run openpipelines-bio/openpipeline_spatial \
 :::{.callout-note}
 Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
 :::
+
+Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
 
 ## Argument groups
 

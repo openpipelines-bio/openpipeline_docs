@@ -1,9 +1,13 @@
 ---
-title: "Rna multisample"
+package: "openpipeline"
+version: "v4.2.0"
+title: "rna_multisample"
 namespace: "Workflows/rna"
 description: "Processing unimodal multi-sample RNA transcriptomics data."
 type: "workflow"
 toc: false
+latest: "true"
+subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}
@@ -14,7 +18,12 @@ ID: `rna_multisample`
 Namespace: `workflows/rna`
 
 ### Links
-[Source](https://github.com/openpipelines-bio/openpipeline/blob/v4.2.0/src/workflows/rna/rna_multisample/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+[{{< fa brands github >}} View source code](https://github.com/openpipelines-bio/openpipeline/tree/v4.2.0/src/workflows/rna/rna_multisample)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Browse all versions](https://www.viash-hub.com/packages/openpipeline)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/rna/rna_multisample)
 
 :::
 
@@ -39,10 +48,12 @@ nextflow run openpipelines-bio/openpipeline \
 
 <details>
 <summary>Example of `params.yaml`</summary>
-```yaml
 
-```
+Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/rna/rna_multisample).
+
 </details>
+
+Run locally with:
 
 ```bash
 nextflow run openpipelines-bio/openpipeline \
@@ -55,6 +66,8 @@ nextflow run openpipelines-bio/openpipeline \
 :::{.callout-note}
 Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
 :::
+
+Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
 
 ## Argument groups
 
@@ -126,3 +139,21 @@ will be created and stored in addition to the non-scaled data.
 
   * Dries Schaumont [{{< fa brands github >}}](https://github.com/DriesSchaumont) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-4389-0440) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-schaumont) (author)
 
+## Visualisation
+
+```{mermaid}
+flowchart TB
+    c_highly_variable_features_scanpy["highly_variable_features_scanpy"]
+    c_log_normalize["log_normalize"]
+    c_qc["qc"]
+    c_scale["scale"]
+    c_highly_variable_features_scanpy --> c_qc
+    c_log_normalize --> c_scale
+    c_scale --> c_highly_variable_features_scanpy
+    style c_highly_variable_features_scanpy fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_log_normalize fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_qc fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_scale fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+```
+
+*Dashed nodes are optional steps.*

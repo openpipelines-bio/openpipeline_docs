@@ -1,9 +1,13 @@
 ---
-title: "Process batches"
+package: "openpipeline"
+version: "v4.2.0"
+title: "process_batches"
 namespace: "Workflows/multiomics"
 description: "This workflow serves as an entrypoint into the 'full_pipeline' in order to re-run the multisample processing and the integration setup."
 type: "workflow"
 toc: false
+latest: "true"
+subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}
@@ -14,7 +18,12 @@ ID: `process_batches`
 Namespace: `workflows/multiomics`
 
 ### Links
-[Source](https://github.com/openpipelines-bio/openpipeline/blob/v4.2.0/src/workflows/multiomics/process_batches/config.vsh.yaml){.btn-action .btn-sm .btn-info .btn role="button"}
+
+[{{< fa brands github >}} View source code](https://github.com/openpipelines-bio/openpipeline/tree/v4.2.0/src/workflows/multiomics/process_batches)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Browse all versions](https://www.viash-hub.com/packages/openpipeline)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/multiomics/process_batches)
 
 :::
 
@@ -43,10 +52,12 @@ nextflow run openpipelines-bio/openpipeline \
 
 <details>
 <summary>Example of `params.yaml`</summary>
-```yaml
 
-```
+Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/multiomics/process_batches).
+
 </details>
+
+Run locally with:
 
 ```bash
 nextflow run openpipelines-bio/openpipeline \
@@ -59,6 +70,8 @@ nextflow run openpipelines-bio/openpipeline \
 :::{.callout-note}
 Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
 :::
+
+Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
 
 ## Argument groups
 
@@ -142,3 +155,30 @@ will be created and stored in addition to the non-scaled data.
 
   * Dries Schaumont [{{< fa brands github >}}](https://github.com/DriesSchaumont) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-4389-0440) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-schaumont) (author, maintainer)
 
+## Visualisation
+
+```{mermaid}
+flowchart TB
+    c_dimensionality_reduction["dimensionality_reduction"]
+    c_intersect_obs["intersect_obs"]
+    c_merge[\merge/]
+    c_prot_multisample["prot_multisample"]
+    c_rna_multisample["rna_multisample"]
+    c_split_modalities[/split_modalities\]
+    c_intersect_obs --> c_dimensionality_reduction
+    c_merge --> c_intersect_obs
+    c_prot_multisample --> c_merge
+    c_rna_multisample --> c_merge
+    c_split_modalities --> c_merge
+    c_split_modalities --> c_prot_multisample
+    c_split_modalities --> c_rna_multisample
+    style c_dimensionality_reduction fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+    style c_intersect_obs fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+    style c_merge fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_prot_multisample fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_rna_multisample fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_split_modalities fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+```
+
+*Dashed nodes are optional steps.*  
+*Trapezoids split or combine data.*
