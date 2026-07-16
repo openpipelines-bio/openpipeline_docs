@@ -33,6 +33,35 @@ are merged again and the integration setup pipeline is executed. Please note tha
 assumes that samples from multiple pipelines are already concatenated. 
 
 
+## Visualisation
+
+```{mermaid}
+flowchart TB
+    c_dataflow_merge[\merge/]
+    c_dataflow_split_modalities[/split_modalities\]
+    c_filter_intersect_obs["intersect_obs"]
+    c_workflows_multiomics_dimensionality_reduction["dimensionality_reduction"]
+    c_workflows_prot_prot_multisample["prot_multisample"]
+    c_workflows_rna_rna_multisample["rna_multisample"]
+    c_dataflow_merge --> c_filter_intersect_obs
+    c_dataflow_split_modalities --> c_dataflow_merge
+    c_dataflow_split_modalities --> c_workflows_prot_prot_multisample
+    c_dataflow_split_modalities --> c_workflows_rna_rna_multisample
+    c_filter_intersect_obs --> c_workflows_multiomics_dimensionality_reduction
+    c_workflows_prot_prot_multisample --> c_dataflow_merge
+    c_workflows_rna_rna_multisample --> c_dataflow_merge
+    style c_dataflow_merge fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_dataflow_split_modalities fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_filter_intersect_obs fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+    style c_workflows_multiomics_dimensionality_reduction fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+    style c_workflows_prot_prot_multisample fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_workflows_rna_rna_multisample fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+```
+
+*Dashed nodes are optional steps.*  
+*Trapezoids split or combine data.*
+
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -154,31 +183,3 @@ will be created and stored in addition to the non-scaled data.
 
 
   * Dries Schaumont [{{< fa brands github >}}](https://github.com/DriesSchaumont) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-4389-0440) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-schaumont) (author, maintainer)
-
-## Visualisation
-
-```{mermaid}
-flowchart TB
-    c_dataflow_merge[\merge/]
-    c_dataflow_split_modalities[/split_modalities\]
-    c_filter_intersect_obs["intersect_obs"]
-    c_workflows_multiomics_dimensionality_reduction["dimensionality_reduction"]
-    c_workflows_prot_prot_multisample["prot_multisample"]
-    c_workflows_rna_rna_multisample["rna_multisample"]
-    c_dataflow_merge --> c_filter_intersect_obs
-    c_dataflow_split_modalities --> c_dataflow_merge
-    c_dataflow_split_modalities --> c_workflows_prot_prot_multisample
-    c_dataflow_split_modalities --> c_workflows_rna_rna_multisample
-    c_filter_intersect_obs --> c_workflows_multiomics_dimensionality_reduction
-    c_workflows_prot_prot_multisample --> c_dataflow_merge
-    c_workflows_rna_rna_multisample --> c_dataflow_merge
-    style c_dataflow_merge fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style c_dataflow_split_modalities fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style c_filter_intersect_obs fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
-    style c_workflows_multiomics_dimensionality_reduction fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
-    style c_workflows_prot_prot_multisample fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style c_workflows_rna_rna_multisample fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-```
-
-*Dashed nodes are optional steps.*  
-*Trapezoids split or combine data.*

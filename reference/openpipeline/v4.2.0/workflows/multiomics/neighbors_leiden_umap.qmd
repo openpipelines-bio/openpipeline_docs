@@ -29,6 +29,26 @@ Namespace: `workflows/multiomics`
 
 
 
+## Visualisation
+
+```{mermaid}
+flowchart TB
+    c_cluster_leiden["leiden"]
+    c_dimred_umap["umap"]
+    c_metadata_move_obsm_to_obs["move_obsm_to_obs"]
+    c_neighbors_find_neighbors["find_neighbors"]
+    c_cluster_leiden --> c_metadata_move_obsm_to_obs
+    c_metadata_move_obsm_to_obs --> c_dimred_umap
+    c_neighbors_find_neighbors --> c_cluster_leiden
+    style c_cluster_leiden fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+    style c_dimred_umap fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+    style c_metadata_move_obsm_to_obs fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+    style c_neighbors_find_neighbors fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+```
+
+*Dashed nodes are optional steps.*
+
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -114,22 +134,3 @@ Running on Seqera or through Viash Hub is explained in the [guides](/guides/inde
 
 
   * Dries Schaumont [{{< fa brands github >}}](https://github.com/DriesSchaumont) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-4389-0440) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-schaumont) (author)
-
-## Visualisation
-
-```{mermaid}
-flowchart TB
-    c_cluster_leiden["leiden"]
-    c_dimred_umap["umap"]
-    c_metadata_move_obsm_to_obs["move_obsm_to_obs"]
-    c_neighbors_find_neighbors["find_neighbors"]
-    c_cluster_leiden --> c_metadata_move_obsm_to_obs
-    c_metadata_move_obsm_to_obs --> c_dimred_umap
-    c_neighbors_find_neighbors --> c_cluster_leiden
-    style c_cluster_leiden fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
-    style c_dimred_umap fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
-    style c_metadata_move_obsm_to_obs fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
-    style c_neighbors_find_neighbors fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-```
-
-*Dashed nodes are optional steps.*

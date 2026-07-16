@@ -35,6 +35,18 @@ ATAC-Seq
 The CWL pipeline file is obtained by cloning 'https://bitbucket.org/CRSwDev/cwl' and removing all objects with class 'DockerRequirement' from the YAML.
 
 
+## Visualisation
+
+```{mermaid}
+flowchart TB
+    c_convert_from_bdrhap_to_h5mu["from_bdrhap_to_h5mu"]
+    c_mapping_bd_rhapsody["bd_rhapsody"]
+    c_mapping_bd_rhapsody --> c_convert_from_bdrhap_to_h5mu
+    style c_convert_from_bdrhap_to_h5mu fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_mapping_bd_rhapsody fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+```
+
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -213,14 +225,3 @@ NOTE: Only change these if you are really sure about what you are doing
   * Robrecht Cannoodt [{{< fa brands github >}}](https://github.com/rcannood) [{{< fa brands orcid >}}](https://orcid.org/0000-0003-3641-729X) [{{< fa brands linkedin >}}](https://linkedin.com/in/robrechtcannoodt) (maintainer)
 
   * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author)
-
-## Visualisation
-
-```{mermaid}
-flowchart TB
-    c_convert_from_bdrhap_to_h5mu["from_bdrhap_to_h5mu"]
-    c_mapping_bd_rhapsody["bd_rhapsody"]
-    c_mapping_bd_rhapsody --> c_convert_from_bdrhap_to_h5mu
-    style c_convert_from_bdrhap_to_h5mu fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style c_mapping_bd_rhapsody fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-```

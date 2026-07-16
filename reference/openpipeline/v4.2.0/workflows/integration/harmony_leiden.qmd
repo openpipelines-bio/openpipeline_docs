@@ -29,6 +29,29 @@ Namespace: `workflows/integration`
 
 
 
+## Visualisation
+
+```{mermaid}
+flowchart TB
+    c_convert_from_tiledb_to_h5mu["from_tiledb_to_h5mu"]
+    c_integrate_harmonypy["harmonypy"]
+    c_tiledb_move_mudata_obs_to_tiledb["move_mudata_obs_to_tiledb"]
+    c_tiledb_move_mudata_obsm_to_tiledb["move_mudata_obsm_to_tiledb"]
+    c_workflows_multiomics_neighbors_leiden_umap["neighbors_leiden_umap"]
+    c_convert_from_tiledb_to_h5mu --> c_integrate_harmonypy
+    c_integrate_harmonypy --> c_workflows_multiomics_neighbors_leiden_umap
+    c_tiledb_move_mudata_obsm_to_tiledb --> c_tiledb_move_mudata_obs_to_tiledb
+    c_workflows_multiomics_neighbors_leiden_umap --> c_tiledb_move_mudata_obsm_to_tiledb
+    style c_convert_from_tiledb_to_h5mu fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+    style c_integrate_harmonypy fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_tiledb_move_mudata_obs_to_tiledb fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+    style c_tiledb_move_mudata_obsm_to_tiledb fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+    style c_workflows_multiomics_neighbors_leiden_umap fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+```
+
+*Dashed nodes are optional steps.*
+
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -135,25 +158,3 @@ Running on Seqera or through Viash Hub is explained in the [guides](/guides/inde
 
 
   * Dries Schaumont [{{< fa brands github >}}](https://github.com/DriesSchaumont) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-4389-0440) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-schaumont) (author)
-
-## Visualisation
-
-```{mermaid}
-flowchart TB
-    c_convert_from_tiledb_to_h5mu["from_tiledb_to_h5mu"]
-    c_integrate_harmonypy["harmonypy"]
-    c_tiledb_move_mudata_obs_to_tiledb["move_mudata_obs_to_tiledb"]
-    c_tiledb_move_mudata_obsm_to_tiledb["move_mudata_obsm_to_tiledb"]
-    c_workflows_multiomics_neighbors_leiden_umap["neighbors_leiden_umap"]
-    c_convert_from_tiledb_to_h5mu --> c_integrate_harmonypy
-    c_integrate_harmonypy --> c_workflows_multiomics_neighbors_leiden_umap
-    c_tiledb_move_mudata_obsm_to_tiledb --> c_tiledb_move_mudata_obs_to_tiledb
-    c_workflows_multiomics_neighbors_leiden_umap --> c_tiledb_move_mudata_obsm_to_tiledb
-    style c_convert_from_tiledb_to_h5mu fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
-    style c_integrate_harmonypy fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style c_tiledb_move_mudata_obs_to_tiledb fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
-    style c_tiledb_move_mudata_obsm_to_tiledb fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
-    style c_workflows_multiomics_neighbors_leiden_umap fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-```
-
-*Dashed nodes are optional steps.*

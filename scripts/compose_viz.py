@@ -234,13 +234,18 @@ def process(path, force=False):
         notes.append("Trapezoids split or combine data.")
     legend = ("\n" + "  \n".join(f"*{n}*" for n in notes) + "\n") if notes else ""
     block = "## Visualisation\n\n```{mermaid}\n" + mer + "\n```\n" + legend
-    if has_diagram:
-        txt = re.sub(
-            r'##\s*Visualisation\s*\n+```\{mermaid\}\n.*?\n```\n*(?:\*[^\n]*\*\s*\n*)*',
-            lambda _m: block, txt, flags=re.S)
+    # Drop any existing Visualisation section (wherever it sits) ...
+    txt = re.sub(
+        r'\n*##\s*Visualisation\s*\n+```\{mermaid\}\n.*?\n```\n*(?:\*[^\n]*\*\s*\n*)*',
+        "\n", txt, flags=re.S)
+    # ... and reinsert it at the top, before the first level-2 section
+    # (i.e. right after the Info/Links margin block).
+    m = re.search(r'(?m)^##\s', txt)
+    if m:
+        txt = txt[:m.start()] + block + "\n\n" + txt[m.start():]
     else:
         txt = txt.rstrip() + "\n\n" + block
-    open(path, "w", encoding="utf-8").write(txt)
+    open(path, "w", encoding="utf-8").write(txt.rstrip() + "\n")
     return True
 
 

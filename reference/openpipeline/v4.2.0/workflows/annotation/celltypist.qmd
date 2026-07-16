@@ -29,6 +29,24 @@ Namespace: `workflows/annotation`
 
 
 
+## Visualisation
+
+```{mermaid}
+flowchart TB
+    c_annotate_celltypist["celltypist"]
+    c_transform_delete_layer["delete_layer"]
+    c_transform_log1p["log1p"]
+    c_transform_normalize_total["normalize_total"]
+    c_transform_delete_layer --> c_annotate_celltypist
+    c_transform_log1p --> c_transform_delete_layer
+    c_transform_normalize_total --> c_transform_log1p
+    style c_annotate_celltypist fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_transform_delete_layer fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_transform_log1p fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_transform_normalize_total fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+```
+
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -134,20 +152,3 @@ Output arguments.
   * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author, maintainer)
 
   * Weiwei Schultz (contributor)
-
-## Visualisation
-
-```{mermaid}
-flowchart TB
-    c_annotate_celltypist["celltypist"]
-    c_transform_delete_layer["delete_layer"]
-    c_transform_log1p["log1p"]
-    c_transform_normalize_total["normalize_total"]
-    c_transform_delete_layer --> c_annotate_celltypist
-    c_transform_log1p --> c_transform_delete_layer
-    c_transform_normalize_total --> c_transform_log1p
-    style c_annotate_celltypist fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style c_transform_delete_layer fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style c_transform_log1p fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style c_transform_normalize_total fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-```

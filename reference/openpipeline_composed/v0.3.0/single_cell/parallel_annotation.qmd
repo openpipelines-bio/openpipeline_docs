@@ -40,6 +40,35 @@ Available annotation methods:
 - Harmony integration followed by KNN label transfer
 
 
+## Visualisation
+
+```{mermaid}
+flowchart TB
+    c_annotate_consensus_vote["consensus_vote"]
+    c_annotate_singler["singler"]
+    c_dataflow_move_anndata_slots["move_anndata_slots"]
+    c_workflows_annotation_celltypist["celltypist"]
+    c_workflows_annotation_harmony_knn["harmony_knn"]
+    c_workflows_annotation_scanvi_scarches["scanvi_scarches"]
+    c_workflows_annotation_scvi_knn["scvi_knn"]
+    c_annotate_singler --> c_dataflow_move_anndata_slots
+    c_dataflow_move_anndata_slots --> c_annotate_consensus_vote
+    c_workflows_annotation_celltypist --> c_dataflow_move_anndata_slots
+    c_workflows_annotation_harmony_knn --> c_dataflow_move_anndata_slots
+    c_workflows_annotation_scanvi_scarches --> c_dataflow_move_anndata_slots
+    c_workflows_annotation_scvi_knn --> c_dataflow_move_anndata_slots
+    style c_annotate_consensus_vote fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+    style c_annotate_singler fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+    style c_dataflow_move_anndata_slots fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+    style c_workflows_annotation_celltypist fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+    style c_workflows_annotation_harmony_knn fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+    style c_workflows_annotation_scanvi_scarches fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+    style c_workflows_annotation_scvi_knn fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+```
+
+*Dashed nodes are optional steps.*
+
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -259,31 +288,3 @@ single consensus label via a (probability-weighted) majority vote.
 
 
   * Jakub Majercik [{{< fa brands github >}}](https://github.com/jakubmajercik) [{{< fa brands linkedin >}}](https://linkedin.com/in/jakubmajercik) (author, maintainer)
-
-## Visualisation
-
-```{mermaid}
-flowchart TB
-    c_annotate_consensus_vote["consensus_vote"]
-    c_annotate_singler["singler"]
-    c_dataflow_move_anndata_slots["move_anndata_slots"]
-    c_workflows_annotation_celltypist["celltypist"]
-    c_workflows_annotation_harmony_knn["harmony_knn"]
-    c_workflows_annotation_scanvi_scarches["scanvi_scarches"]
-    c_workflows_annotation_scvi_knn["scvi_knn"]
-    c_annotate_singler --> c_dataflow_move_anndata_slots
-    c_dataflow_move_anndata_slots --> c_annotate_consensus_vote
-    c_workflows_annotation_celltypist --> c_dataflow_move_anndata_slots
-    c_workflows_annotation_harmony_knn --> c_dataflow_move_anndata_slots
-    c_workflows_annotation_scanvi_scarches --> c_dataflow_move_anndata_slots
-    c_workflows_annotation_scvi_knn --> c_dataflow_move_anndata_slots
-    style c_annotate_consensus_vote fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
-    style c_annotate_singler fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
-    style c_dataflow_move_anndata_slots fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
-    style c_workflows_annotation_celltypist fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
-    style c_workflows_annotation_harmony_knn fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
-    style c_workflows_annotation_scanvi_scarches fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
-    style c_workflows_annotation_scvi_knn fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
-```
-
-*Dashed nodes are optional steps.*

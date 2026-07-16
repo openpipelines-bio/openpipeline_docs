@@ -29,6 +29,29 @@ Namespace: `workflows/differential_expression`
 
 
 
+## Visualisation
+
+```{mermaid}
+flowchart TB
+    c_differential_expression_create_pseudobulk["create_pseudobulk"]
+    c_differential_expression_deseq2["deseq2"]
+    c_filter_delimit_counts["delimit_counts"]
+    c_filter_filter_with_counts["filter_with_counts"]
+    c_filter_filter_with_pattern["filter_with_pattern"]
+    c_differential_expression_create_pseudobulk --> c_filter_delimit_counts
+    c_filter_delimit_counts --> c_filter_filter_with_pattern
+    c_filter_filter_with_counts --> c_differential_expression_deseq2
+    c_filter_filter_with_pattern --> c_filter_filter_with_counts
+    style c_differential_expression_create_pseudobulk fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_differential_expression_deseq2 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_filter_delimit_counts fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_filter_filter_with_counts fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_filter_filter_with_pattern fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+```
+
+*Dashed nodes are optional steps.*
+
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -124,25 +147,3 @@ Running on Seqera or through Viash Hub is explained in the [guides](/guides/inde
   * Jakub Majercik [{{< fa brands github >}}](https://github.com/jakubmajercik) [{{< fa brands linkedin >}}](https://linkedin.com/in/jakubmajercik) (author)
 
   * Weiwei Schultz (contributor)
-
-## Visualisation
-
-```{mermaid}
-flowchart TB
-    c_differential_expression_create_pseudobulk["create_pseudobulk"]
-    c_differential_expression_deseq2["deseq2"]
-    c_filter_delimit_counts["delimit_counts"]
-    c_filter_filter_with_counts["filter_with_counts"]
-    c_filter_filter_with_pattern["filter_with_pattern"]
-    c_differential_expression_create_pseudobulk --> c_filter_delimit_counts
-    c_filter_delimit_counts --> c_filter_filter_with_pattern
-    c_filter_filter_with_counts --> c_differential_expression_deseq2
-    c_filter_filter_with_pattern --> c_filter_filter_with_counts
-    style c_differential_expression_create_pseudobulk fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style c_differential_expression_deseq2 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style c_filter_delimit_counts fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style c_filter_filter_with_counts fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style c_filter_filter_with_pattern fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
-```
-
-*Dashed nodes are optional steps.*

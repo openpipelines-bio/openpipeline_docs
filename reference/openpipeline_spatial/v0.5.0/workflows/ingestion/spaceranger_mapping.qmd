@@ -29,6 +29,18 @@ Namespace: `workflows/ingestion`
 
 
 
+## Visualisation
+
+```{mermaid}
+flowchart TB
+    c_convert_from_spaceranger_to_h5mu["from_spaceranger_to_h5mu"]
+    c_mapping_spaceranger_count["spaceranger_count"]
+    c_mapping_spaceranger_count --> c_convert_from_spaceranger_to_h5mu
+    style c_convert_from_spaceranger_to_h5mu fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_mapping_spaceranger_count fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+```
+
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -135,14 +147,3 @@ Running on Seqera or through Viash Hub is explained in the [guides](/guides/inde
   * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (maintainer)
 
   * Weiwei Schultz (contributor)
-
-## Visualisation
-
-```{mermaid}
-flowchart TB
-    c_convert_from_spaceranger_to_h5mu["from_spaceranger_to_h5mu"]
-    c_mapping_spaceranger_count["spaceranger_count"]
-    c_mapping_spaceranger_count --> c_convert_from_spaceranger_to_h5mu
-    style c_convert_from_spaceranger_to_h5mu fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style c_mapping_spaceranger_count fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-```

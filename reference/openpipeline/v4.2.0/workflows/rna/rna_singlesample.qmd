@@ -29,6 +29,29 @@ Namespace: `workflows/rna`
 
 
 
+## Visualisation
+
+```{mermaid}
+flowchart TB
+    c_filter_delimit_fraction["delimit_fraction"]
+    c_filter_do_filter["do_filter"]
+    c_filter_filter_with_counts["filter_with_counts"]
+    c_filter_filter_with_scrublet["filter_with_scrublet"]
+    c_workflows_qc_qc["qc"]
+    c_filter_delimit_fraction --> c_filter_filter_with_counts
+    c_filter_do_filter --> c_filter_filter_with_scrublet
+    c_filter_filter_with_counts --> c_filter_do_filter
+    c_workflows_qc_qc --> c_filter_delimit_fraction
+    style c_filter_delimit_fraction fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+    style c_filter_do_filter fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_filter_filter_with_counts fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_filter_filter_with_scrublet fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+    style c_workflows_qc_qc fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+```
+
+*Dashed nodes are optional steps.*
+
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -124,25 +147,3 @@ Running on Seqera or through Viash Hub is explained in the [guides](/guides/inde
   * Robrecht Cannoodt [{{< fa brands github >}}](https://github.com/rcannood) [{{< fa brands orcid >}}](https://orcid.org/0000-0003-3641-729X) [{{< fa brands linkedin >}}](https://linkedin.com/in/robrechtcannoodt) (author, maintainer)
 
   * Dries Schaumont [{{< fa brands github >}}](https://github.com/DriesSchaumont) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-4389-0440) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-schaumont) (author)
-
-## Visualisation
-
-```{mermaid}
-flowchart TB
-    c_filter_delimit_fraction["delimit_fraction"]
-    c_filter_do_filter["do_filter"]
-    c_filter_filter_with_counts["filter_with_counts"]
-    c_filter_filter_with_scrublet["filter_with_scrublet"]
-    c_workflows_qc_qc["qc"]
-    c_filter_delimit_fraction --> c_filter_filter_with_counts
-    c_filter_do_filter --> c_filter_filter_with_scrublet
-    c_filter_filter_with_counts --> c_filter_do_filter
-    c_workflows_qc_qc --> c_filter_delimit_fraction
-    style c_filter_delimit_fraction fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
-    style c_filter_do_filter fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style c_filter_filter_with_counts fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style c_filter_filter_with_scrublet fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
-    style c_workflows_qc_qc fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-```
-
-*Dashed nodes are optional steps.*

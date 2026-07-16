@@ -29,6 +29,32 @@ Namespace: `workflows/rna`
 
 
 
+## Visualisation
+
+```{mermaid}
+flowchart TB
+    c_feature_annotation_highly_variable_features_scanpy["highly_variable_features_scanpy"]
+    c_transform_delete_layer["delete_layer"]
+    c_transform_log1p["log1p"]
+    c_transform_normalize_total["normalize_total"]
+    c_transform_scale["scale"]
+    c_workflows_qc_qc["qc"]
+    c_feature_annotation_highly_variable_features_scanpy --> c_workflows_qc_qc
+    c_transform_delete_layer --> c_transform_scale
+    c_transform_log1p --> c_transform_delete_layer
+    c_transform_normalize_total --> c_transform_log1p
+    c_transform_scale --> c_feature_annotation_highly_variable_features_scanpy
+    style c_feature_annotation_highly_variable_features_scanpy fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_transform_delete_layer fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_transform_log1p fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_transform_normalize_total fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_transform_scale fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+    style c_workflows_qc_qc fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+```
+
+*Dashed nodes are optional steps.*
+
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -138,28 +164,3 @@ will be created and stored in addition to the non-scaled data.
   * Robrecht Cannoodt [{{< fa brands github >}}](https://github.com/rcannood) [{{< fa brands orcid >}}](https://orcid.org/0000-0003-3641-729X) [{{< fa brands linkedin >}}](https://linkedin.com/in/robrechtcannoodt) (author, maintainer)
 
   * Dries Schaumont [{{< fa brands github >}}](https://github.com/DriesSchaumont) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-4389-0440) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-schaumont) (author)
-
-## Visualisation
-
-```{mermaid}
-flowchart TB
-    c_feature_annotation_highly_variable_features_scanpy["highly_variable_features_scanpy"]
-    c_transform_delete_layer["delete_layer"]
-    c_transform_log1p["log1p"]
-    c_transform_normalize_total["normalize_total"]
-    c_transform_scale["scale"]
-    c_workflows_qc_qc["qc"]
-    c_feature_annotation_highly_variable_features_scanpy --> c_workflows_qc_qc
-    c_transform_delete_layer --> c_transform_scale
-    c_transform_log1p --> c_transform_delete_layer
-    c_transform_normalize_total --> c_transform_log1p
-    c_transform_scale --> c_feature_annotation_highly_variable_features_scanpy
-    style c_feature_annotation_highly_variable_features_scanpy fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style c_transform_delete_layer fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style c_transform_log1p fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style c_transform_normalize_total fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style c_transform_scale fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
-    style c_workflows_qc_qc fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-```
-
-*Dashed nodes are optional steps.*

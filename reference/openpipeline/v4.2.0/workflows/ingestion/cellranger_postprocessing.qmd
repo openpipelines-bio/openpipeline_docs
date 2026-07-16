@@ -29,6 +29,20 @@ Namespace: `workflows/ingestion`
 
 
 
+## Visualisation
+
+```{mermaid}
+flowchart TB
+    c_correction_cellbender_remove_background["cellbender_remove_background"]
+    c_filter_filter_with_counts["filter_with_counts"]
+    c_correction_cellbender_remove_background --> c_filter_filter_with_counts
+    style c_correction_cellbender_remove_background fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+    style c_filter_filter_with_counts fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+```
+
+*Dashed nodes are optional steps.*
+
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -107,16 +121,3 @@ Running on Seqera or through Viash Hub is explained in the [guides](/guides/inde
   * Angela Oliveira Pisco [{{< fa brands github >}}](https://github.com/aopisco) [{{< fa brands orcid >}}](https://orcid.org/0000-0003-0142-2355) [{{< fa brands linkedin >}}](https://linkedin.com/in/aopisco) (author)
 
   * Robrecht Cannoodt [{{< fa brands github >}}](https://github.com/rcannood) [{{< fa brands orcid >}}](https://orcid.org/0000-0003-3641-729X) [{{< fa brands linkedin >}}](https://linkedin.com/in/robrechtcannoodt) (author, maintainer)
-
-## Visualisation
-
-```{mermaid}
-flowchart TB
-    c_correction_cellbender_remove_background["cellbender_remove_background"]
-    c_filter_filter_with_counts["filter_with_counts"]
-    c_correction_cellbender_remove_background --> c_filter_filter_with_counts
-    style c_correction_cellbender_remove_background fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
-    style c_filter_filter_with_counts fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
-```
-
-*Dashed nodes are optional steps.*

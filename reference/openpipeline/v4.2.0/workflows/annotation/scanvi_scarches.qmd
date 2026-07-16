@@ -29,6 +29,24 @@ Namespace: `workflows/annotation`
 
 
 
+## Visualisation
+
+```{mermaid}
+flowchart TB
+    c_annotate_scanvi["scanvi"]
+    c_integrate_scarches["scarches"]
+    c_integrate_scvi["scvi"]
+    c_workflows_multiomics_neighbors_leiden_umap["neighbors_leiden_umap"]
+    c_annotate_scanvi --> c_integrate_scarches
+    c_integrate_scarches --> c_workflows_multiomics_neighbors_leiden_umap
+    c_integrate_scvi --> c_annotate_scanvi
+    style c_annotate_scanvi fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_integrate_scarches fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_integrate_scvi fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_workflows_multiomics_neighbors_leiden_umap fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+```
+
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -148,20 +166,3 @@ Running on Seqera or through Viash Hub is explained in the [guides](/guides/inde
   * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author, maintainer)
 
   * Weiwei Schultz (contributor)
-
-## Visualisation
-
-```{mermaid}
-flowchart TB
-    c_annotate_scanvi["scanvi"]
-    c_integrate_scarches["scarches"]
-    c_integrate_scvi["scvi"]
-    c_workflows_multiomics_neighbors_leiden_umap["neighbors_leiden_umap"]
-    c_annotate_scanvi --> c_integrate_scarches
-    c_integrate_scarches --> c_workflows_multiomics_neighbors_leiden_umap
-    c_integrate_scvi --> c_annotate_scanvi
-    style c_annotate_scanvi fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style c_integrate_scarches fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style c_integrate_scvi fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style c_workflows_multiomics_neighbors_leiden_umap fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-```

@@ -29,6 +29,18 @@ Namespace: `workflows/integration`
 
 
 
+## Visualisation
+
+```{mermaid}
+flowchart TB
+    c_integrate_scanorama["scanorama"]
+    c_workflows_multiomics_neighbors_leiden_umap["neighbors_leiden_umap"]
+    c_integrate_scanorama --> c_workflows_multiomics_neighbors_leiden_umap
+    style c_integrate_scanorama fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_workflows_multiomics_neighbors_leiden_umap fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+```
+
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -131,14 +143,3 @@ Running on Seqera or through Viash Hub is explained in the [guides](/guides/inde
   * Mauro Saporita [{{< fa brands github >}}](https://github.com/mauro-saporita) [{{< fa brands linkedin >}}](https://linkedin.com/in/mauro-saporita-930b06a5) (author)
 
   * Povilas Gibas [{{< fa brands github >}}](https://github.com/PoGibas) [{{< fa brands linkedin >}}](https://linkedin.com/in/povilas-gibas) (author)
-
-## Visualisation
-
-```{mermaid}
-flowchart TB
-    c_integrate_scanorama["scanorama"]
-    c_workflows_multiomics_neighbors_leiden_umap["neighbors_leiden_umap"]
-    c_integrate_scanorama --> c_workflows_multiomics_neighbors_leiden_umap
-    style c_integrate_scanorama fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style c_workflows_multiomics_neighbors_leiden_umap fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-```

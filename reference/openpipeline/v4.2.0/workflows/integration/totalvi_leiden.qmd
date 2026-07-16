@@ -29,6 +29,18 @@ Namespace: `workflows/integration`
 
 
 
+## Visualisation
+
+```{mermaid}
+flowchart TB
+    c_integrate_totalvi["totalvi"]
+    c_workflows_multiomics_neighbors_leiden_umap["neighbors_leiden_umap"]
+    c_integrate_totalvi --> c_workflows_multiomics_neighbors_leiden_umap
+    style c_integrate_totalvi fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_workflows_multiomics_neighbors_leiden_umap fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+```
+
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -142,14 +154,3 @@ Running on Seqera or through Viash Hub is explained in the [guides](/guides/inde
 
 
   * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author)
-
-## Visualisation
-
-```{mermaid}
-flowchart TB
-    c_integrate_totalvi["totalvi"]
-    c_workflows_multiomics_neighbors_leiden_umap["neighbors_leiden_umap"]
-    c_integrate_totalvi --> c_workflows_multiomics_neighbors_leiden_umap
-    style c_integrate_totalvi fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style c_workflows_multiomics_neighbors_leiden_umap fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-```

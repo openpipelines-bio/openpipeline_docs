@@ -29,6 +29,29 @@ Namespace: `workflows/ingestion`
 
 
 
+## Visualisation
+
+```{mermaid}
+flowchart TB
+    c_reference_build_bdrhap_reference["build_bdrhap_reference"]
+    c_reference_build_cellranger_arc_reference["build_cellranger_arc_reference"]
+    c_reference_build_cellranger_reference["build_cellranger_reference"]
+    c_reference_build_star_reference["build_star_reference"]
+    c_reference_make_reference["make_reference"]
+    c_reference_build_cellranger_arc_reference --> c_reference_build_cellranger_reference
+    c_reference_build_cellranger_reference --> c_reference_build_star_reference
+    c_reference_build_star_reference --> c_reference_build_bdrhap_reference
+    c_reference_make_reference --> c_reference_build_cellranger_arc_reference
+    style c_reference_build_bdrhap_reference fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+    style c_reference_build_cellranger_arc_reference fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+    style c_reference_build_cellranger_reference fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+    style c_reference_build_star_reference fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+    style c_reference_make_reference fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+```
+
+*Dashed nodes are optional steps.*
+
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -133,25 +156,3 @@ Running on Seqera or through Viash Hub is explained in the [guides](/guides/inde
   * Robrecht Cannoodt [{{< fa brands github >}}](https://github.com/rcannood) [{{< fa brands orcid >}}](https://orcid.org/0000-0003-3641-729X) [{{< fa brands linkedin >}}](https://linkedin.com/in/robrechtcannoodt) (author, maintainer)
 
   * Weiwei Schultz (contributor)
-
-## Visualisation
-
-```{mermaid}
-flowchart TB
-    c_reference_build_bdrhap_reference["build_bdrhap_reference"]
-    c_reference_build_cellranger_arc_reference["build_cellranger_arc_reference"]
-    c_reference_build_cellranger_reference["build_cellranger_reference"]
-    c_reference_build_star_reference["build_star_reference"]
-    c_reference_make_reference["make_reference"]
-    c_reference_build_cellranger_arc_reference --> c_reference_build_cellranger_reference
-    c_reference_build_cellranger_reference --> c_reference_build_star_reference
-    c_reference_build_star_reference --> c_reference_build_bdrhap_reference
-    c_reference_make_reference --> c_reference_build_cellranger_arc_reference
-    style c_reference_build_bdrhap_reference fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
-    style c_reference_build_cellranger_arc_reference fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
-    style c_reference_build_cellranger_reference fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
-    style c_reference_build_star_reference fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
-    style c_reference_make_reference fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-```
-
-*Dashed nodes are optional steps.*
