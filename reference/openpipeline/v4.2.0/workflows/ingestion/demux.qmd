@@ -102,19 +102,10 @@ Running on Seqera or through Viash Hub is explained in the [guides](/guides/inde
 
 ```{mermaid}
 flowchart TB
-    v126["fastqc"]
-    v157["multiqc"]
-    v20["cellranger_mkfastq"]
-    v56["bcl_convert"]
-    v92["bcl2fastq"]
-    v126 --> v157
-    v20 --> v126
-    v56 --> v126
-    v92 --> v126
-    style v126 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style v157 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style v20 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style v56 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style v92 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    c_demux_bcl2fastq["bcl2fastq"]
+    c_demux_bcl_convert["bcl_convert"]
+    c_demux_cellranger_mkfastq["cellranger_mkfastq"]
+    style c_demux_bcl2fastq fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_demux_bcl_convert fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_demux_cellranger_mkfastq fill:#e2f4e7,stroke:#2b8f52,color:#13201a
 ```
-

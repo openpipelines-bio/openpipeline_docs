@@ -104,11 +104,10 @@ Running on Seqera or through Viash Hub is explained in the [guides](/guides/inde
 
 ```{mermaid}
 flowchart TB
-    v20["from_10xh5_to_h5mu"]
-    v56["from_h5ad_to_h5mu"]
-    v92["from_10xmtx_to_h5mu"]
-    style v20 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style v56 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style v92 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    c_convert_from_10xh5_to_h5mu["from_10xh5_to_h5mu"]
+    c_convert_from_10xmtx_to_h5mu["from_10xmtx_to_h5mu"]
+    c_convert_from_h5ad_to_h5mu["from_h5ad_to_h5mu"]
+    style c_convert_from_10xh5_to_h5mu fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_convert_from_10xmtx_to_h5mu fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_convert_from_h5ad_to_h5mu fill:#e2f4e7,stroke:#2b8f52,color:#13201a
 ```
-

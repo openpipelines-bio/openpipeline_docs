@@ -139,9 +139,15 @@ Output arguments.
 
 ```{mermaid}
 flowchart TB
-    c_celltypist["celltypist"]
-    c_log_normalize["log_normalize"]
-    c_log_normalize --> c_celltypist
-    style c_celltypist fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style c_log_normalize fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    c_annotate_celltypist["celltypist"]
+    c_transform_delete_layer["delete_layer"]
+    c_transform_log1p["log1p"]
+    c_transform_normalize_total["normalize_total"]
+    c_transform_delete_layer --> c_annotate_celltypist
+    c_transform_log1p --> c_transform_delete_layer
+    c_transform_normalize_total --> c_transform_log1p
+    style c_annotate_celltypist fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_transform_delete_layer fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_transform_log1p fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_transform_normalize_total fill:#e2f4e7,stroke:#2b8f52,color:#13201a
 ```

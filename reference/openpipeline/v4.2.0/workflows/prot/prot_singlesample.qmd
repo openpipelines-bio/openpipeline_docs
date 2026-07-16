@@ -110,10 +110,9 @@ Running on Seqera or through Viash Hub is explained in the [guides](/guides/inde
 
 ```{mermaid}
 flowchart TB
-    v18["prot_filter_with_counts"]
-    v49["prot_do_filter"]
-    v18 --> v49
-    style v18 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style v49 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    c_filter_do_filter["do_filter"]
+    c_filter_filter_with_counts["filter_with_counts"]
+    c_filter_filter_with_counts --> c_filter_do_filter
+    style c_filter_do_filter fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_filter_filter_with_counts fill:#e2f4e7,stroke:#2b8f52,color:#13201a
 ```
-

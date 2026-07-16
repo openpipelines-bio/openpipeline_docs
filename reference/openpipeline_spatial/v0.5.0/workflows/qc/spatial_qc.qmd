@@ -127,6 +127,6 @@ Running on Seqera or through Viash Hub is explained in the [guides](/guides/inde
 
 ```{mermaid}
 flowchart TB
-    c_qc["qc"]
-    style c_qc fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    c_workflows_qc_qc["qc"]
+    style c_workflows_qc_qc fill:#e2f4e7,stroke:#2b8f52,color:#13201a
 ```

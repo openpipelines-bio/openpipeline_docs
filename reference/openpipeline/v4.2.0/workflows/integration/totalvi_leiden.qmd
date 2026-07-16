@@ -147,19 +147,9 @@ Running on Seqera or through Viash Hub is explained in the [guides](/guides/inde
 
 ```{mermaid}
 flowchart TB
-    v120["move_obsm_to_obs"]
-    v151["umap"]
-    v18["totalvi"]
-    v58["find_neighbors"]
-    v89["leiden"]
-    v120 --> v151
-    v18 --> v58
-    v58 --> v89
-    v89 --> v120
-    style v120 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style v151 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style v18 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style v58 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style v89 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    c_integrate_totalvi["totalvi"]
+    c_workflows_multiomics_neighbors_leiden_umap["neighbors_leiden_umap"]
+    c_integrate_totalvi --> c_workflows_multiomics_neighbors_leiden_umap
+    style c_integrate_totalvi fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_workflows_multiomics_neighbors_leiden_umap fill:#e2f4e7,stroke:#2b8f52,color:#13201a
 ```
-

@@ -117,16 +117,9 @@ Running on Seqera or through Viash Hub is explained in the [guides](/guides/inde
 
 ```{mermaid}
 flowchart TB
-    v120["calculate_qc_metrics"]
-    v18["clr"]
-    v58["grep_mitochondrial_genes"]
-    v89["grep_ribosomal_genes"]
-    v18 --> v58
-    v58 --> v89
-    v89 --> v120
-    style v120 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style v18 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style v58 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style v89 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    c_transform_clr["clr"]
+    c_workflows_qc_qc["qc"]
+    c_transform_clr --> c_workflows_qc_qc
+    style c_transform_clr fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_workflows_qc_qc fill:#e2f4e7,stroke:#2b8f52,color:#13201a
 ```
-

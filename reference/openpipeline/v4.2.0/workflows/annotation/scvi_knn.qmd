@@ -158,34 +158,34 @@ Running on Seqera or through Viash Hub is explained in the [guides](/guides/inde
 
 ```{mermaid}
 flowchart TB
-    c_align_query_reference["align_query_reference"]
-    c_concatenate_h5mu[\concatenate_h5mu/]
-    c_delete_layer["delete_layer"]
-    c_highly_variable_features_scanpy["highly_variable_features_scanpy"]
-    c_knn["knn"]
-    c_merge[\merge/]
-    c_scvi_leiden["scvi_leiden"]
-    c_split_h5mu[/split_h5mu\]
-    c_split_modalities[/split_modalities\]
-    c_align_query_reference --> c_split_modalities
-    c_concatenate_h5mu --> c_highly_variable_features_scanpy
-    c_delete_layer --> c_scvi_leiden
-    c_delete_layer --> c_split_h5mu
-    c_highly_variable_features_scanpy --> c_delete_layer
-    c_knn --> c_merge
-    c_scvi_leiden --> c_delete_layer
-    c_split_h5mu --> c_knn
-    c_split_modalities --> c_concatenate_h5mu
-    c_split_modalities --> c_merge
-    style c_align_query_reference fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style c_concatenate_h5mu fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style c_delete_layer fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style c_highly_variable_features_scanpy fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style c_knn fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style c_merge fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style c_scvi_leiden fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style c_split_h5mu fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style c_split_modalities fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    c_dataflow_concatenate_h5mu[\concatenate_h5mu/]
+    c_dataflow_merge[\merge/]
+    c_dataflow_split_h5mu[/split_h5mu\]
+    c_dataflow_split_modalities[/split_modalities\]
+    c_feature_annotation_align_query_reference["align_query_reference"]
+    c_feature_annotation_highly_variable_features_scanpy["highly_variable_features_scanpy"]
+    c_labels_transfer_knn["knn"]
+    c_transform_delete_layer["delete_layer"]
+    c_workflows_integration_scvi_leiden["scvi_leiden"]
+    c_dataflow_concatenate_h5mu --> c_feature_annotation_highly_variable_features_scanpy
+    c_dataflow_split_h5mu --> c_labels_transfer_knn
+    c_dataflow_split_modalities --> c_dataflow_concatenate_h5mu
+    c_dataflow_split_modalities --> c_dataflow_merge
+    c_feature_annotation_align_query_reference --> c_dataflow_split_modalities
+    c_feature_annotation_highly_variable_features_scanpy --> c_transform_delete_layer
+    c_labels_transfer_knn --> c_dataflow_merge
+    c_transform_delete_layer --> c_dataflow_split_h5mu
+    c_transform_delete_layer --> c_workflows_integration_scvi_leiden
+    c_workflows_integration_scvi_leiden --> c_transform_delete_layer
+    style c_dataflow_concatenate_h5mu fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_dataflow_merge fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_dataflow_split_h5mu fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_dataflow_split_modalities fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_feature_annotation_align_query_reference fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_feature_annotation_highly_variable_features_scanpy fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_labels_transfer_knn fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_transform_delete_layer fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_workflows_integration_scvi_leiden fill:#e2f4e7,stroke:#2b8f52,color:#13201a
 ```
 
 *Trapezoids split or combine data.*

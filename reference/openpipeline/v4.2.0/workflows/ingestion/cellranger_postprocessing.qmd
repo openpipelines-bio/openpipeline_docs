@@ -112,10 +112,11 @@ Running on Seqera or through Viash Hub is explained in the [guides](/guides/inde
 
 ```{mermaid}
 flowchart TB
-    v19["cellbender_remove_background"]
-    v50["filter_with_counts"]
-    v19 --> v50
-    style v19 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style v50 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    c_correction_cellbender_remove_background["cellbender_remove_background"]
+    c_filter_filter_with_counts["filter_with_counts"]
+    c_correction_cellbender_remove_background --> c_filter_filter_with_counts
+    style c_correction_cellbender_remove_background fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+    style c_filter_filter_with_counts fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
 ```
 
+*Dashed nodes are optional steps.*

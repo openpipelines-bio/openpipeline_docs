@@ -444,14 +444,14 @@ The output file to write the annotated dataset to.
 
 ```{mermaid}
 flowchart TB
-    c_parallel_annotation["parallel_annotation"]
-    c_parallel_integration["parallel_integration"]
-    c_process_samples["process_samples"]
-    c_parallel_integration --> c_parallel_annotation
-    c_process_samples --> c_parallel_integration
-    style c_parallel_annotation fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
-    style c_parallel_integration fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
-    style c_process_samples fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    c_single_cell_parallel_annotation["parallel_annotation"]
+    c_single_cell_parallel_integration["parallel_integration"]
+    c_workflows_multiomics_process_samples["process_samples"]
+    c_single_cell_parallel_integration --> c_single_cell_parallel_annotation
+    c_workflows_multiomics_process_samples --> c_single_cell_parallel_integration
+    style c_single_cell_parallel_annotation fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+    style c_single_cell_parallel_integration fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+    style c_workflows_multiomics_process_samples fill:#e2f4e7,stroke:#2b8f52,color:#13201a
 ```
 
 *Dashed nodes are optional steps.*

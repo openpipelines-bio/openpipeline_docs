@@ -2,6 +2,7 @@
 /.quarto/
 *.html.bak
 .DS_Store
+*__pycache__*
 
 # Rendered HTML belongs in _site/. Stray .html in the source tree are
 # single-file `quarto render` artifacts — never commit them. (The design

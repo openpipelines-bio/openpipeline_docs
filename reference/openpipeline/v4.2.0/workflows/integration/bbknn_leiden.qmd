@@ -127,16 +127,16 @@ Running on Seqera or through Viash Hub is explained in the [guides](/guides/inde
 
 ```{mermaid}
 flowchart TB
-    v114["umap"]
-    v18["bbknn"]
-    v50["leiden"]
-    v81["move_obsm_to_obs"]
-    v18 --> v50
-    v50 --> v81
-    v81 --> v114
-    style v114 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style v18 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style v50 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style v81 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    c_cluster_leiden["leiden"]
+    c_dimred_umap["umap"]
+    c_metadata_move_obsm_to_obs["move_obsm_to_obs"]
+    c_neighbors_bbknn["bbknn"]
+    c_cluster_leiden --> c_metadata_move_obsm_to_obs
+    c_metadata_move_obsm_to_obs --> c_dimred_umap
+    c_neighbors_bbknn --> c_cluster_leiden
+    c_neighbors_bbknn --> c_dimred_umap
+    style c_cluster_leiden fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_dimred_umap fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_metadata_move_obsm_to_obs fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_neighbors_bbknn fill:#e2f4e7,stroke:#2b8f52,color:#13201a
 ```
-

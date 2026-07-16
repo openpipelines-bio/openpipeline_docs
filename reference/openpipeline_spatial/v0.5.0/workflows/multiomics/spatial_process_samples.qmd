@@ -210,6 +210,6 @@ will be created and stored in addition to the non-scaled data.
 
 ```{mermaid}
 flowchart TB
-    c_process_samples["process_samples"]
-    style c_process_samples fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    c_workflows_multiomics_process_samples["process_samples"]
+    style c_workflows_multiomics_process_samples fill:#e2f4e7,stroke:#2b8f52,color:#13201a
 ```

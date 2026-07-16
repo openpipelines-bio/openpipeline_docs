@@ -235,10 +235,9 @@ These arguments are applicable to all library types.
 
 ```{mermaid}
 flowchart TB
-    v17["cellranger_multi_component"]
-    v49["from_cellranger_multi_to_h5mu"]
-    v17 --> v49
-    style v17 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style v49 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    c_convert_from_cellranger_multi_to_h5mu["from_cellranger_multi_to_h5mu"]
+    c_mapping_cellranger_multi["cellranger_multi"]
+    c_mapping_cellranger_multi --> c_convert_from_cellranger_multi_to_h5mu
+    style c_convert_from_cellranger_multi_to_h5mu fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_mapping_cellranger_multi fill:#e2f4e7,stroke:#2b8f52,color:#13201a
 ```
-

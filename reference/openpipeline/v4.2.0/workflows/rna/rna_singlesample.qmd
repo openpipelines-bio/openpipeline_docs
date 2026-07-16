@@ -129,28 +129,20 @@ Running on Seqera or through Viash Hub is explained in the [guides](/guides/inde
 
 ```{mermaid}
 flowchart TB
-    v143["delimit_fraction"]
-    v174["delimit_fraction"]
-    v205["rna_filter_with_counts"]
-    v236["rna_do_filter"]
-    v267["filter_with_scrublet"]
-    v28["grep_mitochondrial_genes"]
-    v59["grep_ribosomal_genes"]
-    v90["calculate_qc_metrics"]
-    v143 --> v174
-    v174 --> v205
-    v205 --> v236
-    v236 --> v267
-    v28 --> v59
-    v59 --> v90
-    v90 --> v143
-    style v143 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style v174 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style v205 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style v236 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style v267 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style v28 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style v59 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style v90 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    c_filter_delimit_fraction["delimit_fraction"]
+    c_filter_do_filter["do_filter"]
+    c_filter_filter_with_counts["filter_with_counts"]
+    c_filter_filter_with_scrublet["filter_with_scrublet"]
+    c_workflows_qc_qc["qc"]
+    c_filter_delimit_fraction --> c_filter_filter_with_counts
+    c_filter_do_filter --> c_filter_filter_with_scrublet
+    c_filter_filter_with_counts --> c_filter_do_filter
+    c_workflows_qc_qc --> c_filter_delimit_fraction
+    style c_filter_delimit_fraction fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+    style c_filter_do_filter fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_filter_filter_with_counts fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_filter_filter_with_scrublet fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+    style c_workflows_qc_qc fill:#e2f4e7,stroke:#2b8f52,color:#13201a
 ```
 
+*Dashed nodes are optional steps.*

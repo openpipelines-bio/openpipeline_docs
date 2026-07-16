@@ -264,26 +264,26 @@ single consensus label via a (probability-weighted) majority vote.
 
 ```{mermaid}
 flowchart TB
-    c_celltypist["celltypist"]
-    c_consensus_vote["consensus_vote"]
-    c_harmony_knn["harmony_knn"]
-    c_move_anndata_slots["move_anndata_slots"]
-    c_scanvi_scarches["scanvi_scarches"]
-    c_scvi_knn["scvi_knn"]
-    c_singler["singler"]
-    c_celltypist --> c_move_anndata_slots
-    c_harmony_knn --> c_move_anndata_slots
-    c_move_anndata_slots --> c_consensus_vote
-    c_scanvi_scarches --> c_move_anndata_slots
-    c_scvi_knn --> c_move_anndata_slots
-    c_singler --> c_move_anndata_slots
-    style c_celltypist fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
-    style c_consensus_vote fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
-    style c_harmony_knn fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
-    style c_move_anndata_slots fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
-    style c_scanvi_scarches fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
-    style c_scvi_knn fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
-    style c_singler fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+    c_annotate_consensus_vote["consensus_vote"]
+    c_annotate_singler["singler"]
+    c_dataflow_move_anndata_slots["move_anndata_slots"]
+    c_workflows_annotation_celltypist["celltypist"]
+    c_workflows_annotation_harmony_knn["harmony_knn"]
+    c_workflows_annotation_scanvi_scarches["scanvi_scarches"]
+    c_workflows_annotation_scvi_knn["scvi_knn"]
+    c_annotate_singler --> c_dataflow_move_anndata_slots
+    c_dataflow_move_anndata_slots --> c_annotate_consensus_vote
+    c_workflows_annotation_celltypist --> c_dataflow_move_anndata_slots
+    c_workflows_annotation_harmony_knn --> c_dataflow_move_anndata_slots
+    c_workflows_annotation_scanvi_scarches --> c_dataflow_move_anndata_slots
+    c_workflows_annotation_scvi_knn --> c_dataflow_move_anndata_slots
+    style c_annotate_consensus_vote fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+    style c_annotate_singler fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+    style c_dataflow_move_anndata_slots fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+    style c_workflows_annotation_celltypist fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+    style c_workflows_annotation_harmony_knn fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+    style c_workflows_annotation_scanvi_scarches fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+    style c_workflows_annotation_scvi_knn fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
 ```
 
 *Dashed nodes are optional steps.*

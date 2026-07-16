@@ -152,20 +152,20 @@ Running on Seqera or through Viash Hub is explained in the [guides](/guides/inde
 
 ```{mermaid}
 flowchart TB
-    c_from_tiledb_to_h5mu["from_tiledb_to_h5mu"]
-    c_move_mudata_obs_to_tiledb["move_mudata_obs_to_tiledb"]
-    c_move_mudata_obsm_to_tiledb["move_mudata_obsm_to_tiledb"]
-    c_neighbors_leiden_umap["neighbors_leiden_umap"]
-    c_scvi["scvi"]
-    c_from_tiledb_to_h5mu --> c_scvi
-    c_move_mudata_obsm_to_tiledb --> c_move_mudata_obs_to_tiledb
-    c_neighbors_leiden_umap --> c_move_mudata_obsm_to_tiledb
-    c_scvi --> c_neighbors_leiden_umap
-    style c_from_tiledb_to_h5mu fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
-    style c_move_mudata_obs_to_tiledb fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
-    style c_move_mudata_obsm_to_tiledb fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
-    style c_neighbors_leiden_umap fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style c_scvi fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    c_convert_from_tiledb_to_h5mu["from_tiledb_to_h5mu"]
+    c_integrate_scvi["scvi"]
+    c_tiledb_move_mudata_obs_to_tiledb["move_mudata_obs_to_tiledb"]
+    c_tiledb_move_mudata_obsm_to_tiledb["move_mudata_obsm_to_tiledb"]
+    c_workflows_multiomics_neighbors_leiden_umap["neighbors_leiden_umap"]
+    c_convert_from_tiledb_to_h5mu --> c_integrate_scvi
+    c_integrate_scvi --> c_workflows_multiomics_neighbors_leiden_umap
+    c_tiledb_move_mudata_obsm_to_tiledb --> c_tiledb_move_mudata_obs_to_tiledb
+    c_workflows_multiomics_neighbors_leiden_umap --> c_tiledb_move_mudata_obsm_to_tiledb
+    style c_convert_from_tiledb_to_h5mu fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+    style c_integrate_scvi fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_tiledb_move_mudata_obs_to_tiledb fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+    style c_tiledb_move_mudata_obsm_to_tiledb fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+    style c_workflows_multiomics_neighbors_leiden_umap fill:#e2f4e7,stroke:#2b8f52,color:#13201a
 ```
 
 *Dashed nodes are optional steps.*

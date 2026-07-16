@@ -218,10 +218,9 @@ NOTE: Only change these if you are really sure about what you are doing
 
 ```{mermaid}
 flowchart TB
-    v17["bd_rhapsody_component"]
-    v48["from_bdrhap_to_h5mu"]
-    v17 --> v48
-    style v17 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style v48 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    c_convert_from_bdrhap_to_h5mu["from_bdrhap_to_h5mu"]
+    c_mapping_bd_rhapsody["bd_rhapsody"]
+    c_mapping_bd_rhapsody --> c_convert_from_bdrhap_to_h5mu
+    style c_convert_from_bdrhap_to_h5mu fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_mapping_bd_rhapsody fill:#e2f4e7,stroke:#2b8f52,color:#13201a
 ```
-

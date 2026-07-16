@@ -283,18 +283,20 @@ jobs:
           print("post-processed generated pages")
           PY
 
-      # Replace the generator's channel-level workflow diagrams with a clean
-      # component-only view (see scripts/simplify_viz.py). Idempotent: only
-      # diagrams still in the generated form are rewritten.
+      # First pass: simplify the generator's channel-level diagrams to a clean
+      # component view. Acts as a fallback for any workflow the next step can't
+      # parse from main.nf.
       - name: Simplify workflow diagrams
         working-directory: openpipeline_docs
         run: python3 scripts/simplify_viz.py reference
 
-      # Composite workflows (that orchestrate other workflows) get no diagram
-      # from the generator — synthesise a "composed of" one from their deps.
-      - name: Add composed-of diagrams
+      # Main pass: rebuild every workflow diagram from its main.nf data flow,
+      # recursively inlining PRIVATE subworkflows (no reference page of their
+      # own) while keeping public subworkflows/components as clickable nodes.
+      # --force so it also upgrades the leaf diagrams from the step above.
+      - name: Resolve workflow diagrams
         working-directory: openpipeline_docs
-        run: python3 scripts/compose_viz.py reference
+        run: python3 scripts/compose_viz.py --force reference
 
       - name: Open PR
         working-directory: openpipeline_docs

@@ -153,25 +153,15 @@ Running on Seqera or through Viash Hub is explained in the [guides](/guides/inde
 
 ```{mermaid}
 flowchart TB
-    v121["find_neighbors"]
-    v152["leiden"]
-    v18["scvi"]
-    v183["move_obsm_to_obs"]
-    v214["umap"]
-    v49["scanvi"]
-    v80["scarches"]
-    v121 --> v152
-    v152 --> v183
-    v18 --> v49
-    v183 --> v214
-    v49 --> v80
-    v80 --> v121
-    style v121 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style v152 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style v18 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style v183 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style v214 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style v49 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style v80 fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    c_annotate_scanvi["scanvi"]
+    c_integrate_scarches["scarches"]
+    c_integrate_scvi["scvi"]
+    c_workflows_multiomics_neighbors_leiden_umap["neighbors_leiden_umap"]
+    c_annotate_scanvi --> c_integrate_scarches
+    c_integrate_scarches --> c_workflows_multiomics_neighbors_leiden_umap
+    c_integrate_scvi --> c_annotate_scanvi
+    style c_annotate_scanvi fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_integrate_scarches fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_integrate_scvi fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_workflows_multiomics_neighbors_leiden_umap fill:#e2f4e7,stroke:#2b8f52,color:#13201a
 ```
-

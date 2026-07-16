@@ -143,23 +143,23 @@ Running on Seqera or through Viash Hub is explained in the [guides](/guides/inde
 
 ```{mermaid}
 flowchart TB
-    c_add_id["add_id"]
-    c_cellbender_remove_background["cellbender_remove_background"]
-    c_generate_html["generate_html"]
-    c_h5mu_to_qc_json["h5mu_to_qc_json"]
+    c_correction_cellbender_remove_background["cellbender_remove_background"]
+    c_ingestion_qc_generate_html["generate_html"]
+    c_ingestion_qc_h5mu_to_qc_json["h5mu_to_qc_json"]
+    c_metadata_add_id["add_id"]
     c_move_files_to_directory["move_files_to_directory"]
-    c_qc["qc"]
-    c_add_id --> c_cellbender_remove_background
-    c_cellbender_remove_background --> c_qc
-    c_h5mu_to_qc_json --> c_generate_html
-    c_qc --> c_h5mu_to_qc_json
-    c_qc --> c_move_files_to_directory
-    style c_add_id fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style c_cellbender_remove_background fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
-    style c_generate_html fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style c_h5mu_to_qc_json fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    c_workflows_qc_qc["qc"]
+    c_correction_cellbender_remove_background --> c_workflows_qc_qc
+    c_ingestion_qc_h5mu_to_qc_json --> c_ingestion_qc_generate_html
+    c_metadata_add_id --> c_correction_cellbender_remove_background
+    c_workflows_qc_qc --> c_ingestion_qc_h5mu_to_qc_json
+    c_workflows_qc_qc --> c_move_files_to_directory
+    style c_correction_cellbender_remove_background fill:#f2f6f3,stroke:#8ba295,stroke-dasharray:5 3,color:#566b5f
+    style c_ingestion_qc_generate_html fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_ingestion_qc_h5mu_to_qc_json fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_metadata_add_id fill:#e2f4e7,stroke:#2b8f52,color:#13201a
     style c_move_files_to_directory fill:#e2f4e7,stroke:#2b8f52,color:#13201a
-    style c_qc fill:#e2f4e7,stroke:#2b8f52,color:#13201a
+    style c_workflows_qc_qc fill:#e2f4e7,stroke:#2b8f52,color:#13201a
 ```
 
 *Dashed nodes are optional steps.*
