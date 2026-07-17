@@ -2,34 +2,115 @@
 title: "Task guides"
 description: "Goal-oriented recipes. Each is standalone and links into the reference."
 order: 0
-listing:
-  id: guides
-  type: table
-  contents:
-    - ingest-10x.qmd
-    - ingest-spatial.qmd
-    - process-filter.qmd
-    - process-many-samples.qmd
-    - integrate.qmd
-    - annotate.qmd
-    - qc-report.qmd
-    - gpu.qmd
-    - spatial-niches.qmd
-    - turnkey.qmd
-    - tune-resources.qmd
-  fields: [title, categories, description]
-  field-display-names:
-    title: "Guide"
-    categories: "Package"
-    description: "What it covers"
-  sort: false
-  categories: true
-  filter-ui: false
-  sort-ui: false
 ---
 
 Pick a task. Each guide is standalone and links into the
-[reference](../reference/index.qmd). Filter by package using the tags below.
+[reference](../reference/index.qmd). Filter by the package it applies to — some
+guides are cross-cutting and apply to every package.
 
-:::{#guides}
-:::
+```{=html}
+<div class="facet-bar guide-facets" id="guide-facets">
+  <span class="lbl">package</span>
+  <button class="facet" data-pkg="openpipeline" aria-pressed="true"><span class="swatch" style="background:var(--core)"></span>openpipeline</button>
+  <button class="facet" data-pkg="openpipeline_spatial" aria-pressed="true"><span class="swatch" style="background:var(--spatial)"></span>openpipeline_spatial</button>
+  <button class="facet" data-pkg="openpipeline_qc" aria-pressed="true"><span class="swatch" style="background:var(--qc)"></span>openpipeline_qc</button>
+  <button class="facet" data-pkg="openpipeline_composed" aria-pressed="true"><span class="swatch" style="background:var(--composed)"></span>openpipeline_composed</button>
+</div>
+
+<div class="cards-auto" id="guide-grid">
+
+  <a class="rcard link" href="ingest-10x.html" data-pkgs="openpipeline">
+    <div class="tag"><span class="swatch" style="background:var(--core)"></span>openpipeline</div>
+    <h3>Ingest 10x Genomics data</h3>
+    <p>FASTQ or raw counts → MuData with Cell Ranger.</p>
+  </a>
+
+  <a class="rcard link" href="ingest-spatial.html" data-pkgs="openpipeline_spatial">
+    <div class="tag"><span class="swatch" style="background:var(--spatial)"></span>openpipeline_spatial</div>
+    <h3>Ingest Xenium / Visium</h3>
+    <p>Space Ranger mapping and spatial ingestion.</p>
+  </a>
+
+  <a class="rcard link" href="process-filter.html" data-pkgs="openpipeline">
+    <div class="tag"><span class="swatch" style="background:var(--core)"></span>openpipeline</div>
+    <h3>Process &amp; filter samples</h3>
+    <p>Cell filtering, doublets, normalization, and highly variable features.</p>
+  </a>
+
+  <a class="rcard link" href="process-many-samples.html" data-pkgs="all">
+    <div class="tag tag-all"><span class="swatch"></span>all packages</div>
+    <h3>Process many samples (param_list)</h3>
+    <p>Per-sample arguments plus shared settings in one run.</p>
+  </a>
+
+  <a class="rcard link" href="integrate.html" data-pkgs="openpipeline">
+    <div class="tag"><span class="swatch" style="background:var(--core)"></span>openpipeline</div>
+    <h3>Integrate with Harmony or scVI</h3>
+    <p>Batch-correct and cluster across samples.</p>
+  </a>
+
+  <a class="rcard link" href="annotate.html" data-pkgs="openpipeline">
+    <div class="tag"><span class="swatch" style="background:var(--core)"></span>openpipeline</div>
+    <h3>Annotate cell types</h3>
+    <p>CellTypist, scANVI, KNN label transfer.</p>
+  </a>
+
+  <a class="rcard link" href="qc-report.html" data-pkgs="openpipeline_qc">
+    <div class="tag"><span class="swatch" style="background:var(--qc)"></span>openpipeline_qc</div>
+    <h3>Generate a QC report</h3>
+    <p>Standalone quality-control report.</p>
+  </a>
+
+  <a class="rcard link" href="gpu.html" data-pkgs="all">
+    <div class="tag tag-all"><span class="swatch"></span>all packages</div>
+    <h3>Speed up with GPUs</h3>
+    <p>Enable GPU for GPU-capable components; rapids-singlecell coming soon.</p>
+  </a>
+
+  <a class="rcard link" href="spatial-niches.html" data-pkgs="openpipeline_spatial">
+    <div class="tag"><span class="swatch" style="background:var(--spatial)"></span>openpipeline_spatial</div>
+    <h3>Find spatial niches</h3>
+    <p>NicheCompass niche identification.</p>
+  </a>
+
+  <a class="rcard link" href="turnkey.html" data-pkgs="openpipeline_composed">
+    <div class="tag"><span class="swatch" style="background:var(--composed)"></span>openpipeline_composed</div>
+    <h3>Run a turnkey pipeline</h3>
+    <p>End-to-end composed workflow.</p>
+  </a>
+
+  <a class="rcard link" href="tune-resources.html" data-pkgs="all">
+    <div class="tag tag-all"><span class="swatch"></span>all packages</div>
+    <h3>Tune compute resources</h3>
+    <p>Nextflow labels for CPU, memory, and disk.</p>
+  </a>
+
+</div>
+
+<script>
+(function () {
+  var facets = Array.prototype.slice.call(document.querySelectorAll("#guide-facets .facet"));
+  var cards = Array.prototype.slice.call(document.querySelectorAll("#guide-grid .rcard"));
+  if (!facets.length || !cards.length) return;
+  function active() {
+    return facets.filter(function (f) { return f.getAttribute("aria-pressed") === "true"; })
+                 .map(function (f) { return f.dataset.pkg; });
+  }
+  function apply() {
+    var a = active();
+    cards.forEach(function (c) {
+      var pk = (c.dataset.pkgs || "").split(" ");
+      var vis = pk.indexOf("all") !== -1 || pk.some(function (p) { return a.indexOf(p) !== -1; });
+      c.style.display = vis ? "" : "none";
+    });
+  }
+  facets.forEach(function (f) {
+    f.addEventListener("click", function () {
+      f.setAttribute("aria-pressed", f.getAttribute("aria-pressed") === "true" ? "false" : "true");
+      apply();
+    });
+  });
+  apply();
+})();
+</script>
+```
