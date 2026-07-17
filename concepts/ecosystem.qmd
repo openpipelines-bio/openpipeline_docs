@@ -17,7 +17,7 @@ dependency and adds to it rather than forking it.
 | [`openpipeline`]{.pkg-tag .pkg-openpipeline}<span class="swatch openpipeline"></span> | Core single-cell multi-omics — RNA, protein/ADT, ATAC, VDJ, GDO |
 | [`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial}<span class="swatch openpipeline_spatial"></span> | Spatial transcriptomics (Space Ranger, Xenium/CosMx, NicheCompass) |
 | [`openpipeline_qc`]{.pkg-tag .pkg-openpipeline_qc}<span class="swatch openpipeline_qc"></span> | Quality-control components and standalone reporting |
-| [`openpipeline_rapids`]{.pkg-tag .pkg-openpipeline_rapids}<span class="swatch openpipeline_rapids"></span> | GPU-accelerated drop-ins via rapids-singlecell |
+| [`openpipeline_rapids`]{.pkg-tag .pkg-openpipeline_rapids}<span class="swatch openpipeline_rapids"></span> | GPU-accelerated drop-ins via rapids-singlecell — *coming soon* |
 | [`openpipeline_composed`]{.pkg-tag .pkg-openpipeline_composed}<span class="swatch openpipeline_composed"></span> | Turnkey composed pipelines that wrap the whole flow |
 
 ## How the packages relate
@@ -31,8 +31,8 @@ Every package plugs into the same [pipeline architecture](architecture.qmd):
   NicheCompass niche identification.
 - **`openpipeline_qc`** slots quality-control reporting alongside ingestion,
   producing a standalone HTML report before you commit to filter thresholds.
-- **`openpipeline_rapids`** provides GPU drop-in replacements for the
-  compute-heavy processing and integration steps.
+- **`openpipeline_rapids`** (*coming soon*) will provide GPU drop-in
+  replacements for the compute-heavy processing and integration steps.
 - **`openpipeline_composed`** bundles the stages into end-to-end pipelines, so a
   whole cohort goes from raw data to an annotated object in one run.
 
