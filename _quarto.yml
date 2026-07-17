@@ -6,10 +6,10 @@ project:
   # Draft site: ship a crawler-blocking robots.txt into the build output.
   resources:
     - robots.txt
-  # Generate the Team page from the openpipeline (core) author registry before
-  # rendering. See scripts/generate_team.py.
-  pre-render:
-    - scripts/generate_team.py
+  # NOTE: team/ is a hand-curated static page for now (sections + roles the flat
+  # author registry can't express). scripts/generate_team.py is kept for the
+  # eventual return to auto-generation but is intentionally NOT wired as a
+  # pre-render step.
 
 website:
   title: "OpenPipeline"

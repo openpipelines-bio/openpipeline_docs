@@ -44,6 +44,7 @@
 .portrait-title h6 i { font-style: normal; }
 .portrait-title h6 a { color: var(--op-accent-ink); text-decoration: none; }
 .portrait-title h6 a:hover { text-decoration: underline; }
+.portrait-title h6.team-role { font-family: var(--mono); font-weight: 700; color: var(--op-accent-ink); }
 
 .network {
   display: flex;
