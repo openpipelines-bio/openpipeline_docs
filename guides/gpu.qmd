@@ -1,0 +1,38 @@
+---
+title: "Speed up with GPUs"
+description: "Swap in rapids-singlecell components."
+categories: [openpipeline_rapids]
+order: 60
+---
+
+[`openpipeline_rapids`]{.pkg-tag .pkg-openpipeline_rapids}<span class="swatch openpipeline_rapids"></span>
+
+The **`openpipeline_rapids`** package provides GPU-accelerated versions of
+compute-heavy steps via
+[rapids-singlecell](https://rapids-singlecell.readthedocs.io/). On a
+CUDA-capable GPU, steps like PCA, neighbor-graph construction, UMAP, and Leiden
+clustering run substantially faster than their CPU equivalents.
+
+## When it helps
+
+GPU acceleration pays off on large cohorts (hundreds of thousands of cells and
+up), where the dimensionality-reduction and clustering steps dominate wall-clock
+time. For small datasets the CPU workflows are simpler and fast enough.
+
+## How it fits in
+
+`openpipeline_rapids` pins the core `openpipeline` as a Viash dependency and
+exposes drop-in GPU components. The pattern is to run the standard
+[processing](process-filter.qmd) and [integration](integrate.qmd) flow but
+schedule the accelerated components onto a GPU (via a Nextflow profile / config
+that requests a GPU-enabled compute environment).
+
+:::{.callout-note}
+The `openpipeline_rapids` reference is not published yet in this draft site. Once
+generated it will appear in the [reference](../reference/index.qmd) under the
+`openpipeline_rapids` filter. Until then, see the package repo on Viash Hub for
+the current component list and run instructions.
+:::
+
+**Next:** [Tune compute resources →](tune-resources.qmd) ·
+[reference →](../reference/index.qmd)

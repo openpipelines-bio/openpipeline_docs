@@ -1,28 +1,62 @@
 ---
 title: "How it works"
-description: "The concepts that make everything else make sense — read once, apply everywhere."
+description: "The ideas that make everything else make sense — read once, apply everywhere."
 order: 0
 ---
 
-- [One data format: MuData](mudata.qmd) — why components snap together.
-- [Built with Viash · run on Viash Hub](viash.qmd) — how components are packaged and launched.
-- [Many samples at once: the `param_list`](param-list.qmd) — process a cohort in one run.
-- [The pipeline model](pipeline-model.qmd) — the four-step shape, and how packages extend it.
+The ideas below explain how OpenPipeline is put together and why it behaves the
+way it does. Read them top to bottom for the full picture, or jump to whichever
+answers your question.
 
-## The four-step model
+```{=html}
+<div class="concept-list">
 
-```{mermaid}
-flowchart LR
-  A[Ingestion] --> B[Process samples] --> C[Integration] --> D[Downstream]
+  <a class="concept-card" href="ecosystem.html">
+    <div class="ct">The OpenPipeline ecosystem</div>
+    <p>One core package, four satellites — all built the same way, sharing the same components and data format.</p>
+    <span class="go">Read →</span>
+  </a>
+
+  <a class="concept-card" href="modularity.html">
+    <div class="ct">True modularity</div>
+    <p>Modular at the execution level, not just in the source tree: every step is an independently built, containerized unit.</p>
+    <span class="go">Read →</span>
+  </a>
+
+  <div class="concept-card">
+    <div class="ct">Components &amp; workflows</div>
+    <p>A <b>module</b> does one job (normalize, cluster, filter). A <b>workflow</b> chains modules into a pipeline. Both are built with <a href="viash.html"><b>Viash</b></a> and containerized, so a local run and a cloud run behave identically.</p>
+  </div>
+
+  <a class="concept-card" href="mudata.html">
+    <div class="ct">MuData as standard data format</div>
+    <p>One HDF5 object every component reads and writes — with converters to and from H5AD, Seurat, TileDB at the edges.</p>
+    <span class="go">Read →</span>
+  </a>
+
+  <a class="concept-card" href="viash.html">
+    <div class="ct">The engine: Viash and Viash Hub</div>
+    <p>How components are built, containerized, tested, and published — and why the reference can be auto-generated.</p>
+    <span class="go">Read →</span>
+  </a>
+
+  <a class="concept-card" href="param-list.html">
+    <div class="ct">Many samples at once: the param_list</div>
+    <p>Process a whole cohort in one run, with per-sample arguments inside the list and shared settings outside it.</p>
+    <span class="go">Read →</span>
+  </a>
+
+  <a class="concept-card" href="architecture.html">
+    <div class="ct">Pipeline architecture</div>
+    <p>How a dataset flows from raw sequencing to an annotated object, including QC reporting and the spatial branch.</p>
+    <span class="go">Read →</span>
+  </a>
+
+  <a class="concept-card blue" href="data-state.html">
+    <div class="ct">Advanced: the data-state view</div>
+    <p>Under the hood, processing is organized by the <em>state of the data</em> (single-sample → multi-sample → merged → integrated). A deep-dive for pipeline authors.</p>
+    <span class="go">Read →</span>
+  </a>
+
+</div>
 ```
-
-Spatial data follows the same shape with spatial-aware steps; GPU
-(`openpipeline_rapids`) and QC (`openpipeline_qc`) components slot into existing
-steps; turnkey pipelines (`openpipeline_composed`) wrap the whole thing.
-
-::: {.callout-note collapse="true"}
-## Advanced: the data-state view
-Under the hood, processing is organized by the *state of the data*
-(single-sample → multi-sample → merged → integrated). An optional deep-dive for
-pipeline authors — to be ported from the current architecture page.
-:::

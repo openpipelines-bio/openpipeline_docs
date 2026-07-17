@@ -34,6 +34,25 @@ The following files are expected to be present in the Xenium output bundle:
 └── metrics_summary.csv
 
 
+
+## Argument group
+
+### Arguments
+
+|Name                   |Description                                                                                                   |Attributes                                          |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`              |Input folder. Must contain the output from a Xenium run.                                                      |`file`, required, example: `"xenium_output_bundle"` |
+|`--output`             |Output .h5mu file.                                                                                            |`file`, example: `"xenium.h5mu"`                    |
+|`--obsm_coordinates`   |Name of the .obsm slot under which to store the cell centroid coordinates.                                    |`string`, default: `"spatial"`                      |
+|`--uns_experiment`     |Name of the .uns slot under which to store the Xenium experiment specifications.                              |`string`, default: `"xenium_experiment"`            |
+|`--uns_metrics`        |Name of the .uns slot under which to store the summary QC metrics.                                            |`string`, default: `"xenium_metrics"`               |
+|`--output_compression` |Compression format to use for the output AnnData and/or Mudata objects. By default no compression is applied. |`string`, example: `"gzip"`                         |
+
+## Authors
+
+
+  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (maintainer)
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -73,22 +92,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument group
-
-### Arguments
-
-|Name                   |Description                                                                                                   |Attributes                                          |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`              |Input folder. Must contain the output from a Xenium run.                                                      |`file`, required, example: `"xenium_output_bundle"` |
-|`--output`             |Output .h5mu file.                                                                                            |`file`, example: `"xenium.h5mu"`                    |
-|`--obsm_coordinates`   |Name of the .obsm slot under which to store the cell centroid coordinates.                                    |`string`, default: `"spatial"`                      |
-|`--uns_experiment`     |Name of the .uns slot under which to store the Xenium experiment specifications.                              |`string`, default: `"xenium_experiment"`            |
-|`--uns_metrics`        |Name of the .uns slot under which to store the summary QC metrics.                                            |`string`, default: `"xenium_metrics"`               |
-|`--output_compression` |Compression format to use for the output AnnData and/or Mudata objects. By default no compression is applied. |`string`, example: `"gzip"`                         |
-
-## Authors
-
-
-  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (maintainer)
-

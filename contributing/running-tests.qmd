@@ -1,0 +1,159 @@
+---
+title: "Running tests"
+description: "Unit tests per component and integration tests with real data."
+order: 40
+---
+
+## Test structure
+
+Every component has its tests defined alongside its source files:
+
+```
+src/my_namespace/my_component/
+├── config.vsh.yaml
+├── script.py / script.sh / script.R
+├── test.sh                        # component test script
+└── test_data/
+    └── test_data_script.sh        # script to generate local test inputs
+```
+
+Workflows use a Nextflow test workflow instead:
+
+```
+src/workflows/my_category/my_workflow/
+├── config.vsh.yaml
+├── main.nf
+└── test.nf                        # integration test workflow
+```
+
+`viash test` automatically picks up `test.sh` (for components) or `test.nf` (for
+workflows) — no extra configuration needed.
+
+## Generating test data locally
+
+Rather than downloading test data from S3, the preferred approach for new
+components is to generate test inputs with a shell script. This keeps tests
+self-contained and reproducible without network access.
+
+Create `test_data/test_data_script.sh` alongside your component:
+
+```bash
+#!/bin/bash
+set -eo pipefail
+
+# Run from the component directory
+cd "$(dirname "$0")"
+
+# Generate a minimal H5MU test file
+python3 - <<'EOF'
+import mudata as mu
+import anndata as ad
+import numpy as np
+import scipy.sparse
+
+n_obs, n_vars = 50, 100
+X = scipy.sparse.random(n_obs, n_vars, density=0.3, format="csr")
+adata = ad.AnnData(X=X)
+adata.obs_names = [f"cell_{i}" for i in range(n_obs)]
+adata.var_names = [f"gene_{i}" for i in range(n_vars)]
+mdata = mu.MuData({"rna": adata})
+mdata.write_h5mu("test_input.h5mu")
+print("Written test_input.h5mu")
+EOF
+```
+
+Run it once before testing:
+
+```bash
+bash src/my_namespace/my_component/test_data/test_data_script.sh
+```
+
+## Writing a component test
+
+`test.sh` runs the component and asserts the output is correct. A minimal
+pattern:
+
+```bash
+#!/bin/bash
+set -eo pipefail
+
+# viash injects $meta_resources_dir and $meta_temp_dir at test time
+cd "$meta_temp_dir"
+
+echo ">>> Running component"
+viash run "$meta_resources_dir/config.vsh.yaml" -- \
+  --input "$meta_resources_dir/test_data/test_input.h5mu" \
+  --output output.h5mu
+
+echo ">>> Checking output exists"
+[[ -f output.h5mu ]] || { echo "Output file missing"; exit 1; }
+
+echo ">>> Checking output is valid H5MU"
+python3 -c "
+import mudata as mu
+mdata = mu.read_h5mu('output.h5mu')
+assert 'rna' in mdata.mod, 'rna modality missing'
+print('obs:', mdata.n_obs, 'vars:', mdata.mod['rna'].n_vars)
+"
+
+echo ">>> All tests passed"
+```
+
+## Fetch test data from S3
+
+For CI and components that use shared test resources, download the data from the
+OpenPipeline S3 bucket:
+
+```bash
+viash run src/download/sync_test_resources/config.vsh.yaml
+```
+
+This downloads to `resources_test/` by default, which is where test configs
+reference shared fixtures.
+
+## Run component tests
+
+Test a single component (builds on the fly, no separate build step needed):
+
+```bash
+viash test src/my_namespace/my_component/config.vsh.yaml
+```
+
+By default this uses the first declared engine, which is Docker for most
+components. To test without Docker:
+
+```bash
+viash test src/my_namespace/my_component/config.vsh.yaml --engine native
+```
+
+Test all components in a namespace in parallel:
+
+```bash
+viash ns test --parallel -q my_namespace
+```
+
+## Run workflow integration tests
+
+Test a single workflow end-to-end using its `test.nf`:
+
+```bash
+viash test src/workflows/my_category/my_workflow/config.vsh.yaml
+```
+
+For workflows that provide a separate integration test script alongside
+`main.nf`:
+
+```bash
+bash src/workflows/ingestion/cellranger_mapping/integration_test.sh
+```
+
+## Run the full test suite
+
+```bash
+viash ns test --parallel
+```
+
+:::{.callout-note}
+The full suite requires all test data to be present in `resources_test/`. Run
+`sync_test_resources` first if you have not already done so.
+:::

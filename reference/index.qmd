@@ -22,32 +22,22 @@ listing:
       namespace: "Namespace"
       description: "Description"
     sort: "title"
+    page-size: 100000
     filter-ui: false
     sort-ui: false
 ---
 
+::: {.genbanner}
+⚙️ **Auto-generated.** Every page here is produced from each package's
+`config.vsh.yaml` on release, so the reference can never drift from the code.
+Filter by package or type, or search by name.
+:::
+
 ```{=html}
-<div class="ref-controls">
-  <span class="ref-controls-label">Filter</span>
-  <label class="ref-field">
-    <span class="ref-field-label">Package</span>
-    <select class="ref-pkg-select">
-      <option value="">All packages</option>
-      <option value="openpipeline">openpipeline</option>
-      <option value="openpipeline_spatial">openpipeline_spatial</option>
-      <option value="openpipeline_qc">openpipeline_qc</option>
-      <option value="openpipeline_composed">openpipeline_composed</option>
-    </select>
-  </label>
-  <label class="ref-field">
-    <span class="ref-field-label">Type</span>
-    <select class="ref-type-select">
-      <option value="workflow" selected>Workflows</option>
-      <option value="module">Modules</option>
-      <option value="">Modules &amp; workflows</option>
-    </select>
-  </label>
-  <input type="search" class="ref-search" placeholder="Search" aria-label="Search components">
+<div class="ref-facets">
+  <div class="facet-bar" data-facet="package"><span class="lbl">Package</span></div>
+  <div class="facet-bar" data-facet="type"><span class="lbl">Type</span></div>
+  <input class="ref-search-input" type="search" placeholder="Search…  e.g. harmony, cellranger or xenium" aria-label="Search components">
 </div>
 ```
 
@@ -55,37 +45,100 @@ listing:
 :::
 
 ```{=html}
+<span class="ref-count"></span>
 <script>
-(function () {
+function initRefListing() {
   var listing = document.getElementById("listing-ref");
   if (!listing) return;
-  var rows = Array.prototype.slice.call(listing.querySelectorAll("tbody tr"));
-  var pkgSel = document.querySelector(".ref-pkg-select");
-  var typeSel = document.querySelector(".ref-type-select");
-  var search = document.querySelector(".ref-search");
-  var count = document.querySelector(".ref-count");
-  function txt(row, cls) { var e = row.querySelector(cls); return e ? e.textContent.trim() : ""; }
-  function apply() {
-    var p = pkgSel.value, t = typeSel.value, q = (search.value || "").trim().toLowerCase(), shown = 0;
-    rows.forEach(function (r) {
-      var okPkg = !p || txt(r, ".listing-package") === p;
-      var okType = !t || txt(r, ".listing-type") === t;
-      var hay = (txt(r, ".listing-title") + " " + txt(r, ".listing-namespace") + " " + txt(r, ".listing-description")).toLowerCase();
-      var okQ = !q || hay.indexOf(q) !== -1;
-      var show = okPkg && okType && okQ;
-      r.style.display = show ? "" : "none";
-      if (show) shown++;
+  var tbody = listing.querySelector("tbody");
+  if (!tbody) return;
+  var rows = Array.prototype.slice.call(tbody.querySelectorAll("tr"));
+
+  // package name → facet colour CSS var
+  var PKG_VAR = {
+    openpipeline: "core", openpipeline_spatial: "spatial", openpipeline_qc: "qc",
+    openpipeline_rapids: "rapids", openpipeline_composed: "composed"
+  };
+  // reference "type" → label shown to users
+  var TYPE_LABEL = { module: "component", workflow: "workflow" };
+
+  function cellText(row, cls) { var e = row.querySelector(cls); return e ? e.textContent.trim() : ""; }
+
+  // 1) decorate each row: package → coloured tag, type → labelled kind
+  rows.forEach(function (r) {
+    var pkgEl = r.querySelector(".listing-package");
+    if (pkgEl) {
+      var pkg = pkgEl.textContent.trim();
+      pkgEl.dataset.pkg = pkg;
+      pkgEl.classList.add("ptag");
+      pkgEl.innerHTML = '<span class="swatch" style="background:var(--' + (PKG_VAR[pkg] || "core") + ')"></span>' + pkg;
+    }
+    var typeEl = r.querySelector(".listing-type");
+    if (typeEl) {
+      var t = typeEl.textContent.trim();
+      typeEl.dataset.type = t;
+      typeEl.textContent = TYPE_LABEL[t] || t;
+    }
+  });
+
+  // 2) build facet pills from the data actually present
+  function makeFacet(bar, value, label, swatchVar, pressed, onToggle) {
+    var b = document.createElement("button");
+    b.className = "facet";
+    b.setAttribute("aria-pressed", pressed ? "true" : "false");
+    b.dataset.value = value;
+    b.innerHTML = (swatchVar ? '<span class="swatch" style="background:var(--' + swatchVar + ')"></span>' : "") + label;
+    b.addEventListener("click", function () {
+      b.setAttribute("aria-pressed", b.getAttribute("aria-pressed") === "true" ? "false" : "true");
+      onToggle();
     });
-    if (count) count.textContent = shown + " component" + (shown === 1 ? "" : "s");
+    bar.appendChild(b);
   }
-  pkgSel.addEventListener("change", apply);
-  typeSel.addEventListener("change", apply);
+  var pkgBar = document.querySelector('.facet-bar[data-facet="package"]');
+  var typeBar = document.querySelector('.facet-bar[data-facet="type"]');
+  var seenPkg = {}, seenType = {};
+  rows.forEach(function (r) {
+    var p = r.querySelector(".listing-package").dataset.pkg;
+    if (p && !seenPkg[p]) { seenPkg[p] = 1; makeFacet(pkgBar, p, p, PKG_VAR[p] || "core", true, apply); }
+    var t = r.querySelector(".listing-type").dataset.type;
+    // default to workflows only — components are off until toggled on
+    if (t && !seenType[t]) { seenType[t] = 1; makeFacet(typeBar, t, TYPE_LABEL[t] || t, null, t === "workflow", apply); }
+  });
+
+  var search = document.querySelector(".ref-search-input");
+  var count = document.querySelector(".ref-count");
+
+  function activeVals(bar) {
+    return Array.prototype.slice.call(bar.querySelectorAll(".facet"))
+      .filter(function (f) { return f.getAttribute("aria-pressed") === "true"; })
+      .map(function (f) { return f.dataset.value; });
+  }
+
+  function apply() {
+    var ap = activeVals(pkgBar), at = activeVals(typeBar);
+    var q = (search.value || "").trim().toLowerCase();
+    var shown = 0;
+    rows.forEach(function (r) {
+      var pkg = r.querySelector(".listing-package").dataset.pkg;
+      var typ = r.querySelector(".listing-type").dataset.type;
+      var hay = (cellText(r, ".listing-title") + " " + cellText(r, ".listing-namespace") + " " + cellText(r, ".listing-description")).toLowerCase();
+      var vis = ap.indexOf(pkg) >= 0 && at.indexOf(typ) >= 0 && (!q || hay.indexOf(q) !== -1);
+      r.style.display = vis ? "" : "none";
+      if (vis) shown++;
+    });
+    count.textContent = shown + " of " + rows.length + " shown";
+  }
+
   search.addEventListener("input", apply);
   apply();
-})();
+}
+// Run AFTER Quarto's list.js has initialised the listing, so our decorations
+// and default filter aren't clobbered. setTimeout(…,0) defers past list.js's
+// own DOMContentLoaded handler.
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", function () { setTimeout(initRefListing, 0); });
+} else {
+  setTimeout(initRefListing, 0);
+}
 </script>
 ```
-
-::: {.ref-count-wrap}
-[]{.ref-count}
-:::

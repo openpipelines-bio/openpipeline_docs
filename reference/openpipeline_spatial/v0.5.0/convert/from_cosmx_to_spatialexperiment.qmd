@@ -38,6 +38,25 @@ Optional files, by default added to the metadata() as a list of paths (will be c
 · | — *_polygons.csv
 
 
+
+## Argument group
+
+### Arguments
+
+|Name                                |Description                                                                                                                             |Attributes                                                                                           |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`                           |Input CosMx directory                                                                                                                   |`file`, required, example: `"path/to/cosmx_bundle"`                                                  |
+|`--add_tx_path`                     |Whether to add parquet paths to the metadata.  If True, `*_tx_file.csv` file will be converted to .parquet and added to the metadata.   |`boolean`, default: `TRUE`                                                                           |
+|`--add_polygon_path`                |Whether to add polygon path to the metadata. If True, `*_polygons.csv` file will be converted to .parquet and be added to the metadata. |`boolean`, default: `TRUE`                                                                           |
+|`--add_fov_positions`               |Whether to add fov positions to the metadata. If True, `fov_positions_file.csv` will be added to the metadata.                          |`boolean`, default: `TRUE`                                                                           |
+|`--alternative_experiment_features` |Feature names containing these strings will be moved to altExps(sxe) slots as separate SpatialExperiment objects.                       |List of `string`, default: `"NegPrb", "Negative", "SystemControl", "FalseCode"`, multiple_sep: `";"` |
+|`--output`                          |Output SpatialExperiment file                                                                                                           |`file`, required, example: `"output.rds"`                                                            |
+
+## Authors
+
+
+  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author, maintainer)
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -77,22 +96,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument group
-
-### Arguments
-
-|Name                                |Description                                                                                                                             |Attributes                                                                                           |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`                           |Input CosMx directory                                                                                                                   |`file`, required, example: `"path/to/cosmx_bundle"`                                                  |
-|`--add_tx_path`                     |Whether to add parquet paths to the metadata.  If True, `*_tx_file.csv` file will be converted to .parquet and added to the metadata.   |`boolean`, default: `TRUE`                                                                           |
-|`--add_polygon_path`                |Whether to add polygon path to the metadata. If True, `*_polygons.csv` file will be converted to .parquet and be added to the metadata. |`boolean`, default: `TRUE`                                                                           |
-|`--add_fov_positions`               |Whether to add fov positions to the metadata. If True, `fov_positions_file.csv` will be added to the metadata.                          |`boolean`, default: `TRUE`                                                                           |
-|`--alternative_experiment_features` |Feature names containing these strings will be moved to altExps(sxe) slots as separate SpatialExperiment objects.                       |List of `string`, default: `"NegPrb", "Negative", "SystemControl", "FalseCode"`, multiple_sep: `";"` |
-|`--output`                          |Output SpatialExperiment file                                                                                                           |`file`, required, example: `"output.rds"`                                                            |
-
-## Authors
-
-
-  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author, maintainer)
-

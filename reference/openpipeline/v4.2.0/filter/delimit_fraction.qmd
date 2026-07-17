@@ -29,6 +29,39 @@ Namespace: `filter`
 
 
 
+
+## Argument groups
+
+### Inputs
+
+|Name                    |Description                                                                                                |Attributes                                              |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`               |Input h5mu file                                                                                            |`file`, required, example: `"input.h5mu"`               |
+|`--modality`            |Which modality from the input MuData file to process.                                                      |`string`, default: `"rna"`                              |
+|`--obs_fraction_column` |Name of column from .var dataframe selecting a column that contains floating point values between 0 and 1. |`string`, required, example: `"fraction_mitochondrial"` |
+
+
+### Outputs
+
+|Name                   |Description                                                                                                    |Attributes                       |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output`             |Output h5mu file.                                                                                              |`file`, example: `"output.h5mu"` |
+|`--obs_name_filter`    |In which .obs slot to store a boolean array corresponding to which observations should be removed.             |`string`, required               |
+|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied. |`string`, example: `"gzip"`      |
+
+
+### Arguments
+
+|Name             |Description                                                      |Attributes             |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--min_fraction` |Min fraction for an observation to be retained (True in output). |`double`, default: `0` |
+|`--max_fraction` |Max fraction for an observation to be retained (True in output). |`double`, default: `1` |
+
+## Authors
+
+
+  * Dries Schaumont [{{< fa brands github >}}](https://github.com/DriesSchaumont) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-4389-0440) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-schaumont) (author, maintainer)
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -68,36 +101,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument groups
-
-### Inputs
-
-|Name                    |Description                                                                                                |Attributes                                              |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`               |Input h5mu file                                                                                            |`file`, required, example: `"input.h5mu"`               |
-|`--modality`            |Which modality from the input MuData file to process.                                                      |`string`, default: `"rna"`                              |
-|`--obs_fraction_column` |Name of column from .var dataframe selecting a column that contains floating point values between 0 and 1. |`string`, required, example: `"fraction_mitochondrial"` |
-
-
-### Outputs
-
-|Name                   |Description                                                                                                    |Attributes                       |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output`             |Output h5mu file.                                                                                              |`file`, example: `"output.h5mu"` |
-|`--obs_name_filter`    |In which .obs slot to store a boolean array corresponding to which observations should be removed.             |`string`, required               |
-|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied. |`string`, example: `"gzip"`      |
-
-
-### Arguments
-
-|Name             |Description                                                      |Attributes             |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--min_fraction` |Min fraction for an observation to be retained (True in output). |`double`, default: `0` |
-|`--max_fraction` |Max fraction for an observation to be retained (True in output). |`double`, default: `1` |
-
-## Authors
-
-
-  * Dries Schaumont [{{< fa brands github >}}](https://github.com/DriesSchaumont) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-4389-0440) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-schaumont) (author, maintainer)
-

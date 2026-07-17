@@ -33,6 +33,27 @@ Example input files are:
   - `ercc`: https://assets.thermofisher.com/TFS-Assets/LSG/manuals/ERCC92.zip
 
 
+
+## Argument group
+
+### Arguments
+
+|Name                  |Description                                                  |Attributes                                                     |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--genome_fasta`      |Reference genome fasta. Example:                             |`file`, required, example: `"genome_fasta.fa.gz"`              |
+|`--transcriptome_gtf` |Reference transcriptome annotation.                          |`file`, required, example: `"transcriptome.gtf.gz"`            |
+|`--ercc`              |ERCC sequence and annotation file.                           |`file`, example: `"ercc.zip"`                                  |
+|`--subset_regex`      |Will subset the reference chromosomes using the given regex. |`string`, example: `"(ERCC-00002&#124;chr1)"`                  |
+|`--output_fasta`      |Output genome sequence fasta.                                |`file`, required, example: `"genome_sequence.fa.gz"`           |
+|`--output_gtf`        |Output transcriptome annotation gtf.                         |`file`, required, example: `"transcriptome_annotation.gtf.gz"` |
+
+## Authors
+
+
+  * Angela Oliveira Pisco [{{< fa brands github >}}](https://github.com/aopisco) [{{< fa brands orcid >}}](https://orcid.org/0000-0003-0142-2355) [{{< fa brands linkedin >}}](https://linkedin.com/in/aopisco) (author)
+
+  * Robrecht Cannoodt [{{< fa brands github >}}](https://github.com/rcannood) [{{< fa brands orcid >}}](https://orcid.org/0000-0003-3641-729X) [{{< fa brands linkedin >}}](https://linkedin.com/in/robrechtcannoodt) (author, maintainer)
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -72,24 +93,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument group
-
-### Arguments
-
-|Name                  |Description                                                  |Attributes                                                     |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--genome_fasta`      |Reference genome fasta. Example:                             |`file`, required, example: `"genome_fasta.fa.gz"`              |
-|`--transcriptome_gtf` |Reference transcriptome annotation.                          |`file`, required, example: `"transcriptome.gtf.gz"`            |
-|`--ercc`              |ERCC sequence and annotation file.                           |`file`, example: `"ercc.zip"`                                  |
-|`--subset_regex`      |Will subset the reference chromosomes using the given regex. |`string`, example: `"(ERCC-00002&#124;chr1)"`                  |
-|`--output_fasta`      |Output genome sequence fasta.                                |`file`, required, example: `"genome_sequence.fa.gz"`           |
-|`--output_gtf`        |Output transcriptome annotation gtf.                         |`file`, required, example: `"transcriptome_annotation.gtf.gz"` |
-
-## Authors
-
-
-  * Angela Oliveira Pisco [{{< fa brands github >}}](https://github.com/aopisco) [{{< fa brands orcid >}}](https://orcid.org/0000-0003-0142-2355) [{{< fa brands linkedin >}}](https://linkedin.com/in/aopisco) (author)
-
-  * Robrecht Cannoodt [{{< fa brands github >}}](https://github.com/rcannood) [{{< fa brands orcid >}}](https://orcid.org/0000-0003-3641-729X) [{{< fa brands linkedin >}}](https://linkedin.com/in/robrechtcannoodt) (author, maintainer)
-

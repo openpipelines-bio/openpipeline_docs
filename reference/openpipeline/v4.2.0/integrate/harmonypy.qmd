@@ -29,6 +29,29 @@ Namespace: `integrate`
 
 Based on an implementation in python from https://github.com/slowkow/harmonypy
 
+
+## Argument group
+
+### Arguments
+
+|Name                   |Description                                                                                                                                                                                                                                                                                   |Attributes                                                                    |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`              |Input h5mu file                                                                                                                                                                                                                                                                               |`file`, required, example: `"input.h5mu"`                                     |
+|`--output`             |Output h5mu file.                                                                                                                                                                                                                                                                             |`file`, required, example: `"output.h5mu"`                                    |
+|`--modality`           |Which modality from the input MuData file to process.                                                                                                                                                                                                                                         |`string`, default: `"rna"`                                                    |
+|`--obsm_input`         |Which .obsm slot to use as a starting PCA embedding.                                                                                                                                                                                                                                          |`string`, default: `"X_pca"`                                                  |
+|`--obsm_output`        |In which .obsm slot to store the resulting integrated embedding.                                                                                                                                                                                                                              |`string`, default: `"X_pca_integrated"`                                       |
+|`--theta`              |Diversity clustering penalty parameter. Can be set as a single value for all batch observations or as multiple values, one for each observation in the batches defined by --obs_covariates. theta=0 does not encourage any diversity. Larger values of theta result in more diverse clusters. |List of `double`, default: `2`, multiple_sep: `";"`                           |
+|`--obs_covariates`     |The .obs field(s) that define the covariate(s) to regress out.                                                                                                                                                                                                                                |List of `string`, required, example: `"batch", "sample"`, multiple_sep: `";"` |
+|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied.                                                                                                                                                                                |`string`, example: `"gzip"`                                                   |
+
+## Authors
+
+
+  * Dries Schaumont [{{< fa brands github >}}](https://github.com/DriesSchaumont) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-4389-0440) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-schaumont) (maintainer)
+
+  * Robrecht Cannoodt [{{< fa brands github >}}](https://github.com/rcannood) [{{< fa brands orcid >}}](https://orcid.org/0000-0003-3641-729X) [{{< fa brands linkedin >}}](https://linkedin.com/in/robrechtcannoodt) (contributor)
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -68,26 +91,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument group
-
-### Arguments
-
-|Name                   |Description                                                                                                                                                                                                                                                                                   |Attributes                                                                    |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`              |Input h5mu file                                                                                                                                                                                                                                                                               |`file`, required, example: `"input.h5mu"`                                     |
-|`--output`             |Output h5mu file.                                                                                                                                                                                                                                                                             |`file`, required, example: `"output.h5mu"`                                    |
-|`--modality`           |Which modality from the input MuData file to process.                                                                                                                                                                                                                                         |`string`, default: `"rna"`                                                    |
-|`--obsm_input`         |Which .obsm slot to use as a starting PCA embedding.                                                                                                                                                                                                                                          |`string`, default: `"X_pca"`                                                  |
-|`--obsm_output`        |In which .obsm slot to store the resulting integrated embedding.                                                                                                                                                                                                                              |`string`, default: `"X_pca_integrated"`                                       |
-|`--theta`              |Diversity clustering penalty parameter. Can be set as a single value for all batch observations or as multiple values, one for each observation in the batches defined by --obs_covariates. theta=0 does not encourage any diversity. Larger values of theta result in more diverse clusters. |List of `double`, default: `2`, multiple_sep: `";"`                           |
-|`--obs_covariates`     |The .obs field(s) that define the covariate(s) to regress out.                                                                                                                                                                                                                                |List of `string`, required, example: `"batch", "sample"`, multiple_sep: `";"` |
-|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied.                                                                                                                                                                                |`string`, example: `"gzip"`                                                   |
-
-## Authors
-
-
-  * Dries Schaumont [{{< fa brands github >}}](https://github.com/DriesSchaumont) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-4389-0440) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-schaumont) (maintainer)
-
-  * Robrecht Cannoodt [{{< fa brands github >}}](https://github.com/rcannood) [{{< fa brands orcid >}}](https://orcid.org/0000-0003-3641-729X) [{{< fa brands linkedin >}}](https://linkedin.com/in/robrechtcannoodt) (contributor)
-

@@ -29,45 +29,6 @@ Namespace: `annotate`
 
 scANVI is an scVI extension that can leverage the cell type knowledge for a subset of the cells present in the data sets to infer the states of the rest of the cells. This component will instantiate a scANVI model from a pre-trained scVI model, integrate the data and perform label prediction
 
-## Example commands
-
-You can run the pipeline using `nextflow run`.
-
-### View help
-
-You can use `--help` as a parameter to get an overview of the possible parameters.
-
-```bash
-nextflow run openpipelines-bio/openpipeline \
-  -r v4.2.0 -latest \
-  -main-script target/nextflow/annotate/scanvi/main.nf \
-  --help
-```
-
-### Run command
-
-<details>
-<summary>Example of `params.yaml`</summary>
-
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/annotate/scanvi).
-
-</details>
-
-Run locally with:
-
-```bash
-nextflow run openpipelines-bio/openpipeline \
-  -r v4.2.0 -latest \
-  -profile docker \
-  -main-script target/nextflow/annotate/scanvi/main.nf \
-  -params-file params.yaml
-```
-
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
-:::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
 
 ## Argument groups
 
@@ -126,3 +87,42 @@ Running on Seqera or through Viash Hub is explained in the [guides](/guides/inde
 
   * Weiwei Schultz (contributor)
 
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -main-script target/nextflow/annotate/scanvi/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+
+Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/annotate/scanvi).
+
+</details>
+
+Run locally with:
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/annotate/scanvi/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

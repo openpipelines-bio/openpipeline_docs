@@ -58,45 +58,6 @@ flowchart TB
 *Dashed nodes are optional steps.*
 
 
-## Example commands
-
-You can run the pipeline using `nextflow run`.
-
-### View help
-
-You can use `--help` as a parameter to get an overview of the possible parameters.
-
-```bash
-nextflow run openpipelines-bio/openpipeline_composed \
-  -r v0.3.0 -latest \
-  -main-script target/nextflow/single_cell/process_integrate_annotate/main.nf \
-  --help
-```
-
-### Run command
-
-<details>
-<summary>Example of `params.yaml`</summary>
-
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline_composed/v0.3.0/components/single_cell/process_integrate_annotate).
-
-</details>
-
-Run locally with:
-
-```bash
-nextflow run openpipelines-bio/openpipeline_composed \
-  -r v0.3.0 -latest \
-  -profile docker \
-  -main-script target/nextflow/single_cell/process_integrate_annotate/main.nf \
-  -params-file params.yaml
-```
-
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
-:::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
 
 ## Argument groups
 
@@ -456,3 +417,43 @@ The output file to write the annotated dataset to.
   * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author, maintainer)
 
   * Weiwei Schultz (contributor)
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline_composed \
+  -r v0.3.0 -latest \
+  -main-script target/nextflow/single_cell/process_integrate_annotate/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+
+Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline_composed/v0.3.0/components/single_cell/process_integrate_annotate).
+
+</details>
+
+Run locally with:
+
+```bash
+nextflow run openpipelines-bio/openpipeline_composed \
+  -r v0.3.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/single_cell/process_integrate_annotate/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

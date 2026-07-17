@@ -1,0 +1,47 @@
+---
+title: "Ingest Xenium / Visium"
+description: "Space Ranger mapping and spatial ingestion."
+categories: [openpipeline_spatial]
+order: 15
+---
+
+[`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial}<span class="swatch openpipeline_spatial"></span>
+
+Spatial ingestion lives in the **`openpipeline_spatial`** package, which pins the
+core `openpipeline` as a Viash dependency and adds Space Ranger mapping plus
+spatial-aware processing.
+
+## Map with Space Ranger
+
+`ingestion/spaceranger_mapping` runs 10x Space Ranger to align a Visium or
+Xenium run and produce a spatial `.h5mu` — the count matrix carries per-spot (or
+per-cell) coordinates in `.obsm["spatial"]`.
+
+```bash
+nextflow run openpipelines-bio/openpipeline_spatial \
+  -r v0.5.0 -latest -profile docker \
+  -main-script target/nextflow/workflows/ingestion/spaceranger_mapping/main.nf \
+  --id sample_A \
+  --input "fastq/sample_A/" \
+  --reference reference_genome/ \
+  --output sample_A.h5mu \
+  --publish_dir results/
+```
+
+## Process spatial samples
+
+After ingestion, `multiomics/spatial_process_samples` runs QC, normalization,
+and dimensionality reduction adapted for spatial data, and `qc/spatial_qc`
+produces spatial quality-control output. These mirror the core
+[process & filter](process-filter.qmd) flow but keep the spatial coordinates
+intact.
+
+:::{.callout-note}
+`openpipeline_spatial` is a separate package. Check the
+[reference](../reference/index.qmd) (filter by `openpipeline_spatial`) for the
+exact argument list of each spatial workflow, and open its Viash Hub page for
+copy-paste run instructions.
+:::
+
+**Next:** [Find spatial niches →](spatial-niches.qmd) ·
+[spatial reference →](../reference/index.qmd)

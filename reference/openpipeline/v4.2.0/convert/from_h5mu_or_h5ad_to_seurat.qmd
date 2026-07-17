@@ -29,6 +29,24 @@ Namespace: `convert`
 
 
 
+
+## Argument group
+
+### Arguments
+
+|Name          |Description                                                        |Attributes                                |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`     |Input h5ad or h5mu file                                            |`file`, required, example: `"input.h5ad"` |
+|`--modality`  |Modality to be converted if the input file is an h5mu file.        |`string`, default: `"rna"`                |
+|`--assay`     |Name of the assay to be created.                                   |`string`, default: `"RNA"`                |
+|`--x_mapping` |Name of the Seurat layer in which the AnnData .X matrix is stored. |`string`, default: `"counts"`             |
+|`--output`    |Output Seurat file                                                 |`file`, required, example: `"output.rds"` |
+
+## Authors
+
+
+  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author, maintainer)
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -68,21 +86,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument group
-
-### Arguments
-
-|Name          |Description                                                        |Attributes                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`     |Input h5ad or h5mu file                                            |`file`, required, example: `"input.h5ad"` |
-|`--modality`  |Modality to be converted if the input file is an h5mu file.        |`string`, default: `"rna"`                |
-|`--assay`     |Name of the assay to be created.                                   |`string`, default: `"RNA"`                |
-|`--x_mapping` |Name of the Seurat layer in which the AnnData .X matrix is stored. |`string`, default: `"counts"`             |
-|`--output`    |Output Seurat file                                                 |`file`, required, example: `"output.rds"` |
-
-## Authors
-
-
-  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author, maintainer)
-

@@ -29,6 +29,33 @@ Namespace: `filter`
 
 
 
+
+## Argument groups
+
+### Inputs
+
+|Name               |Description                                                                                          |Attributes                                                                                                 |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`          |Input h5mu file                                                                                      |`file`, required, example: `"input.h5mu"`                                                                  |
+|`--modality`       |Which modality from the input MuData file to process.                                                |`string`, default: `"rna"`                                                                                 |
+|`--var_gene_names` |The .var field containing the gene names to be filtered. If not provided, `.var.index` will be used. |`string`, example: `"gene_symbol"`                                                                         |
+|`--pattern`        |A regex pattern to filter the gene names.                                                            |List of `string`, required, example: `"MIR\d+", "AL\d+", "LINC\d+", "AC\d+", "AP\d+"`, multiple_sep: `";"` |
+
+
+### Outputs
+
+|Name                   |Description                                                                                                    |Attributes                                 |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output`             |Output h5mu file.                                                                                              |`file`, example: `"output.h5mu"`           |
+|`--do_subset`          |Whether to subset before storing the output.                                                                   |`boolean_true`                             |
+|`--var_name_filter`    |In which .var slot to store a boolean array corresponding to which variables should be removed.                |`string`, default: `"filter_with_pattern"` |
+|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied. |`string`, example: `"gzip"`                |
+
+## Authors
+
+
+  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author)
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -68,30 +95,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument groups
-
-### Inputs
-
-|Name               |Description                                                                                          |Attributes                                                                                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`          |Input h5mu file                                                                                      |`file`, required, example: `"input.h5mu"`                                                                  |
-|`--modality`       |Which modality from the input MuData file to process.                                                |`string`, default: `"rna"`                                                                                 |
-|`--var_gene_names` |The .var field containing the gene names to be filtered. If not provided, `.var.index` will be used. |`string`, example: `"gene_symbol"`                                                                         |
-|`--pattern`        |A regex pattern to filter the gene names.                                                            |List of `string`, required, example: `"MIR\d+", "AL\d+", "LINC\d+", "AC\d+", "AP\d+"`, multiple_sep: `";"` |
-
-
-### Outputs
-
-|Name                   |Description                                                                                                    |Attributes                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output`             |Output h5mu file.                                                                                              |`file`, example: `"output.h5mu"`           |
-|`--do_subset`          |Whether to subset before storing the output.                                                                   |`boolean_true`                             |
-|`--var_name_filter`    |In which .var slot to store a boolean array corresponding to which variables should be removed.                |`string`, default: `"filter_with_pattern"` |
-|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied. |`string`, example: `"gzip"`                |
-
-## Authors
-
-
-  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author)
-

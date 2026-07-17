@@ -33,6 +33,29 @@ TF-IDF normalization is applied to single-cell ATAC-seq data to highlight the im
 across different cells while down-weighting regions that are commonly accessible across many cells. 
 
 
+
+## Argument group
+
+### Arguments
+
+|Name                   |Description                                                                                                    |Attributes                                 |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`              |Input h5mu file                                                                                                |`file`, required, example: `"input.h5mu"`  |
+|`--modality`           |Which modality from the input MuData file to process.                                                          |`string`, default: `"atac"`                |
+|`--input_layer`        |Input layer to use. By default, X is normalized                                                                |`string`                                   |
+|`--output`             |Output h5mu file.                                                                                              |`file`, required, example: `"output.h5mu"` |
+|`--output_layer`       |Output layer to use.                                                                                           |`string`, default: `"tfidf"`               |
+|`--scale_factor`       |Scale factor to multiply the TF-IDF matrix by.                                                                 |`integer`, default: `10000`                |
+|`--log_idf`            |Whether to log-transform IDF term.                                                                             |`boolean`, default: `TRUE`                 |
+|`--log_tf`             |Whether to log-transform TF term.                                                                              |`boolean`, default: `TRUE`                 |
+|`--log_tfidf`          |Whether to log-transform TF*IDF term (False by default). Can only be used when log_tf and log_idf are False.   |`boolean`, default: `FALSE`                |
+|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied. |`string`, example: `"gzip"`                |
+
+## Authors
+
+
+  * Vladimir Shitov [{{< fa brands github >}}](https://github.com/vladimirshitov) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-1960-8812) [{{< fa brands linkedin >}}](https://linkedin.com/in/vladimir-shitov-9a659513b) (maintainer)
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -72,26 +95,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument group
-
-### Arguments
-
-|Name                   |Description                                                                                                    |Attributes                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`              |Input h5mu file                                                                                                |`file`, required, example: `"input.h5mu"`  |
-|`--modality`           |Which modality from the input MuData file to process.                                                          |`string`, default: `"atac"`                |
-|`--input_layer`        |Input layer to use. By default, X is normalized                                                                |`string`                                   |
-|`--output`             |Output h5mu file.                                                                                              |`file`, required, example: `"output.h5mu"` |
-|`--output_layer`       |Output layer to use.                                                                                           |`string`, default: `"tfidf"`               |
-|`--scale_factor`       |Scale factor to multiply the TF-IDF matrix by.                                                                 |`integer`, default: `10000`                |
-|`--log_idf`            |Whether to log-transform IDF term.                                                                             |`boolean`, default: `TRUE`                 |
-|`--log_tf`             |Whether to log-transform TF term.                                                                              |`boolean`, default: `TRUE`                 |
-|`--log_tfidf`          |Whether to log-transform TF*IDF term (False by default). Can only be used when log_tf and log_idf are False.   |`boolean`, default: `FALSE`                |
-|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied. |`string`, example: `"gzip"`                |
-
-## Authors
-
-
-  * Vladimir Shitov [{{< fa brands github >}}](https://github.com/vladimirshitov) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-1960-8812) [{{< fa brands linkedin >}}](https://linkedin.com/in/vladimir-shitov-9a659513b) (maintainer)
-

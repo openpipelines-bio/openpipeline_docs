@@ -42,6 +42,38 @@ flowchart TB
 ```
 
 
+
+## Argument groups
+
+### Inputs
+
+|Name           |Description                                                                                     |Attributes                                |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--id`         |ID of the sample.                                                                               |`string`, required, example: `"foo"`      |
+|`--input`      |Path to the sample to be converted. Possible format options include:   - .h5ad   - .h5   - .mtx |`file`, required, example: `"input.h5ad"` |
+|`--input_type` |Type of the input file                                                                          |`string`, required                        |
+
+
+### Outputs
+
+|Name       |Description                            |Attributes                       |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output` |Name or template for the output files. |`file`, example: `"output.h5mu"` |
+
+
+### Conversion from h5ad
+
+|Name         |Description                                                       |Attributes                            |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--modality` |Name of the modality where the h5ad is stored in the h5mu object. |List of `string`, multiple_sep: `";"` |
+
+## Authors
+
+
+  * Dries Schaumont [{{< fa brands github >}}](https://github.com/DriesSchaumont) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-4389-0440) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-schaumont) (author, maintainer)
+
+  * Dries De Maeyer [{{< fa brands github >}}](https://github.com/ddemaeyer) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-de-maeyer-b46a814) (author)
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -81,34 +113,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument groups
-
-### Inputs
-
-|Name           |Description                                                                                     |Attributes                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--id`         |ID of the sample.                                                                               |`string`, required, example: `"foo"`      |
-|`--input`      |Path to the sample to be converted. Possible format options include:   - .h5ad   - .h5   - .mtx |`file`, required, example: `"input.h5ad"` |
-|`--input_type` |Type of the input file                                                                          |`string`, required                        |
-
-
-### Outputs
-
-|Name       |Description                            |Attributes                       |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output` |Name or template for the output files. |`file`, example: `"output.h5mu"` |
-
-
-### Conversion from h5ad
-
-|Name         |Description                                                       |Attributes                            |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--modality` |Name of the modality where the h5ad is stored in the h5mu object. |List of `string`, multiple_sep: `";"` |
-
-## Authors
-
-
-  * Dries Schaumont [{{< fa brands github >}}](https://github.com/DriesSchaumont) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-4389-0440) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-schaumont) (author, maintainer)
-
-  * Dries De Maeyer [{{< fa brands github >}}](https://github.com/ddemaeyer) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-de-maeyer-b46a814) (author)

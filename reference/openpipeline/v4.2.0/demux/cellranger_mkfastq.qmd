@@ -29,6 +29,27 @@ Namespace: `demux`
 
 
 
+
+## Argument group
+
+### Arguments
+
+|Name             |Description                                                            |Attributes                                                          |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`        |Path to the (untarred) BCL files. Expects 'RunParameters.xml' at './'. |`file`, required, example: `"/path/to/bcl"`                         |
+|`--sample_sheet` |The path to the sample sheet.                                          |`file`, required, example: `"SampleSheet.csv"`                      |
+|`--output`       |The folder to store the demux results                                  |`file`, required, default: `"fastqs"`, example: `"/path/to/output"` |
+|`--reports`      |Reports directory                                                      |`file`, example: `"reports_dir"`                                    |
+
+## Authors
+
+
+  * Angela Oliveira Pisco [{{< fa brands github >}}](https://github.com/aopisco) [{{< fa brands orcid >}}](https://orcid.org/0000-0003-0142-2355) [{{< fa brands linkedin >}}](https://linkedin.com/in/aopisco) (author)
+
+  * Samuel D'Souza [{{< fa brands github >}}](https://github.com/srdsam) [{{< fa brands linkedin >}}](https://linkedin.com/in/samuel-d-souza-887023150/) (author)
+
+  * Robrecht Cannoodt [{{< fa brands github >}}](https://github.com/rcannood) [{{< fa brands orcid >}}](https://orcid.org/0000-0003-3641-729X) [{{< fa brands linkedin >}}](https://linkedin.com/in/robrechtcannoodt) (author, maintainer)
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -68,24 +89,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument group
-
-### Arguments
-
-|Name             |Description                                                            |Attributes                                                          |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`        |Path to the (untarred) BCL files. Expects 'RunParameters.xml' at './'. |`file`, required, example: `"/path/to/bcl"`                         |
-|`--sample_sheet` |The path to the sample sheet.                                          |`file`, required, example: `"SampleSheet.csv"`                      |
-|`--output`       |The folder to store the demux results                                  |`file`, required, default: `"fastqs"`, example: `"/path/to/output"` |
-|`--reports`      |Reports directory                                                      |`file`, example: `"reports_dir"`                                    |
-
-## Authors
-
-
-  * Angela Oliveira Pisco [{{< fa brands github >}}](https://github.com/aopisco) [{{< fa brands orcid >}}](https://orcid.org/0000-0003-0142-2355) [{{< fa brands linkedin >}}](https://linkedin.com/in/aopisco) (author)
-
-  * Samuel D'Souza [{{< fa brands github >}}](https://github.com/srdsam) [{{< fa brands linkedin >}}](https://linkedin.com/in/samuel-d-souza-887023150/) (author)
-
-  * Robrecht Cannoodt [{{< fa brands github >}}](https://github.com/rcannood) [{{< fa brands orcid >}}](https://orcid.org/0000-0003-3641-729X) [{{< fa brands linkedin >}}](https://linkedin.com/in/robrechtcannoodt) (author, maintainer)
-

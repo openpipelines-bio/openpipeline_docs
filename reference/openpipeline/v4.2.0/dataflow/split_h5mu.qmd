@@ -30,6 +30,33 @@ Namespace: `dataflow`
 
 
 
+
+## Argument groups
+
+### Input & specifications
+
+|Name                        |Description                                                                            |Attributes                                |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`                   |Path to a single .h5mu file.                                                           |`file`, required, example: `"input.h5mu"` |
+|`--modality`                |Which modality from the input MuData file to process.                                  |`string`, default: `"rna"`                |
+|`--obs_feature`             |The .obs column to split the mudata on.                                                |`string`, required, example: `"celltype"` |
+|`--drop_obs_nan`            |Whether to drop all .obs columns that contain only nan values after splitting.         |`boolean_true`                            |
+|`--ensure_unique_filenames` |Append number suffixes to ensure unique filenames after sanitizing obs feature values. |`boolean_true`                            |
+
+
+### Outputs
+
+|Name                   |Description                                                                                                    |Attributes                                      |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output`             |Output directory containing multiple h5mu files.                                                               |`file`, required, example: `"/path/to/output"`  |
+|`--output_files`       |A csv containing the base filename and obs feature by which it was split.                                      |`file`, required, example: `"sample_files.csv"` |
+|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied. |`string`, example: `"gzip"`                     |
+
+## Authors
+
+
+  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author, maintainer)
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -69,30 +96,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument groups
-
-### Input & specifications
-
-|Name                        |Description                                                                            |Attributes                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`                   |Path to a single .h5mu file.                                                           |`file`, required, example: `"input.h5mu"` |
-|`--modality`                |Which modality from the input MuData file to process.                                  |`string`, default: `"rna"`                |
-|`--obs_feature`             |The .obs column to split the mudata on.                                                |`string`, required, example: `"celltype"` |
-|`--drop_obs_nan`            |Whether to drop all .obs columns that contain only nan values after splitting.         |`boolean_true`                            |
-|`--ensure_unique_filenames` |Append number suffixes to ensure unique filenames after sanitizing obs feature values. |`boolean_true`                            |
-
-
-### Outputs
-
-|Name                   |Description                                                                                                    |Attributes                                      |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output`             |Output directory containing multiple h5mu files.                                                               |`file`, required, example: `"/path/to/output"`  |
-|`--output_files`       |A csv containing the base filename and obs feature by which it was split.                                      |`file`, required, example: `"sample_files.csv"` |
-|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied. |`string`, example: `"gzip"`                     |
-
-## Authors
-
-
-  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author, maintainer)
-

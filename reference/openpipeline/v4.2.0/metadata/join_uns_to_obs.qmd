@@ -29,6 +29,19 @@ Namespace: `metadata`
 
 
 
+
+## Argument group
+
+### Arguments
+
+|Name                   |Description                                                  |Attributes                                 |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`              |Input h5mu file                                              |`file`, required, example: `"input.h5mu"`  |
+|`--modality`           |Which modality from the input MuData file to process.        |`string`, default: `"rna"`                 |
+|`--uns_key`            |Lookup key from .uns pointing to the input data.             |`string`, required                         |
+|`--output`             |Output h5mu file.                                            |`file`, required, example: `"output.h5mu"` |
+|`--output_compression` |The compression format to be used on the output h5mu object. |`string`, example: `"gzip"`                |
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -68,16 +81,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument group
-
-### Arguments
-
-|Name                   |Description                                                  |Attributes                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`              |Input h5mu file                                              |`file`, required, example: `"input.h5mu"`  |
-|`--modality`           |Which modality from the input MuData file to process.        |`string`, default: `"rna"`                 |
-|`--uns_key`            |Lookup key from .uns pointing to the input data.             |`string`, required                         |
-|`--output`             |Output h5mu file.                                            |`file`, required, example: `"output.h5mu"` |
-|`--output_compression` |The compression format to be used on the output h5mu object. |`string`, example: `"gzip"`                |
-

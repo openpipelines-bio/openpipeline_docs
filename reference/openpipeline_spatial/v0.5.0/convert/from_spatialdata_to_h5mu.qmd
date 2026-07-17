@@ -30,6 +30,25 @@ Namespace: `convert`
   
 
 
+
+## Argument group
+
+### Arguments
+
+|Name                   |Description                                               |Attributes                                |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`              |Input zarr folder where the SpatialData object is stored. |`file`, required, example: `"input.zarr"` |
+|`--modality`           |                                                          |`string`, default: `"rna"`                |
+|`--output`             |The output h5mu file.                                     |`file`, example: `"output.h5mu"`          |
+|`--output_compression` |                                                          |`string`, example: `"gzip"`               |
+
+## Authors
+
+
+  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (maintainer)
+
+  * Weiwei Schultz (contributor)
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -69,22 +88,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument group
-
-### Arguments
-
-|Name                   |Description                                               |Attributes                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`              |Input zarr folder where the SpatialData object is stored. |`file`, required, example: `"input.zarr"` |
-|`--modality`           |                                                          |`string`, default: `"rna"`                |
-|`--output`             |The output h5mu file.                                     |`file`, example: `"output.h5mu"`          |
-|`--output_compression` |                                                          |`string`, example: `"gzip"`               |
-
-## Authors
-
-
-  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (maintainer)
-
-  * Weiwei Schultz (contributor)
-

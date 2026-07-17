@@ -1,0 +1,76 @@
+---
+title: "Tune compute resources"
+description: "Nextflow labels for CPU, memory, and disk."
+categories: [openpipeline]
+order: 90
+---
+
+[`openpipeline`]{.pkg-tag .pkg-openpipeline}<span class="swatch openpipeline"></span>
+
+Every OpenPipeline component declares its CPU and memory needs through a
+**resource label**. Labels are defined once in
+`src/workflows/utils/labels.config` and applied per component, so a workflow
+inherits sensible defaults from each step it runs.
+
+## The standard labels
+
+| Label | CPUs | Memory (attempt 1) |
+|---|---|---|
+| `singlecpu` | 1 | — |
+| `lowcpu` | 4 | — |
+| `midcpu` | 10 | — |
+| `highcpu` | 20 | — |
+| `lowmem` | — | 4 GB |
+| `midmem` | — | 25 GB |
+| `highmem` | — | 50 GB |
+| `veryhighmem` | — | 75 GB |
+
+Labels combine — a component tagged `[highcpu, midmem]` requests 20 CPUs and
+25 GB. Requests scale automatically on retry, so a step that runs out of memory
+is resubmitted with more.
+
+## Override resources at run time
+
+To cap or raise resources for a specific run, supply a Nextflow config with a
+`process` scope and select it with `-c`. Target a label with `withLabel:` or a
+specific process with `withName:`.
+
+```groovy
+// my_resources.config
+process {
+  withLabel: highmem   { memory = 32.GB }
+  withLabel: highcpu   { cpus   = 16 }
+}
+```
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r 4.2.0 -latest -profile docker \
+  -main-script target/nextflow/workflows/multiomics/process_samples/main.nf \
+  --param_list samples.csv \
+  --publish_dir results/ \
+  -c my_resources.config
+```
+
+:::{.callout-tip}
+The same `-c config` mechanism is how you point a run at cloud executors
+(AWS Batch, Google Cloud Batch, an HPC scheduler). See the
+[Nextflow executor docs](https://www.nextflow.io/docs/latest/executor.html).
+:::
+
+## Set resources on your own component
+
+When [creating a component](../contributing/creating-components.qmd), assign
+labels in its Nextflow runner directives:
+
+```yaml
+runners:
+  - type: nextflow
+    directives:
+      label: [highcpu, midmem]
+```
+
+Inside scripts, read `meta_cpus` and `meta_memory_gb` for resource-aware
+parallelism rather than hardcoding thread counts.
+
+**Next:** [Create a component →](../contributing/creating-components.qmd)

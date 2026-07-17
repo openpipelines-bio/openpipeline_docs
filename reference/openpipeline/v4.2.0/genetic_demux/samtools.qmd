@@ -29,6 +29,21 @@ Namespace: `genetic_demux`
 
 
 
+
+## Argument group
+
+### Arguments
+
+|Name       |Description                   |Attributes                               |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--bam`    |Input bam file for filtering. |`file`, required, example: `"input.bam"` |
+|`--output` |Samtools output directory.    |`file`, example: `"samtools_out"`        |
+
+## Authors
+
+
+  * Xichen Wu [{{< fa brands github >}}](https://github.com/wxicu) [{{< fa brands orcid >}}](https://orcid.org/0009-0008-2168-4508) [{{< fa brands linkedin >}}](https://linkedin.com/in/xichen-wu) (author)
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -68,18 +83,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument group
-
-### Arguments
-
-|Name       |Description                   |Attributes                               |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--bam`    |Input bam file for filtering. |`file`, required, example: `"input.bam"` |
-|`--output` |Samtools output directory.    |`file`, example: `"samtools_out"`        |
-
-## Authors
-
-
-  * Xichen Wu [{{< fa brands github >}}](https://github.com/wxicu) [{{< fa brands orcid >}}](https://orcid.org/0009-0008-2168-4508) [{{< fa brands linkedin >}}](https://linkedin.com/in/xichen-wu) (author)
-

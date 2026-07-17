@@ -29,6 +29,22 @@ Namespace: `dataflow`
 
 
 
+
+## Argument group
+
+### Arguments
+
+|Name                   |Description                                                       |Attributes                                                                                                                                  |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`              |Paths to the single-modality .h5mu files that need to be combined |List of `file`, required, default: `"sample_paths"`, example: `"/path/to/modality_1.h5mu", "/path/to/modality_2.h5mu"`, multiple_sep: `";"` |
+|`--output`             |Path to the output file.                                          |`file`, default: `"output.h5mu"`                                                                                                            |
+|`--output_compression` |The compression format to be used on the output h5mu object.      |`string`, example: `"gzip"`                                                                                                                 |
+
+## Authors
+
+
+  * Dries Schaumont [{{< fa brands github >}}](https://github.com/DriesSchaumont) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-4389-0440) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-schaumont) (maintainer)
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -68,19 +84,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument group
-
-### Arguments
-
-|Name                   |Description                                                       |Attributes                                                                                                                                  |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`              |Paths to the single-modality .h5mu files that need to be combined |List of `file`, required, default: `"sample_paths"`, example: `"/path/to/modality_1.h5mu", "/path/to/modality_2.h5mu"`, multiple_sep: `";"` |
-|`--output`             |Path to the output file.                                          |`file`, default: `"output.h5mu"`                                                                                                            |
-|`--output_compression` |The compression format to be used on the output h5mu object.      |`string`, example: `"gzip"`                                                                                                                 |
-
-## Authors
-
-
-  * Dries Schaumont [{{< fa brands github >}}](https://github.com/DriesSchaumont) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-4389-0440) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-schaumont) (maintainer)
-

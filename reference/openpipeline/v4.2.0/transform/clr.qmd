@@ -29,6 +29,26 @@ Namespace: `transform`
 
 
 
+
+## Argument group
+
+### Arguments
+
+|Name                   |Description                                                                                                                                           |Attributes                                 |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`              |Input h5mu file                                                                                                                                       |`file`, required, example: `"input.h5mu"`  |
+|`--modality`           |Which modality from the input MuData file to process.                                                                                                 |`string`, default: `"prot"`                |
+|`--output`             |Output h5mu file.                                                                                                                                     |`file`, required, default: `"output.h5mu"` |
+|`--input_layer`        |Input layer to use. By default, .X is used.                                                                                                           |`string`                                   |
+|`--output_layer`       |Output layer to use. By default, use X.                                                                                                               |`string`                                   |
+|`--axis`               |Axis across which CLR is performed. If set to 0, CLR is performed across observations (cells). If set to 1, CLR is performed across features (genes). |`integer`, default: `0`                    |
+|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied.                                        |`string`, example: `"gzip"`                |
+
+## Authors
+
+
+  * Dries Schaumont [{{< fa brands github >}}](https://github.com/DriesSchaumont) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-4389-0440) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-schaumont) (maintainer)
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -68,23 +88,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument group
-
-### Arguments
-
-|Name                   |Description                                                                                                                                           |Attributes                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`              |Input h5mu file                                                                                                                                       |`file`, required, example: `"input.h5mu"`  |
-|`--modality`           |Which modality from the input MuData file to process.                                                                                                 |`string`, default: `"prot"`                |
-|`--output`             |Output h5mu file.                                                                                                                                     |`file`, required, default: `"output.h5mu"` |
-|`--input_layer`        |Input layer to use. By default, .X is used.                                                                                                           |`string`                                   |
-|`--output_layer`       |Output layer to use. By default, use X.                                                                                                               |`string`                                   |
-|`--axis`               |Axis across which CLR is performed. If set to 0, CLR is performed across observations (cells). If set to 1, CLR is performed across features (genes). |`integer`, default: `0`                    |
-|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied.                                        |`string`, example: `"gzip"`                |
-
-## Authors
-
-
-  * Dries Schaumont [{{< fa brands github >}}](https://github.com/DriesSchaumont) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-4389-0440) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-schaumont) (maintainer)
-

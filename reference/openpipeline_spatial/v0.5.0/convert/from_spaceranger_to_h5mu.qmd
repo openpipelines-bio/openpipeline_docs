@@ -29,6 +29,33 @@ Namespace: `convert`
 
 
 
+
+## Argument groups
+
+### Inputs
+
+|Name      |Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |Attributes                                        |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input` |Convert spatial data resulting from Aviti Teton sequencers that have been processed by the Element Biosciences cells2stats workflow to H5MU format.  This component processes cells2stats count matrices to create a standardized H5MU file for downstream analysis.  The component reads: - Parquet file containing the count matrix and metadata - Panel.json with target and batch information  And outputs an H5MU file with: - Count data as the main .X matrix - Spatial coordinates in obsm - Cell Paint intensities in obsm (optional) - Nuclear count data as a layer (optional) - CellProfiler morphology metrics in obsm (optional) - Unassigned targets in obsm (optional) |`file`, required, example: `"spaceranger_output"` |
+
+
+### Outputs
+
+|Name                   |Description                                                                |Attributes                                 |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output`             |Output h5mu file.                                                          |`file`, example: `"output.h5mu"`           |
+|`--modality`           |Name of the modality under which to store the data.                        |`string`, default: `"rna"`                 |
+|`--uns_metrics`        |Name of the .uns slot under which to QC metrics (if any).                  |`string`, default: `"metrics_spaceranger"` |
+|`--uns_probe_set`      |Name of the .uns slot under which to store probe set information (if any). |`string`, default: `"probe_set"`           |
+|`--obsm_coordinates`   |Name of the .obsm slot under which to store the cell centroid coordinates. |`string`, default: `"spatial"`             |
+|`--output_type`        |Which Spaceranger output to use for converting to h5mu.                    |`string`, default: `"filtered"`            |
+|`--output_compression` |Compression to use when writing the h5mu file.                             |`string`                                   |
+
+## Authors
+
+
+  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (maintainer)
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -68,30 +95,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument groups
-
-### Inputs
-
-|Name      |Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |Attributes                                        |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input` |Convert spatial data resulting from Aviti Teton sequencers that have been processed by the Element Biosciences cells2stats workflow to H5MU format.  This component processes cells2stats count matrices to create a standardized H5MU file for downstream analysis.  The component reads: - Parquet file containing the count matrix and metadata - Panel.json with target and batch information  And outputs an H5MU file with: - Count data as the main .X matrix - Spatial coordinates in obsm - Cell Paint intensities in obsm (optional) - Nuclear count data as a layer (optional) - CellProfiler morphology metrics in obsm (optional) - Unassigned targets in obsm (optional) |`file`, required, example: `"spaceranger_output"` |
-
-
-### Outputs
-
-|Name                   |Description                                                                |Attributes                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output`             |Output h5mu file.                                                          |`file`, example: `"output.h5mu"`           |
-|`--modality`           |Name of the modality under which to store the data.                        |`string`, default: `"rna"`                 |
-|`--uns_metrics`        |Name of the .uns slot under which to QC metrics (if any).                  |`string`, default: `"metrics_spaceranger"` |
-|`--uns_probe_set`      |Name of the .uns slot under which to store probe set information (if any). |`string`, default: `"probe_set"`           |
-|`--obsm_coordinates`   |Name of the .obsm slot under which to store the cell centroid coordinates. |`string`, default: `"spatial"`             |
-|`--output_type`        |Which Spaceranger output to use for converting to h5mu.                    |`string`, default: `"filtered"`            |
-|`--output_compression` |Compression to use when writing the h5mu file.                             |`string`                                   |
-
-## Authors
-
-
-  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (maintainer)
-

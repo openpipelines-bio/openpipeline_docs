@@ -1,0 +1,81 @@
+---
+title: "The data-state view"
+description: "Advanced: how the pipeline is organized by the state of the data — for pipeline authors."
+order: 70
+---
+
+There are two ways to read the pipeline. [Pipeline architecture](architecture.qmd)
+reads it **by stage** — ingestion, processing, integration, downstream — which is
+how an analyst thinks. This page reads it **by the state of the data**, which is
+how the workflows are actually organized. If you are writing or wiring components,
+this is the view that tells you where a step belongs.
+
+## The data changes shape as it flows
+
+The unit of data is not constant through the pipeline. It passes through four
+states, and a component only makes sense in one of them:
+
+1. **Single-sample** — one H5MU per sample, straight from ingestion. Each sample
+   stands alone; there is no `sample_id` yet and nothing has been normalized.
+2. **Multi-sample (concatenated)** — every sample joined into one object, with a
+   `sample_id` column in `.obs` recording each cell's origin.
+3. **Merged (multimodal)** — within a sample or cohort, modalities are split out
+   for per-modality processing and then merged back into one multimodal object.
+4. **Integrated** — a batch-corrected embedding plus Leiden clusters and a UMAP,
+   produced by a separate integration workflow.
+
+## Why the state matters
+
+Some operations are only correct in a particular state:
+
+- **Per-sample by nature** — QC and filtering (empty droplets, mitochondrial
+  fraction, doublet detection) reason about one sample's own distribution, so
+  they run in the **single-sample** state.
+- **Cohort-wide by nature** — normalization, highly-variable-feature selection,
+  and PCA need to see variation across the whole cohort, so they run only after
+  concatenation, in the **multi-sample** state.
+
+This is why you see the `_singlesample` / `_multisample` suffixes throughout the
+codebase: they are not arbitrary names, they declare which data state a workflow
+operates on.
+
+| State | Example workflows | Operates on |
+|---|---|---|
+| Single-sample | `rna/rna_singlesample`, `prot/prot_singlesample` | one sample, one modality |
+| Multi-sample | `rna/rna_multisample`, `prot/prot_multisample` | the concatenated cohort |
+| Merged | `multiomics/process_batches` (via `dataflow/merge`) | all modalities together |
+| Integrated | `integration/harmony_leiden`, … | the corrected embedding |
+
+## The state transitions
+
+The `multiomics` workflows exist to move data between states, so you rarely wire
+these transitions by hand:
+
+- **`process_singlesample`** runs the per-sample work while the data is still one
+  H5MU per sample.
+- **`dataflow/concatenate_h5mu`** performs the single-sample → multi-sample
+  transition, adding `sample_id`.
+- **`process_batches`** runs the multi-sample work per modality
+  (`dataflow/split_modalities` → `*_multisample` → `dataflow/merge`), and, for
+  large cohorts, does it on groups of samples in parallel before combining —
+  capping peak memory.
+- **`process_samples`** orchestrates the whole single-sample → multi-sample →
+  merged sequence in one command.
+
+Integration then takes the merged object and produces the integrated state; it is
+run as a [separate workflow](architecture.qmd), once per cohort.
+
+## What this means when you author a component
+
+Before adding a component to a workflow, decide which state it reads:
+
+- Does it reason about a **single sample** (so it belongs in a `_singlesample`
+  workflow, before concatenation)?
+- Or does it need the **whole cohort** (so it belongs after concatenation, in a
+  `_multisample` workflow)?
+
+That single question tells you where the component slots in, which assumptions
+hold (`Is sample_id present? Is the data normalized yet?`), and which dataflow
+utility (`concatenate_h5mu`, `split_modalities`, `merge`, `split_h5mu`) you need
+around it. See [Creating pipelines](../contributing/creating-pipelines.qmd) for
+the mechanics of wiring one in.

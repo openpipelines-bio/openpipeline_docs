@@ -38,6 +38,29 @@ This requires having ran `neighbors/find_neighbors` or `neighbors/bbknn` first.
 [Wolf18]: Wolf et al. (2018), Scanpy: large-scale single-cell gene expression data analysis, Genome Biology.  
 
 
+
+## Argument group
+
+### Arguments
+
+|Name                    |Description                                                                                                                                                                                                                              |Attributes                                                    |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`               |Input file.                                                                                                                                                                                                                              |`file`, required, example: `"input.h5mu"`                     |
+|`--modality`            |Which modality from the input MuData file to process.                                                                                                                                                                                    |`string`, default: `"rna"`                                    |
+|`--obsp_connectivities` |In which .obsp slot the neighbor connectivities can be found.                                                                                                                                                                            |`string`, default: `"connectivities"`                         |
+|`--output`              |Output file.                                                                                                                                                                                                                             |`file`, required, example: `"output.h5mu"`                    |
+|`--obsm_name`           |Name of the .obsm key under which to add the cluster labels. The name of the columns in the matrix will correspond to the resolutions.                                                                                                   |`string`, default: `"leiden"`                                 |
+|`--flavor`              |Which package's implementation to use.                                                                                                                                                                                                   |`string`, default: `"leidenalg"`                              |
+|`--n_iterations`        |How many iterations of the Leiden clustering algorithm to perform. When defined, positive values above 2 define the total number of iterations to perform. When not set, the algorithm will run until it reaches its optimal clustering. |`integer`                                                     |
+|`--seed`                |Fix the initialization of the optimization. Can be used to increase reproducibility.                                                                                                                                                     |`integer`                                                     |
+|`--resolution`          |A parameter value controlling the coarseness of the clustering. Higher values lead to more clusters. Multiple values will result in clustering being performed multiple times.                                                           |List of `double`, required, default: `1`, multiple_sep: `";"` |
+|`--output_compression`  |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied.                                                                                                                           |`string`, example: `"gzip"`                                   |
+
+## Authors
+
+
+  * Dries De Maeyer [{{< fa brands github >}}](https://github.com/ddemaeyer) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-de-maeyer-b46a814) (maintainer)
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -77,26 +100,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument group
-
-### Arguments
-
-|Name                    |Description                                                                                                                                                                                                                              |Attributes                                                    |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`               |Input file.                                                                                                                                                                                                                              |`file`, required, example: `"input.h5mu"`                     |
-|`--modality`            |Which modality from the input MuData file to process.                                                                                                                                                                                    |`string`, default: `"rna"`                                    |
-|`--obsp_connectivities` |In which .obsp slot the neighbor connectivities can be found.                                                                                                                                                                            |`string`, default: `"connectivities"`                         |
-|`--output`              |Output file.                                                                                                                                                                                                                             |`file`, required, example: `"output.h5mu"`                    |
-|`--obsm_name`           |Name of the .obsm key under which to add the cluster labels. The name of the columns in the matrix will correspond to the resolutions.                                                                                                   |`string`, default: `"leiden"`                                 |
-|`--flavor`              |Which package's implementation to use.                                                                                                                                                                                                   |`string`, default: `"leidenalg"`                              |
-|`--n_iterations`        |How many iterations of the Leiden clustering algorithm to perform. When defined, positive values above 2 define the total number of iterations to perform. When not set, the algorithm will run until it reaches its optimal clustering. |`integer`                                                     |
-|`--seed`                |Fix the initialization of the optimization. Can be used to increase reproducibility.                                                                                                                                                     |`integer`                                                     |
-|`--resolution`          |A parameter value controlling the coarseness of the clustering. Higher values lead to more clusters. Multiple values will result in clustering being performed multiple times.                                                           |List of `double`, required, default: `1`, multiple_sep: `";"` |
-|`--output_compression`  |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied.                                                                                                                           |`string`, example: `"gzip"`                                   |
-
-## Authors
-
-
-  * Dries De Maeyer [{{< fa brands github >}}](https://github.com/ddemaeyer) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-de-maeyer-b46a814) (maintainer)
-

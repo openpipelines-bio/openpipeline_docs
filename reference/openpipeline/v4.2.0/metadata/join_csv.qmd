@@ -29,6 +29,39 @@ Namespace: `metadata`
 
 
 
+
+## Argument groups
+
+### MuData Input
+
+|Name         |Description                                                                                                                                                                  |Attributes                                |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`    |Input h5mu file                                                                                                                                                              |`file`, required, example: `"input.h5mu"` |
+|`--modality` |Which modality from the input MuData file to process.                                                                                                                        |`string`, default: `"rna"`                |
+|`--obs_key`  |Obs column name where the sample id can be found for each observation to join on. Useful when adding metadata to concatenated samples. Mutually exclusive with `--var_key`." |`string`                                  |
+|`--var_key`  |Var column name where the sample id can be found for each variable to join on. Mutually exclusive with `--obs_key`."                                                         |`string`                                  |
+
+
+### MuData Output
+
+|Name                   |Description                                                  |Attributes                                 |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output`             |Output h5mu file.                                            |`file`, required, example: `"output.h5mu"` |
+|`--output_compression` |The compression format to be used on the output h5mu object. |`string`, example: `"gzip"`                |
+
+
+### Metadata Input
+
+|Name          |Description                                              |Attributes                                  |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input_csv` |.csv file containing metadata                            |`file`, required, example: `"metadata.csv"` |
+|`--csv_key`   |column of the the csv that corresponds to the sample id. |`string`, default: `"id"`                   |
+
+## Authors
+
+
+  * Dries Schaumont [{{< fa brands github >}}](https://github.com/DriesSchaumont) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-4389-0440) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-schaumont) (author)
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -68,36 +101,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument groups
-
-### MuData Input
-
-|Name         |Description                                                                                                                                                                  |Attributes                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`    |Input h5mu file                                                                                                                                                              |`file`, required, example: `"input.h5mu"` |
-|`--modality` |Which modality from the input MuData file to process.                                                                                                                        |`string`, default: `"rna"`                |
-|`--obs_key`  |Obs column name where the sample id can be found for each observation to join on. Useful when adding metadata to concatenated samples. Mutually exclusive with `--var_key`." |`string`                                  |
-|`--var_key`  |Var column name where the sample id can be found for each variable to join on. Mutually exclusive with `--obs_key`."                                                         |`string`                                  |
-
-
-### MuData Output
-
-|Name                   |Description                                                  |Attributes                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output`             |Output h5mu file.                                            |`file`, required, example: `"output.h5mu"` |
-|`--output_compression` |The compression format to be used on the output h5mu object. |`string`, example: `"gzip"`                |
-
-
-### Metadata Input
-
-|Name          |Description                                              |Attributes                                  |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input_csv` |.csv file containing metadata                            |`file`, required, example: `"metadata.csv"` |
-|`--csv_key`   |column of the the csv that corresponds to the sample id. |`string`, default: `"id"`                   |
-
-## Authors
-
-
-  * Dries Schaumont [{{< fa brands github >}}](https://github.com/DriesSchaumont) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-4389-0440) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-schaumont) (author)
-

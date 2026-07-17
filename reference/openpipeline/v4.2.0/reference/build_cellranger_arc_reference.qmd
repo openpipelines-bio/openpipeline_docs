@@ -29,6 +29,27 @@ Namespace: `reference`
 
 Creates a new folder named after the genome.
 
+
+## Argument group
+
+### Arguments
+
+|Name                    |Description                                                                                                                                                                                                                                                               |Attributes                                                                  |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--genome_fasta`        |Reference genome fasta.                                                                                                                                                                                                                                                   |`file`, required, example: `"genome_sequence.fa.gz"`                        |
+|`--annotation_gtf`      |Reference annotation.                                                                                                                                                                                                                                                     |`file`, required, example: `"annotation.gtf.gz"`                            |
+|`--motifs_file`         |Transcription factor motifs in JASPAR format. See https://support.10xgenomics.com/single-cell-multiome-atac-gex/software/pipelines/latest/advanced/references                                                                                                             |`file`, example: `"motifs.txt"`                                             |
+|`--non_nuclear_contigs` |Name(s) of contig(s) that do not have any chromatin structure, for example, mitochondria or plastids. These contigs are excluded from peak calling since the entire contig will be "open" due to a lack of chromatin structure. Leave empty if there are no such contigs. |List of `string`, default: `"chrM"`, example: `"chrM"`, multiple_sep: `";"` |
+|`--output`              |Output folder                                                                                                                                                                                                                                                             |`file`, required, example: `"cellranger_reference"`                         |
+|`--genome`              |Name of the genome. This will be the name of the intermediate output folder                                                                                                                                                                                               |`string`, required, default: `"output"`, example: `"GRCh38"`                |
+|`--organism`            |Name of the organism. This is displayed in the web summary but is otherwise not used in the analysis.                                                                                                                                                                     |`string`                                                                    |
+|`--subset_regex`        |Will subset the reference chromosomes using the given regex.                                                                                                                                                                                                              |`string`, example: `"(ERCC-00002&#124;chr1)"`                               |
+
+## Authors
+
+
+  * Vladimir Shitov [{{< fa brands github >}}](https://github.com/vladimirshitov) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-1960-8812) [{{< fa brands linkedin >}}](https://linkedin.com/in/vladimir-shitov-9a659513b) (author)
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -68,24 +89,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument group
-
-### Arguments
-
-|Name                    |Description                                                                                                                                                                                                                                                               |Attributes                                                                  |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--genome_fasta`        |Reference genome fasta.                                                                                                                                                                                                                                                   |`file`, required, example: `"genome_sequence.fa.gz"`                        |
-|`--annotation_gtf`      |Reference annotation.                                                                                                                                                                                                                                                     |`file`, required, example: `"annotation.gtf.gz"`                            |
-|`--motifs_file`         |Transcription factor motifs in JASPAR format. See https://support.10xgenomics.com/single-cell-multiome-atac-gex/software/pipelines/latest/advanced/references                                                                                                             |`file`, example: `"motifs.txt"`                                             |
-|`--non_nuclear_contigs` |Name(s) of contig(s) that do not have any chromatin structure, for example, mitochondria or plastids. These contigs are excluded from peak calling since the entire contig will be "open" due to a lack of chromatin structure. Leave empty if there are no such contigs. |List of `string`, default: `"chrM"`, example: `"chrM"`, multiple_sep: `";"` |
-|`--output`              |Output folder                                                                                                                                                                                                                                                             |`file`, required, example: `"cellranger_reference"`                         |
-|`--genome`              |Name of the genome. This will be the name of the intermediate output folder                                                                                                                                                                                               |`string`, required, default: `"output"`, example: `"GRCh38"`                |
-|`--organism`            |Name of the organism. This is displayed in the web summary but is otherwise not used in the analysis.                                                                                                                                                                     |`string`                                                                    |
-|`--subset_regex`        |Will subset the reference chromosomes using the given regex.                                                                                                                                                                                                              |`string`, example: `"(ERCC-00002&#124;chr1)"`                               |
-
-## Authors
-
-
-  * Vladimir Shitov [{{< fa brands github >}}](https://github.com/vladimirshitov) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-1960-8812) [{{< fa brands linkedin >}}](https://linkedin.com/in/vladimir-shitov-9a659513b) (author)
-

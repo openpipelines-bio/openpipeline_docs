@@ -29,6 +29,24 @@ Namespace: `mapping`
 
 
 
+
+## Argument group
+
+### Arguments
+
+|Name                   |Description                                                                                                    |Attributes                                  |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`              |The directory created by `multi_star`                                                                          |`file`, required, example: `"/path/to/foo"` |
+|`--output`             |Output h5mu file.                                                                                              |`file`, required, example: `"output.h5mu"`  |
+|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied. |`string`, example: `"gzip"`                 |
+
+## Authors
+
+
+  * Robrecht Cannoodt [{{< fa brands github >}}](https://github.com/rcannood) [{{< fa brands orcid >}}](https://orcid.org/0000-0003-3641-729X) [{{< fa brands linkedin >}}](https://linkedin.com/in/robrechtcannoodt) (author, maintainer)
+
+  * Angela Oliveira Pisco [{{< fa brands github >}}](https://github.com/aopisco) [{{< fa brands orcid >}}](https://orcid.org/0000-0003-0142-2355) [{{< fa brands linkedin >}}](https://linkedin.com/in/aopisco) (author)
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -68,21 +86,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument group
-
-### Arguments
-
-|Name                   |Description                                                                                                    |Attributes                                  |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`              |The directory created by `multi_star`                                                                          |`file`, required, example: `"/path/to/foo"` |
-|`--output`             |Output h5mu file.                                                                                              |`file`, required, example: `"output.h5mu"`  |
-|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied. |`string`, example: `"gzip"`                 |
-
-## Authors
-
-
-  * Robrecht Cannoodt [{{< fa brands github >}}](https://github.com/rcannood) [{{< fa brands orcid >}}](https://orcid.org/0000-0003-3641-729X) [{{< fa brands linkedin >}}](https://linkedin.com/in/robrechtcannoodt) (author, maintainer)
-
-  * Angela Oliveira Pisco [{{< fa brands github >}}](https://github.com/aopisco) [{{< fa brands orcid >}}](https://orcid.org/0000-0003-0142-2355) [{{< fa brands linkedin >}}](https://linkedin.com/in/aopisco) (author)
-

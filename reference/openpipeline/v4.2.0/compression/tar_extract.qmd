@@ -29,6 +29,18 @@ Namespace: `compression`
 
 
 
+
+## Argument group
+
+### Arguments
+
+|Name                 |Description                                                                                                                                                                                                              |Attributes                                   |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`            |Input file                                                                                                                                                                                                               |`file`, required, example: `"input.tar.gz"`  |
+|`--output`           |Folder to restore file(s) to.                                                                                                                                                                                            |`file`, required, example: `"output_folder"` |
+|`--strip_components` |Strip this amount of leading components from file names on extraction. For example, to extract only 'myfile.txt' from an archive containing the structure `this/goes/deep/myfile.txt', use 3 to strip 'this/goes/deep/'. |`integer`, example: `1`                      |
+|`--exclude`          |Prevents any file or member whose name matches the shell wildcard (pattern) from being extracted.                                                                                                                        |`string`, example: `"docs/figures"`          |
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -68,15 +80,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument group
-
-### Arguments
-
-|Name                 |Description                                                                                                                                                                                                              |Attributes                                   |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`            |Input file                                                                                                                                                                                                               |`file`, required, example: `"input.tar.gz"`  |
-|`--output`           |Folder to restore file(s) to.                                                                                                                                                                                            |`file`, required, example: `"output_folder"` |
-|`--strip_components` |Strip this amount of leading components from file names on extraction. For example, to extract only 'myfile.txt' from an archive containing the structure `this/goes/deep/myfile.txt', use 3 to strip 'this/goes/deep/'. |`integer`, example: `1`                      |
-|`--exclude`          |Prevents any file or member whose name matches the shell wildcard (pattern) from being extracted.                                                                                                                        |`string`, example: `"docs/figures"`          |
-

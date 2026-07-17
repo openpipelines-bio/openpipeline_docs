@@ -36,6 +36,35 @@ Obs metrics (name in this component -> name in scanpy):
     
 
 
+
+## Argument groups
+
+### Inputs
+
+|Name                                  |Description                                                                                                                                                                                                                                                                           |Attributes                                |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`                             |Input h5mu file                                                                                                                                                                                                                                                                       |`file`, required, example: `"input.h5mu"` |
+|`--fragments_path`                    |Path to the fragments file. If not provided and not present in the input h5mu file, the nucleosome signal and TSS enrichment score will not be calculated.                                                                                                                            |`file`, example: `"fragments.tsv.gz"`     |
+|`--modality`                          |Which modality from the input MuData file to process.                                                                                                                                                                                                                                 |`string`, default: `"atac"`               |
+|`--layer`                             |Layer at `.layers` to use for the calculation. If not provided, `.X` is used.                                                                                                                                                                                                         |`string`, example: `"raw_counts"`         |
+|`--n_fragments_for_nucleosome_signal` |Number of fragments to use per cell for nucleosome signal calculation. Takes very long to calculate, for a test run lower value (e.g. 10e3) is recommended. See https://www.sc-best-practices.org/chromatin_accessibility/quality_control.html#nucleosome-signal for more information |`integer`, default: `100000`              |
+|`--nuc_signal_threshold`              |Threshold for nucleosome signal. Cells with nucleosome signal above this threshold will be marked as low quality ("NS_FAIL"), otherwise they will be marked "NS_PASS".                                                                                                                |`double`, default: `2`                    |
+|`--n_tss`                             |Number of the transcription start sites to calculate TSS enrichment score. See https://www.sc-best-practices.org/chromatin_accessibility/quality_control.html#tss-enrichment for more information                                                                                     |`integer`, default: `3000`                |
+|`--tss_threshold`                     |Threshold for TSS enrichment score. Cells with TSS enrichment score below this threshold will be marked as low quality ("TSS_FAIL") otherwise they will be marked as "TSS_PASS".                                                                                                      |`double`, default: `1.5`                  |
+
+
+### Outputs
+
+|Name                   |Description                                                                                                    |Attributes                       |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output`             |Output h5mu file.                                                                                              |`file`, example: `"output.h5mu"` |
+|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied. |`string`, example: `"gzip"`      |
+
+## Authors
+
+
+  * Vladimir Shitov [{{< fa brands github >}}](https://github.com/vladimirshitov) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-1960-8812) [{{< fa brands linkedin >}}](https://linkedin.com/in/vladimir-shitov-9a659513b) (author)
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -75,32 +104,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument groups
-
-### Inputs
-
-|Name                                  |Description                                                                                                                                                                                                                                                                           |Attributes                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`                             |Input h5mu file                                                                                                                                                                                                                                                                       |`file`, required, example: `"input.h5mu"` |
-|`--fragments_path`                    |Path to the fragments file. If not provided and not present in the input h5mu file, the nucleosome signal and TSS enrichment score will not be calculated.                                                                                                                            |`file`, example: `"fragments.tsv.gz"`     |
-|`--modality`                          |Which modality from the input MuData file to process.                                                                                                                                                                                                                                 |`string`, default: `"atac"`               |
-|`--layer`                             |Layer at `.layers` to use for the calculation. If not provided, `.X` is used.                                                                                                                                                                                                         |`string`, example: `"raw_counts"`         |
-|`--n_fragments_for_nucleosome_signal` |Number of fragments to use per cell for nucleosome signal calculation. Takes very long to calculate, for a test run lower value (e.g. 10e3) is recommended. See https://www.sc-best-practices.org/chromatin_accessibility/quality_control.html#nucleosome-signal for more information |`integer`, default: `100000`              |
-|`--nuc_signal_threshold`              |Threshold for nucleosome signal. Cells with nucleosome signal above this threshold will be marked as low quality ("NS_FAIL"), otherwise they will be marked "NS_PASS".                                                                                                                |`double`, default: `2`                    |
-|`--n_tss`                             |Number of the transcription start sites to calculate TSS enrichment score. See https://www.sc-best-practices.org/chromatin_accessibility/quality_control.html#tss-enrichment for more information                                                                                     |`integer`, default: `3000`                |
-|`--tss_threshold`                     |Threshold for TSS enrichment score. Cells with TSS enrichment score below this threshold will be marked as low quality ("TSS_FAIL") otherwise they will be marked as "TSS_PASS".                                                                                                      |`double`, default: `1.5`                  |
-
-
-### Outputs
-
-|Name                   |Description                                                                                                    |Attributes                       |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output`             |Output h5mu file.                                                                                              |`file`, example: `"output.h5mu"` |
-|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied. |`string`, example: `"gzip"`      |
-
-## Authors
-
-
-  * Vladimir Shitov [{{< fa brands github >}}](https://github.com/vladimirshitov) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-1960-8812) [{{< fa brands linkedin >}}](https://linkedin.com/in/vladimir-shitov-9a659513b) (author)
-

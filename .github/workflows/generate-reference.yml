@@ -292,11 +292,17 @@ jobs:
 
       # Main pass: rebuild every workflow diagram from its main.nf data flow,
       # recursively inlining PRIVATE subworkflows (no reference page of their
-      # own) while keeping public subworkflows/components as clickable nodes.
+      # own) while keeping public subworkflows/components as separate nodes.
       # --force so it also upgrades the leaf diagrams from the step above.
       - name: Resolve workflow diagrams
         working-directory: openpipeline_docs
         run: python3 scripts/compose_viz.py --force reference
+
+      # Move the "Example commands" (run instructions) section to the bottom of
+      # every page, so it leads with what a component is and does.
+      - name: Reorder page sections
+        working-directory: openpipeline_docs
+        run: python3 scripts/reorder_sections.py reference
 
       - name: Open PR
         working-directory: openpipeline_docs

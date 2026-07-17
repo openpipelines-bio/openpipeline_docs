@@ -1,0 +1,43 @@
+---
+title: "Run a turnkey pipeline"
+description: "End-to-end composed workflow."
+categories: [openpipeline_composed]
+order: 80
+---
+
+[`openpipeline_composed`]{.pkg-tag .pkg-openpipeline_composed}<span class="swatch openpipeline_composed"></span>
+
+The **`openpipeline_composed`** package bundles the individual stages into
+turnkey, end-to-end pipelines. Instead of running
+[ingestion](ingest-10x.qmd) → [processing](process-filter.qmd) →
+[integration](integrate.qmd) → [annotation](annotate.qmd) as separate commands,
+one composed workflow chains them together.
+
+## process_integrate_annotate
+
+The flagship `single_cell/process_integrate_annotate` workflow processes,
+integrates, and annotates single-cell (multi-)omics data in a single run. It
+lets you choose the integration method (Harmony, scVI, Scanorama, BBKNN) and the
+annotation method (CellTypist, harmony_knn, scANVI, scvi_knn, SingleR).
+
+```bash
+nextflow run openpipelines-bio/openpipeline_composed \
+  -r v0.3.0 -latest -profile docker \
+  -main-script target/nextflow/single_cell/process_integrate_annotate/main.nf \
+  --param_list samples.csv \
+  --publish_dir results/
+```
+
+The package also exposes `parallel_integration`, `parallel_annotation`, and
+`parallel_subtyping` for running a stage several ways at once (e.g. comparing
+integration methods on the same cohort).
+
+:::{.callout-note}
+`openpipeline_composed` pins core `openpipeline` plus `openpipeline_qc` and
+biobox. Check the [reference](../reference/index.qmd) (filter by
+`openpipeline_composed`) for the exact argument list, and its Viash Hub page for
+run instructions.
+:::
+
+**Next:** [param_list concept →](../concepts/param-list.qmd) ·
+[composed reference →](../reference/index.qmd)

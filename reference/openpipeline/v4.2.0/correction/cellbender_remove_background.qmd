@@ -34,45 +34,6 @@ will be added in the future. A quick start tutorial can be found here.
 Fleming et al. 2022, bioRxiv.
 
 
-## Example commands
-
-You can run the pipeline using `nextflow run`.
-
-### View help
-
-You can use `--help` as a parameter to get an overview of the possible parameters.
-
-```bash
-nextflow run openpipelines-bio/openpipeline \
-  -r v4.2.0 -latest \
-  -main-script target/nextflow/correction/cellbender_remove_background/main.nf \
-  --help
-```
-
-### Run command
-
-<details>
-<summary>Example of `params.yaml`</summary>
-
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/correction/cellbender_remove_background).
-
-</details>
-
-Run locally with:
-
-```bash
-nextflow run openpipelines-bio/openpipeline \
-  -r v4.2.0 -latest \
-  -profile docker \
-  -main-script target/nextflow/correction/cellbender_remove_background/main.nf \
-  -params-file params.yaml
-```
-
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
-:::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
 
 ## Argument groups
 
@@ -136,3 +97,42 @@ Running on Seqera or through Viash Hub is explained in the [guides](/guides/inde
 |`--debug`                             |Including the flag --debug will log extra messages useful for debugging.                                                                                                                                                                                                                                                                                                                                                                                                                                                       |`boolean_true`                                         |
 |`--cuda`                              |Including the flag --cuda will run the inference on a GPU.                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |`boolean_true`                                         |
 
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -main-script target/nextflow/correction/cellbender_remove_background/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+
+Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/correction/cellbender_remove_background).
+
+</details>
+
+Run locally with:
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/correction/cellbender_remove_background/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

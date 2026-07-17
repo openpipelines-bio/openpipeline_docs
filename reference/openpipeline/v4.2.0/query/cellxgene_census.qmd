@@ -31,45 +31,6 @@ Aside from fetching the cells' RNA counts (`.X`), cell metadata
 (`.obs`) and gene metadata (`.var`), this component also fetches
 the dataset metadata and joins it into the cell metadata
 
-## Example commands
-
-You can run the pipeline using `nextflow run`.
-
-### View help
-
-You can use `--help` as a parameter to get an overview of the possible parameters.
-
-```bash
-nextflow run openpipelines-bio/openpipeline \
-  -r v4.2.0 -latest \
-  -main-script target/nextflow/query/cellxgene_census/main.nf \
-  --help
-```
-
-### Run command
-
-<details>
-<summary>Example of `params.yaml`</summary>
-
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/query/cellxgene_census).
-
-</details>
-
-Run locally with:
-
-```bash
-nextflow run openpipelines-bio/openpipeline \
-  -r v4.2.0 -latest \
-  -profile docker \
-  -main-script target/nextflow/query/cellxgene_census/main.nf \
-  -params-file params.yaml
-```
-
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
-:::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
 
 ## Argument groups
 
@@ -143,3 +104,42 @@ Output arguments.
 
   * Kai Waldrant [{{< fa brands github >}}](https://github.com/KaiWaldrant) [{{< fa brands orcid >}}](https://orcid.org/0009-0003-8555-1361) [{{< fa brands linkedin >}}](https://linkedin.com/in/kaiwaldrant) (contributor)
 
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -main-script target/nextflow/query/cellxgene_census/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+
+Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/query/cellxgene_census).
+
+</details>
+
+Run locally with:
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/query/cellxgene_census/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

@@ -1,0 +1,82 @@
+---
+title: "Annotate cell types"
+description: "CellTypist, scANVI, KNN label transfer."
+categories: [openpipeline]
+order: 40
+---
+
+[`openpipeline`]{.pkg-tag .pkg-openpipeline}<span class="swatch openpipeline"></span>
+
+After [integration](integrate.qmd), each cluster is a group of cells with
+similar expression — but the clusters are just numbers. Annotation assigns a
+biological cell-type label to each cluster or cell.
+
+## Two strategies
+
+**Marker-based (manual):** inspect known marker genes per cluster (e.g. *CD3D*
+for T cells, *CD19* for B cells) and assign labels by hand. Full control, but
+requires domain expertise and does not scale.
+
+**Reference-based (automated):** transfer labels from an annotated reference.
+OpenPipeline supports several methods:
+
+| Method | Workflow / component | Notes |
+|---|---|---|
+| CellTypist | `annotation/celltypist` | Logistic regression; large library of pretrained immune models |
+| SingleR | `annotate/singler` | Correlation-based; Bioconductor reference datasets |
+| PopV | `annotate/popv` | Consensus across methods; robust for diverse atlases |
+| scANVI | `annotation/scanvi_scarches` | Variational autoencoder; preserves query-specific biology |
+| KNN transfer | `annotation/harmony_knn`, `annotation/scvi_knn` | Direct label transfer from a reference embedding |
+
+## Run CellTypist (no reference of your own)
+
+CellTypist ships pretrained models for many tissues. Browse them at
+[celltypist.org](https://www.celltypist.org/models).
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r 4.2.0 -latest -profile docker \
+  -main-script target/nextflow/workflows/annotation/celltypist/main.nf \
+  --id cohort_01 \
+  --input cohort_01_integrated.h5mu \
+  --model "Immune_All_Low.pkl" \
+  --output cohort_01_annotated.h5mu \
+  --publish_dir results/
+```
+
+## Transfer labels from a custom reference
+
+If you have an annotated reference atlas, transfer its labels to your query with
+KNN label transfer:
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r 4.2.0 -latest -profile docker \
+  -main-script target/nextflow/workflows/annotation/harmony_knn/main.nf \
+  --id query \
+  --input query_integrated.h5mu \
+  --reference reference_atlas.h5mu \
+  --reference_obs_targets "cell_type" \
+  --output query_annotated.h5mu \
+  --publish_dir results/
+```
+
+## Query a public atlas
+
+Fetch cells directly from the CZ CELLxGENE Census to use as a reference:
+
+```bash
+viash run src/query/cellxgene_census/config.vsh.yaml -- \
+  --tissue "brain" \
+  --cell_type "neuron" \
+  --output census_neurons.h5mu
+```
+
+## What comes after
+
+With cell types assigned, common next analyses include differential expression
+(the `differential_expression/pseudobulk_deseq2` workflow), RNA velocity
+(`velocity/velocyto` + `velocity/scvelo`), and cell-cell communication
+(`interpret/lianapy`). These are optional and depend on your biological question.
+
+**Next:** [every annotation argument →](../reference/index.qmd)

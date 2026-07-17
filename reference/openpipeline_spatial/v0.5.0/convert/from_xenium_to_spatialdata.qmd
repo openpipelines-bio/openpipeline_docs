@@ -30,6 +30,34 @@ Namespace: `convert`
 By default, the following files will be converted:
   - `experiment.xenium`: File containing specifications.   - `nucleus_boundaries.parquet`: Polygons of nucleus boundaries.   - `cell_boundaries.parquet`: Polygons of cell boundaries.   - `transcripts.parquet`: File containing transcripts.   - `cell_feature_matrix.h5`: File containing cell feature matrix.   - `cells.parquet`: File containing cell metadata.   - `morphology_mip.ome.tif`: File containing morphology mip.   - `morphology_focus.ome.tif`: File containing morphology focus
 
+
+## Argument group
+
+### Arguments
+
+|Name                   |Description                                                                                                                                                                                                                                                                       |Attributes                                 |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`              |Input folder. Must contain the output from a xenium run.                                                                                                                                                                                                                          |`file`, required, example: `"xenium_data"` |
+|`--output`             |Zarr directory where the SpatialData object will be stored                                                                                                                                                                                                                        |`file`, example: `"xenium_data.zarr"`      |
+|`--cells_boundaries`   |Whether to read cell boundaries (polygons).                                                                                                                                                                                                                                       |`boolean`, default: `TRUE`                 |
+|`--nucleus_boundaries` |Whether to read nucleus boundaries (polygons).                                                                                                                                                                                                                                    |`boolean`, default: `TRUE`                 |
+|`--cells_as_circles`   |Whether to read cells also as circles (the center and the radius of each circle is computed from the corresponding labels cell).                                                                                                                                                  |`boolean_true`                             |
+|`--cells_labels`       |Whether to read cell labels (raster). The polygonal version of the cell labels are simplified for visualization purposes, and using the raster version is recommended for analysis.                                                                                               |`boolean`, default: `TRUE`                 |
+|`--transcripts`        |Whether to read transcripts.                                                                                                                                                                                                                                                      |`boolean`, default: `TRUE`                 |
+|`--nucleus_labels`     |Whether to read nucleus labels (raster). The polygonal version of the nucleus labels are simplified for visualization purposes, and using the raster version is recommended for analysis.                                                                                         |`boolean`, default: `TRUE`                 |
+|`--morphology_mip`     |Whether to read the morphology mip image (available in versions < 2.0.0).                                                                                                                                                                                                         |`boolean`, default: `TRUE`                 |
+|`--morphology_focus`   |Whether to read the morphology focus image.                                                                                                                                                                                                                                       |`boolean`, default: `TRUE`                 |
+|`--aligned_images`     |Whether to also parse, when available, additional H&E or IF aligned images. For more control over the aligned images being read, in particular, to specify the axes of the aligned images, please set this parameter to False and use the xenium_aligned_image function directly. |`boolean`, default: `TRUE`                 |
+|`--cells_table`        |Whether to read the cell annotations in the AnnData table.                                                                                                                                                                                                                        |`boolean`, default: `TRUE`                 |
+|`--n_jobs`             |                                                                                                                                                                                                                                                                                  |`integer`, default: `1`                    |
+
+## Authors
+
+
+  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (maintainer)
+
+  * Weiwei Schultz (contributor)
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -69,31 +97,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument group
-
-### Arguments
-
-|Name                   |Description                                                                                                                                                                                                                                                                       |Attributes                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`              |Input folder. Must contain the output from a xenium run.                                                                                                                                                                                                                          |`file`, required, example: `"xenium_data"` |
-|`--output`             |Zarr directory where the SpatialData object will be stored                                                                                                                                                                                                                        |`file`, example: `"xenium_data.zarr"`      |
-|`--cells_boundaries`   |Whether to read cell boundaries (polygons).                                                                                                                                                                                                                                       |`boolean`, default: `TRUE`                 |
-|`--nucleus_boundaries` |Whether to read nucleus boundaries (polygons).                                                                                                                                                                                                                                    |`boolean`, default: `TRUE`                 |
-|`--cells_as_circles`   |Whether to read cells also as circles (the center and the radius of each circle is computed from the corresponding labels cell).                                                                                                                                                  |`boolean_true`                             |
-|`--cells_labels`       |Whether to read cell labels (raster). The polygonal version of the cell labels are simplified for visualization purposes, and using the raster version is recommended for analysis.                                                                                               |`boolean`, default: `TRUE`                 |
-|`--transcripts`        |Whether to read transcripts.                                                                                                                                                                                                                                                      |`boolean`, default: `TRUE`                 |
-|`--nucleus_labels`     |Whether to read nucleus labels (raster). The polygonal version of the nucleus labels are simplified for visualization purposes, and using the raster version is recommended for analysis.                                                                                         |`boolean`, default: `TRUE`                 |
-|`--morphology_mip`     |Whether to read the morphology mip image (available in versions < 2.0.0).                                                                                                                                                                                                         |`boolean`, default: `TRUE`                 |
-|`--morphology_focus`   |Whether to read the morphology focus image.                                                                                                                                                                                                                                       |`boolean`, default: `TRUE`                 |
-|`--aligned_images`     |Whether to also parse, when available, additional H&E or IF aligned images. For more control over the aligned images being read, in particular, to specify the axes of the aligned images, please set this parameter to False and use the xenium_aligned_image function directly. |`boolean`, default: `TRUE`                 |
-|`--cells_table`        |Whether to read the cell annotations in the AnnData table.                                                                                                                                                                                                                        |`boolean`, default: `TRUE`                 |
-|`--n_jobs`             |                                                                                                                                                                                                                                                                                  |`integer`, default: `1`                    |
-
-## Authors
-
-
-  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (maintainer)
-
-  * Weiwei Schultz (contributor)
-

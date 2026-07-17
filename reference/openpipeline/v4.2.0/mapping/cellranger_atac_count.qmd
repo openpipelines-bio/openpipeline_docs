@@ -29,6 +29,40 @@ Namespace: `mapping`
 
 
 
+
+## Argument groups
+
+### Inputs
+
+|Name          |Description                                                                            |Attributes                                                                                                                   |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`     |The fastq.gz files to align. Can also be a single directory containing fastq.gz files. |List of `file`, required, example: `"sample_S1_L001_R1_001.fastq.gz", "sample_S1_L001_R2_001.fastq.gz"`, multiple_sep: `";"` |
+|`--reference` |The path to Cell Ranger reference tar.gz file. Can also be a directory.                |`file`, required, example: `"reference.tar.gz"`                                                                              |
+
+
+### Outputs
+
+|Name       |Description                                |Attributes                                     |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output` |The folder to store the alignment results. |`file`, required, example: `"/path/to/output"` |
+
+
+### Arguments
+
+|Name               |Description                                                                                                                                                                                                                                                                     |Attributes                                              |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--description`    |Sample description to embed in output files                                                                                                                                                                                                                                     |`string`, default: `""`                                 |
+|`--force_cells`    |Define the top N barcodes with the most fragments overlapping peaks as cells and override the cell calling algorithm. N must be a positive integer <= 20,000. Use this option if the number of cells estimated by Cell Ranger ATAC is not consistent with the barcode rank plot |`integer`                                               |
+|`--peaks`          |Override peak caller: specify peaks to use in downstream analyses from supplied 3-column BED file. The supplied peaks file must be sorted by position and not contain overlapping peaks; comment lines beginning with # are allowed                                             |`file`, example: `"peaks.bed"`                          |
+|`--dim_reduce`     |Dimensionality reduction mode for clustering                                                                                                                                                                                                                                    |`string`, default: `"lsa"`                              |
+|`--subsample_rate` |Downsample to preserve this fraction of reads                                                                                                                                                                                                                                   |`double`, example: `0.1`                                |
+|`--lanes`          |bcl2fastq option. Semicolon-delimited series of lanes to demultiplex. Use this if you have a sample sheet for an entire flow cell but only want to generate a few lanes for further 10x Genomics analysis.                                                                      |List of `string`, example: `"1,3"`, multiple_sep: `";"` |
+
+## Authors
+
+
+  * Vladimir Shitov [{{< fa brands github >}}](https://github.com/vladimirshitov) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-1960-8812) [{{< fa brands linkedin >}}](https://linkedin.com/in/vladimir-shitov-9a659513b) (author)
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -68,37 +102,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument groups
-
-### Inputs
-
-|Name          |Description                                                                            |Attributes                                                                                                                   |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`     |The fastq.gz files to align. Can also be a single directory containing fastq.gz files. |List of `file`, required, example: `"sample_S1_L001_R1_001.fastq.gz", "sample_S1_L001_R2_001.fastq.gz"`, multiple_sep: `";"` |
-|`--reference` |The path to Cell Ranger reference tar.gz file. Can also be a directory.                |`file`, required, example: `"reference.tar.gz"`                                                                              |
-
-
-### Outputs
-
-|Name       |Description                                |Attributes                                     |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output` |The folder to store the alignment results. |`file`, required, example: `"/path/to/output"` |
-
-
-### Arguments
-
-|Name               |Description                                                                                                                                                                                                                                                                     |Attributes                                              |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--description`    |Sample description to embed in output files                                                                                                                                                                                                                                     |`string`, default: `""`                                 |
-|`--force_cells`    |Define the top N barcodes with the most fragments overlapping peaks as cells and override the cell calling algorithm. N must be a positive integer <= 20,000. Use this option if the number of cells estimated by Cell Ranger ATAC is not consistent with the barcode rank plot |`integer`                                               |
-|`--peaks`          |Override peak caller: specify peaks to use in downstream analyses from supplied 3-column BED file. The supplied peaks file must be sorted by position and not contain overlapping peaks; comment lines beginning with # are allowed                                             |`file`, example: `"peaks.bed"`                          |
-|`--dim_reduce`     |Dimensionality reduction mode for clustering                                                                                                                                                                                                                                    |`string`, default: `"lsa"`                              |
-|`--subsample_rate` |Downsample to preserve this fraction of reads                                                                                                                                                                                                                                   |`double`, example: `0.1`                                |
-|`--lanes`          |bcl2fastq option. Semicolon-delimited series of lanes to demultiplex. Use this if you have a sample sheet for an entire flow cell but only want to generate a few lanes for further 10x Genomics analysis.                                                                      |List of `string`, example: `"1,3"`, multiple_sep: `";"` |
-
-## Authors
-
-
-  * Vladimir Shitov [{{< fa brands github >}}](https://github.com/vladimirshitov) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-1960-8812) [{{< fa brands linkedin >}}](https://linkedin.com/in/vladimir-shitov-9a659513b) (author)
-

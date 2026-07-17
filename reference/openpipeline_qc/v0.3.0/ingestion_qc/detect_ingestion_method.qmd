@@ -29,6 +29,31 @@ Namespace: `ingestion_qc`
 
 Currently detects either 10X CellRanger Multi, 10X Xenium or Nanostring CosMx, but can be extended to other technologies upon request
 
+
+## Argument groups
+
+### Inputs
+
+|Name         |Description            |Attributes                                       |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`    |The input h5mu file(s) |`file`, required, example: `"path/to/file.h5mu"` |
+|`--modality` |The modality to use    |`string`, default: `"rna"`                       |
+
+
+### Outputs
+
+|Name                            |Description                                                                                                        |Attributes                                       |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output_uns_ingestion_method` |The .uns field in which to store the exprimental setup. Values stored are `cellranger_multi`, `xenium` or `cosmx`. |`string`, default: `"ingestion_method"`          |
+|`--output`                      |The output h5mu file, containing an .uns field with experiment description.                                        |`file`, required, example: `"path/to/file.h5mu"` |
+
+## Authors
+
+
+  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author)
+
+  * Weiwei Schultz (contributor)
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -68,28 +93,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument groups
-
-### Inputs
-
-|Name         |Description            |Attributes                                       |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`    |The input h5mu file(s) |`file`, required, example: `"path/to/file.h5mu"` |
-|`--modality` |The modality to use    |`string`, default: `"rna"`                       |
-
-
-### Outputs
-
-|Name                            |Description                                                                                                        |Attributes                                       |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output_uns_ingestion_method` |The .uns field in which to store the exprimental setup. Values stored are `cellranger_multi`, `xenium` or `cosmx`. |`string`, default: `"ingestion_method"`          |
-|`--output`                      |The output h5mu file, containing an .uns field with experiment description.                                        |`file`, required, example: `"path/to/file.h5mu"` |
-
-## Authors
-
-
-  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author)
-
-  * Weiwei Schultz (contributor)
-

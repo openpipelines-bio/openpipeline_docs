@@ -29,45 +29,6 @@ Namespace: `dimred`
 
 Besides tending to be faster than tSNE, it optimizes the embedding such that it best reflects the topology of the data, which we represent throughout Scanpy using a neighborhood graph. tSNE, by contrast, optimizes the distribution of nearest-neighbor distances in the embedding such that these best match the distribution of distances in the high-dimensional space. We use the implementation of umap-learn [McInnes18]. For a few comparisons of UMAP with tSNE, see this preprint
 
-## Example commands
-
-You can run the pipeline using `nextflow run`.
-
-### View help
-
-You can use `--help` as a parameter to get an overview of the possible parameters.
-
-```bash
-nextflow run openpipelines-bio/openpipeline \
-  -r v4.2.0 -latest \
-  -main-script target/nextflow/dimred/umap/main.nf \
-  --help
-```
-
-### Run command
-
-<details>
-<summary>Example of `params.yaml`</summary>
-
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/dimred/umap).
-
-</details>
-
-Run locally with:
-
-```bash
-nextflow run openpipelines-bio/openpipeline \
-  -r v4.2.0 -latest \
-  -profile docker \
-  -main-script target/nextflow/dimred/umap/main.nf \
-  -params-file params.yaml
-```
-
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
-:::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
 
 ## Argument groups
 
@@ -107,3 +68,42 @@ Running on Seqera or through Viash Hub is explained in the [guides](/guides/inde
 
   * Dries De Maeyer [{{< fa brands github >}}](https://github.com/ddemaeyer) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-de-maeyer-b46a814) (maintainer)
 
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -main-script target/nextflow/dimred/umap/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+
+Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/dimred/umap).
+
+</details>
+
+Run locally with:
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r v4.2.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/dimred/umap/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

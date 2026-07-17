@@ -29,6 +29,16 @@ Namespace: `qc`
 
 It searches a given directory for analysis logs and compiles a HTML report. It's a general use tool, perfect for summarising the output from numerous bioinformatics tools
 
+
+## Argument group
+
+### Arguments
+
+|Name       |Description                                      |Attributes                                                            |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`  |Inputs for MultiQC.                              |List of `file`, required, example: `"input.txt"`, multiple_sep: `";"` |
+|`--output` |Create report in the specified output directory. |`file`, required, example: `"path/to/report"`                         |
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -68,13 +78,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument group
-
-### Arguments
-
-|Name       |Description                                      |Attributes                                                            |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`  |Inputs for MultiQC.                              |List of `file`, required, example: `"input.txt"`, multiple_sep: `";"` |
-|`--output` |Create report in the specified output directory. |`file`, required, example: `"path/to/report"`                         |
-

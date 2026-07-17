@@ -29,6 +29,37 @@ Namespace: `convert`
 
 
 
+
+## Argument groups
+
+### Input database
+
+Open a tileDB-SOMA database by URI.
+
+
+|Name                   |Description                                                                           |Attributes                                        |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input_uri`          |A URI pointing to a TileDB-SOMA database.                                             |`string`, required, example: `"s3://bucket/path"` |
+|`--s3_region`          |Region where the TileDB-SOMA database is hosted.                                      |`string`                                          |
+|`--endpoint`           |Custom endpoint to use to connect to S3                                               |`string`                                          |
+|`--s3_no_sign_request` |Do not sign S3 requests. Credentials will not be loaded if this argument is provided. |`boolean`, default: `FALSE`                       |
+|`--input_modality`     |TileDB-SOMA measurement to take the input from.                                       |`string`, required                                |
+|`--input_layers`       |Layers to import from TileDB-SOMA database.                                           |List of `string`, required, multiple_sep: `";"`   |
+
+
+### MuData output
+
+|Name                   |Description                                                                                                    |Attributes                                 |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output`             |The output MuData file.                                                                                        |`file`, required, example: `"output.h5mu"` |
+|`--output_modality`    |Name of the modality to write the results to.                                                                  |`string`, required                         |
+|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied. |`string`, example: `"gzip"`                |
+
+## Authors
+
+
+  * Dries Schaumont [{{< fa brands github >}}](https://github.com/DriesSchaumont) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-4389-0440) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-schaumont) (author, maintainer)
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -68,34 +99,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument groups
-
-### Input database
-
-Open a tileDB-SOMA database by URI.
-
-
-|Name                   |Description                                                                           |Attributes                                        |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input_uri`          |A URI pointing to a TileDB-SOMA database.                                             |`string`, required, example: `"s3://bucket/path"` |
-|`--s3_region`          |Region where the TileDB-SOMA database is hosted.                                      |`string`                                          |
-|`--endpoint`           |Custom endpoint to use to connect to S3                                               |`string`                                          |
-|`--s3_no_sign_request` |Do not sign S3 requests. Credentials will not be loaded if this argument is provided. |`boolean`, default: `FALSE`                       |
-|`--input_modality`     |TileDB-SOMA measurement to take the input from.                                       |`string`, required                                |
-|`--input_layers`       |Layers to import from TileDB-SOMA database.                                           |List of `string`, required, multiple_sep: `";"`   |
-
-
-### MuData output
-
-|Name                   |Description                                                                                                    |Attributes                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output`             |The output MuData file.                                                                                        |`file`, required, example: `"output.h5mu"` |
-|`--output_modality`    |Name of the modality to write the results to.                                                                  |`string`, required                         |
-|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied. |`string`, example: `"gzip"`                |
-
-## Authors
-
-
-  * Dries Schaumont [{{< fa brands github >}}](https://github.com/DriesSchaumont) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-4389-0440) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-schaumont) (author, maintainer)
-

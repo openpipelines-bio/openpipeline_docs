@@ -1,0 +1,132 @@
+---
+title: "Ingest 10x Genomics data"
+description: "FASTQ or raw counts → MuData with Cell Ranger."
+categories: [openpipeline]
+order: 10
+---
+
+[`openpipeline`]{.pkg-tag .pkg-openpipeline}<span class="swatch openpipeline"></span>
+
+Ingestion takes the raw output of a 10x Genomics run and produces a per-sample
+count matrix stored as an `.h5mu` file, ready for
+[processing and filtering](process-filter.qmd).
+
+## Pick a starting point
+
+The right workflow depends on what your sequencing provider delivered.
+
+| Starting point | Library type | Workflow |
+|---|---|---|
+| BCL files | Any | `ingestion/demux` → then a mapping workflow |
+| FASTQ | 10x GEX only | `ingestion/cellranger_mapping` |
+| FASTQ | 10x multi (GEX + VDJ + ADT/HTO) | `ingestion/cellranger_multi` |
+| 10x HDF5 (`.h5`) | Pre-generated | `convert/from_10xh5_to_h5mu` |
+| 10x MEX (`.mtx`) | Pre-generated | `convert/from_10xmtx_to_h5mu` |
+
+:::{.callout-tip}
+If your provider already delivered a Cell Ranger count matrix, skip mapping and
+use one of the converters directly.
+:::
+
+## Build a reference genome
+
+Mapping needs a reference genome index. Build one with `make_reference`, or use
+a pre-built 10x Genomics reference directly.
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r 4.2.0 -latest -profile docker \
+  -main-script target/nextflow/workflows/ingestion/make_reference/main.nf \
+  --id GRCh38 \
+  --genome_fasta Homo_sapiens.GRCh38.dna.primary_assembly.fa \
+  --annotation_gtf Homo_sapiens.GRCh38.111.gtf \
+  --output reference_genome/ \
+  --publish_dir results/
+```
+
+## Demultiplex BCL files (if needed)
+
+If you start from raw Illumina BCL output, convert it to per-sample FASTQ files
+first:
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r 4.2.0 -latest -profile docker \
+  -main-script target/nextflow/workflows/ingestion/demux/main.nf \
+  --id run_001 \
+  --input /path/to/bcl_run/ \
+  --sample_sheet SampleSheet.csv \
+  --output demux_output/ \
+  --publish_dir results/
+```
+
+## Map single-library samples (GEX only)
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r 4.2.0 -latest -profile docker \
+  -main-script target/nextflow/workflows/ingestion/cellranger_mapping/main.nf \
+  --id sample_A \
+  --input "fastq/sample_A/" \
+  --reference reference_genome/ \
+  --output sample_A.h5mu \
+  --publish_dir results/
+```
+
+## Map multi-library samples (GEX + ADT/HTO + VDJ)
+
+For CITE-seq or experiments with multiple library types captured from the same
+cells, Cell Ranger Multi aligns all libraries jointly. The `feature_reference.csv`
+describes the antibody or guide-RNA sequences used.
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r 4.2.0 -latest -profile docker \
+  -main-script target/nextflow/workflows/ingestion/cellranger_multi/main.nf \
+  --id sample_A \
+  --input "fastq/sample_A/" \
+  --gex_reference reference_genome/ \
+  --feature_reference feature_reference.csv \
+  --output sample_A.h5mu \
+  --publish_dir results/
+```
+
+## Ingest many samples at once
+
+Pass a [`param_list`](../concepts/param-list.qmd) to map a whole cohort in one
+run. Example `samples.csv`:
+
+```
+id,input,reference
+sample_A,fastq/sample_A/,reference_genome/
+sample_B,fastq/sample_B/,reference_genome/
+sample_C,fastq/sample_C/,reference_genome/
+```
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r 4.2.0 -latest -profile docker \
+  -main-script target/nextflow/workflows/ingestion/cellranger_mapping/main.nf \
+  --param_list samples.csv \
+  --publish_dir results/
+```
+
+## What the output contains
+
+Each sample becomes one `.h5mu` file. Depending on the library type it holds one
+or more modalities:
+
+| Modality key | Content |
+|---|---|
+| `rna` | RNA count matrix (cells × genes) |
+| `prot` | ADT count matrix — antibody-derived tags (CITE-seq) |
+| `vdj_b` / `vdj_t` | Immune repertoire (B/T cell receptor sequences) |
+| `atac` | Chromatin accessibility (ATAC-seq peaks) |
+| `gdo` | Guide RNA / CRISPR perturbation data |
+
+Each modality stores the raw counts in `.X`, cell metadata in `.obs`, and
+feature metadata in `.var`. No filtering has been applied yet — the matrix
+contains both real cells and empty droplets.
+
+**Next:** [Process & filter samples →](process-filter.qmd) ·
+[every ingestion argument →](../reference/index.qmd)

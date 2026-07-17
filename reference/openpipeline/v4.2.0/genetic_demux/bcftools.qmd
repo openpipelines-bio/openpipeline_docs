@@ -29,6 +29,24 @@ Namespace: `genetic_demux`
 
 
 
+
+## Argument group
+
+### Arguments
+
+|Name            |Description                                                               |Attributes                                                                             |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--vcf`         |VCF files, must have the same sample columns appearing in the same order. |List of `file`, required, example: `"input_1.vcf", "input_2.vcf"`, multiple_sep: `";"` |
+|`--concat`      |Concatenate or combine VCFs and sort them.                                |`boolean_true`                                                                         |
+|`--filter`      |Filter VCFs.                                                              |`boolean_true`                                                                         |
+|`--filter_qual` |Filter VCFs with specified QUAL threshold.                                |`integer`, default: `30`                                                               |
+|`--output`      |bcftools output directory                                                 |`file`, example: `"bcftools_out"`                                                      |
+
+## Authors
+
+
+  * Xichen Wu [{{< fa brands github >}}](https://github.com/wxicu) [{{< fa brands orcid >}}](https://orcid.org/0009-0008-2168-4508) [{{< fa brands linkedin >}}](https://linkedin.com/in/xichen-wu) (author)
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -68,21 +86,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument group
-
-### Arguments
-
-|Name            |Description                                                               |Attributes                                                                             |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--vcf`         |VCF files, must have the same sample columns appearing in the same order. |List of `file`, required, example: `"input_1.vcf", "input_2.vcf"`, multiple_sep: `";"` |
-|`--concat`      |Concatenate or combine VCFs and sort them.                                |`boolean_true`                                                                         |
-|`--filter`      |Filter VCFs.                                                              |`boolean_true`                                                                         |
-|`--filter_qual` |Filter VCFs with specified QUAL threshold.                                |`integer`, default: `30`                                                               |
-|`--output`      |bcftools output directory                                                 |`file`, example: `"bcftools_out"`                                                      |
-
-## Authors
-
-
-  * Xichen Wu [{{< fa brands github >}}](https://github.com/wxicu) [{{< fa brands orcid >}}](https://orcid.org/0009-0008-2168-4508) [{{< fa brands linkedin >}}](https://linkedin.com/in/xichen-wu) (author)
-

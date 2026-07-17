@@ -1,0 +1,118 @@
+---
+title: "Process many samples (param_list)"
+description: "Per-sample arguments plus shared settings in one run."
+categories: [openpipeline]
+order: 25
+---
+
+[`openpipeline`]{.pkg-tag .pkg-openpipeline}<span class="swatch openpipeline"></span>
+
+A **`param_list`** processes a whole cohort in a single command. It is a list
+where each entry is one sample carrying that sample's own arguments; any argument
+set outside the list applies to every sample. See the
+[param_list concept](../concepts/param-list.qmd) for the full model.
+
+## Event-specific and global parameters
+
+In the list below, a multi-event Nextflow channel is created for two inputs.
+Each carries an `id` and any per-sample (event-specific) parameters:
+
+```yaml
+# param_list.yaml
+- id: foo
+  input: foo.h5mu
+  rna_min_counts: 2      # only for foo
+- id: bar
+  input: bar.h5mu
+  rna_min_counts: 1      # only for bar
+```
+
+Combine event-specific parameters with **global** parameters that apply to every
+event:
+
+```bash
+nextflow run ... --param_list param_list.yaml --rna_max_counts 1000000
+```
+
+Event-specific parameters always override globals of the same name.
+
+## Supported file types
+
+The `param_list` can be a YAML, JSON, or CSV file.
+
+::: {.panel-tabset}
+
+## CSV
+
+```
+id,input,rna_min_counts
+foo,foo.h5mu,2
+bar,bar.h5mu,1
+```
+
+## JSON
+
+```json
+[
+  { "id": "foo", "input": "foo.h5mu", "rna_min_counts": 2 },
+  { "id": "bar", "input": "bar.h5mu", "rna_min_counts": 1 }
+]
+```
+
+## YAML
+
+```yaml
+- id: foo
+  input: foo.h5mu
+  rna_min_counts: 2
+- id: bar
+  input: bar.h5mu
+  rna_min_counts: 1
+```
+
+:::
+
+## Run a cohort through process_samples
+
+`process_samples` is the recommended entry point for a full cohort — it reads the
+`param_list`, runs per-sample QC and multisample normalization, and emits one
+processed object:
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r 4.2.0 -latest -profile docker \
+  -main-script target/nextflow/workflows/multiomics/process_samples/main.nf \
+  --param_list samples.csv \
+  --publish_dir results/
+```
+
+For very large cohorts, `process_batches` runs the multisample steps on groups
+of samples in parallel before merging, reducing peak memory use.
+
+## Passing the list through a params-file
+
+Both event-specific and global parameters can live in one Nextflow
+`-params-file`:
+
+```yaml
+# params-file.yaml
+param_list:
+  - id: foo
+    input: foo.h5mu
+  - id: bar
+    input: bar.h5mu
+rna_max_counts: 1000000
+```
+
+```bash
+nextflow run ... -params-file params-file.yaml
+```
+
+## Resolving paths
+
+Files in a `param_list` are resolved relative to the location of the list file
+itself — including when the list lives on a remote location such as an S3 bucket.
+Absolute paths are used as-is.
+
+**Next:** [Process & filter samples →](process-filter.qmd) ·
+[param_list concept →](../concepts/param-list.qmd)

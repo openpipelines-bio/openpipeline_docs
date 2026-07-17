@@ -29,6 +29,18 @@ Namespace: `qc`
 
 This component can take one or more files (by means of shell globbing) or a complete directory
 
+
+## Argument group
+
+### Arguments
+
+|Name        |Description                                                                                                         |Attributes                               |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--mode`    |The mode in which the component works. Can be either files or dir.                                                  |`string`, default: `"files"`             |
+|`--input`   |Directory containing input fastq files.                                                                             |`file`, required, example: `"fastq_dir"` |
+|`--output`  |Output directory to write reports to.                                                                               |`file`, required, example: `"qc"`        |
+|`--threads` |Specifies the number of files which can be processed simultaneously. Each thread will be allocated 250MB of memory. |`integer`                                |
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -68,15 +80,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument group
-
-### Arguments
-
-|Name        |Description                                                                                                         |Attributes                               |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--mode`    |The mode in which the component works. Can be either files or dir.                                                  |`string`, default: `"files"`             |
-|`--input`   |Directory containing input fastq files.                                                                             |`file`, required, example: `"fastq_dir"` |
-|`--output`  |Output directory to write reports to.                                                                               |`file`, required, example: `"qc"`        |
-|`--threads` |Specifies the number of files which can be processed simultaneously. Each thread will be allocated 250MB of memory. |`integer`                                |
-

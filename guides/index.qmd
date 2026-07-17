@@ -2,25 +2,34 @@
 title: "Task guides"
 description: "Goal-oriented recipes. Each is standalone and links into the reference."
 order: 0
+listing:
+  id: guides
+  type: table
+  contents:
+    - ingest-10x.qmd
+    - ingest-spatial.qmd
+    - process-filter.qmd
+    - process-many-samples.qmd
+    - integrate.qmd
+    - annotate.qmd
+    - qc-report.qmd
+    - gpu.qmd
+    - spatial-niches.qmd
+    - turnkey.qmd
+    - tune-resources.qmd
+  fields: [title, categories, description]
+  field-display-names:
+    title: "Guide"
+    categories: "Package"
+    description: "What it covers"
+  sort: false
+  categories: true
+  filter-ui: false
+  sort-ui: false
 ---
 
-Pick a task. Each guide is tagged by the package it belongs to.
+Pick a task. Each guide is standalone and links into the
+[reference](../reference/index.qmd). Filter by package using the tags below.
 
-| Guide | Package | What it covers |
-|---|---|---|
-| Ingest 10x Genomics data | [`openpipeline`]{.pkg-tag .pkg-openpipeline}<span class="swatch openpipeline"></span> | FASTQ or raw counts → MuData with Cell Ranger |
-| Ingest Xenium / Visium | [`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial} | Space Ranger mapping and spatial ingestion |
-| Process & filter samples | [`openpipeline`]{.pkg-tag .pkg-openpipeline} | Cell filtering, doublets, normalization, HVG |
-| Process many samples (`param_list`) | [`openpipeline`]{.pkg-tag .pkg-openpipeline} | Per-sample arguments plus shared settings in one run |
-| Integrate with Harmony or scVI | [`openpipeline`]{.pkg-tag .pkg-openpipeline} | Batch-correct and cluster across samples |
-| Annotate cell types | [`openpipeline`]{.pkg-tag .pkg-openpipeline} | CellTypist, scANVI, KNN label transfer |
-| Generate a QC report | [`openpipeline_qc`]{.pkg-tag .pkg-openpipeline_qc} | Standalone quality-control report |
-| Speed up with GPUs | [`openpipeline_rapids`]{.pkg-tag .pkg-openpipeline_rapids} | Swap in rapids-singlecell components |
-| Find spatial niches | [`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial} | NicheCompass niche identification |
-| Run a turnkey pipeline | [`openpipeline_composed`]{.pkg-tag .pkg-openpipeline_composed} | End-to-end composed workflow |
-| Tune compute resources | [`openpipeline`]{.pkg-tag .pkg-openpipeline} | Nextflow labels for CPU, memory, disk |
-
-::: {.callout-note appearance="simple"}
-Placeholder index — each row will become its own how-to page. The package tags
-use the real package names, matching the reference facets.
+:::{#guides}
 :::

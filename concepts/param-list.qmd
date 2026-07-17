@@ -1,6 +1,7 @@
 ---
 title: "Many samples at once: the param_list"
-order: 30
+description: "Process a whole cohort in one run, with per-sample and shared arguments."
+order: 50
 ---
 
 A **`param_list`** processes a whole cohort in a single run. It is a list where

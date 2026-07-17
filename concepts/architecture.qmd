@@ -1,0 +1,145 @@
+---
+title: "Pipeline architecture"
+description: "How a dataset flows from raw sequencing to an annotated object."
+order: 60
+---
+
+OpenPipeline provides modular, best-practice Nextflow workflows for single-cell
+data — from raw sequencing output to a batch-corrected, clustered, annotated
+dataset. A dataset flows through the same shape whichever
+[package](ecosystem.qmd) you use: ingestion, an optional QC report, per- and
+multi-sample processing, integration, and downstream analysis, with a spatial
+branch running in parallel.
+
+```{mermaid}
+%%| label: fig-architecture
+%%| fig-cap: "A dataset flows from raw experimental data (grey) through ingestion, processing, integration, and downstream analysis. It can enter as raw FASTQ (after demultiplexing) or as a pre-built count matrix. A QC report is generated off the ingested data; the spatial branch runs the same shape with spatial-aware steps."
+%%{init: {"theme":"base", "themeVariables":{"fontSize":"14px"}}}%%
+flowchart TD
+  classDef external fill:#f5f5f5,stroke:#aaaaaa,color:#444
+  classDef map     fill:#e1d5e7,stroke:#9673a6,color:#000
+  classDef ingest  fill:#d5e8d4,stroke:#82b366,color:#000
+  classDef process fill:#dae8fc,stroke:#6c8ebf,color:#000
+  classDef integ   fill:#ffe6cc,stroke:#d6b656,color:#000
+  classDef down    fill:#f8cecc,stroke:#b85450,color:#000
+  classDef spatial fill:#d0f0f5,stroke:#3a9db5,color:#000
+  classDef qc      fill:#fff3cd,stroke:#c9a227,color:#000
+
+  wetlab["<b>Experiment &amp; sequencing</b><br>10x Chromium<br>BD Rhapsody<br>Xenium / CosMx (spatial)"]:::external
+  fastq["<b>FASTQ files</b><br>or pre-built count matrices"]:::external
+
+  map["<b>Demultiplexing &amp; mapping</b><br>demux (BCL to FASTQ)<br>cellranger_multi<br>bd_rhapsody<br>star_align"]:::map
+  ingest["<b>Ingestion &amp; conversion</b><br>from_cellranger_multi_to_h5mu<br>conversion<br>to MuData (H5MU) per sample"]:::ingest
+  qcreport["<b>QC reporting</b><br>generate_qc_report<br>(openpipeline_qc)"]:::qc
+  process["<b>Process samples</b><br>filter_with_counts<br>cellbender_remove_background<br>clr / normalize / HVF<br>pca"]:::process
+  integ["<b>Integration &amp; clustering</b><br>harmony_leiden<br>scvi_leiden<br>totalvi_leiden<br>bbknn_leiden<br>to Leiden clusters + UMAP"]:::integ
+  down["<b>Downstream analysis</b><br>scanvi_scarches<br>celltypist<br>singler<br>lianapy<br>pseudobulk_deseq2"]:::down
+  spatial["<b>Spatial branch</b><br>spaceranger_mapping<br>from_xenium_to_h5mu<br>spatial_process_samples<br>nichecompass"]:::spatial
+
+  wetlab --> map --> ingest --> process --> integ --> down
+  fastq -.-> ingest
+  ingest -.-> qcreport
+  ingest -.-> spatial
+  spatial -.-> integ
+```
+
+## Demultiplexing
+
+If your sequencing provider delivers raw Illumina BCL files, convert them to
+per-sample FASTQ files at the start. This is **often already performed upstream**
+by your provider, but is also available via the `ingestion/demux` workflow, which
+supports **bcl2fastq**, **BCL Convert**, and **cellranger mkfastq** (selected with
+`--demultiplexer`). If you already have FASTQ files or a pre-built count matrix,
+skip straight to ingestion.
+
+## Ingestion
+
+Every cell is tagged with a unique barcode before sequencing. Ingestion aligns
+the resulting short reads back to a reference genome, uses the barcode to assign
+each read to a cell, and uses the UMI (Unique Molecular Identifier) to count each
+RNA molecule exactly once — removing the amplification bias from PCR. The result
+is a **count matrix** (cells × genes), stored — along with cell and gene metadata
+and any additional modalities (ADT, VDJ, ATAC) — in a single **H5MU file per
+sample**. This per-sample H5MU is the unit that flows through every later step.
+Pre-built count matrices from Cell Ranger, Scanpy, or Seurat enter here through
+the [converters](mudata.qmd#working-with-other-formats). See
+[Ingest 10x Genomics data](../guides/ingest-10x.qmd) for workflow selection and
+reference-genome setup.
+
+## QC reporting
+
+Directly off the ingested data, the [`openpipeline_qc`](ecosystem.qmd) package's
+`generate_qc_report` produces a standalone HTML report of count distributions,
+mitochondrial fractions, and doublet signals. Running it **before** processing
+lets you inspect the raw data and choose filter thresholds deliberately rather
+than accepting defaults. It is optional and sits to the side of the main flow.
+See [Generate a QC report](../guides/qc-report.qmd).
+
+## Process samples
+
+Raw count matrices contain not only real cells but also empty droplets (ambient
+RNA), damaged cells (high mitochondrial fraction), and doublets (two cells
+sequenced as one). The `process_samples` workflow handles all per-sample and
+multi-sample processing in a single command.
+
+Per sample, each modality is split out and cells are flagged for removal on total
+counts, number of detected genes, and mitochondrial fraction. For RNA, **doublet
+detection** then runs with Scrublet, adding scores to `.obs` rather than removing
+cells outright, so you keep control of the threshold. ADT (CITE-seq) data gets
+the same count-based filtering without doublet detection.
+
+After per-sample QC, samples are **concatenated together** — not normalized per
+sample — because normalization needs to see variation across the whole cohort. A
+`sample_id` column records each cell's origin. The concatenated object is then
+normalized (scaled to a fixed total count, then log1p-transformed), reduced to
+the 2,000–3,000 most **highly variable features**, and compressed with **PCA**
+into the reduced space all integration methods operate in. For large cohorts,
+`process_batches` runs the multi-sample steps on groups in parallel before
+merging, reducing peak memory. See
+[Process & filter samples](../guides/process-filter.qmd).
+
+:::{.callout-note}
+ATAC data is carried through `process_samples` without dedicated QC or
+normalization — ATAC-specific processing is not yet implemented. ATAC ingestion
+(`mapping/cellranger_atac_count`) and a standalone QC-metrics module
+(`qc/calculate_atac_qc_metrics`) are available.
+:::
+
+## Integration
+
+When samples come from different donors, runs, or library preparations, cells of
+the same biological type cluster by their technical origin rather than their
+biology. **Batch correction** realigns them in the PCA embedding so biology — not
+technical source — drives the groupings. From the corrected embedding a
+**k-nearest-neighbor graph** is built, **Leiden** community detection assigns
+cluster labels, and **UMAP** projects the graph to 2D for visualization. Those
+three outputs — corrected embedding, cluster labels, UMAP — are what downstream
+tools consume. OpenPipeline provides one workflow per method; there is no single
+default. See [Integrate with Harmony or scVI](../guides/integrate.qmd).
+
+## Downstream and annotation
+
+After integration the numbered Leiden clusters have no biological labels yet.
+**Annotation** assigns cell-type identities — by comparing marker-gene expression
+to known references, or by transferring labels from an annotated atlas. This runs
+separately from the core pipeline and depends on the tissue and question. Beyond
+annotation, the integrated H5MU is the starting point for differential
+expression, RNA velocity, cell-cell communication, and population-level analyses
+— some as OpenPipeline workflows, others as external tools that read the H5MU
+directly. See [Annotate cell types](../guides/annotate.qmd).
+
+## The spatial branch
+
+Spatial data ([`openpipeline_spatial`](ecosystem.qmd)) follows the same shape
+with spatial-aware steps. It ingests via `spaceranger_mapping` (Visium) or the
+Xenium/CosMx converters, keeping per-spot or per-cell coordinates in
+`.obsm["spatial"]`; runs spatial QC and `spatial_process_samples`; and can
+identify recurring neighbourhoods with **NicheCompass**. From there it rejoins
+the shared integration and downstream steps. See
+[Ingest Xenium / Visium](../guides/ingest-spatial.qmd) and
+[Find spatial niches](../guides/spatial-niches.qmd).
+
+---
+
+Browse every workflow and component, with full argument lists, in the
+[reference](../reference/index.qmd).

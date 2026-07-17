@@ -29,6 +29,22 @@ Namespace: `download`
 
 
 
+
+## Argument group
+
+### Arguments
+
+|Name        |Description                 |Attributes         |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`   |URL to a file to download.  |`string`, required |
+|`--output`  |Path where to store output. |`file`, required   |
+|`--verbose` |Increase verbosity          |`boolean_true`     |
+
+## Authors
+
+
+  * Robrecht Cannoodt [{{< fa brands github >}}](https://github.com/rcannood) [{{< fa brands orcid >}}](https://orcid.org/0000-0003-3641-729X) [{{< fa brands linkedin >}}](https://linkedin.com/in/robrechtcannoodt) (maintainer)
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -68,19 +84,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument group
-
-### Arguments
-
-|Name        |Description                 |Attributes         |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`   |URL to a file to download.  |`string`, required |
-|`--output`  |Path where to store output. |`file`, required   |
-|`--verbose` |Increase verbosity          |`boolean_true`     |
-
-## Authors
-
-
-  * Robrecht Cannoodt [{{< fa brands github >}}](https://github.com/rcannood) [{{< fa brands orcid >}}](https://orcid.org/0000-0003-3641-729X) [{{< fa brands linkedin >}}](https://linkedin.com/in/robrechtcannoodt) (maintainer)
-

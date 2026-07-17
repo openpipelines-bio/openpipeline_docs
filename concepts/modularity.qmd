@@ -1,0 +1,40 @@
+---
+title: "True modularity"
+description: "Modular at the execution level, not just in the source tree."
+order: 20
+---
+
+Most pipelines call themselves modular because their *source* is tidy —
+functions in files, steps in folders. OpenPipeline is modular at the level that
+actually matters for running an analysis: the **execution level**.
+
+## Code-level vs. execution-level modularity
+
+**Code-level modularity** organizes source: a well-named function, a script per
+step. But those pieces are still stitched together by shared imports, a shared
+environment, and glue code. Swapping one out means editing the others.
+
+**Execution-level modularity** means each step is an *independently built,
+versioned, containerized unit* that runs on its own. In OpenPipeline every
+component is:
+
+- **Self-contained** — its dependencies live in its own Docker image, so two
+  components can need conflicting library versions and still run in the same
+  pipeline.
+- **Independently runnable** — you can execute, test, or build any component on
+  its own with `viash run` / `viash test`, without the rest of the pipeline.
+- **A drop-in unit** — because every component reads and writes the same
+  [MuData](mudata.qmd) file through a generated CLI, one can be placed before,
+  after, or in place of another with no format conversion and no glue code.
+
+## Why it matters
+
+Building a pipeline becomes composition, not integration. Adding a step,
+removing one, or swapping an integration method is a change to the *pipeline
+definition* — not a refactor of shared code. A component written for the core
+[`openpipeline`](ecosystem.qmd) package works unchanged in a satellite package,
+because the unit of reuse is the built component, not a snippet of source.
+
+This is what the [engine — Viash and Viash Hub](viash.qmd) is built to deliver,
+and what lets the [ecosystem](ecosystem.qmd) of packages share one set of
+components.

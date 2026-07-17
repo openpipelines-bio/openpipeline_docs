@@ -31,6 +31,30 @@ Newly created columns in .obs will
 be created from the .obsm key suffixed with an underscore and the name of the columns
 of the specified .obsm matrix
 
+
+## Argument groups
+
+### MuData Input
+
+|Name         |Description                                             |Attributes                                |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`    |Input h5mu file                                         |`file`, required, example: `"input.h5mu"` |
+|`--modality` |Which modality from the input MuData file to process.   |`string`, default: `"rna"`                |
+|`--obsm_key` |Key of a data structure to move from `.obsm` to `.obs`. |`string`, required                        |
+
+
+### MuData Output
+
+|Name                   |Description                                                                                                    |Attributes                                 |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output`             |Output h5mu file.                                                                                              |`file`, required, example: `"output.h5mu"` |
+|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied. |`string`, example: `"gzip"`                |
+
+## Authors
+
+
+  * Dries Schaumont [{{< fa brands github >}}](https://github.com/DriesSchaumont) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-4389-0440) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-schaumont) (author)
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -70,27 +94,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument groups
-
-### MuData Input
-
-|Name         |Description                                             |Attributes                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`    |Input h5mu file                                         |`file`, required, example: `"input.h5mu"` |
-|`--modality` |Which modality from the input MuData file to process.   |`string`, default: `"rna"`                |
-|`--obsm_key` |Key of a data structure to move from `.obsm` to `.obs`. |`string`, required                        |
-
-
-### MuData Output
-
-|Name                   |Description                                                                                                    |Attributes                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output`             |Output h5mu file.                                                                                              |`file`, required, example: `"output.h5mu"` |
-|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied. |`string`, example: `"gzip"`                |
-
-## Authors
-
-
-  * Dries Schaumont [{{< fa brands github >}}](https://github.com/DriesSchaumont) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-4389-0440) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-schaumont) (author)
-

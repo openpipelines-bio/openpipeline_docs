@@ -1,0 +1,62 @@
+---
+title: "FAQ"
+description: "Common questions when developing components."
+order: 50
+---
+
+## How can I add an external resource to my component?
+
+Additional files such as helper scripts or configuration files are included by
+listing them under `resources` in `config.vsh.yaml`:
+
+```yaml
+resources:
+  - type: python_script
+    path: script.py
+  - type: file
+    path: helper_functions.py
+```
+
+Viash makes all listed resources available at runtime (including inside Docker
+containers) via `meta["resources_dir"]`. Reference them in your script as:
+
+```python
+helper_path = meta["resources_dir"] + "/helper_functions.py"
+```
+
+See the [Viash documentation](https://viash.io/guide/component/add-resources.html)
+for more examples.
+
+## What does `__merge__` do?
+
+`__merge__` is a Viash YAML directive that merges the contents of another YAML
+file into the current config at the point where it appears. In OpenPipeline it is
+used for author information:
+
+```yaml
+authors:
+  - __merge__: /src/authors/my_name.yaml
+    roles: [ author ]
+```
+
+This pulls the author's name, links, and ORCID from a central file in
+`src/authors/`, keeping that information consistent across all components without
+duplication.
+
+## How do I view the Dockerfile Viash generates?
+
+Pass `---dockerfile` (three dashes) to `viash run`:
+
+```bash
+viash run src/my_namespace/my_component/config.vsh.yaml -- ---dockerfile
+```
+
+This prints the generated Dockerfile without building it — useful for debugging
+dependency setup.
+
+## Where do I report bugs or request features?
+
+Open an issue on the
+[OpenPipeline GitHub repository](https://github.com/openpipelines-bio/openpipeline/issues).
+A useful report states what you ran, what you expected, what happened, and the
+versions of OpenPipeline, Viash, and Nextflow involved.

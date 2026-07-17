@@ -41,6 +41,44 @@ flowchart TB
 ```
 
 
+
+## Argument groups
+
+### Input
+
+|Name      |Description                                             |Attributes                                  |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--id`    |ID of the sample.                                       |`string`, required, example: `"foo"`        |
+|`--input` |Path to the sample.                                     |`file`, required, example: `"dataset.h5mu"` |
+|`--layer` |Input layer to start from. By default, .X will be used. |`string`                                    |
+
+
+### Output
+
+|Name       |Description                     |Attributes                                 |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output` |Destination path to the output. |`file`, required, example: `"output.h5mu"` |
+
+
+### Filtering options
+
+|Name                      |Description                                 |Attributes                    |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--min_counts`            |Minimum number of counts captured per cell. |`integer`, example: `200`     |
+|`--max_counts`            |Maximum number of counts captured per cell. |`integer`, example: `5000000` |
+|`--min_proteins_per_cell` |Minimum of non-zero values per cell.        |`integer`, example: `200`     |
+|`--max_proteins_per_cell` |Maximum of non-zero values per cell.        |`integer`, example: `1500000` |
+|`--min_cells_per_protein` |Minimum of non-zero values per gene.        |`integer`, example: `3`       |
+
+## Authors
+
+
+  * Dries De Maeyer [{{< fa brands github >}}](https://github.com/ddemaeyer) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-de-maeyer-b46a814) (author)
+
+  * Robrecht Cannoodt [{{< fa brands github >}}](https://github.com/rcannood) [{{< fa brands orcid >}}](https://orcid.org/0000-0003-3641-729X) [{{< fa brands linkedin >}}](https://linkedin.com/in/robrechtcannoodt) (author, maintainer)
+
+  * Dries Schaumont [{{< fa brands github >}}](https://github.com/DriesSchaumont) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-4389-0440) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-schaumont) (author)
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -80,40 +118,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument groups
-
-### Input
-
-|Name      |Description                                             |Attributes                                  |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--id`    |ID of the sample.                                       |`string`, required, example: `"foo"`        |
-|`--input` |Path to the sample.                                     |`file`, required, example: `"dataset.h5mu"` |
-|`--layer` |Input layer to start from. By default, .X will be used. |`string`                                    |
-
-
-### Output
-
-|Name       |Description                     |Attributes                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output` |Destination path to the output. |`file`, required, example: `"output.h5mu"` |
-
-
-### Filtering options
-
-|Name                      |Description                                 |Attributes                    |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--min_counts`            |Minimum number of counts captured per cell. |`integer`, example: `200`     |
-|`--max_counts`            |Maximum number of counts captured per cell. |`integer`, example: `5000000` |
-|`--min_proteins_per_cell` |Minimum of non-zero values per cell.        |`integer`, example: `200`     |
-|`--max_proteins_per_cell` |Maximum of non-zero values per cell.        |`integer`, example: `1500000` |
-|`--min_cells_per_protein` |Minimum of non-zero values per gene.        |`integer`, example: `3`       |
-
-## Authors
-
-
-  * Dries De Maeyer [{{< fa brands github >}}](https://github.com/ddemaeyer) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-de-maeyer-b46a814) (author)
-
-  * Robrecht Cannoodt [{{< fa brands github >}}](https://github.com/rcannood) [{{< fa brands orcid >}}](https://orcid.org/0000-0003-3641-729X) [{{< fa brands linkedin >}}](https://linkedin.com/in/robrechtcannoodt) (author, maintainer)
-
-  * Dries Schaumont [{{< fa brands github >}}](https://github.com/DriesSchaumont) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-4389-0440) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-schaumont) (author)

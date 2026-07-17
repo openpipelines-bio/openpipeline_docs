@@ -74,45 +74,6 @@ flowchart TB
 *Trapezoids split or combine data.*
 
 
-## Example commands
-
-You can run the pipeline using `nextflow run`.
-
-### View help
-
-You can use `--help` as a parameter to get an overview of the possible parameters.
-
-```bash
-nextflow run openpipelines-bio/openpipeline_composed \
-  -r v0.3.0 -latest \
-  -main-script target/nextflow/single_cell/parallel_subtyping/main.nf \
-  --help
-```
-
-### Run command
-
-<details>
-<summary>Example of `params.yaml`</summary>
-
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline_composed/v0.3.0/components/single_cell/parallel_subtyping).
-
-</details>
-
-Run locally with:
-
-```bash
-nextflow run openpipelines-bio/openpipeline_composed \
-  -r v0.3.0 -latest \
-  -profile docker \
-  -main-script target/nextflow/single_cell/parallel_subtyping/main.nf \
-  -params-file params.yaml
-```
-
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
-:::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
 
 ## Argument groups
 
@@ -298,3 +259,43 @@ Names of the .obs and .obsm slots each method writes to the subtyped output.
 
 
   * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author, maintainer)
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline_composed \
+  -r v0.3.0 -latest \
+  -main-script target/nextflow/single_cell/parallel_subtyping/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+
+Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline_composed/v0.3.0/components/single_cell/parallel_subtyping).
+
+</details>
+
+Run locally with:
+
+```bash
+nextflow run openpipelines-bio/openpipeline_composed \
+  -r v0.3.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/single_cell/parallel_subtyping/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

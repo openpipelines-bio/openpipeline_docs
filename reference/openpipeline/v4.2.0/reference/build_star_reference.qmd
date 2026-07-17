@@ -29,6 +29,29 @@ Namespace: `reference`
 
 
 
+
+## Argument groups
+
+### Input/Output
+
+|Name                  |Description                                                                                                                                                                                                                                                     |Attributes                                                                           |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--genome_fasta`      |The fasta files to be included in the reference. Corresponds to the --genomeFastaFiles argument in the STAR command.                                                                                                                                            |List of `file`, required, example: `"chr1.fasta", "chr2.fasta"`, multiple_sep: `";"` |
+|`--transcriptome_gtf` |Specifies the path to the file with annotated transcripts in the standard GTF format. STAR will extract splice junctions from this file and use them to greatly improve accuracy of the mapping. Corresponds to the --sjdbGTFfile argument in the STAR command. |`file`, example: `"transcriptome.gtf"`                                               |
+|`--output`            |Path to output directory. Corresponds to the --genomeDir argument in the STAR command.                                                                                                                                                                          |`file`, required, example: `"/path/to/foo"`                                          |
+
+
+### Genome indexing arguments
+
+|Name                    |Description                                                                                                                                                                                                                                                     |Attributes               |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--genomeSAindexNbases` |Length (bases) of the SA pre-indexing string. Typically between 10 and 15. Longer strings will use much more memory, but allow faster searches. For small genomes, the parameter {genomeSAindexNbases must be scaled down to min(14, log2(GenomeLength)/2 - 1). |`integer`, default: `14` |
+
+## Authors
+
+
+  * Dries Schaumont [{{< fa brands github >}}](https://github.com/DriesSchaumont) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-4389-0440) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-schaumont) (author)
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -68,26 +91,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument groups
-
-### Input/Output
-
-|Name                  |Description                                                                                                                                                                                                                                                     |Attributes                                                                           |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--genome_fasta`      |The fasta files to be included in the reference. Corresponds to the --genomeFastaFiles argument in the STAR command.                                                                                                                                            |List of `file`, required, example: `"chr1.fasta", "chr2.fasta"`, multiple_sep: `";"` |
-|`--transcriptome_gtf` |Specifies the path to the file with annotated transcripts in the standard GTF format. STAR will extract splice junctions from this file and use them to greatly improve accuracy of the mapping. Corresponds to the --sjdbGTFfile argument in the STAR command. |`file`, example: `"transcriptome.gtf"`                                               |
-|`--output`            |Path to output directory. Corresponds to the --genomeDir argument in the STAR command.                                                                                                                                                                          |`file`, required, example: `"/path/to/foo"`                                          |
-
-
-### Genome indexing arguments
-
-|Name                    |Description                                                                                                                                                                                                                                                     |Attributes               |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--genomeSAindexNbases` |Length (bases) of the SA pre-indexing string. Typically between 10 and 15. Longer strings will use much more memory, but allow faster searches. For small genomes, the parameter {genomeSAindexNbases must be scaled down to min(14, log2(GenomeLength)/2 - 1). |`integer`, default: `14` |
-
-## Authors
-
-
-  * Dries Schaumont [{{< fa brands github >}}](https://github.com/DriesSchaumont) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-4389-0440) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-schaumont) (author)
-

@@ -29,6 +29,37 @@ Namespace: `feature_annotation`
 
 This allows identifying spatially variable genes
 
+
+## Argument groups
+
+### Inputs
+
+|Name                        |Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |Attributes                                    |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`                   |Input h5mu file.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |`file`, required                              |
+|`--modality`                |Modality to use.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |`string`, default: `"rna"`                    |
+|`--layer`                   |Layer in the AnnData object to use. - If `attr` is 'X', this is the key in `.layers` to use. If not provided, `.X` is used. - If `attr` is 'obsm', this is the key in `.obsm` to use.                                                                                                                                                                                                                                                                                                                                                                        |`string`                                      |
+|`--input_genes`             |The features to calculate autocorrelation for. Meaning depends on `--attr`: - If `attr` is 'X' (default), this must be a list of gene names from `.var_names`.    If not provided, it defaults to using genes in `.var['highly_variable']` (if present), or all genes.   This behavior can be overridden by setting `--use_all_genes` to `true`.   Note: You cannot pass a column name from `.var` here. - If `attr` is 'obs', this must be a list of column names from `.obs`.  - If `attr` is 'obsm', this must be indices in `.obsm[layer]` (as strings). |List of `string`, multiple_sep: `","`         |
+|`--obsp_neighborhood_graph` |Key in .obsp where spatial connectivities are stored.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |`string`, default: `"spatial_connectivities"` |
+|`--use_all_genes`           |Whether to use all genes even if highly variable genes are present in .var. If set to true, all genes will be used.                                                                                                                                                                                                                                                                                                                                                                                                                                          |`boolean`, default: `FALSE`                   |
+
+
+### Parameters
+
+|Name        |Description                                                                                                                                                                   |Attributes                   |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--mode`    |Mode of spatial autocorrelation.                                                                                                                                              |`string`, default: `"moran"` |
+|`--attr`    |The attribute of the AnnData object to use for calculation. - 'X': Use gene expression data (default). - 'obs': Use cell metadata. - 'obsm': Use multidimensional embeddings. |`string`, default: `"X"`     |
+|`--n_perms` |Number of permutations for p-value calculation.                                                                                                                               |`integer`, default: `100`    |
+|`--use_raw` |Whether to use .raw attribute of AnnData.                                                                                                                                     |`boolean`, default: `FALSE`  |
+
+
+### Outputs
+
+|Name       |Description                            |Attributes       |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output` |Output h5mu file with results in .uns. |`file`, required |
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -68,34 +99,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument groups
-
-### Inputs
-
-|Name                        |Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |Attributes                                    |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`                   |Input h5mu file.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |`file`, required                              |
-|`--modality`                |Modality to use.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |`string`, default: `"rna"`                    |
-|`--layer`                   |Layer in the AnnData object to use. - If `attr` is 'X', this is the key in `.layers` to use. If not provided, `.X` is used. - If `attr` is 'obsm', this is the key in `.obsm` to use.                                                                                                                                                                                                                                                                                                                                                                        |`string`                                      |
-|`--input_genes`             |The features to calculate autocorrelation for. Meaning depends on `--attr`: - If `attr` is 'X' (default), this must be a list of gene names from `.var_names`.    If not provided, it defaults to using genes in `.var['highly_variable']` (if present), or all genes.   This behavior can be overridden by setting `--use_all_genes` to `true`.   Note: You cannot pass a column name from `.var` here. - If `attr` is 'obs', this must be a list of column names from `.obs`.  - If `attr` is 'obsm', this must be indices in `.obsm[layer]` (as strings). |List of `string`, multiple_sep: `","`         |
-|`--obsp_neighborhood_graph` |Key in .obsp where spatial connectivities are stored.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |`string`, default: `"spatial_connectivities"` |
-|`--use_all_genes`           |Whether to use all genes even if highly variable genes are present in .var. If set to true, all genes will be used.                                                                                                                                                                                                                                                                                                                                                                                                                                          |`boolean`, default: `FALSE`                   |
-
-
-### Parameters
-
-|Name        |Description                                                                                                                                                                   |Attributes                   |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--mode`    |Mode of spatial autocorrelation.                                                                                                                                              |`string`, default: `"moran"` |
-|`--attr`    |The attribute of the AnnData object to use for calculation. - 'X': Use gene expression data (default). - 'obs': Use cell metadata. - 'obsm': Use multidimensional embeddings. |`string`, default: `"X"`     |
-|`--n_perms` |Number of permutations for p-value calculation.                                                                                                                               |`integer`, default: `100`    |
-|`--use_raw` |Whether to use .raw attribute of AnnData.                                                                                                                                     |`boolean`, default: `FALSE`  |
-
-
-### Outputs
-
-|Name       |Description                            |Attributes       |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output` |Output h5mu file with results in .uns. |`file`, required |
-

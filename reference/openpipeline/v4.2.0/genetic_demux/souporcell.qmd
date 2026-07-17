@@ -29,6 +29,41 @@ Namespace: `genetic_demux`
 
 
 
+
+## Argument groups
+
+### Input
+
+|Name                             |Description                                                                                                       |Attributes                               |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--fasta`                        |reference fasta file                                                                                              |`file`, example: `"reference.fasta"`     |
+|`--bam`                          |cellranger bam                                                                                                    |`file`, example: `"input.bam"`           |
+|`--bam_index`                    |cellranger bam index                                                                                              |`file`, example: `"input.bam.bai"`       |
+|`--barcodes`                     |barcodes.tsv from cellranger                                                                                      |`file`, example: `"barcodes.tsv"`        |
+|`--clusters`                     |number cluster, tbd add easy way to run on a range of k                                                           |`integer`                                |
+|`--ploidy`                       |ploidy, must be 1 or 2                                                                                            |`integer`, default: `2`                  |
+|`--min_alt`                      |min alt to use locus                                                                                              |`integer`, default: `10`                 |
+|`--min_ref`                      |min ref to use locus                                                                                              |`integer`, default: `10`                 |
+|`--max_loci`                     |max loci per cell, affects speed                                                                                  |`integer`, default: `2048`               |
+|`--restarts`                     |number of restarts in clustering, when there are > 12 clusters we recommend increasing this to avoid local minima |`integer`                                |
+|`--common_variants`              |common variant loci or known variant loci vcf, must be vs same reference fasta                                    |`file`, example: `"common_variants.vcf"` |
+|`--known_genotypes`              |known variants per clone in population vcf mode                                                                   |`file`, example: `"known_variants.vcf"`  |
+|`--known_genotypes_sample_names` |which samples in population vcf from known genotypes option represent the donors in your sample                   |`string`                                 |
+|`--skip_remap`                   |dont remap with minimap2 (not recommended unless in conjunction with --common_variants                            |`boolean_true`                           |
+|`--ignore`                       |set to True to ignore data error assertions                                                                       |`boolean_true`                           |
+
+
+### Output
+
+|Name       |Description                                 |Attributes                          |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output` |name of directory to place souporcell files |`file`, example: `"souporcell_out"` |
+
+## Authors
+
+
+  * Xichen Wu [{{< fa brands github >}}](https://github.com/wxicu) [{{< fa brands orcid >}}](https://orcid.org/0009-0008-2168-4508) [{{< fa brands linkedin >}}](https://linkedin.com/in/xichen-wu) (author)
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -68,38 +103,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument groups
-
-### Input
-
-|Name                             |Description                                                                                                       |Attributes                               |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--fasta`                        |reference fasta file                                                                                              |`file`, example: `"reference.fasta"`     |
-|`--bam`                          |cellranger bam                                                                                                    |`file`, example: `"input.bam"`           |
-|`--bam_index`                    |cellranger bam index                                                                                              |`file`, example: `"input.bam.bai"`       |
-|`--barcodes`                     |barcodes.tsv from cellranger                                                                                      |`file`, example: `"barcodes.tsv"`        |
-|`--clusters`                     |number cluster, tbd add easy way to run on a range of k                                                           |`integer`                                |
-|`--ploidy`                       |ploidy, must be 1 or 2                                                                                            |`integer`, default: `2`                  |
-|`--min_alt`                      |min alt to use locus                                                                                              |`integer`, default: `10`                 |
-|`--min_ref`                      |min ref to use locus                                                                                              |`integer`, default: `10`                 |
-|`--max_loci`                     |max loci per cell, affects speed                                                                                  |`integer`, default: `2048`               |
-|`--restarts`                     |number of restarts in clustering, when there are > 12 clusters we recommend increasing this to avoid local minima |`integer`                                |
-|`--common_variants`              |common variant loci or known variant loci vcf, must be vs same reference fasta                                    |`file`, example: `"common_variants.vcf"` |
-|`--known_genotypes`              |known variants per clone in population vcf mode                                                                   |`file`, example: `"known_variants.vcf"`  |
-|`--known_genotypes_sample_names` |which samples in population vcf from known genotypes option represent the donors in your sample                   |`string`                                 |
-|`--skip_remap`                   |dont remap with minimap2 (not recommended unless in conjunction with --common_variants                            |`boolean_true`                           |
-|`--ignore`                       |set to True to ignore data error assertions                                                                       |`boolean_true`                           |
-
-
-### Output
-
-|Name       |Description                                 |Attributes                          |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output` |name of directory to place souporcell files |`file`, example: `"souporcell_out"` |
-
-## Authors
-
-
-  * Xichen Wu [{{< fa brands github >}}](https://github.com/wxicu) [{{< fa brands orcid >}}](https://orcid.org/0009-0008-2168-4508) [{{< fa brands linkedin >}}](https://linkedin.com/in/xichen-wu) (author)
-

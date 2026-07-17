@@ -29,6 +29,28 @@ Namespace: `transform`
 
 Computes X = log(X + 1), where log denotes the natural logarithm unless a different base is given
 
+
+## Argument group
+
+### Arguments
+
+|Name                   |Description                                                                                                    |Attributes                                 |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`              |Input h5mu file                                                                                                |`file`, required, example: `"input.h5mu"`  |
+|`--modality`           |Which modality from the input MuData file to process.                                                          |`string`, default: `"rna"`                 |
+|`--input_layer`        |Input layer to use. If None, X is normalized                                                                   |`string`                                   |
+|`--output_layer`       |Output layer to use. By default, use X.                                                                        |`string`                                   |
+|`--output`             |Output h5mu file.                                                                                              |`file`, required, default: `"output.h5mu"` |
+|`--base`               |Base of the logarithm. Natural logarithm is used by default.                                                   |`double`, example: `2`                     |
+|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied. |`string`, example: `"gzip"`                |
+
+## Authors
+
+
+  * Dries De Maeyer [{{< fa brands github >}}](https://github.com/ddemaeyer) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-de-maeyer-b46a814) (maintainer)
+
+  * Robrecht Cannoodt [{{< fa brands github >}}](https://github.com/rcannood) [{{< fa brands orcid >}}](https://orcid.org/0000-0003-3641-729X) [{{< fa brands linkedin >}}](https://linkedin.com/in/robrechtcannoodt) (contributor)
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -68,25 +90,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument group
-
-### Arguments
-
-|Name                   |Description                                                                                                    |Attributes                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`              |Input h5mu file                                                                                                |`file`, required, example: `"input.h5mu"`  |
-|`--modality`           |Which modality from the input MuData file to process.                                                          |`string`, default: `"rna"`                 |
-|`--input_layer`        |Input layer to use. If None, X is normalized                                                                   |`string`                                   |
-|`--output_layer`       |Output layer to use. By default, use X.                                                                        |`string`                                   |
-|`--output`             |Output h5mu file.                                                                                              |`file`, required, default: `"output.h5mu"` |
-|`--base`               |Base of the logarithm. Natural logarithm is used by default.                                                   |`double`, example: `2`                     |
-|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied. |`string`, example: `"gzip"`                |
-
-## Authors
-
-
-  * Dries De Maeyer [{{< fa brands github >}}](https://github.com/ddemaeyer) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-de-maeyer-b46a814) (maintainer)
-
-  * Robrecht Cannoodt [{{< fa brands github >}}](https://github.com/rcannood) [{{< fa brands orcid >}}](https://orcid.org/0000-0003-3641-729X) [{{< fa brands linkedin >}}](https://linkedin.com/in/robrechtcannoodt) (contributor)
-

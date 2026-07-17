@@ -1,22 +1,84 @@
 ---
-title: "Built with Viash · run on Viash Hub"
-order: 20
+title: "The engine: Viash and Viash Hub"
+description: "How components are built, containerized, tested, and published."
+order: 40
 ---
 
+OpenPipeline's [modularity](modularity.qmd) is not hand-maintained — it is
+produced by two pieces of tooling: **Viash**, which builds each component, and
+**Viash Hub**, the platform that builds, tests, and publishes them.
+
+## Viash: config + script → component
+
 **[Viash](https://viash.io)** turns a config (`config.vsh.yaml`) plus a script
-into a containerized component *and* a Nextflow VDSL3 module. Because every
-component is containerized and versioned, a local run and a cloud run behave
-identically.
+into a self-contained component. From that one description it generates:
 
-- A **module** does one job (normalize, cluster, filter).
-- A **workflow** chains modules into a pipeline.
-- Both are built by Viash; the build output lives in `target/`.
+- a **command-line interface**, parsing and injecting the declared arguments into
+  the script;
+- a **Docker image** pinning the component's exact dependencies;
+- a **Nextflow (VDSL3) module** that can be chained into a workflow.
 
-**[Viash Hub](https://www.viash-hub.com)** is the web catalog where those
-components live. You can browse them, read their parameters, and launch workflows
-through a GUI — or connect to Seqera — without touching the command line.
+Viash separates a component's **logic** (a script in Python, R, or Bash) from its
+**execution environment** (the container) and its **orchestration layer**
+(Nextflow). Two properties fall out of that separation:
 
-This is also why the [reference](../reference/index.qmd) can be auto-generated:
-the same configs that build the components produce their documentation.
+**Language independence.** Each component is written in whatever language suits
+the task — normalization in Python, a statistical test in R, a file conversion in
+Bash. The generated CLI makes them interchangeable regardless of language.
 
-*Content to be expanded from the current `fundamentals` pages.*
+**Modularity.** Because every component shares the [MuData](mudata.qmd) format
+and a generated CLI, they compose freely — no glue code between steps. The same
+component runs standalone with `viash run`, is tested with `viash test`, or is
+built into an image with `viash build`.
+
+## The technology stack
+
+At build time Viash compiles each component into a Nextflow module. Workflows
+chain these modules using Nextflow DSL2, with data flowing as MuData files on a
+shared channel. The same pipeline runs unchanged from a laptop to an HPC cluster
+or the cloud.
+
+```{mermaid}
+%%| label: fig-techstack
+%%| fig-cap: "Components (code in R, Python, or Bash) are wrapped by Viash into Docker images and Nextflow modules, assembled into Nextflow workflows that run unchanged on local, cloud, and HPC platforms."
+%%{init: {"theme":"base", "themeVariables":{"fontSize":"14px"}}}%%
+graph LR
+    classDef input fill:#f5f5f5,stroke:#aaaaaa,color:#444
+    classDef light fill:#eaf5e6,stroke:#b3d99e,color:#000
+    classDef mid   fill:#d5e8d4,stroke:#82b366,color:#000
+    classDef core  fill:#a9d69a,stroke:#5a9e57,color:#000
+
+    MuData["<b>MuData</b>"]:::input
+    R["<b>R scripts</b>"]:::light
+    Python["<b>Python scripts</b>"]:::light
+    Bash["<b>Bash scripts</b>"]:::light
+    Viash["<b>Viash component</b>"]:::core
+    Docker["<b>Docker images</b>"]:::mid
+    Modules["<b>Nextflow modules</b>"]:::mid
+    Nextflow["<b>Nextflow workflows</b>"]:::core
+    Local["<b>Local execution</b>"]:::light
+    AWS["<b>AWS Batch</b>"]:::light
+    GCP["<b>Google Cloud Batch</b>"]:::light
+    HPC["<b>HPC</b>"]:::light
+    More["<b>...</b>"]:::light
+
+    MuData --> R & Python & Bash
+    R & Python & Bash --> Viash
+    Viash --> Docker & Modules
+    Docker & Modules --> Nextflow
+    Nextflow --> Local & AWS & GCP & HPC & More
+```
+
+## Viash Hub: build, test, publish
+
+**[Viash Hub](https://www.viash-hub.com)** is the platform that runs this
+machinery continuously. It acts as the CI backing OpenPipeline: it **builds the
+containers**, **runs the unit and workflow tests**, and **publishes** the
+resulting components to a versioned catalog. Because the same configs drive both
+the build and the docs, it is also what lets the
+[reference](../reference/index.qmd) be auto-generated.
+
+From the catalog you can browse components, read their parameters, and launch
+workflows through a GUI — or connect to Seqera — without touching the command
+line. Each generated reference page links to its Viash Hub entry for copy-paste
+run instructions.

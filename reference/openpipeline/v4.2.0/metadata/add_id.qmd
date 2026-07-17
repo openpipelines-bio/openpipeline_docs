@@ -30,6 +30,25 @@ Namespace: `metadata`
 Also allows to make .obs_names (the .obs index) unique 
 by prefixing the values with an unique id per .h5mu file
 
+
+## Argument group
+
+### Arguments
+
+|Name                             |Description                                                                                                    |Attributes                                |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`                        |Path to the input .h5mu.                                                                                       |`file`, required, example: `"input.h5mu"` |
+|`--input_id`                     |The input id.                                                                                                  |`string`, required                        |
+|`--obs_output`                   |Name of the .obs column where to store the id.                                                                 |`string`, default: `"sample_id"`          |
+|`--output`                       |Name of output MuData file.                                                                                    |`file`, example: `"output.h5mu"`          |
+|`--make_observation_keys_unique` |Join the id to the .obs index (.obs_names).                                                                    |`boolean_true`                            |
+|`--output_compression`           |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied. |`string`, example: `"gzip"`               |
+
+## Authors
+
+
+  * Dries Schaumont [{{< fa brands github >}}](https://github.com/DriesSchaumont) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-4389-0440) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-schaumont) (maintainer)
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -69,22 +88,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument group
-
-### Arguments
-
-|Name                             |Description                                                                                                    |Attributes                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`                        |Path to the input .h5mu.                                                                                       |`file`, required, example: `"input.h5mu"` |
-|`--input_id`                     |The input id.                                                                                                  |`string`, required                        |
-|`--obs_output`                   |Name of the .obs column where to store the id.                                                                 |`string`, default: `"sample_id"`          |
-|`--output`                       |Name of output MuData file.                                                                                    |`file`, example: `"output.h5mu"`          |
-|`--make_observation_keys_unique` |Join the id to the .obs index (.obs_names).                                                                    |`boolean_true`                            |
-|`--output_compression`           |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied. |`string`, example: `"gzip"`               |
-
-## Authors
-
-
-  * Dries Schaumont [{{< fa brands github >}}](https://github.com/DriesSchaumont) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-4389-0440) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-schaumont) (maintainer)
-

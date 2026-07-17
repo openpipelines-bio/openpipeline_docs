@@ -29,6 +29,40 @@ Namespace: `genetic_demux`
 
 
 
+
+## Argument groups
+
+### Input
+
+|Name          |Description                                                                                                                                                                                                                |Attributes                              |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--vcf`       |VCF from mixed BAM                                                                                                                                                                                                         |`file`, example: `"input.vcf"`          |
+|`--bam`       |mixed sample BAM                                                                                                                                                                                                           |`file`, example: `"input.bam"`          |
+|`--bar`       |barcodes whitelist                                                                                                                                                                                                         |`file`, example: `"barcodes.txt"`       |
+|`--tag`       |tag for barcode                                                                                                                                                                                                            |`string`, default: `"CB"`               |
+|`--com`       |common SNVs                                                                                                                                                                                                                |`file`, example: `"common_snvs.txt"`    |
+|`--num`       |expected number of mixed samples                                                                                                                                                                                           |`integer`                               |
+|`--sub`       |maximum number of subpopulations in autodetect mode                                                                                                                                                                        |`integer`, default: `10`                |
+|`--ems`       |number of EM repeats to avoid local maximum                                                                                                                                                                                |`integer`, default: `30`                |
+|`--dbl`       |correction for doublets. There will be no refinement on the results if this optional parameter is not specified or specified percentage is less than doublet rates detected during the run.                                |`double`                                |
+|`--vcf_known` |known individual genotypes to limit distinguishing variants to available variants, so that users do not need to redo genotyping on selected variants, otherwise any variants could be selected as distinguishing variants. |`file`, example: `"known_variants.vcf"` |
+|`--geno`      |generate sample genotypes based on the split result.                                                                                                                                                                       |`boolean_true`                          |
+
+
+### Output
+
+|Name       |Description             |Attributes                       |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output` |Output directory        |`file`, example: `"scSplit_out"` |
+|`--ref`    |output Ref count matrix |`string`                         |
+|`--alt`    |output Alt count matrix |`string`                         |
+|`--psc`    |generated P(S&#124;C)   |`string`                         |
+
+## Authors
+
+
+  * Xichen Wu [{{< fa brands github >}}](https://github.com/wxicu) [{{< fa brands orcid >}}](https://orcid.org/0009-0008-2168-4508) [{{< fa brands linkedin >}}](https://linkedin.com/in/xichen-wu) (author)
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -68,37 +102,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument groups
-
-### Input
-
-|Name          |Description                                                                                                                                                                                                                |Attributes                              |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--vcf`       |VCF from mixed BAM                                                                                                                                                                                                         |`file`, example: `"input.vcf"`          |
-|`--bam`       |mixed sample BAM                                                                                                                                                                                                           |`file`, example: `"input.bam"`          |
-|`--bar`       |barcodes whitelist                                                                                                                                                                                                         |`file`, example: `"barcodes.txt"`       |
-|`--tag`       |tag for barcode                                                                                                                                                                                                            |`string`, default: `"CB"`               |
-|`--com`       |common SNVs                                                                                                                                                                                                                |`file`, example: `"common_snvs.txt"`    |
-|`--num`       |expected number of mixed samples                                                                                                                                                                                           |`integer`                               |
-|`--sub`       |maximum number of subpopulations in autodetect mode                                                                                                                                                                        |`integer`, default: `10`                |
-|`--ems`       |number of EM repeats to avoid local maximum                                                                                                                                                                                |`integer`, default: `30`                |
-|`--dbl`       |correction for doublets. There will be no refinement on the results if this optional parameter is not specified or specified percentage is less than doublet rates detected during the run.                                |`double`                                |
-|`--vcf_known` |known individual genotypes to limit distinguishing variants to available variants, so that users do not need to redo genotyping on selected variants, otherwise any variants could be selected as distinguishing variants. |`file`, example: `"known_variants.vcf"` |
-|`--geno`      |generate sample genotypes based on the split result.                                                                                                                                                                       |`boolean_true`                          |
-
-
-### Output
-
-|Name       |Description             |Attributes                       |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output` |Output directory        |`file`, example: `"scSplit_out"` |
-|`--ref`    |output Ref count matrix |`string`                         |
-|`--alt`    |output Alt count matrix |`string`                         |
-|`--psc`    |generated P(S&#124;C)   |`string`                         |
-
-## Authors
-
-
-  * Xichen Wu [{{< fa brands github >}}](https://github.com/wxicu) [{{< fa brands orcid >}}](https://orcid.org/0009-0008-2168-4508) [{{< fa brands linkedin >}}](https://linkedin.com/in/xichen-wu) (author)
-

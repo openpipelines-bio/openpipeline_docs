@@ -29,6 +29,41 @@ Namespace: `genetic_demux`
 
 
 
+
+## Argument groups
+
+### Input
+
+|Name                  |Description                                                                                          |Attributes                                  |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--cell_data`         |The cell genotype file in VCF format or cellSNP folder with sparse matrices.                         |`file`, example: `"cell_data.vcf"`          |
+|`--n_donor`           |Number of donors to demultiplex; can be larger than provided in donor_file.                          |`integer`, default: `2`                     |
+|`--vartrix_data`      |The cell genotype files in vartrix outputs.                                                          |`file`, example: `"path/to/vatrix_outputs"` |
+|`--donor_file`        |The donor genotype file in VCF format. Please filter the sample and region with bcftools first!      |`file`                                      |
+|`--geno_tag`          |The tag for donor genotype.                                                                          |`string`, default: `"PL"`                   |
+|`--no_doublet`        |If use, not checking doublets.                                                                       |`boolean`, default: `FALSE`                 |
+|`--n_init`            |Number of random initializations, when GT needs to learn.                                            |`integer`, default: `50`                    |
+|`--extra_donor`       |Number of extra donor in pre-cluster, when GT needs to learn.                                        |`integer`, default: `0`                     |
+|`--extra_donorMode`   |Method for searching from extra donors. size: n_cell per donor; distance: GT distance between donors |`string`                                    |
+|`--force_learn_gt`    |If use, treat donor GT as prior only.                                                                |`boolean`, default: `FALSE`                 |
+|`--ase_mode`          |If use, turn on SNP specific allelic ratio.                                                          |`boolean`, default: `FALSE`                 |
+|`--no_plot`           |If use, turn off plotting GT distance.                                                               |`boolean`, default: `FALSE`                 |
+|`--rand_seed`         |Seed for random initialization                                                                       |`integer`                                   |
+|`--cell_range`        |Range of cells to process.                                                                           |`string`                                    |
+|`--call_ambient_rnas` |If use, detect ambient RNAs in each cell.                                                            |`boolean`, default: `FALSE`                 |
+
+
+### Output
+
+|Name       |Description      |Attributes                 |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output` |Output directory |`file`, example: `"vireo"` |
+
+## Authors
+
+
+  * Xichen Wu [{{< fa brands github >}}](https://github.com/wxicu) [{{< fa brands orcid >}}](https://orcid.org/0009-0008-2168-4508) [{{< fa brands linkedin >}}](https://linkedin.com/in/xichen-wu) (author)
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -68,38 +103,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument groups
-
-### Input
-
-|Name                  |Description                                                                                          |Attributes                                  |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--cell_data`         |The cell genotype file in VCF format or cellSNP folder with sparse matrices.                         |`file`, example: `"cell_data.vcf"`          |
-|`--n_donor`           |Number of donors to demultiplex; can be larger than provided in donor_file.                          |`integer`, default: `2`                     |
-|`--vartrix_data`      |The cell genotype files in vartrix outputs.                                                          |`file`, example: `"path/to/vatrix_outputs"` |
-|`--donor_file`        |The donor genotype file in VCF format. Please filter the sample and region with bcftools first!      |`file`                                      |
-|`--geno_tag`          |The tag for donor genotype.                                                                          |`string`, default: `"PL"`                   |
-|`--no_doublet`        |If use, not checking doublets.                                                                       |`boolean`, default: `FALSE`                 |
-|`--n_init`            |Number of random initializations, when GT needs to learn.                                            |`integer`, default: `50`                    |
-|`--extra_donor`       |Number of extra donor in pre-cluster, when GT needs to learn.                                        |`integer`, default: `0`                     |
-|`--extra_donorMode`   |Method for searching from extra donors. size: n_cell per donor; distance: GT distance between donors |`string`                                    |
-|`--force_learn_gt`    |If use, treat donor GT as prior only.                                                                |`boolean`, default: `FALSE`                 |
-|`--ase_mode`          |If use, turn on SNP specific allelic ratio.                                                          |`boolean`, default: `FALSE`                 |
-|`--no_plot`           |If use, turn off plotting GT distance.                                                               |`boolean`, default: `FALSE`                 |
-|`--rand_seed`         |Seed for random initialization                                                                       |`integer`                                   |
-|`--cell_range`        |Range of cells to process.                                                                           |`string`                                    |
-|`--call_ambient_rnas` |If use, detect ambient RNAs in each cell.                                                            |`boolean`, default: `FALSE`                 |
-
-
-### Output
-
-|Name       |Description      |Attributes                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output` |Output directory |`file`, example: `"vireo"` |
-
-## Authors
-
-
-  * Xichen Wu [{{< fa brands github >}}](https://github.com/wxicu) [{{< fa brands orcid >}}](https://orcid.org/0009-0008-2168-4508) [{{< fa brands linkedin >}}](https://linkedin.com/in/xichen-wu) (author)
-

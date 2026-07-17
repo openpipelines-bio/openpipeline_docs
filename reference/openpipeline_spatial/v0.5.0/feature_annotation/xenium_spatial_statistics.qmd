@@ -30,6 +30,34 @@ Namespace: `feature_annotation`
 This component expects a MuData object with a pre-computed spatial neighborhood graph
 in `.obsp`
 
+
+## Argument groups
+
+### Inputs
+
+|Name                         |Description                                                                                                            |Attributes                                |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`                    |A MuData file containing spatial transcriptomics data and a pre-computed spatial neighborhood graph in `.obsp`.        |`file`, required, example: `"input.h5mu"` |
+|`--modality`                 |The name of the modality to use from the MuData object. This specifies which AnnData object contains the spatial data. |`string`, required, default: `"rna"`      |
+|`--obsm_spatial_coordinates` |The key in `.obsm` where spatial coordinates are stored. Expected shape is (n_cells, 2) for 2D coordinates.            |`string`, default: `"spatial"`            |
+
+
+### Outputs
+
+|Name              |Description                                                                                                                       |Attributes                       |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output`        |The output MuData file with calculated spatial statistics. Per-cell metrics are stored in `.obs` and global statistics in `.uns`. |`file`, default: `"output.h5mu"` |
+|`--output_prefix` |Prefix to add to all generated column names in `.obs`.                                                                            |`string`, default: `"spatial_"`  |
+
+
+### Parameters
+
+|Name                   |Description                                                                                                                                       |Attributes                  |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--density_bandwidth`  |Bandwidth parameter for Gaussian kernel density estimation in spatial units (typically microns). Larger values create smoother density estimates. |`double`, default: `50`     |
+|`--calculate_ripley_l` |Whether to calculate Ripley's L statistic.  Warning: This is an O(N^2) operation and can be very slow for large datasets (>5000 cells).           |`boolean`, default: `FALSE` |
+|`--n_subsample_ripley` |Number of cells to subsample for Ripley's L calculation.  If -1, use all cells. Recommended to keep this below 5000 for performance.              |`integer`, default: `-1`    |
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -69,31 +97,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument groups
-
-### Inputs
-
-|Name                         |Description                                                                                                            |Attributes                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`                    |A MuData file containing spatial transcriptomics data and a pre-computed spatial neighborhood graph in `.obsp`.        |`file`, required, example: `"input.h5mu"` |
-|`--modality`                 |The name of the modality to use from the MuData object. This specifies which AnnData object contains the spatial data. |`string`, required, default: `"rna"`      |
-|`--obsm_spatial_coordinates` |The key in `.obsm` where spatial coordinates are stored. Expected shape is (n_cells, 2) for 2D coordinates.            |`string`, default: `"spatial"`            |
-
-
-### Outputs
-
-|Name              |Description                                                                                                                       |Attributes                       |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output`        |The output MuData file with calculated spatial statistics. Per-cell metrics are stored in `.obs` and global statistics in `.uns`. |`file`, default: `"output.h5mu"` |
-|`--output_prefix` |Prefix to add to all generated column names in `.obs`.                                                                            |`string`, default: `"spatial_"`  |
-
-
-### Parameters
-
-|Name                   |Description                                                                                                                                       |Attributes                  |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--density_bandwidth`  |Bandwidth parameter for Gaussian kernel density estimation in spatial units (typically microns). Larger values create smoother density estimates. |`double`, default: `50`     |
-|`--calculate_ripley_l` |Whether to calculate Ripley's L statistic.  Warning: This is an O(N^2) operation and can be very slow for large datasets (>5000 cells).           |`boolean`, default: `FALSE` |
-|`--n_subsample_ripley` |Number of cells to subsample for Ripley's L calculation.  If -1, use all cells. Recommended to keep this below 5000 for performance.              |`integer`, default: `-1`    |
-

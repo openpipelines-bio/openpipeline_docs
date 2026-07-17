@@ -1,0 +1,95 @@
+---
+title: "Project structure"
+description: "How namespaces, configs, and the target/ build map together."
+order: 10
+---
+
+## Repository layout {#sec-project-structure}
+
+The root of the repository contains two main folders:
+
+1. `src` — the source code for components and workflows.
+2. `target` — build outputs (only present after components have been built).
+
+Each subfolder of `src` is a Viash
+[namespace](https://viash.io/guides/projects/namespaces/): a logical grouping of
+components with similar function. Within a namespace, each subfolder is one
+component. For example `src/convert/from_bdrhap_to_h5mu` implements the
+`from_bdrhap_to_h5mu` component, grouped with others such as
+`from_10xmtx_to_h5mu` into the `convert` namespace. Pipelines are grouped into
+folders in the same way, but these are not component namespaces and do not
+interact with `viash ns` commands.
+
+Viash provides commands that operate on a single component, on a whole namespace,
+or on the entire project. As a rule of thumb, the basic commands (like
+`viash test`) act on individual components, while `ns` commands (like
+`viash ns test`) act on namespaces. A fresh clone has no `target` folder — it is
+created only after components are built.
+
+## Versioning and branching {#sec-versioning}
+
+OpenPipeline follows [semantic versioning](https://semver.org/): releases use a
+`MAJOR.MINOR.PATCH` number. At major version 4.x, public-facing breaking changes
+are documented in a dedicated section of the CHANGELOG on each `MINOR` release. A
+`PATCH` release resolves bugs without introducing breaking changes — though a
+patch may correct behavior that was itself an inadvertent earlier breaking change.
+
+Between releases, development happens on Git branches. All pull requests target
+the **`main`** branch, so `main` holds the latest code and acts as the
+development branch. Once a pull request is approved and merged, GitHub Actions CI
+builds all components (creating `target/`) and pushes the result to the
+**`main_build`** branch — a copy of `main` that also contains the built
+components.
+
+To cut a release, the CI release workflow is triggered manually: components on
+`main` are built and tested, the result is pushed to the **`release`** branch,
+and integration tests run. If they pass, a GitHub tag and release are created
+from `release`. A release also publishes the auto-generated reference
+documentation.
+
+```{mermaid}
+%%{init: { 'logLevel': 'debug', 'theme': 'default'} } }%%
+gitGraph
+  commit id: "initial commit"
+  branch main_build
+  commit id: "CI build"
+  checkout main
+  commit
+  checkout main_build
+  merge main
+  checkout main
+  branch feature_a
+  branch feature_b
+  checkout feature_a
+  commit
+  commit
+  checkout main
+  commit id: "#release 0.1" type: HIGHLIGHT
+  checkout main_build
+  merge main
+  checkout main
+  branch release
+  commit tag: "0.1"
+  checkout main
+  commit
+  checkout feature_b
+  commit
+  commit
+  checkout feature_a
+  commit
+  checkout main
+  merge feature_a
+  checkout main_build
+  merge main
+  checkout main
+  checkout feature_b
+  commit
+  checkout main
+  merge feature_b
+  checkout main_build
+  merge main
+  checkout release
+  merge main tag: "0.2"
+```
+
+**Next:** [Creating components →](creating-components.qmd)

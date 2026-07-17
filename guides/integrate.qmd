@@ -1,0 +1,109 @@
+---
+title: "Integrate with Harmony or scVI"
+description: "Batch-correct and cluster across samples."
+categories: [openpipeline]
+order: 30
+---
+
+[`openpipeline`]{.pkg-tag .pkg-openpipeline}<span class="swatch openpipeline"></span>
+
+Integration is a **separate workflow** run after
+[`process_samples`](process-filter.qmd). It takes the processed object as input
+and produces a batch-corrected embedding, Leiden clusters, and a UMAP.
+
+:::{.callout-important}
+Integration is not part of `process_samples`. Run it independently once per
+cohort, using the `process_samples` output as its input.
+:::
+
+## Why batch correction
+
+Samples from different donors, sequencing runs, or library preparations will
+cluster by technical origin rather than biology if left uncorrected. Batch
+correction aligns cell-type clusters across batches without erasing real
+biological variation.
+
+## The dimensionality reduction chain
+
+Every integration workflow runs the same fixed sequence on top of the PCA
+produced by `process_samples`:
+
+1. **Batch correction** — adjusts the embedding so cells of the same identity
+   from different batches overlap. Harmony operates in PCA space; scVI and
+   totalVI learn a corrected latent space with a variational autoencoder.
+2. **Neighbor graph** — builds a k-nearest-neighbor graph in the corrected space.
+3. **Leiden clustering** — community detection on the graph. `--leiden_resolution`
+   controls granularity: higher values give more, smaller clusters.
+4. **UMAP** — projects the graph to 2D for visualization. Local structure is
+   preserved; distances between clusters are not quantitatively meaningful.
+
+The corrected embedding (`.obsm["X_pca_integrated"]`) is what downstream tools
+use — not the UMAP coordinates.
+
+## Choose a method
+
+| Workflow | Method | When to use |
+|---|---|---|
+| `integration/harmony_leiden` | Harmony | Fast, good default for most datasets |
+| `integration/scvi_leiden` | scVI | Deep learning; complex batch structure, large datasets |
+| `integration/scanorama_leiden` | Scanorama | Partial cell-type overlap across batches |
+| `integration/bbknn_leiden` | BBKNN | Batch-balanced neighbor graph; no corrected embedding |
+| `integration/totalvi_leiden` | totalVI | Multiomics (RNA + ADT / CITE-seq); corrects both jointly |
+
+A practical guide:
+
+- Start with **Harmony** — fast, interpretable, works well for most datasets.
+- Use **scVI** with many samples (>20), strong batch effects, or when you need a
+  probabilistic latent space downstream.
+- Use **totalVI** for matched RNA + ADT (CITE-seq).
+- Use **Scanorama** when batches have different cell-type compositions.
+- **BBKNN** modifies only the neighbor graph — lighter, but no corrected
+  embedding for downstream use.
+
+## Run Harmony (recommended starting point)
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r 4.2.0 -latest -profile docker \
+  -main-script target/nextflow/workflows/integration/harmony_leiden/main.nf \
+  --id cohort_01 \
+  --input cohort_01_multisample.h5mu \
+  --obs_covariates "sample_id" \
+  --leiden_resolution 1.0 \
+  --output cohort_01_integrated.h5mu \
+  --publish_dir results/
+```
+
+:::{.callout-note}
+`--obs_covariates` must name an existing `.obs` column that identifies the
+technical source of variation — typically sample ID, batch, or donor.
+:::
+
+## Run scVI (large or complex datasets)
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r 4.2.0 -latest -profile docker \
+  -main-script target/nextflow/workflows/integration/scvi_leiden/main.nf \
+  --id cohort_01 \
+  --input cohort_01_multisample.h5mu \
+  --obs_batch "sample_id" \
+  --leiden_resolution 1.0 \
+  --output cohort_01_integrated.h5mu \
+  --publish_dir results/
+```
+
+## Output
+
+| Slot | Content |
+|---|---|
+| `.obsm["X_pca_integrated"]` | Batch-corrected cell embedding |
+| `.obs["leiden"]` | Leiden cluster labels |
+| `.obsm["X_umap"]` | UMAP coordinates for visualization |
+| `.obsp["distances"]` / `.obsp["connectivities"]` | Neighbor graph |
+
+Clusters are numbered — they have no biological meaning yet. Assign labels next
+with [cell type annotation](annotate.qmd).
+
+**Next:** [Annotate cell types →](annotate.qmd) ·
+[every parameter →](../reference/index.qmd)

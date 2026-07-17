@@ -1,0 +1,42 @@
+---
+title: "Generate a QC report"
+description: "Standalone quality-control report."
+categories: [openpipeline_qc]
+order: 50
+---
+
+[`openpipeline_qc`]{.pkg-tag .pkg-openpipeline_qc}<span class="swatch openpipeline_qc"></span>
+
+The **`openpipeline_qc`** package produces a standalone HTML quality-control
+report from an ingested `.h5mu`, so you can inspect count distributions,
+mitochondrial fractions, and doublet signals before committing to
+[filter thresholds](process-filter.qmd).
+
+## Run the report
+
+`generate_qc_report` detects the ingestion method, computes QC metrics, and
+renders a self-contained HTML report:
+
+```bash
+nextflow run openpipelines-bio/openpipeline_qc \
+  -r v0.3.0 -latest -profile docker \
+  -main-script target/nextflow/workflows/generate_qc_report/main.nf \
+  --id cohort_01 \
+  --input cohort_01.h5mu \
+  --output qc_report.html \
+  --publish_dir results/
+```
+
+Under the hood the package also exposes `ingestion_qc/detect_ingestion_method`
+and `ingestion_qc/generate_html` as individual components, in case you want to
+compute metrics and render the report as separate steps.
+
+:::{.callout-note}
+`openpipeline_qc` is a separate package pinning core `openpipeline` plus
+craftbox. Check the [reference](../reference/index.qmd) (filter by
+`openpipeline_qc`) for the exact argument list, and its Viash Hub page for run
+instructions.
+:::
+
+**Next:** [Process & filter samples →](process-filter.qmd) ·
+[QC reference →](../reference/index.qmd)

@@ -29,45 +29,6 @@ Namespace: `nichecompass`
 
 
 
-## Example commands
-
-You can run the pipeline using `nextflow run`.
-
-### View help
-
-You can use `--help` as a parameter to get an overview of the possible parameters.
-
-```bash
-nextflow run openpipelines-bio/openpipeline_spatial \
-  -r v0.5.0 -latest \
-  -main-script target/nextflow/nichecompass/gene_program_mask/main.nf \
-  --help
-```
-
-### Run command
-
-<details>
-<summary>Example of `params.yaml`</summary>
-
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline_spatial/v0.5.0/components/nichecompass/gene_program_mask).
-
-</details>
-
-Run locally with:
-
-```bash
-nextflow run openpipelines-bio/openpipeline_spatial \
-  -r v0.5.0 -latest \
-  -profile docker \
-  -main-script target/nextflow/nichecompass/gene_program_mask/main.nf \
-  -params-file params.yaml
-```
-
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
-:::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
 
 ## Argument groups
 
@@ -135,3 +96,42 @@ Running on Seqera or through Viash Hub is explained in the [guides](/guides/inde
 
   * Weiwei Schultz (contributor)
 
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline_spatial \
+  -r v0.5.0 -latest \
+  -main-script target/nextflow/nichecompass/gene_program_mask/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+
+Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline_spatial/v0.5.0/components/nichecompass/gene_program_mask).
+
+</details>
+
+Run locally with:
+
+```bash
+nextflow run openpipelines-bio/openpipeline_spatial \
+  -r v0.5.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/nichecompass/gene_program_mask/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

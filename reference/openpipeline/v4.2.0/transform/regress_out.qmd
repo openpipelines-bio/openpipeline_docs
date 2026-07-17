@@ -30,6 +30,26 @@ Namespace: `transform`
 Uses simple linear regression. This is inspired by Seurat's regressOut function in R [Satija15]. 
 Note that this function tends to overcorrect in certain circumstances as described in issue theislab/scanpy#526. See https://github.com/theislab/scanpy/issues/526
 
+
+## Argument group
+
+### Arguments
+
+|Name                   |Description                                                                                                                           |Attributes                                 |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`              |Input h5mu file                                                                                                                       |`file`, required, example: `"input.h5mu"`  |
+|`--output`             |Output h5mu file.                                                                                                                     |`file`, required, default: `"output.h5mu"` |
+|`--modality`           |Which modality (one or more) to run this component on.                                                                                |`string`, default: `"rna"`                 |
+|`--obs_keys`           |Which .obs keys to regress on.                                                                                                        |List of `string`, multiple_sep: `";"`      |
+|`--input_layer`        |The layer of the adata object to regress on. If not provided, the X attribute of the adata object will be used.                       |`string`, example: `"X_normalized"`        |
+|`--output_layer`       |The layer of the adata object containing the regressed count data. If not provided, the X attribute of the adata object will be used. |`string`, example: `"X_regressed"`         |
+|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied.                        |`string`, example: `"gzip"`                |
+
+## Authors
+
+
+  * Robrecht Cannoodt [{{< fa brands github >}}](https://github.com/rcannood) [{{< fa brands orcid >}}](https://orcid.org/0000-0003-3641-729X) [{{< fa brands linkedin >}}](https://linkedin.com/in/robrechtcannoodt) (maintainer, contributor)
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -69,23 +89,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument group
-
-### Arguments
-
-|Name                   |Description                                                                                                                           |Attributes                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`              |Input h5mu file                                                                                                                       |`file`, required, example: `"input.h5mu"`  |
-|`--output`             |Output h5mu file.                                                                                                                     |`file`, required, default: `"output.h5mu"` |
-|`--modality`           |Which modality (one or more) to run this component on.                                                                                |`string`, default: `"rna"`                 |
-|`--obs_keys`           |Which .obs keys to regress on.                                                                                                        |List of `string`, multiple_sep: `";"`      |
-|`--input_layer`        |The layer of the adata object to regress on. If not provided, the X attribute of the adata object will be used.                       |`string`, example: `"X_normalized"`        |
-|`--output_layer`       |The layer of the adata object containing the regressed count data. If not provided, the X attribute of the adata object will be used. |`string`, example: `"X_regressed"`         |
-|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied.                        |`string`, example: `"gzip"`                |
-
-## Authors
-
-
-  * Robrecht Cannoodt [{{< fa brands github >}}](https://github.com/rcannood) [{{< fa brands orcid >}}](https://orcid.org/0000-0003-3641-729X) [{{< fa brands linkedin >}}](https://linkedin.com/in/robrechtcannoodt) (maintainer, contributor)
-

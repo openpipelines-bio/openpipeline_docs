@@ -29,6 +29,25 @@ Namespace: `reference`
 
 Creates a new folder named after the genome.
 
+
+## Argument group
+
+### Arguments
+
+|Name                  |Description                                                 |Attributes                                                     |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--genome_fasta`      |Reference genome fasta.                                     |`file`, required, example: `"genome_sequence.fa.gz"`           |
+|`--transcriptome_gtf` |Reference transcriptome annotation.                         |`file`, required, example: `"transcriptome_annotation.gtf.gz"` |
+|`--reference_version` |Optional reference version string to include with reference |`string`                                                       |
+|`--output`            |Output folder                                               |`file`, required, example: `"cellranger_reference"`            |
+
+## Authors
+
+
+  * Angela Oliveira Pisco [{{< fa brands github >}}](https://github.com/aopisco) [{{< fa brands orcid >}}](https://orcid.org/0000-0003-0142-2355) [{{< fa brands linkedin >}}](https://linkedin.com/in/aopisco) (author)
+
+  * Robrecht Cannoodt [{{< fa brands github >}}](https://github.com/rcannood) [{{< fa brands orcid >}}](https://orcid.org/0000-0003-3641-729X) [{{< fa brands linkedin >}}](https://linkedin.com/in/robrechtcannoodt) (author, maintainer)
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -68,22 +87,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument group
-
-### Arguments
-
-|Name                  |Description                                                 |Attributes                                                     |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--genome_fasta`      |Reference genome fasta.                                     |`file`, required, example: `"genome_sequence.fa.gz"`           |
-|`--transcriptome_gtf` |Reference transcriptome annotation.                         |`file`, required, example: `"transcriptome_annotation.gtf.gz"` |
-|`--reference_version` |Optional reference version string to include with reference |`string`                                                       |
-|`--output`            |Output folder                                               |`file`, required, example: `"cellranger_reference"`            |
-
-## Authors
-
-
-  * Angela Oliveira Pisco [{{< fa brands github >}}](https://github.com/aopisco) [{{< fa brands orcid >}}](https://orcid.org/0000-0003-0142-2355) [{{< fa brands linkedin >}}](https://linkedin.com/in/aopisco) (author)
-
-  * Robrecht Cannoodt [{{< fa brands github >}}](https://github.com/rcannood) [{{< fa brands orcid >}}](https://orcid.org/0000-0003-3641-729X) [{{< fa brands linkedin >}}](https://linkedin.com/in/robrechtcannoodt) (author, maintainer)
-

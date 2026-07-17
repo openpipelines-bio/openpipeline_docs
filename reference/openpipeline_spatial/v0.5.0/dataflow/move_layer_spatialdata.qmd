@@ -29,6 +29,38 @@ Namespace: `dataflow`
 
 
 
+
+## Argument groups
+
+### Inputs
+
+|Name            |Description                                                  |Attributes                                |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`       |Path to the input SpatialData Zarr store                     |`file`, required, example: `"input.zarr"` |
+|`--input_layer` |Name of the layer to move. If not provided, X will be moved. |`string`, example: `"old_layer"`          |
+
+
+### Outputs
+
+|Name             |Description                                                                                           |Attributes                       |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output`       |Path to the output SpatialData Zarr store                                                             |`file`, default: `"output.zarr"` |
+|`--output_layer` |Name of the new layer to create with the moved data. If not provided, input layer will be moved to X. |`string`, example: `"new_layer"` |
+
+
+### Options
+
+|Name                   |Description                                                                                                                                                                                                        |Attributes                 |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--delete_input_layer` |Whether to delete the input layer after moving it to the new layer. If true (default), the input layer is moved to the new location, if false it is copied to the new location and the original layer is retained. |`boolean`, default: `TRUE` |
+
+## Authors
+
+
+  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (maintainer)
+
+  * Luke Zappia [{{< fa brands github >}}](https://github.com/lazappi) [{{< fa brands orcid >}}](https://orcid.org/0000-0001-7744-8565) [{{< fa brands linkedin >}}](https://linkedin.com/in/lazappi) (author)
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -68,35 +100,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument groups
-
-### Inputs
-
-|Name            |Description                                                  |Attributes                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`       |Path to the input SpatialData Zarr store                     |`file`, required, example: `"input.zarr"` |
-|`--input_layer` |Name of the layer to move. If not provided, X will be moved. |`string`, example: `"old_layer"`          |
-
-
-### Outputs
-
-|Name             |Description                                                                                           |Attributes                       |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output`       |Path to the output SpatialData Zarr store                                                             |`file`, default: `"output.zarr"` |
-|`--output_layer` |Name of the new layer to create with the moved data. If not provided, input layer will be moved to X. |`string`, example: `"new_layer"` |
-
-
-### Options
-
-|Name                   |Description                                                                                                                                                                                                        |Attributes                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--delete_input_layer` |Whether to delete the input layer after moving it to the new layer. If true (default), the input layer is moved to the new location, if false it is copied to the new location and the original layer is retained. |`boolean`, default: `TRUE` |
-
-## Authors
-
-
-  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (maintainer)
-
-  * Luke Zappia [{{< fa brands github >}}](https://github.com/lazappi) [{{< fa brands orcid >}}](https://orcid.org/0000-0001-7744-8565) [{{< fa brands linkedin >}}](https://linkedin.com/in/lazappi) (author)
-

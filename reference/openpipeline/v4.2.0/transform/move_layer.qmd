@@ -29,6 +29,20 @@ Namespace: `transform`
 
 
 
+
+## Argument group
+
+### Arguments
+
+|Name                   |Description                                                                                                                                           |Attributes                                 |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`              |Input h5mu file                                                                                                                                       |`file`, required, example: `"input.h5mu"`  |
+|`--modality`           |Which modality from the input MuData file to process.                                                                                                 |`string`, default: `"rna"`                 |
+|`--input_layer`        |Input layer to move to a new output location. If specified, will be used to select a key from .layers, otherwise .X is used.                          |`string`                                   |
+|`--output`             |Output h5mu file.                                                                                                                                     |`file`, required, example: `"output.h5mu"` |
+|`--output_layer`       |Destination location for the layer. If not provided, .X will be used, Otherwise, will be the key for the .layers attribute in the output MuData file. |`string`                                   |
+|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied.                                        |`string`, example: `"gzip"`                |
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -68,17 +82,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument group
-
-### Arguments
-
-|Name                   |Description                                                                                                                                           |Attributes                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`              |Input h5mu file                                                                                                                                       |`file`, required, example: `"input.h5mu"`  |
-|`--modality`           |Which modality from the input MuData file to process.                                                                                                 |`string`, default: `"rna"`                 |
-|`--input_layer`        |Input layer to move to a new output location. If specified, will be used to select a key from .layers, otherwise .X is used.                          |`string`                                   |
-|`--output`             |Output h5mu file.                                                                                                                                     |`file`, required, example: `"output.h5mu"` |
-|`--output_layer`       |Destination location for the layer. If not provided, .X will be used, Otherwise, will be the key for the .layers attribute in the output MuData file. |`string`                                   |
-|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied.                                        |`string`, example: `"gzip"`                |
-

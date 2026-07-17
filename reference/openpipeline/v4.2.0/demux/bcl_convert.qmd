@@ -32,6 +32,34 @@ https://emea.support.illumina.com/bulletins/2020/10/upgrading-from-bcl2fastq-to-
 and https://support.illumina.com/sequencing/sequencing_software/bcl-convert/compatibility.html
 
 
+
+## Argument group
+
+### Arguments
+
+|Name                  |Description                                                       |Attributes                               |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`             |Input run directory                                               |`file`, required, example: `"bcl_dir"`   |
+|`--sample_sheet`      |Pointer to the sample sheet                                       |`file`, required, example: `"bcl_dir"`   |
+|`--output`            |Output directory containig fastq files                            |`file`, required, example: `"fastq_dir"` |
+|`--reports`           |Reports directory                                                 |`file`, example: `"reports_dir"`         |
+|`--test_mode`         |Should bcl-convert be run in test mode (using --first-tile-only)? |`boolean`, default: `FALSE`              |
+|`--strict_mode`       |Abort if any files are missing.                                   |`boolean`, default: `FALSE`              |
+|`--tiles`             |Process only a subset of tiles by a regular expression.           |`string`                                 |
+|`--exclude_tiles`     |Exclude set of tiles by a regular expression                      |`string`                                 |
+|`--no_lane_splitting` |Wheter to avoid splitting FASTQ file by lane.                     |`boolean`                                |
+
+## Authors
+
+
+  * Toni Verbeiren [{{< fa brands github >}}](https://github.com/tverbeiren) [{{< fa brands linkedin >}}](https://linkedin.com/in/verbeiren) (author, maintainer)
+
+  * Marijke Van Moerbeke [{{< fa brands github >}}](https://github.com/mvanmoerbeke) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-3097-5621) [{{< fa brands linkedin >}}](https://linkedin.com/in/marijke-van-moerbeke-84303a34) (author)
+
+  * Weiwei Schultz (contributor)
+
+  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author)
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -71,31 +99,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument group
-
-### Arguments
-
-|Name                  |Description                                                       |Attributes                               |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`             |Input run directory                                               |`file`, required, example: `"bcl_dir"`   |
-|`--sample_sheet`      |Pointer to the sample sheet                                       |`file`, required, example: `"bcl_dir"`   |
-|`--output`            |Output directory containig fastq files                            |`file`, required, example: `"fastq_dir"` |
-|`--reports`           |Reports directory                                                 |`file`, example: `"reports_dir"`         |
-|`--test_mode`         |Should bcl-convert be run in test mode (using --first-tile-only)? |`boolean`, default: `FALSE`              |
-|`--strict_mode`       |Abort if any files are missing.                                   |`boolean`, default: `FALSE`              |
-|`--tiles`             |Process only a subset of tiles by a regular expression.           |`string`                                 |
-|`--exclude_tiles`     |Exclude set of tiles by a regular expression                      |`string`                                 |
-|`--no_lane_splitting` |Wheter to avoid splitting FASTQ file by lane.                     |`boolean`                                |
-
-## Authors
-
-
-  * Toni Verbeiren [{{< fa brands github >}}](https://github.com/tverbeiren) [{{< fa brands linkedin >}}](https://linkedin.com/in/verbeiren) (author, maintainer)
-
-  * Marijke Van Moerbeke [{{< fa brands github >}}](https://github.com/mvanmoerbeke) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-3097-5621) [{{< fa brands linkedin >}}](https://linkedin.com/in/marijke-van-moerbeke-84303a34) (author)
-
-  * Weiwei Schultz (contributor)
-
-  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author)
-

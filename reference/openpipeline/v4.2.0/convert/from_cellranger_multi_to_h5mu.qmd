@@ -43,6 +43,24 @@ underscores to generate the modality name.
 Currently does not allow parsing the output from cell barcode demultiplexing.
 
 
+
+## Argument group
+
+### Arguments
+
+|Name                   |Description                                                                                                         |Attributes                                                     |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`              |Input folder. Must contain the output from a cellranger multi run.                                                  |`file`, required, example: `"input_dir_containing_modalities"` |
+|`--output`             |Locations for the output files. Must contain a wildcard (*) character, which will be replaced with the sample name. |List of `file`, example: `"*.h5mu"`, multiple_sep: `";"`       |
+|`--sample_csv`         |CSV file describing the sample name per output file                                                                 |`file`, example: `"samples.csv"`                               |
+|`--uns_metrics`        |Name of the .uns slot under which to QC metrics (if any).                                                           |`string`, default: `"metrics_cellranger"`                      |
+|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied.      |`string`, example: `"gzip"`                                    |
+
+## Authors
+
+
+  * Dries Schaumont [{{< fa brands github >}}](https://github.com/DriesSchaumont) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-4389-0440) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-schaumont) (maintainer)
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -82,21 +100,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument group
-
-### Arguments
-
-|Name                   |Description                                                                                                         |Attributes                                                     |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`              |Input folder. Must contain the output from a cellranger multi run.                                                  |`file`, required, example: `"input_dir_containing_modalities"` |
-|`--output`             |Locations for the output files. Must contain a wildcard (*) character, which will be replaced with the sample name. |List of `file`, example: `"*.h5mu"`, multiple_sep: `";"`       |
-|`--sample_csv`         |CSV file describing the sample name per output file                                                                 |`file`, example: `"samples.csv"`                               |
-|`--uns_metrics`        |Name of the .uns slot under which to QC metrics (if any).                                                           |`string`, default: `"metrics_cellranger"`                      |
-|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied.      |`string`, example: `"gzip"`                                    |
-
-## Authors
-
-
-  * Dries Schaumont [{{< fa brands github >}}](https://github.com/DriesSchaumont) [{{< fa brands orcid >}}](https://orcid.org/0000-0002-4389-0440) [{{< fa brands linkedin >}}](https://linkedin.com/in/dries-schaumont) (maintainer)
-

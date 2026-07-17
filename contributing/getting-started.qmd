@@ -1,0 +1,58 @@
+---
+title: "Getting started"
+description: "Install dependencies and fetch test resources."
+order: 0
+---
+
+## Fork and clone the repository
+
+The OpenPipeline code is hosted on GitHub. Create your own copy by forking the
+[openpipeline repository](https://github.com/openpipelines-bio/openpipeline)
+with the **Fork** button, then clone it locally and add the original as an
+`upstream` remote.
+
+::: {.panel-tabset}
+
+## HTTPS
+
+```bash
+git clone https://github.com/<YOUR USERNAME>/openpipeline.git
+cd openpipeline
+git remote add upstream https://github.com/openpipelines-bio/openpipeline.git
+```
+
+## SSH
+
+```bash
+git clone git@github.com:<YOUR USERNAME>/openpipeline.git
+cd openpipeline
+git remote add upstream git@github.com:openpipelines-bio/openpipeline.git
+```
+
+:::
+
+## Install Viash and Nextflow {#sec-install-viash-nextflow}
+
+You will need [Java 11](https://www.oracle.com/java/technologies/downloads/) (or
+higher) and [Docker](https://docs.docker.com/get-docker/) installed. OpenPipeline
+is built with [Viash](https://viash.io/quickstart/) and
+[Nextflow](https://www.nextflow.io/docs/latest/index.html) — see their docs if
+either is new to you.
+
+Check both are installed correctly:
+
+```bash
+nextflow run hello -with-docker
+viash --version
+```
+
+## Fetch test resources
+
+OpenPipeline uses shared test resources to test its pipelines. If everything is
+installed correctly, fetch them with:
+
+```bash
+viash run src/download/sync_test_resources/config.vsh.yaml
+```
+
+**Next:** [Project structure →](project-structure.qmd)

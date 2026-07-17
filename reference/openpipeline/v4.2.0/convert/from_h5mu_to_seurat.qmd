@@ -35,6 +35,21 @@ Restrictions:
   - Seurat does not support global variables metadata /var.
 
 
+
+## Argument group
+
+### Arguments
+
+|Name       |Description        |Attributes                                |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`  |Input h5mu file    |`file`, required, example: `"input.h5mu"` |
+|`--output` |Output Seurat file |`file`, required, example: `"output.rds"` |
+
+## Authors
+
+
+  * Robrecht Cannoodt [{{< fa brands github >}}](https://github.com/rcannood) [{{< fa brands orcid >}}](https://orcid.org/0000-0003-3641-729X) [{{< fa brands linkedin >}}](https://linkedin.com/in/robrechtcannoodt) (author, maintainer)
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -74,18 +89,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument group
-
-### Arguments
-
-|Name       |Description        |Attributes                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`  |Input h5mu file    |`file`, required, example: `"input.h5mu"` |
-|`--output` |Output Seurat file |`file`, required, example: `"output.rds"` |
-
-## Authors
-
-
-  * Robrecht Cannoodt [{{< fa brands github >}}](https://github.com/rcannood) [{{< fa brands orcid >}}](https://orcid.org/0000-0003-3641-729X) [{{< fa brands linkedin >}}](https://linkedin.com/in/robrechtcannoodt) (author, maintainer)
-

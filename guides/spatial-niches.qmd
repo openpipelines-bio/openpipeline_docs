@@ -1,0 +1,35 @@
+---
+title: "Find spatial niches"
+description: "NicheCompass niche identification."
+categories: [openpipeline_spatial]
+order: 70
+---
+
+[`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial}<span class="swatch openpipeline_spatial"></span>
+
+A **niche** is a recurring spatial neighborhood — a local mix of cell types that
+appears across a tissue. The **`openpipeline_spatial`** package uses
+[NicheCompass](https://nichecompass.readthedocs.io/) to learn these
+neighborhoods from a spatial `.h5mu`.
+
+## Prerequisite
+
+Start from an ingested, processed spatial object (see
+[Ingest Xenium / Visium](ingest-spatial.qmd)) that carries spot/cell coordinates
+in `.obsm["spatial"]`.
+
+## Build the gene-program mask
+
+NicheCompass models niches on top of curated gene programs (sets of genes that
+act together). The `nichecompass/gene_program_mask` component prepares that mask,
+which the NicheCompass workflow then uses to embed cells into a niche-aware
+latent space and cluster them into niches.
+
+:::{.callout-note}
+NicheCompass niche identification is specific to `openpipeline_spatial`. See the
+[reference](../reference/index.qmd) (filter by `openpipeline_spatial`) for the
+NicheCompass components and their arguments, and open the package's Viash Hub
+page for run instructions.
+:::
+
+**Next:** [spatial reference →](../reference/index.qmd)

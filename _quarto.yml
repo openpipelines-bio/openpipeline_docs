@@ -25,8 +25,11 @@ website:
     left: "© OpenPipeline"
 
   navbar:
-    logo: images/logo.svg
-    title: false
+    # Mark only (theme-adapting) + the wordmark as title text — the clearer
+    # treatment from design/mockup.html. The old logo.svg stacked the wordmark
+    # under the mark, which turned to mush at navbar height.
+    logo: images/logo-mark.svg
+    title: "OpenPipeline"
     left:
       - href: get-started/index.qmd
         text: Get started
@@ -63,7 +66,13 @@ website:
 
 format:
   html:
-    theme: [cosmo, theme.scss]
+    # Light + dark pair — Quarto adds a navbar toggle. The dark variant layers
+    # theme-dark.scss (palette only) over the shared rules in theme.scss.
+    theme:
+      light: [cosmo, theme.scss]
+      dark: [cosmo, theme.scss, theme-dark.scss]
+    # Dark "scientific terminal" code blocks, matching design/mockup.html.
+    highlight-style: monokai
     toc: true
     grid:
       content-mode: standard

@@ -29,6 +29,39 @@ Namespace: `convert`
 
 
 
+
+## Argument groups
+
+### Inputs
+
+|Name                          |Description                                                                                    |Attributes                                |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`                     |Input h5mu file                                                                                |`file`, required, example: `"input.h5mu"` |
+|`--modality`                  |Modality of the h5mu file to convert.                                                          |`string`, default: `"rna"`                |
+|`--obsm_centroid_coordinates` |Key name of the .obsm slot in the input file that contains the spatial (centroid) coordinates. |`string`, default: `"spatial"`            |
+
+
+### Centroid arguments
+
+|Name                |Description                                                                                                                                                    |Attributes |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--centroid_nsides` |Number of sides of the polygon to be created around each centroid coordinate to represent the cell shape. If not provided, circles will be created.            |`integer`  |
+|`--centroid_radius` |Radius of the shape around each centroid coordinate to represent the cell shape. If not provided, Seurat computes a default based on the centroid coordinates. |`double`   |
+|`--centroid_theta`  |Angle to adjust the shapes around each centroid when plotting. If not provided, no adjustment will be made (theta = 0)                                         |`double`   |
+
+
+### Outputs
+
+|Name       |Description                      |Attributes                                |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output` |Output Seurat file               |`file`, required, example: `"output.rds"` |
+|`--assay`  |Name of the assay to be created. |`string`, default: `"RNA"`                |
+
+## Authors
+
+
+  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author, maintainer)
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -68,36 +101,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument groups
-
-### Inputs
-
-|Name                          |Description                                                                                    |Attributes                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`                     |Input h5mu file                                                                                |`file`, required, example: `"input.h5mu"` |
-|`--modality`                  |Modality of the h5mu file to convert.                                                          |`string`, default: `"rna"`                |
-|`--obsm_centroid_coordinates` |Key name of the .obsm slot in the input file that contains the spatial (centroid) coordinates. |`string`, default: `"spatial"`            |
-
-
-### Centroid arguments
-
-|Name                |Description                                                                                                                                                    |Attributes |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--centroid_nsides` |Number of sides of the polygon to be created around each centroid coordinate to represent the cell shape. If not provided, circles will be created.            |`integer`  |
-|`--centroid_radius` |Radius of the shape around each centroid coordinate to represent the cell shape. If not provided, Seurat computes a default based on the centroid coordinates. |`double`   |
-|`--centroid_theta`  |Angle to adjust the shapes around each centroid when plotting. If not provided, no adjustment will be made (theta = 0)                                         |`double`   |
-
-
-### Outputs
-
-|Name       |Description                      |Attributes                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output` |Output Seurat file               |`file`, required, example: `"output.rds"` |
-|`--assay`  |Name of the assay to be created. |`string`, default: `"RNA"`                |
-
-## Authors
-
-
-  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author, maintainer)
-

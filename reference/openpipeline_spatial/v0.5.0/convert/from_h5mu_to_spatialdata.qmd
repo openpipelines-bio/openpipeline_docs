@@ -32,6 +32,25 @@ modality in the MuData is stored as the main table in the SpatialData object. If
 remaining SpatialData slots.   
 
 
+
+## Argument group
+
+### Arguments
+
+|Name                  |Description                                                                        |Attributes                                 |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`             |Input H5MU file.                                                                   |`file`, required, example: `"input.h5mu"`  |
+|`--input_spatialdata` |An optional existing SpatialData Zarr store to fill remaining slots from.          |`file`, example: `"existing.zarr"`         |
+|`--modality`          |The modality in the MuData to be used as the main table in the SpatialData object. |`string`, default: `"rna"`                 |
+|`--output`            |The path to the output SpatialData Zarr store.                                     |`file`, required, example: `"output.zarr"` |
+
+## Authors
+
+
+  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (maintainer)
+
+  * Luke Zappia [{{< fa brands github >}}](https://github.com/lazappi) [{{< fa brands orcid >}}](https://orcid.org/0000-0001-7744-8565) [{{< fa brands linkedin >}}](https://linkedin.com/in/lazappi) (author)
+
 ## Example commands
 
 You can run the pipeline using `nextflow run`.
@@ -71,22 +90,3 @@ Replace `-profile docker` with `-profile podman` or `-profile singularity` depen
 :::
 
 Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
-
-## Argument group
-
-### Arguments
-
-|Name                  |Description                                                                        |Attributes                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`             |Input H5MU file.                                                                   |`file`, required, example: `"input.h5mu"`  |
-|`--input_spatialdata` |An optional existing SpatialData Zarr store to fill remaining slots from.          |`file`, example: `"existing.zarr"`         |
-|`--modality`          |The modality in the MuData to be used as the main table in the SpatialData object. |`string`, default: `"rna"`                 |
-|`--output`            |The path to the output SpatialData Zarr store.                                     |`file`, required, example: `"output.zarr"` |
-
-## Authors
-
-
-  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (maintainer)
-
-  * Luke Zappia [{{< fa brands github >}}](https://github.com/lazappi) [{{< fa brands orcid >}}](https://orcid.org/0000-0001-7744-8565) [{{< fa brands linkedin >}}](https://linkedin.com/in/lazappi) (author)
-
