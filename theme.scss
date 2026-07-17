@@ -66,12 +66,23 @@ h1, h2, h3 { letter-spacing: -0.02em; }
   padding: 3px 9px;
   border-radius: 20px;
   border: 1px solid var(--op-border);
+  background: var(--surface-2);
+  color: var(--op-ink);
   display: inline-flex;
   align-items: center;
   gap: 6px;
   white-space: nowrap;
 }
 .pkg-tag .swatch { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+// the chip label is inline code — neutralise the global code styling so it
+// isn't green-on-green (hard to read, especially in dark mode)
+.pkg-tag code, .pkg-tag code:not(.sourceCode) {
+  background: none;
+  color: inherit;
+  padding: 0;
+  border-radius: 0;
+  font-size: inherit;
+}
 .pkg-openpipeline          .swatch, .swatch.openpipeline          { background: #{$pkg-openpipeline}; }
 .pkg-openpipeline_spatial  .swatch, .swatch.openpipeline_spatial  { background: #{$pkg-openpipeline_spatial}; }
 .pkg-openpipeline_qc       .swatch, .swatch.openpipeline_qc       { background: #{$pkg-openpipeline_qc}; }
@@ -276,7 +287,7 @@ a.concept-card.blue:hover { box-shadow: 0 0 0 1px var(--composed), var(--shadow)
 .ref-search-input:focus { outline: 2px solid var(--op-brand); outline-offset: 1px; }
 
 // package tag shown inside the table
-.ptag { font-family: var(--mono); font-size: 11px; padding: 3px 8px; border-radius: 20px; display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--op-border); white-space: nowrap; }
+.ptag { font-family: var(--mono); font-size: 11px; padding: 3px 8px; border-radius: 20px; display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--op-border); background: var(--surface-2); color: var(--op-ink); white-space: nowrap; }
 .ptag .swatch { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
 
 // table
@@ -332,11 +343,12 @@ a.concept-card.blue:hover { box-shadow: 0 0 0 1px var(--composed), var(--shadow)
 // theme-dark.scss flips these back to a light fill for the dark bar.
 .navbar .quarto-navigation-tool { color: var(--op-muted); }
 .navbar .quarto-navigation-tool:hover { color: var(--op-ink); }
+// moon when light is active (click → dark); sun when dark is active (click → light)
 .navbar .quarto-color-scheme-toggle:not(.alternate) .bi::before {
-  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%2313201a" viewBox="0 0 16 16"><path d="M11 4a4 4 0 0 1 0 8H8a4.992 4.992 0 0 0 2-4 4.992 4.992 0 0 0-2-4h3zm-6 8a4 4 0 1 1 0-8 4 4 0 0 1 0 8zM0 8a5 5 0 0 0 5 5h6a5 5 0 0 0 0-10H5a5 5 0 0 0-5 5z"/></svg>');
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%2313201a" viewBox="0 0 16 16"><path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"/></svg>');
 }
 .navbar .quarto-color-scheme-toggle.alternate .bi::before {
-  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%2313201a" viewBox="0 0 16 16"><path d="M5 3a5 5 0 0 0 0 10h6a5 5 0 0 0 0-10H5zm6 9a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/></svg>');
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%2313201a" viewBox="0 0 16 16"><path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/></svg>');
 }
 
 // ---- left sidebar navigation ----
@@ -377,13 +389,30 @@ pre:not(.sourceCode) {
   border-radius: 10px;
   padding: 14px 16px;
 }
-// inline code in prose
+// inline code in prose — inherit the surrounding text colour (so it's always
+// readable in any context/theme) and drop the background box; the monospace
+// font is what marks it as code. Inheriting also makes code inside a link take
+// the link colour automatically.
 code:not(.sourceCode) {
   font-family: var(--mono);
-  color: var(--op-accent-ink);
-  background: var(--op-accent-soft);
-  padding: .1em .4em;
-  border-radius: 5px;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  font-size: .9em;
+}
+// Quarto sets a near-white background on inline code inside p / li / td with
+// higher specificity (0,1,2) than the rule above — this is the "white box".
+// Override it at matching specificity so it disappears in those contexts too.
+p code:not(.sourceCode),
+li code:not(.sourceCode),
+td code:not(.sourceCode),
+th code:not(.sourceCode),
+dd code:not(.sourceCode),
+dt code:not(.sourceCode) {
+  background: none;
+  padding: 0;
+  color: inherit;
 }
 
 // ---- content tables (exclude the reference listing, which is styled above) ----

@@ -1,37 +1,74 @@
 ---
 title: "Speed up with GPUs"
-description: "Coming soon — GPU acceleration via rapids-singlecell."
-categories: [openpipeline_rapids]
+description: "Enable GPU for GPU-capable components today; rapids-singlecell coming soon."
+categories: [openpipeline, openpipeline_rapids]
 order: 60
 ---
 
+[`openpipeline`]{.pkg-tag .pkg-openpipeline}<span class="swatch openpipeline"></span>
 [`openpipeline_rapids`]{.pkg-tag .pkg-openpipeline_rapids}<span class="swatch openpipeline_rapids"></span>
+
+There are two paths to GPU acceleration: components that wrap **natively
+GPU-capable tools** (available today), and GPU drop-ins for the remaining steps
+via `openpipeline_rapids` (coming soon).
+
+## The `gpu` label
+
+Several components wrap tools that natively support GPU acceleration — for
+example `cellbender`, `scvi`, `scanvi`, `scarches`, and `celltypist`. These
+already carry a **`gpu` label** (alongside their usual CPU/memory labels), which
+marks them as able to run on a GPU. The `gpu` label works like the other
+resource labels, which have their own [Tune compute resources](tune-resources.qmd)
+guide.
+
+By default they still run on CPU. To actually schedule them onto a GPU, adjust
+the Nextflow config to request GPU resources for the `gpu` label, using the
+[`accelerator`](https://www.nextflow.io/docs/latest/process.html#accelerator)
+directive:
+
+```groovy
+// gpu.config
+process {
+  withLabel: gpu {
+    accelerator = 1
+    // plus any executor- / runtime-specific GPU settings
+  }
+}
+```
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r 4.2.0 -latest -profile docker \
+  -main-script target/nextflow/workflows/integration/scvi_leiden/main.nf \
+  --input cohort_01_multisample.h5mu --output cohort_01_integrated.h5mu \
+  --publish_dir results/ \
+  -c gpu.config
+```
+
+The exact settings depend on your executor (local, AWS Batch, an HPC scheduler)
+and container runtime — see the
+[Nextflow accelerator / GPU documentation](https://www.nextflow.io/docs/latest/process.html#accelerator)
+for how to configure it on your platform.
+
+## Coming soon: `openpipeline_rapids`
 
 :::{.callout-important}
 ## Coming soon
-`openpipeline_rapids` is not released yet. This page previews what it will offer;
-the components and reference will land here once the package is published.
+`openpipeline_rapids` is not released yet. This section previews what it will add.
 :::
 
-The **`openpipeline_rapids`** package will provide GPU-accelerated versions of
-compute-heavy steps via
-[rapids-singlecell](https://rapids-singlecell.readthedocs.io/). On a
-CUDA-capable GPU, steps like PCA, neighbor-graph construction, UMAP, and Leiden
-clustering run substantially faster than their CPU equivalents.
-
-## When it will help
+For the compute-heavy steps whose tools have **no native GPU path** — PCA,
+neighbor-graph construction, UMAP, and Leiden clustering — the
+[`openpipeline_rapids`](../concepts/ecosystem.qmd) package will provide
+GPU-accelerated drop-in replacements via
+[rapids-singlecell](https://rapids-singlecell.readthedocs.io/). It pins the core
+`openpipeline` as a Viash dependency, so the pattern will be the same standard
+[processing](process-filter.qmd) and [integration](integrate.qmd) flow with the
+accelerated components scheduled onto a GPU.
 
 GPU acceleration pays off on large cohorts (hundreds of thousands of cells and
-up), where the dimensionality-reduction and clustering steps dominate wall-clock
-time. For small datasets the CPU workflows are simpler and fast enough.
-
-## How it will fit in
-
-`openpipeline_rapids` pins the core `openpipeline` as a Viash dependency and
-exposes drop-in GPU components. The pattern will be to run the standard
-[processing](process-filter.qmd) and [integration](integrate.qmd) flow but
-schedule the accelerated components onto a GPU (via a Nextflow profile / config
-that requests a GPU-enabled compute environment).
+up), where these steps dominate wall-clock time. For small datasets the CPU
+workflows are simpler and fast enough.
 
 :::{.callout-note}
 Until the package is released, the [reference](../reference/index.qmd) shows no

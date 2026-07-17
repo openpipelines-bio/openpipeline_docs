@@ -29,6 +29,12 @@ Labels combine — a component tagged `[highcpu, midmem]` requests 20 CPUs and
 25 GB. Requests scale automatically on retry, so a step that runs out of memory
 is resubmitted with more.
 
+There are also disk labels (`lowdisk`, `middisk`, `highdisk`, `veryhighdisk`),
+but unlike CPU and memory they have **no value by default** — components carry
+the label without it requesting any disk. When processing very large datasets,
+give them an effect by setting sizes in your compute environment, for example
+`withLabel: highdisk { disk = { 200.GB * task.attempt } }`.
+
 ## Override resources at run time
 
 To cap or raise resources for a specific run, supply a Nextflow config with a
@@ -40,6 +46,17 @@ specific process with `withName:`.
 process {
   withLabel: highmem   { memory = 32.GB }
   withLabel: highcpu   { cpus   = 16 }
+}
+```
+
+For finer control, target a single process by name with `withName:`. This
+overrides any resource labels that process carries, so you can bump one
+component without touching everything that shares its label:
+
+```groovy
+// my_resources.config
+process {
+  withName: '.*:scvi:.*' { memory = 64.GB; cpus = 24 }
 }
 ```
 
@@ -57,6 +74,34 @@ The same `-c config` mechanism is how you point a run at cloud executors
 (AWS Batch, Google Cloud Batch, an HPC scheduler). See the
 [Nextflow executor docs](https://www.nextflow.io/docs/latest/executor.html).
 :::
+
+## GPU acceleration
+
+Components that wrap natively GPU-capable tools — such as `cellbender`, `scvi`,
+`scanvi`, `scarches`, and `celltypist` — already carry a **`gpu` label** in
+addition to their CPU/memory labels. They run on CPU by default; to schedule
+them onto a GPU, request GPU resources for the `gpu` label with the
+[`accelerator`](https://www.nextflow.io/docs/latest/process.html#accelerator)
+directive in a config file:
+
+```groovy
+// gpu.config
+process {
+  withLabel: gpu {
+    accelerator = 1
+    // plus any executor- / runtime-specific GPU settings
+  }
+}
+```
+
+```bash
+nextflow run ... -c gpu.config
+```
+
+The exact settings depend on your executor and container runtime — see the
+[Nextflow accelerator / GPU documentation](https://www.nextflow.io/docs/latest/process.html#accelerator).
+GPU drop-ins for the steps whose tools have no native GPU path are covered in
+[Speed up with GPUs](gpu.qmd).
 
 ## Set resources on your own component
 
