@@ -31,8 +31,6 @@ An input .h5mu file will
 first be split in order to run the multisample processing per modality. Next, the modalities
 are merged again and the integration setup pipeline is executed. Please note that this workflow
 assumes that samples from multiple pipelines are already concatenated. 
-
-
 ## Visualisation
 
 ```{mermaid}
@@ -60,7 +58,6 @@ flowchart TB
 
 *Dashed nodes are optional steps.*  
 *Trapezoids split or combine data.*
-
 
 
 ## Argument groups

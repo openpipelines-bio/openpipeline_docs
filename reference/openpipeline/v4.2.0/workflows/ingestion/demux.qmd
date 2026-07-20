@@ -28,8 +28,6 @@ Namespace: `workflows/ingestion`
 :::
 
 Convert `.bcl` files to `.fastq` files using bcl2fastq, bcl-convert or Cell Ranger mkfastq.
-
-
 ## Visualisation
 
 ```{mermaid}
@@ -41,7 +39,6 @@ flowchart TB
     style c_demux_bcl_convert fill:#e2f4e7,stroke:#2b8f52,color:#13201a
     style c_demux_cellranger_mkfastq fill:#e2f4e7,stroke:#2b8f52,color:#13201a
 ```
-
 
 
 ## Argument group

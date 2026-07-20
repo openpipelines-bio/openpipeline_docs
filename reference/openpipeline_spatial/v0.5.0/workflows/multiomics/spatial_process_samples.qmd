@@ -26,9 +26,6 @@ Namespace: `workflows/multiomics`
 [![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline_spatial/v0.5.0/components/workflows/multiomics/spatial_process_samples)
 
 :::
-
-
-
 ## Visualisation
 
 ```{mermaid}
@@ -36,7 +33,6 @@ flowchart TB
     c_workflows_multiomics_process_samples["process_samples"]
     style c_workflows_multiomics_process_samples fill:#e2f4e7,stroke:#2b8f52,color:#13201a
 ```
-
 
 
 ## Argument groups

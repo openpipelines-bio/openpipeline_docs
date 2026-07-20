@@ -26,9 +26,6 @@ Namespace: `workflows/multiomics`
 [![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/multiomics/process_singlesample)
 
 :::
-
-
-
 ## Visualisation
 
 ```{mermaid}
@@ -59,7 +56,6 @@ flowchart TB
 
 *Dashed nodes are optional steps.*  
 *Trapezoids split or combine data.*
-
 
 
 ## Argument groups
