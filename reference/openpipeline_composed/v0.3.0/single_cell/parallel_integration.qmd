@@ -28,8 +28,6 @@ Namespace: `single_cell`
 :::
 
 Available integration methods: Harmony, scVI, Scanorama, BBKNN.
-
-
 ## Visualisation
 
 ```{mermaid}
@@ -51,7 +49,6 @@ flowchart TB
 ```
 
 *Dashed nodes are optional steps.*
-
 
 
 ## Argument groups

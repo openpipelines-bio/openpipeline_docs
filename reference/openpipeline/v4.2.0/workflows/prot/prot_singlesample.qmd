@@ -26,9 +26,6 @@ Namespace: `workflows/prot`
 [![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/prot/prot_singlesample)
 
 :::
-
-
-
 ## Visualisation
 
 ```{mermaid}
@@ -39,7 +36,6 @@ flowchart TB
     style c_filter_do_filter fill:#e2f4e7,stroke:#2b8f52,color:#13201a
     style c_filter_filter_with_counts fill:#e2f4e7,stroke:#2b8f52,color:#13201a
 ```
-
 
 
 ## Argument groups
