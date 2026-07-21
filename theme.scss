@@ -190,6 +190,10 @@ h1, h2, h3 { letter-spacing: -0.02em; }
   .sec-head p { color: var(--muted); margin: 8px 0 0; max-width: 64ch; }
 
   // .cards3 / .rcard are a shared component — see "Card grid" section below.
+  // On the landing "three ways in" cards, pin the CTA to the bottom so the
+  // "→" links align across cards despite different description lengths.
+  .cards3 .rcard { display: flex; flex-direction: column; }
+  .cards3 .rcard .go { margin-top: auto; }
 
   // run-your-way
   .ways { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }

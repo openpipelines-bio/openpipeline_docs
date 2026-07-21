@@ -1,393 +1,57 @@
 ---
 title: "Creating components"
-description: "Write a config.vsh.yaml + script and wire up its container."
+description: "How OpenPipeline uses Viash components — the mechanics live in the Viash docs."
 order: 20
 ---
 
-## A common file format
-
-One of the core principles of OpenPipeline is to use
-[MuData](https://mudata.readthedocs.io/) as a common data format throughout the
-whole pipeline. See [the MuData concept page](../concepts/mudata.qmd) for how
-OpenPipeline uses MuData to store single-cell data.
-
-## Component location
-
-As discussed in [the project structure](project-structure.qmd#sec-project-structure),
-components live in `src`, grouped into namespaces by common functionality. For
-example, the dimensionality-reduction namespace (`dimred`) holds the `pca` and
-`umap` components. To create a new component, make a folder for its elements:
-
-```bash
-mkdir src/my_namespace/my_component
-```
+A component is one step of a pipeline: a script plus a `config.vsh.yaml` that
+describes its inputs, outputs, dependencies, and container. OpenPipeline builds
+every component with [Viash](https://viash.io), so the **how-to for writing a
+component is the Viash documentation** — this page only covers the conventions
+specific to OpenPipeline.
 
 :::{.callout-tip}
-Take a look at the components already in `src/`! There might be one that already
-does something similar to what you need.
+New to Viash? Start with the [Viash guide](https://viash.io/guide/) and the
+[config reference](https://viash.io/reference/config/). The mechanics there
+(argument groups, `engines`, `runners`, the `## VIASH START` / `## VIASH END`
+block, building images) apply as-is to OpenPipeline.
 :::
 
-## The elements of a component
-
-A component consists of one or more scripts that provide its functionality,
-together with metadata in a configuration file. The
-[Viash config](https://viash.io/reference/config/) holds that metadata: which
-script runs it and the required dependencies. An in-depth guide is on the
-[Viash website](https://viash.io/guide/component/create-component.html); a few
-OpenPipeline specifics follow.
-
-## The config
-
-```yaml
-name: "my_component"
-namespace: "my_namespace"
-description: "My new custom component"
-authors:
-  - __merge__: ../../authors/my_name.yaml
-    roles: [ author ]
-
-argument_groups:
-  - name: "Inputs"
-    arguments:
-      - name: "--input"
-        type: file
-        required: true
-        description: "Input H5MU file."
-        example: "input.h5mu"
-  - name: "Outputs"
-    arguments:
-      - name: "--output"
-        type: file
-        direction: output
-        description: "Location where the output file should be written to."
-        example: "output.h5mu"
-
-resources:
-  - type: python_script
-    path: script.py
-
-engines:
-  - type: docker
-    image: python:3.11
-    setup:
-      - type: python
-        packages:
-          - mudata~=0.3
-
-runners:
-  - type: nextflow
-    directives:
-      label: [highcpu, midmem]
-  - type: executable
-```
-
-### Basic information
-
-Each component needs a name, a namespace, a description, and author information.
-Because one author contributes to many components, author info is centralized in
-`src/authors/` — each author has a YAML file, merged into configs with Viash's
-`__merge__` property so it stays consistent and maintainable.
-
-Basic information checklist:
-
-  - Give the component a name
-  - Add the component to an appropriate namespace
-  - Add a description
-  - Add author information
-
-### Arguments and argument groups
-
-Define arguments in `argument_groups`. Group them once the count grows large
-(10 or more, as a rule of thumb).
-
-Argument checklist:
-
- - Add a description and name
- - Give each argument the appropriate type
- - Input and output files should be `type: file` (not `string`) with the correct `direction:`
- - Add an example where possible
- - If an argument accepts multiple values, add `multiple: true`
- - If the input is limited to a fixed set of values, use `choices:`
-
-### (Test) resources
-
-Resources are files a component needs to do its job — scripts, but also tool
-settings. Declaring them is both required (Viash needs to know what code to run)
-and convenient (resources are automatically mounted into the running Docker
-container). `test_resources` are only needed when testing (e.g. with
-`viash test`), in addition to the regular resources.
-
-OpenPipeline does not use a service like `git lfs` for large resources. Instead:
-
-  * Large resources needed for **testing** are uploaded to an S3 bucket that is
-    synced automatically before tests run (locally and on GitHub). Ping a
-    maintainer on your PR to upload the files for you.
-  * Large resources not needed for testing are treated as input — create an
-    argument of `type: file`. The downside is that Viash cannot natively support
-    remote files.
-
-Resources checklist:
-
-  - Script resources sit next to the config, added with the correct type (`python_script`, `r_script`, ...)
-  - Small non-script resources (<50MB) can be checked into the repo next to `config.vsh.yaml`
-
-### The script file
-
-The script contains the actual implementation. Viash injects the parsed CLI
-arguments using a `## VIASH START` / `## VIASH END` marker block. During
-development the block holds placeholder values so the script runs directly in an
-IDE or REPL; at build time Viash replaces it with code that reads the real CLI
-arguments.
-
-::: {.panel-tabset}
-
-# Python
-
-```python
-## VIASH START
-par = {
-    "input": "input.h5mu",
-    "output": "output.h5mu",
-    "modality": "rna",
-    "min_counts": 200,
-}
-meta = {
-    "resources_dir": ".",
-    "temp_dir": "/tmp",
-    "cpus": 1,
-    "memory_gb": 4,
-}
-## VIASH END
-
-import mudata as mu
-
-mdata = mu.read_h5mu(par["input"])
-adata = mdata.mod[par["modality"]]
-
-# ... component logic ...
-
-mdata.write_h5mu(par["output"])
-```
-
-# R
-
-```r
-## VIASH START
-par <- list(
-  input = "input.h5mu",
-  output = "output.h5mu",
-  modality = "rna"
-)
-meta <- list(
-  resources_dir = ".",
-  temp_dir = "/tmp",
-  cpus = 1L,
-  memory_gb = 4L
-)
-## VIASH END
-
-library(MuData)
-
-mdata <- readH5MU(par$input)
-
-# ... component logic ...
-
-writeH5MU(mdata, par$output)
-```
-
-# Bash
-
-```bash
-## VIASH START
-par_input="input.h5mu"
-par_output="output.h5mu"
-par_modality="rna"
-meta_cpus=1
-meta_memory_gb=4
-## VIASH END
-
-set -eo pipefail
-
-# unset boolean parameters before use
-[[ "$par_some_flag" == "false" ]] && unset par_some_flag
-
-# build argument array
-cmd_args=(
-  --input "$par_input"
-  --output "$par_output"
-  --modality "$par_modality"
-)
-[[ -n "$par_some_flag" ]] && cmd_args+=(--flag)
-
-mytool "${cmd_args[@]}"
-```
-
-:::
-
-Script checklist:
-
-  - The `## VIASH START` / `## VIASH END` block is present with realistic placeholder values
-  - Use `meta_cpus` and `meta_memory_gb` for resource-aware parallelism — never hardcode thread counts
-  - Bash scripts: use `set -eo pipefail` after `## VIASH END` and build CLI arguments as arrays
-
-### Author information
-
-Author information is centralized in `src/authors/`. Each contributor has a YAML
-file with their profile, merged into component configs with Viash's `__merge__`
-property. This keeps author info consistent across all components without
-duplication.
-
-To add yourself as an author:
-
-1. Create `src/authors/your_name.yaml`:
-
-```yaml
-name: Your Name
-info:
-  links:
-    - type: github
-      url: https://github.com/your_handle
-    - type: orcid
-      url: https://orcid.org/0000-0000-0000-0000
-```
-
-2. Reference it in your component's `config.vsh.yaml`:
-
-```yaml
-authors:
-  - __merge__: ../../authors/your_name.yaml
-    roles: [ author ]
-```
-
-Valid roles are `author` and `maintainer`. The `maintainer` role indicates who
-is responsible for keeping the component up to date.
-
-## Adding dependencies
-
-Dependencies are declared in the `engines` section of `config.vsh.yaml`. Viash
-uses this to build the component's Docker image. Always prefer installing through
-a package manager over building from source.
-
-::: {.panel-tabset}
-
-# Python (pip)
-
-```yaml
-engines:
-  - type: docker
-    image: python:3.11
-    setup:
-      - type: python
-        packages:
-          - mudata~=0.3
-          - scanpy>=1.9
-          - numpy
-```
-
-# Python (conda / BioContainers)
-
-BioContainers images from `quay.io/biocontainers` are preferred for
-bioinformatics tools because they pin exact versions including the build string
-(e.g. `tool:2.0.3--h5b5514e_1`), improving reproducibility:
-
-```yaml
-engines:
-  - type: docker
-    image: quay.io/biocontainers/scanpy:1.9.3--pyhdfd78af_0
-    setup:
-      - type: python
-        packages:
-          - mudata~=0.3
-```
-
-# R
-
-```yaml
-engines:
-  - type: docker
-    image: eddelbuettel/r2u:22.04
-    setup:
-      - type: r
-        cran:
-          - MuData
-          - Seurat
-        bioc:
-          - SingleR
-          - scran
-```
-
-# System packages (apt)
-
-```yaml
-engines:
-  - type: docker
-    image: ubuntu:22.04
-    setup:
-      - type: apt
-        packages:
-          - samtools
-          - libhdf5-dev
-      - type: python
-        packages:
-          - mudata
-```
-
-:::
-
-After editing the setup, rebuild the Docker image to verify it installs
-correctly:
-
-```bash
-viash build src/my_namespace/my_component/config.vsh.yaml \
-  --engine docker --setup cb
-```
-
-The `cb` (cachedbuild) flag reuses cached layers where possible.
-
-## Building components from source
-
-When running or [testing individual components](running-tests.qmd), no extra
-build step is needed — `viash test` and `viash run` build the component on the
-fly. Before integrating components into a pipeline, however, you must build them,
-at least for the `nextflow` target. The easiest way:
-
-```bash
-viash ns build --setup cb
-```
-
-After `viash ns build`, `target/` is populated with build outputs for each
-declared engine and runner (typically `docker` and `nextflow`).
-
-Building an individual component is useful when debugging a build failure or
-creating a standalone executable. Note that the default output directory is
-`output/`, not `target/` — use `--output` to set the correct location:
-
-```bash
-viash build src/filter/do_filter/config.vsh.yaml \
-  -o target/executable/filter/do_filter/ --engine native
-```
-
-## Containerization
-
-A key benefit of Viash is per-component containers, which avoids building one
-container that has to hold every pipeline dependency. A single-component
-container can be kept small by defining only its minimal requirements. Building
-containers from scratch is labour-intensive and error-prone, though, and base
-containers from reputable publishers tend to be more reliable and secure — so
-balance size against convenience.
-
-Preferred containerization guidelines:
-
-* Choose a base container from a reputable source and use its latest version
-* Do not use base containers that have not been updated in a while
-* Use package managers to install dependencies as much as possible
-* Avoid building dependencies from source
-
-Base containers currently in use include:
-
-* [python:3.11](https://hub.docker.com/_/python) for Python environments
-* [ubuntu:focal](https://hub.docker.com/_/ubuntu) for general Linux and bash scripts
-* [eddelbuettel/r2u:22.04](https://eddelbuettel.github.io/r2u/) for R
-* [nvcr.io/nvidia/pytorch:22.09-py3](https://catalog.ngc.nvidia.com/orgs/nvidia/containers/pytorch) for GPU-accelerated PyTorch in Python
+## OpenPipeline conventions
+
+- **One common data format.** Components read and write the same
+  [MuData](../concepts/mudata.qmd) object, so any component can slot before or
+  after any other. Convert to/from other formats only at the edges.
+- **Where it lives.** Components sit in `src/<namespace>/<component>/`, grouped
+  into [namespaces](project-structure.qmd#sec-project-structure) by function
+  (e.g. `convert`, `filter`, `dimred`). Look for an existing component that does
+  something similar before starting a new one.
+- **Author info is centralized.** Each contributor has a YAML file in
+  `src/authors/`, merged into configs with Viash's `__merge__` directive, so
+  author details stay consistent without duplication:
+
+  ```yaml
+  authors:
+    - __merge__: /src/authors/your_name.yaml
+      roles: [ author ]
+  ```
+
+- **Resource labels.** Declare CPU/memory (and GPU) needs with labels in the
+  component's `nextflow` runner — see [Tune compute resources](../guides/tune-resources.qmd).
+- **Base containers.** Start from a reputable, actively-maintained base image and
+  install dependencies through a package manager. Common choices (use the current
+  tag rather than pinning an old one):
+  - [`python`](https://hub.docker.com/_/python) — Python environments
+  - [`ubuntu`](https://hub.docker.com/_/ubuntu) — general Linux and bash scripts
+  - [`rocker`](https://rocker-project.org/) images — R
+  - [`nvcr.io/nvidia/pytorch`](https://catalog.ngc.nvidia.com/orgs/nvidia/containers/pytorch) — GPU-accelerated PyTorch in Python
+
+## Build and test locally
+
+While developing, `viash run` and `viash test` build the component on the fly —
+no separate build step. See [Running tests](running-tests.qmd). The published,
+versioned package is built and hosted by Viash Hub
+([packages.viash-hub.com](https://packages.viash-hub.com)), not committed to the
+repository.
 
 **Next:** [Creating pipelines →](creating-pipelines.qmd)

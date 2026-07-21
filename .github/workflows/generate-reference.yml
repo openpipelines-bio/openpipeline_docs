@@ -10,8 +10,11 @@ name: Generate reference
 # run does nothing unless a new release has appeared ("latest forward").
 #
 # Packages are cloned from viash-hub (public, no credentials) at the tag, which
-# ships the built target/ the generator reads. openpipeline_rapids is excluded
-# for now (not ready).
+# ships the built target/ the generator reads. The package set + viash-hub owner
+# come from the registry (data/packages.yaml, read via scripts/packages.py) —
+# the single source of truth. openpipeline_rapids is intentionally absent there
+# until it has a published release; add it to the registry AND add a matching
+# generate step pair below when it does.
 #
 # Requires repo secret GTHB_PAT only for `viash_pro_token`: the generator clones
 # the private viash-io/viash_tools repo with it. Package fetching needs no auth.
@@ -40,6 +43,10 @@ jobs:
           path: openpipeline_docs
           token: ${{ secrets.GTHB_PAT }}
 
+      # scripts/packages.py reads the registry (data/packages.yaml) with PyYAML.
+      - name: Install registry-reader deps
+        run: python3 -m pip install --quiet pyyaml
+
       # Scan viash-hub for each package's latest tag. If reference/<pkg>/<tag>/
       # already exists, skip it (cached); otherwise clone that tag for the
       # generate steps below. Per-package build flag + tag go to $GITHUB_OUTPUT.
@@ -50,8 +57,11 @@ jobs:
           FORCE: ${{ inputs.force }}
         run: |
           set -euo pipefail
-          for pkg in openpipeline openpipeline_spatial openpipeline_qc openpipeline_composed; do
-            latest=$(curl -sf "https://packages.viash-hub.com/api/v1/repos/vsh/$pkg/tags?limit=100" \
+          # Package set + viash-hub owner come from the registry (single source
+          # of truth) — see data/packages.yaml / scripts/packages.py.
+          OWNER=$(python3 openpipeline_docs/scripts/packages.py viash-hub-owner)
+          for pkg in $(python3 openpipeline_docs/scripts/packages.py names); do
+            latest=$(curl -sf "https://packages.viash-hub.com/api/v1/repos/$OWNER/$pkg/tags?limit=100" \
               | python3 -c "import sys,json,re; ts=[t['name'] for t in json.load(sys.stdin) if re.match(r'v?\d+\.\d+', t['name'])]; print(sorted(ts, key=lambda v:[int(x) for x in re.findall(r'\d+', v)])[-1])")
             echo "${pkg}_tag=$latest" >> "$GITHUB_OUTPUT"
             if [ "$FORCE" != "true" ] && [ -d "openpipeline_docs/reference/$pkg/$latest" ]; then
@@ -61,7 +71,7 @@ jobs:
             fi
             echo "$pkg: new version $latest — will build"
             echo "${pkg}_build=true" >> "$GITHUB_OUTPUT"
-            git clone --quiet --depth 1 --branch "$latest" "https://packages.viash-hub.com/vsh/$pkg.git" "$pkg"
+            git clone --quiet --depth 1 --branch "$latest" "https://packages.viash-hub.com/$OWNER/$pkg.git" "$pkg"
             # Drop vendored dependencies (craftbox/biobox/base openpipeline components):
             # they are external/base libs we only mention, not document, and some of
             # their configs carry no `namespace`, which crashes the qmd generator
@@ -79,7 +89,7 @@ jobs:
       - name: Drop legacy flat reference
         working-directory: openpipeline_docs
         run: |
-          for pkg in openpipeline openpipeline_spatial openpipeline_qc openpipeline_composed; do
+          for pkg in $(python3 scripts/packages.py names); do
             [ -d "reference/$pkg" ] || continue
             find "reference/$pkg" -mindepth 1 -maxdepth 1 -type d ! -name 'v[0-9]*' -exec rm -rf {} +
           done
@@ -88,6 +98,11 @@ jobs:
 
       # Two passes per package (modules, then workflows) into the version folder.
       # Only runs when Plan flagged a new version for that package.
+      #
+      # These steps are per-package by necessity (the generate action can't be
+      # looped). The package SET is driven by the registry (data/packages.yaml),
+      # but each package still needs its own modules+workflows pair here. When you
+      # add a package to the registry, add a matching pair below.
       - name: Generate — openpipeline (modules)
         if: steps.plan.outputs.openpipeline_build == 'true'
         uses: viash-io/viash-actions/pro/generate-documentation-qmd@v6
@@ -204,15 +219,17 @@ jobs:
       # filter by them (version otherwise lives only in the path).
       - name: Post-process generated pages
         working-directory: openpipeline_docs
+        env:
+          # All Plan outputs as JSON; the package set comes from the registry,
+          # so this stays in sync with data/packages.yaml automatically.
+          PLAN_OUTPUTS: ${{ toJSON(steps.plan.outputs) }}
         run: |
           python3 - <<'PY'
-          import os, glob, re
-          plan = {
-            "openpipeline": ("${{ steps.plan.outputs.openpipeline_build }}", "${{ steps.plan.outputs.openpipeline_tag }}"),
-            "openpipeline_spatial": ("${{ steps.plan.outputs.openpipeline_spatial_build }}", "${{ steps.plan.outputs.openpipeline_spatial_tag }}"),
-            "openpipeline_qc": ("${{ steps.plan.outputs.openpipeline_qc_build }}", "${{ steps.plan.outputs.openpipeline_qc_tag }}"),
-            "openpipeline_composed": ("${{ steps.plan.outputs.openpipeline_composed_build }}", "${{ steps.plan.outputs.openpipeline_composed_tag }}"),
-          }
+          import os, glob, re, sys, json
+          sys.path.insert(0, "scripts")
+          from packages import PACKAGES
+          outputs = json.loads(os.environ["PLAN_OUTPUTS"])
+          plan = {p: (outputs.get(f"{p}_build", "false"), outputs.get(f"{p}_tag", "")) for p in PACKAGES}
           def rewrite(f, pkg, tag):
               # drop the generator's per-version index (we use one catalog instead)
               if os.path.basename(f) == "index.qmd":

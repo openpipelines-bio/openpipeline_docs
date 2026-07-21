@@ -6,40 +6,62 @@ order: 0
 
 ## Fork and clone the repository
 
-The OpenPipeline code is hosted on GitHub. Create your own copy by forking the
-[openpipeline repository](https://github.com/openpipelines-bio/openpipeline)
-with the **Fork** button, then clone it locally and add the original as an
-`upstream` remote.
+Each package's **source** lives in its own GitHub repository under
+[openpipelines-bio](https://github.com/openpipelines-bio). These repos hold only
+source code; the built packages are produced by Viash Hub (see
+[Project structure](project-structure.qmd#sec-project-structure)).
+
+| Package | Repository |
+|---|---|
+| `openpipeline` | [github.com/openpipelines-bio/openpipeline](https://github.com/openpipelines-bio/openpipeline) |
+| `openpipeline_spatial` | [github.com/openpipelines-bio/openpipeline_spatial](https://github.com/openpipelines-bio/openpipeline_spatial) |
+| `openpipeline_qc` | [github.com/openpipelines-bio/openpipeline_qc](https://github.com/openpipelines-bio/openpipeline_qc) |
+| `openpipeline_composed` | [github.com/openpipelines-bio/openpipeline_composed](https://github.com/openpipelines-bio/openpipeline_composed) |
+
+:::{.callout-note appearance="simple"}
+`openpipeline_rapids` is [coming soon](../guides/gpu.qmd).
+:::
+
+Pick the package you want to contribute to, create your own copy with the
+**Fork** button, then clone your fork and add the original as an `upstream`
+remote. Replace `<repo>` with the package name (e.g. `openpipeline_spatial`):
 
 ::: {.panel-tabset}
 
 ## HTTPS
 
 ```bash
-git clone https://github.com/<YOUR USERNAME>/openpipeline.git
-cd openpipeline
-git remote add upstream https://github.com/openpipelines-bio/openpipeline.git
+git clone https://github.com/<YOUR USERNAME>/<repo>.git
+cd <repo>
+git remote add upstream https://github.com/openpipelines-bio/<repo>.git
 ```
 
 ## SSH
 
 ```bash
-git clone git@github.com:<YOUR USERNAME>/openpipeline.git
-cd openpipeline
-git remote add upstream git@github.com:openpipelines-bio/openpipeline.git
+git clone git@github.com:<YOUR USERNAME>/<repo>.git
+cd <repo>
+git remote add upstream git@github.com:openpipelines-bio/<repo>.git
 ```
 
 :::
 
 ## Install Viash and Nextflow {#sec-install-viash-nextflow}
 
-You will need [Java 11](https://www.oracle.com/java/technologies/downloads/) (or
-higher) and [Docker](https://docs.docker.com/get-docker/) installed. OpenPipeline
-is built with [Viash](https://viash.io/quickstart/) and
-[Nextflow](https://www.nextflow.io/docs/latest/index.html) — see their docs if
-either is new to you.
+OpenPipeline is built with [Viash](https://viash.io) and
+[Nextflow](https://www.nextflow.io/docs/latest/index.html), so you need both —
+plus [Docker](https://docs.docker.com/get-docker/) and Java.
 
-Check both are installed correctly:
+:::{.callout-tip}
+## Follow the Viash installation guide
+For detailed, up-to-date steps — the download, adding Viash to your `PATH`, and
+the Java requirement (minimum Java 11; the LTS releases 17 or 21 are
+recommended) — follow the
+[**Viash installation guide**](https://viash.io/installation/). Nextflow has its
+own [installation docs](https://www.nextflow.io/docs/latest/install.html).
+:::
+
+Once installed, check both work:
 
 ```bash
 nextflow run hello -with-docker
@@ -48,11 +70,22 @@ viash --version
 
 ## Fetch test resources
 
-OpenPipeline uses shared test resources to test its pipelines. If everything is
-installed correctly, fetch them with:
+Tests run against shared test data hosted in a bucket. The core `openpipeline`
+package provides the `sync_test_resources` component that downloads it, and each
+repository's `_viash.yaml` already declares which bucket to pull — you don't need
+to configure anything. From the **root of the repo you cloned**, run the
+component straight from `openpipeline` with Nextflow; it reads the local
+`_viash.yaml` and syncs into `resources_test/`:
 
 ```bash
-viash run src/download/sync_test_resources/config.vsh.yaml
+nextflow run openpipelines-bio/openpipeline \
+  -r 4.2.0 -latest -profile docker \
+  -main-script target/nextflow/download/sync_test_resources/main.nf \
+  --input _viash.yaml \
+  --output .
 ```
+
+Use the `openpipeline` version your package pins. See
+[Running tests](running-tests.qmd) for how the test data is used.
 
 **Next:** [Project structure →](project-structure.qmd)

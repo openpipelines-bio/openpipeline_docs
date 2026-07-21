@@ -1,159 +1,57 @@
 ---
 title: "Running tests"
-description: "Unit tests per component and integration tests with real data."
+description: "Fetch test data from the repo's bucket, then run component and workflow tests."
 order: 40
 ---
 
-## Test structure
+Components and workflows are tested with Viash. The **test mechanics are Viash's**
+— see the [Viash guide](https://viash.io/guide/) for writing tests. This page
+covers what is specific to OpenPipeline: where the test data comes from and the
+workflow integration-test convention.
 
-Every component has its tests defined alongside its source files:
+## Test data comes from the bucket
 
-```
-src/my_namespace/my_component/
-├── config.vsh.yaml
-├── script.py / script.sh / script.R
-├── test.sh                        # component test script
-└── test_data/
-    └── test_data_script.sh        # script to generate local test inputs
-```
-
-Workflows use a Nextflow test workflow instead:
-
-```
-src/workflows/my_category/my_workflow/
-├── config.vsh.yaml
-├── main.nf
-└── test.nf                        # integration test workflow
-```
-
-`viash test` automatically picks up `test.sh` (for components) or `test.nf` (for
-workflows) — no extra configuration needed.
-
-## Generating test data locally
-
-Rather than downloading test data from S3, the preferred approach for new
-components is to generate test inputs with a shell script. This keeps tests
-self-contained and reproducible without network access.
-
-Create `test_data/test_data_script.sh` alongside your component:
+Test data is **not stored in the repository** — it lives in a remote bucket, and
+each package repository declares its own in its `_viash.yaml` (you don't edit
+that). Rather than duplicating the download logic, the core `openpipeline`
+package provides the `sync_test_resources` component. From the **root of the repo
+you're working in**, run it straight from `openpipeline` with Nextflow — it reads
+the local `_viash.yaml` and syncs into `resources_test/`:
 
 ```bash
-#!/bin/bash
-set -eo pipefail
-
-# Run from the component directory
-cd "$(dirname "$0")"
-
-# Generate a minimal H5MU test file
-python3 - <<'EOF'
-import mudata as mu
-import anndata as ad
-import numpy as np
-import scipy.sparse
-
-n_obs, n_vars = 50, 100
-X = scipy.sparse.random(n_obs, n_vars, density=0.3, format="csr")
-adata = ad.AnnData(X=X)
-adata.obs_names = [f"cell_{i}" for i in range(n_obs)]
-adata.var_names = [f"gene_{i}" for i in range(n_vars)]
-mdata = mu.MuData({"rna": adata})
-mdata.write_h5mu("test_input.h5mu")
-print("Written test_input.h5mu")
-EOF
+nextflow run openpipelines-bio/openpipeline \
+  -r 4.2.0 -latest -profile docker \
+  -main-script target/nextflow/download/sync_test_resources/main.nf \
+  --input _viash.yaml \
+  --output .
 ```
 
-Run it once before testing:
+Run it from the repo you're working in so it picks up that repo's `_viash.yaml`
+(and thus its bucket) — don't reuse another package's data. Use the `openpipeline`
+version your package pins.
+
+## Running component tests
+
+`viash test` builds the component on the fly and runs its test:
 
 ```bash
-bash src/my_namespace/my_component/test_data/test_data_script.sh
+viash test src/<namespace>/<component>/config.vsh.yaml   # one component
+viash ns test --parallel -q <namespace>                  # a whole namespace
+viash ns test --parallel                                 # the whole suite
 ```
 
-## Writing a component test
+## Running workflow tests
 
-`test.sh` runs the component and asserts the output is correct. A minimal
-pattern:
-
-```bash
-#!/bin/bash
-set -eo pipefail
-
-# viash injects $meta_resources_dir and $meta_temp_dir at test time
-cd "$meta_temp_dir"
-
-echo ">>> Running component"
-viash run "$meta_resources_dir/config.vsh.yaml" -- \
-  --input "$meta_resources_dir/test_data/test_input.h5mu" \
-  --output output.h5mu
-
-echo ">>> Checking output exists"
-[[ -f output.h5mu ]] || { echo "Output file missing"; exit 1; }
-
-echo ">>> Checking output is valid H5MU"
-python3 -c "
-import mudata as mu
-mdata = mu.read_h5mu('output.h5mu')
-assert 'rna' in mdata.mod, 'rna modality missing'
-print('obs:', mdata.n_obs, 'vars:', mdata.mod['rna'].n_vars)
-"
-
-echo ">>> All tests passed"
-```
-
-## Fetch test data from S3
-
-For CI and components that use shared test resources, download the data from the
-OpenPipeline S3 bucket:
+Each workflow ships with a `nextflow.config` (needed to run it) and a `test.nf`
+that `viash test` executes. On top of that, OpenPipeline workflows carry an
+**`integration_test.sh`** by convention — a script that runs the workflow
+end-to-end against the test data, for local integration testing:
 
 ```bash
-viash run src/download/sync_test_resources/config.vsh.yaml
-```
-
-This downloads to `resources_test/` by default, which is where test configs
-reference shared fixtures.
-
-## Run component tests
-
-Test a single component (builds on the fly, no separate build step needed):
-
-```bash
-viash test src/my_namespace/my_component/config.vsh.yaml
-```
-
-By default this uses the first declared engine, which is Docker for most
-components. To test without Docker:
-
-```bash
-viash test src/my_namespace/my_component/config.vsh.yaml --engine native
-```
-
-Test all components in a namespace in parallel:
-
-```bash
-viash ns test --parallel -q my_namespace
-```
-
-## Run workflow integration tests
-
-Test a single workflow end-to-end using its `test.nf`:
-
-```bash
-viash test src/workflows/my_category/my_workflow/config.vsh.yaml
-```
-
-For workflows that provide a separate integration test script alongside
-`main.nf`:
-
-```bash
-bash src/workflows/ingestion/cellranger_mapping/integration_test.sh
-```
-
-## Run the full test suite
-
-```bash
-viash ns test --parallel
+bash src/workflows/<category>/<workflow>/integration_test.sh
 ```
 
 :::{.callout-note}
-The full suite requires all test data to be present in `resources_test/`. Run
-`sync_test_resources` first if you have not already done so.
+All of these need the repository's data present in `resources_test/` — run
+`sync_test_resources` first.
 :::

@@ -1,0 +1,27 @@
+# Canonical registry of the OpenPipeline packages.
+#
+# Single source of truth for the generation tooling:
+#   * scripts/generate_team.py           — pulls src/authors/ from each repo
+#   * .github/workflows/generate-reference.yml — generates reference/<pkg>/<ver>/
+#
+# Both read this file through scripts/packages.py. Colours (theme.scss) and the
+# prose package tables (concepts/ecosystem.qmd, contributing/getting-started.qmd)
+# are maintained separately — this file drives the scripts only.
+#
+# Repo and package URLs are derived from the names below:
+#   source repo   -> https://github.com/{org}/{name}
+#   built package -> https://packages.viash-hub.com/{viash_hub_owner}/{name}
+#
+# openpipeline_rapids is intentionally absent until it has a published
+# viash-hub release. Add its name to the list below when it does.
+
+org: openpipelines-bio # GitHub org holding the source repos (author files)
+viash_hub_owner: vsh # packages.viash-hub.com owner of the built packages
+ref: main # git ref used to fetch author files for the team page
+
+packages:
+  - openpipeline
+  - openpipeline_spatial
+  - openpipeline_qc
+  - openpipeline_composed
+  # - openpipeline_rapids  # TODO: uncomment once it has a published viash-hub release

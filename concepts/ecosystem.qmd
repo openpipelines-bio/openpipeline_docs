@@ -15,7 +15,7 @@ dependency and adds to it rather than forking it.
 | Package | Role |
 |---|---|
 | [`openpipeline`]{.pkg-tag .pkg-openpipeline}<span class="swatch openpipeline"></span> | Core single-cell multi-omics — RNA, protein/ADT, ATAC, VDJ, GDO |
-| [`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial}<span class="swatch openpipeline_spatial"></span> | Spatial transcriptomics (Space Ranger, Xenium/CosMx, NicheCompass) |
+| [`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial}<span class="swatch openpipeline_spatial"></span> | Spatial transcriptomics — ingests Visium, Visium HD, Xenium, Aviti24, CosMx (or any pre-ingested count matrix) |
 | [`openpipeline_qc`]{.pkg-tag .pkg-openpipeline_qc}<span class="swatch openpipeline_qc"></span> | Quality-control components and standalone reporting |
 | [`openpipeline_rapids`]{.pkg-tag .pkg-openpipeline_rapids}<span class="swatch openpipeline_rapids"></span> | GPU-accelerated drop-ins via rapids-singlecell — *coming soon* |
 | [`openpipeline_composed`]{.pkg-tag .pkg-openpipeline_composed}<span class="swatch openpipeline_composed"></span> | Turnkey composed pipelines that wrap the whole flow |
@@ -26,9 +26,10 @@ Every package plugs into the same [pipeline architecture](architecture.qmd):
 
 - **`openpipeline`** defines all stages — ingestion, QC, processing, integration,
   and downstream — for the RNA, protein, ATAC, VDJ, and GDO modalities.
-- **`openpipeline_spatial`** follows the same shape with spatial-aware steps:
-  Space Ranger mapping, spatial ingestion for Xenium/CosMx, spatial QC, and
-  NicheCompass niche identification.
+- **`openpipeline_spatial`** brings spatial transcriptomics. It currently ingests
+  Visium, Visium HD, Xenium, Aviti24, and CosMx — or you start from an
+  already-ingested count matrix of any technology and run the spatial processing
+  workflow.
 - **`openpipeline_qc`** slots quality-control reporting alongside ingestion,
   producing a standalone HTML report before you commit to filter thresholds.
 - **`openpipeline_rapids`** (*coming soon*) will provide GPU drop-in

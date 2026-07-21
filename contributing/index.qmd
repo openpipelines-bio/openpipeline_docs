@@ -11,6 +11,7 @@ listing:
     - creating-components.qmd
     - creating-pipelines.qmd
     - running-tests.qmd
+    - pull-requests.qmd
   fields: [title, description]
   field-display-names:
     title: "Step"
@@ -25,10 +26,11 @@ OpenPipeline is open source. The path in, in order:
 :::{#contributing}
 :::
 
-The pull-request, build, and release flow — how a merge to `main` triggers a CI
-build and how a release publishes documentation automatically — is covered under
-[Project structure → Versioning and branching](project-structure.qmd#sec-versioning).
+## Code of conduct
 
-Stuck on something specific? The [FAQ](faq.qmd) covers common component-development
-questions (external resources, `__merge__`, inspecting the generated Dockerfile,
-reporting bugs).
+OpenPipeline adopts the
+[Contributor Covenant](https://www.contributor-covenant.org/) — we pledge to keep
+the community welcoming, inclusive, and harassment-free. By taking part you agree
+to uphold it. Please read the full
+[Code of Conduct](https://github.com/openpipelines-bio/openpipeline/blob/main/CODE_OF_CONDUCT.md)
+before participating.
