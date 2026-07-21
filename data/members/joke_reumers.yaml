@@ -1,0 +1,11 @@
+name: Joke Reumers
+info:
+  links:
+    linkedin: jokereumers
+    orcid: 0000-0001-5434-6515
+  organizations:
+    - name: Johnson & Johnson
+      href: https://www.jnj.com/
+      role: Director Portfolio Management
+team:
+  groups: [sponsor]

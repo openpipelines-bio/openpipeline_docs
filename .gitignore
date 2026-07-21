@@ -10,6 +10,8 @@
 *.html
 !design/mockup.html
 
-# Team member pages are generated from openpipeline core at render time
-# (see scripts/generate_team.py). Only the listing machinery is tracked.
+# team/index.qmd is generated from openpipeline core at render time
+# (see scripts/generate_team.py). Generated subdirs are ignored, but the
+# roster overlay (maintainers/advisors/sponsors source) must be tracked.
 /team/*/
+!/team/roster/
