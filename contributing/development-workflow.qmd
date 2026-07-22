@@ -1,0 +1,90 @@
+---
+title: "Build and test locally"
+description: "The local edit-run-test loop and the test data it needs"
+order: 30
+---
+
+OpenPipeline is built with [Viash](https://viash.io), so the whole local loop
+runs through the `viash` CLI. You edit source, run it, and test it, all without a
+separate build step. This page covers how that loop works and where the test data
+comes from. The [component](creating-components.qmd) and
+[pipeline](creating-pipelines.qmd) pages build on it.
+
+## The edit-run-test loop
+
+While developing a single component you rarely need to build anything. `viash
+run` and `viash test` compile the component on the fly from its
+`config.vsh.yaml`, so the loop is:
+
+```bash
+# run the component against real inputs
+viash run src/<namespace>/<component>/config.vsh.yaml -- --input … --output …
+
+# run its tests
+viash test src/<namespace>/<component>/config.vsh.yaml
+```
+
+Both commands read the config, assemble the container, and execute your script.
+Edit the script or config, rerun, repeat. See the
+[Viash guide](https://viash.io/guide/) for what these commands do under the hood.
+
+:::{.callout-tip}
+## Run the script on its own while iterating
+Every OpenPipeline script has a `## VIASH START` / `## VIASH END` block near the
+top that defines a `par` dictionary with sample paths and values:
+
+```python
+## VIASH START
+par = {"input": "…", "output": "output.h5mu", "modality": "rna"}
+## VIASH END
+```
+
+Viash strips this block out at build time and injects the real arguments, but
+because it is plain code you can also run the script directly (`python
+script.py`) to debug with a fast inner loop, then verify with `viash run`.
+:::
+
+## Building the target code
+
+Workflows are different: a [VDSL3 pipeline](creating-pipelines.qmd) imports the
+compiled Nextflow modules of the components it depends on, so those have to exist
+as **target code** first. Build the package (or a single namespace) with:
+
+```bash
+viash ns build --parallel                 # the whole package
+viash ns build --parallel -q <namespace>  # one namespace
+```
+
+This writes runnable containers and Nextflow modules into `target/`. A fresh
+clone has none; `target/` is git-ignored and never committed (see
+[Project structure](project-structure.qmd#sec-project-structure)). Rebuild after
+changing anything a workflow depends on.
+
+## Fetch the test resources {#sec-test-resources}
+
+Test data lives in a remote **S3 bucket**, not in the repository, and the CI uses
+the exact same resources, so what you run locally matches what CI checks. Each
+package repository declares its own bucket in its `_viash.yaml`, so there is
+nothing to configure. Rather than duplicating the download logic, the core
+`openpipeline` package provides the `sync_test_resources` component. Run it from
+the **root of the repository you are working in**; it reads the local
+`_viash.yaml` and syncs into `resources_test/`:
+
+```bash
+nextflow run openpipelines-bio/openpipeline \
+  -r 4.2.0 -latest -profile docker \
+  -main-script target/nextflow/download/sync_test_resources/main.nf \
+  --input _viash.yaml \
+  --output .
+```
+
+:::{.callout-note appearance="simple"}
+Use the `openpipeline` version your package pins, and always sync from the
+repository you are working in so you get its own bucket.
+:::
+
+With the data in `resources_test/`, you can run components and tests against real
+inputs. See [Testing](testing.qmd) for the component and workflow test types and
+how CI runs them.
+
+**Next:** [Create a component →](creating-components.qmd)

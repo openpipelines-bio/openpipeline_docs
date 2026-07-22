@@ -1,0 +1,47 @@
+---
+title: "Testing"
+description: "Run unit and integration tests against the test data"
+order: 60
+---
+
+Components and workflows are tested with Viash, and the CI runs the same tests on
+every pull request. The [Viash guide](https://viash.io/guide/) covers how to
+*write* a test; this page covers *running* them and the two test types specific
+to OpenPipeline.
+
+:::{.callout-important}
+## Sync the test data first
+Every test runs against the resources in `resources_test/`. If you haven't
+already, fetch them as described in
+[Build and test locally](development-workflow.qmd#sec-test-resources). CI uses
+the same bucket, so a green run locally means a green run in CI.
+:::
+
+## Component tests
+
+`viash test` builds the component on the fly and runs its test resource
+(usually `test.py`):
+
+```bash
+viash test src/<namespace>/<component>/config.vsh.yaml   # one component
+viash ns test --parallel -q <namespace>                  # a whole namespace
+viash ns test --parallel                                 # the whole suite
+```
+
+## Workflow tests
+
+Each workflow ships with a `nextflow.config` and a `test.nf` that `viash test`
+runs. By convention it also carries an **`integration_test.sh`** that runs the
+workflow end to end against the test data:
+
+```bash
+bash src/workflows/<category>/<workflow>/integration_test.sh
+```
+
+## Continuous integration
+
+The same unit and integration tests run automatically on every pull request and
+on every release, so there is nothing extra to trigger. Getting them green
+locally before you push is the fastest way to a clean review.
+
+**Next:** [Open a pull request →](pull-requests.qmd)

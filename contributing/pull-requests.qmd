@@ -1,7 +1,7 @@
 ---
-title: "Opening a pull request"
-description: "Branch, changelog, and the checklist before requesting a review."
-order: 50
+title: "Open a pull request"
+description: "Get your change reviewed, merged and released"
+order: 70
 ---
 
 Changes reach OpenPipeline through pull requests against the **`main`** branch of
@@ -10,21 +10,19 @@ the package repository (see
 
 ## The flow
 
-1. Work on a branch in your fork (see [Getting started](getting-started.qmd)).
-2. Make your change and [test it locally](running-tests.qmd).
+1. Work on a branch in your fork (see [Set up your environment](getting-started.qmd)).
+2. Make your change and [test it locally](testing.qmd).
 3. Add an entry to the repository's `CHANGELOG.md` describing the change.
 4. Push to your fork and open a pull request against `main`.
 
 ## Before requesting a review
 
-The pull-request template asks you to confirm:
-
-- you have done a **self-review** of your changes;
-- the change is **described in `CHANGELOG.md`**;
-- the PR **links its issue** (`Closes #<number>`);
-- you have **categorized** the change — breaking change, new functionality, major
-  change, minor change, documentation, or bug fix;
-- the **CI tests pass** (they run automatically on the PR).
+Opening the pull request fills in the repository's
+[PR template](https://github.com/openpipelines-bio/openpipeline/blob/main/.github/PULL_REQUEST_TEMPLATE.md).
+Work through its checklist: it asks you to self-review, link the issue you're
+closing, categorize the change (breaking, new functionality, documentation, bug
+fix, and so on), confirm the change is in `CHANGELOG.md`, and check that CI
+passes. The CI tests run automatically on the pull request.
 
 A maintainer reviews the pull request and, once approved, merges it into `main`.
 From there [Viash Hub builds and publishes](project-structure.qmd#sec-versioning)

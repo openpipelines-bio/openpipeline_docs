@@ -1,42 +1,134 @@
 ---
-title: "Creating pipelines"
-description: "How OpenPipeline composes components into VDSL3 pipelines."
-order: 30
+title: "Create a pipeline"
+description: "Chain components into a VDSL3 Nextflow workflow"
+order: 50
 ---
 
-A workflow chains components into a pipeline. OpenPipeline workflows are
-**VDSL3 pipelines** — built with [Viash](https://viash.io) from a
-`config.vsh.yaml` plus a `main.nf`. Creating one is a Viash task, so **refer to
-the [Viash website](https://viash.io/guide/) for the how-to** (declaring
-`dependencies`, the `nextflow_script` resource, `fromState` / `toState` wiring,
-`runIf`, building, …). This page covers only the conventions specific to
-OpenPipeline.
+A pipeline chains components into a workflow. OpenPipeline workflows are **VDSL3
+pipelines**, built with [Viash](https://viash.io) from a `config.vsh.yaml` plus a
+`main.nf`. The mechanics of VDSL3, channels, and the `.run()` operator are
+covered in the [Viash guide](https://viash.io/guide/); this page covers the
+OpenPipeline conventions and walks through a real workflow.
 
 ## OpenPipeline conventions
 
-- **Layout.** A workflow lives in `src/workflows/<category>/<name>/` with a
-  `config.vsh.yaml`, `main.nf` (a `run_wf` workflow), a `nextflow.config`, a
-  `test.nf`, and — by convention — an `integration_test.sh` for local
-  integration testing (see [Running tests](running-tests.qmd)). Categories follow
-  the analysis stage (`rna`, `integration`, `annotation`, `multiomics`, …).
-- **State-based channels.** Data flows as `[id, state]` tuples; components read
-  from the state with `fromState` and write back with `toState`. The lens behind
-  this — single-sample → multi-sample → merged → integrated — is explained in
-  [the data-state view](../concepts/data-state.qmd).
-- **Declare dependencies.** Every component or sub-workflow used in `main.nf`
-  must be listed under `dependencies` in the config; Viash resolves and includes
-  the compiled modules at build time (imports are not written by hand).
+- **Layout.** A workflow lives in `src/workflows/<category>/<name>/`, with the
+  category following the analysis stage, such as `rna`, `integration`,
+  `annotation`, or `multiomics`. It holds a `config.vsh.yaml`, a `main.nf` (the
+  `run_wf` workflow), a `nextflow.config`, a `test.nf`, and, by convention, an
+  `integration_test.sh`.
+- **State-based channels.** Data flows as `[id, state]` tuples. Components read
+  from the state with `fromState` and write back with `toState`. The
+  [data-state view](../concepts/data-state.qmd) explains the lens behind this.
+- **Declare dependencies.** List every component or sub-workflow used in `main.nf`
+  under `dependencies` in the config. Viash resolves and compiles the modules at
+  build time, so imports are never written by hand.
 - **Dataflow utilities.** Reuse `dataflow/concatenate_h5mu`, `split_modalities`,
-  `merge`, and `split_h5mu` for common channel manipulations rather than
+  `merge`, and `split_h5mu` for common channel manipulations instead of
   reimplementing them.
-- **Resource labels.** Assign CPU/memory via labels on each component; the
-  workflow inherits them. See [Tune compute resources](../guides/tune-resources.qmd).
+- **Resource labels.** Assign CPU and memory with
+  [resource labels](../guides/tune-resources.qmd) on each component; the workflow
+  inherits them.
 
-## Build and run locally
+## Anatomy of a workflow
 
-Use `viash ns build` to build a workflow and its dependencies locally for
-development, then run it with `nextflow run`. See [Running tests](running-tests.qmd).
-Published packages are built and hosted by Viash Hub
-([packages.viash-hub.com](https://packages.viash-hub.com)).
+A workflow folder pairs the config with a Nextflow script and its tests:
 
-**Next:** [Running tests →](running-tests.qmd)
+```
+src/workflows/rna/log_normalize/
+├── config.vsh.yaml       # arguments + dependencies
+├── main.nf               # the run_wf workflow
+├── nextflow.config
+├── test.nf               # the test workflow
+└── integration_test.sh   # end-to-end run against test data
+```
+
+### The config
+
+The config groups the pipeline's arguments and, crucially, lists its
+`dependencies`. Trimmed from the real
+[`workflows/rna/log_normalize`](https://github.com/openpipelines-bio/openpipeline/blob/main/src/workflows/rna/log_normalize/config.vsh.yaml):
+
+```yaml
+name: "log_normalize"
+namespace: "workflows/rna"
+description: "Normalization and log-transformation of raw count data."
+argument_groups:
+  - name: "Inputs"
+    arguments:
+      - name: "--input"
+        type: file
+        required: true
+      - name: "--modality"
+        type: string
+        default: "rna"
+  - name: "Output"
+    arguments:
+      - name: "--output"
+        type: file
+        direction: output
+        required: true
+dependencies:
+  - name: transform/normalize_total
+  - name: transform/log1p
+  - name: transform/delete_layer
+resources:
+  - type: nextflow_script
+    path: main.nf
+    entrypoint: run_wf
+runners:
+  - type: nextflow
+```
+
+Each entry under `dependencies` is a component (or sub-workflow) the pipeline
+calls. Because they are declared here, `viash ns build` compiles them into the
+`target/` modules that `main.nf` uses, so you never write `include` statements
+yourself.
+
+### The main workflow
+
+`main.nf` defines `run_wf`, a chain of `.run()` calls on the declared
+dependencies. Each component pulls its inputs from the state with `fromState` and
+writes results back with `toState`:
+
+```groovy
+workflow run_wf {
+  take:
+  input_ch
+
+  main:
+  output_ch = input_ch
+    | normalize_total.run(
+        fromState: ["input": "input", "modality": "modality"],
+        args:      ["output_layer": "normalized"],
+        toState:   ["input": "output"]
+      )
+    | log1p.run(
+        fromState: ["input": "input", "modality": "modality"],
+        args:      ["input_layer": "normalized"],
+        toState:   ["input": "output"]
+      )
+    | setState(["output"])
+
+  emit:
+  output_ch
+}
+```
+
+Data enters as `[id, state]` tuples, each step reads the fields it needs from the
+state and merges its output back, and `setState` selects the final fields to
+emit. This is the [data-state model](../concepts/data-state.qmd) in practice.
+
+## Build and run
+
+A workflow needs its dependencies compiled first: run `viash ns build`, then
+`nextflow run`. See [Build and test locally](development-workflow.qmd) for the
+details.
+
+## Publishing
+
+When your workflow is ready, open a pull request and follow
+[Open a pull request](pull-requests.qmd). Once merged, Viash Hub builds it into
+the package and publishes it with the next release.
+
+**Next:** [Testing →](testing.qmd)

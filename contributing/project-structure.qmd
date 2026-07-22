@@ -1,15 +1,15 @@
 ---
 title: "Project structure"
-description: "Source code, target code (Viash Hub vs local), and how versions are released."
-order: 10
+description: "Source code, target packages and release versioning"
+order: 20
 ---
 
 ## Source code {#sec-project-structure}
 
-An OpenPipeline repository holds **only source code** under `src/` — nothing
-built. Each component is a `config.vsh.yaml` (its metadata: inputs, outputs,
-dependencies, container) plus a script; each workflow is a config plus a
-`main.nf`.
+An OpenPipeline repository holds **only source code** under `src/`, never the
+target code produced from it. Each component is a `config.vsh.yaml` (its
+metadata: inputs, outputs, dependencies, container) plus a script; each workflow
+is a config plus a `main.nf`.
 
 `src/` is organized into Viash [namespaces](https://viash.io/guide/): each
 subfolder is a namespace grouping related components, and each subfolder within
@@ -18,32 +18,33 @@ it is one component. For example `src/convert/from_bdrhap_to_h5mu` is the
 `src/workflows/` and are organized into namespaces the same way. Everything in
 `src/` is handled by the same `viash` and `viash ns` commands.
 
-## Target code — Viash Hub vs. local building
+## Target package
 
 **Target code** is the runnable form built from the source: each component
-becomes a container plus a Nextflow module. Source is never run directly — it is
+becomes a container plus a Nextflow module. Source is never run directly, it is
 always built first. That build happens in two places:
 
 - **On Viash Hub (the published packages).** [Viash Hub](https://viash-hub.com)
   builds each package from its source and publishes versioned releases to
   [packages.viash-hub.com](https://packages.viash-hub.com). These are the
-  official builds the [reference](../reference/index.qmd) documents and that
-  users run — nothing built is ever committed to the source repository.
+  official releases the [reference](../reference/index.qmd) documents and that
+  users run; the target code is never committed to the source repository.
 - **Locally (for development).** While developing you build it yourself with
-  `viash ns build`, which writes the target code into a `target/` folder in your
+  Viash commands, which write the target code into a `target/` folder in your
   working copy. A fresh clone has no `target/`; it appears only after a local
   build, is git-ignored, and is never committed. It's purely for running and
-  testing your work (see [Running tests](running-tests.qmd)).
+  testing your work (see [Build and test locally](development-workflow.qmd) for
+  the commands).
 
-## Versioning and releases {#sec-versioning}
+## Release management {#sec-versioning}
 
-OpenPipeline uses [semantic versioning](https://semver.org/) — every release is
+OpenPipeline uses [semantic versioning](https://semver.org/), every release is
 numbered `MAJOR.MINOR.PATCH`:
 
-- **MAJOR** — breaking changes to the public interface.
-- **MINOR** — new, backward-compatible functionality. This can be substantial
+- **MAJOR**: breaking changes to the public interface.
+- **MINOR**: new, backward-compatible functionality. This can be substantial
   (large new features), but it never breaks existing usage.
-- **PATCH** — backward-compatible bug fixes, with no container updates (the
+- **PATCH**: backward-compatible bug fixes, with no container updates (the
   component containers are not rebuilt).
 
 Changes for each release are recorded in the CHANGELOG.
@@ -55,6 +56,6 @@ stays available there, so:
 
 - a run pinned to a version (e.g. `nextflow run … -r 4.2.0`) always gets exactly
   that build, and
-- the [reference](../reference/index.qmd) documents a specific published version.
+- the [reference](../reference/index.qmd) documents the latest published version.
 
-**Next:** [Creating components →](creating-components.qmd)
+**Next:** [Build and test locally →](development-workflow.qmd)

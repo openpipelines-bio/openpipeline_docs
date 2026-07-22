@@ -1,34 +1,36 @@
 ---
-title: "Creating components"
-description: "How OpenPipeline uses Viash components — the mechanics live in the Viash docs."
-order: 20
+title: "Create a component"
+description: "Write a Viash component that fits OpenPipeline conventions"
+order: 40
 ---
 
 A component is one step of a pipeline: a script plus a `config.vsh.yaml` that
 describes its inputs, outputs, dependencies, and container. OpenPipeline builds
-every component with [Viash](https://viash.io), so the **how-to for writing a
-component is the Viash documentation** — this page only covers the conventions
-specific to OpenPipeline.
-
-:::{.callout-tip}
-New to Viash? Start with the [Viash guide](https://viash.io/guide/) and the
-[config reference](https://viash.io/reference/config/). The mechanics there
-(argument groups, `engines`, `runners`, the `## VIASH START` / `## VIASH END`
-block, building images) apply as-is to OpenPipeline.
-:::
+every component with [Viash](https://viash.io). The how-to for writing a config
+lives in the [Viash guide](https://viash.io/guide/) and
+[config reference](https://viash.io/reference/config/); this page covers the
+conventions specific to OpenPipeline and walks through the anatomy of a real
+component.
 
 ## OpenPipeline conventions
 
-- **One common data format.** Components read and write the same
-  [MuData](../concepts/mudata.qmd) object, so any component can slot before or
-  after any other. Convert to/from other formats only at the edges.
-- **Where it lives.** Components sit in `src/<namespace>/<component>/`, grouped
-  into [namespaces](project-structure.qmd#sec-project-structure) by function
-  (e.g. `convert`, `filter`, `dimred`). Look for an existing component that does
-  something similar before starting a new one.
+:::{.callout-tip}
+## Check the reference first
+Before starting a new component, browse the
+[reference](../reference/index.qmd) to see whether one already exists that does
+what you need, or that you can extend.
+:::
+
+- **One common data format.** Every component reads and writes the same
+  [MuData](../concepts/mudata.qmd) object. Any component can therefore slot
+  before or after any other.
+- **Where it lives.** A component sits in `src/<namespace>/<component>/`, grouped
+  into [namespaces](project-structure.qmd#sec-project-structure) by function such
+  as `convert`, `filter`, or `transform`.
 - **Author info is centralized.** Each contributor has a YAML file in
-  `src/authors/`, merged into configs with Viash's `__merge__` directive, so
-  author details stay consistent without duplication:
+  `src/authors/`. When you contribute code, add yourself to the component with
+  Viash's `__merge__` directive so author details stay consistent across
+  components. The role is either `author` or `contributor`:
 
   ```yaml
   authors:
@@ -36,22 +38,126 @@ block, building images) apply as-is to OpenPipeline.
       roles: [ author ]
   ```
 
-- **Resource labels.** Declare CPU/memory (and GPU) needs with labels in the
-  component's `nextflow` runner — see [Tune compute resources](../guides/tune-resources.qmd).
-- **Base containers.** Start from a reputable, actively-maintained base image and
-  install dependencies through a package manager. Common choices (use the current
-  tag rather than pinning an old one):
-  - [`python`](https://hub.docker.com/_/python) — Python environments
-  - [`ubuntu`](https://hub.docker.com/_/ubuntu) — general Linux and bash scripts
-  - [`rocker`](https://rocker-project.org/) images — R
-  - [`nvcr.io/nvidia/pytorch`](https://catalog.ngc.nvidia.com/orgs/nvidia/containers/pytorch) — GPU-accelerated PyTorch in Python
+- **Resource labels.** Declare CPU, memory, and GPU needs with
+  [resource labels](../guides/tune-resources.qmd) on the `nextflow` runner.
+- **Base containers.** Start from a reputable, actively maintained base image and
+  install dependencies through a package manager. Use the current tag rather than
+  pinning an old one. Common choices are
+  [`python`](https://hub.docker.com/_/python) for Python,
+  [`ubuntu`](https://hub.docker.com/_/ubuntu) for Linux and bash,
+  [`rocker`](https://rocker-project.org/) for R, and
+  [`nvcr.io/nvidia/pytorch`](https://catalog.ngc.nvidia.com/orgs/nvidia/containers/pytorch)
+  for GPU-accelerated PyTorch.
 
-## Build and test locally
+## Anatomy of a component
 
-While developing, `viash run` and `viash test` build the component on the fly —
-no separate build step. See [Running tests](running-tests.qmd). The published,
-versioned package is built and hosted by Viash Hub
-([packages.viash-hub.com](https://packages.viash-hub.com)), not committed to the
-repository.
+The quickest way to start is to **copy the existing component closest to what you
+need** and adapt it. A component folder holds the config, the script, and a test:
 
-**Next:** [Creating pipelines →](creating-pipelines.qmd)
+```
+src/transform/log1p/
+├── config.vsh.yaml   # metadata: arguments, resources, container
+├── script.py         # the logic
+└── test.py           # the test (see Testing)
+```
+
+### The config
+
+`config.vsh.yaml` declares the interface and the container. Trimmed from the real
+[`transform/log1p`](https://github.com/openpipelines-bio/openpipeline/blob/main/src/transform/log1p/config.vsh.yaml):
+
+```yaml
+name: log1p
+namespace: "transform"
+description: |
+  Logarithmize the data matrix. Computes X = log(X + 1).
+authors:
+  - __merge__: /src/authors/your_name.yaml
+    roles: [ author ]
+arguments:
+  - name: "--input"
+    type: file
+    direction: input
+    required: true
+  - name: "--modality"
+    type: string
+    default: "rna"
+  - name: "--output"
+    type: file
+    direction: output
+    required: true
+resources:
+  - type: python_script
+    path: script.py
+  - path: /src/utils/setup_logger.py       # shared helpers, merged in
+engines:
+  - type: docker
+    image: python:3.12-slim
+    setup:
+      - type: python
+        __merge__: [/src/base/requirements/scanpy.yaml, .]
+runners:
+  - type: executable
+  - type: nextflow
+    directives:
+      label: [midmem, lowcpu, highdisk]     # resource labels
+```
+
+A few OpenPipeline habits show up here: `--input`/`--output` are `file`
+arguments carrying the [MuData](../concepts/mudata.qmd) object, a `--modality`
+argument selects which modality to act on, shared Python requirements and helper
+scripts are pulled in with `__merge__` instead of copied, and the `nextflow`
+runner carries [resource labels](../guides/tune-resources.qmd).
+
+### The script
+
+The script does the work. OpenPipeline scripts read the MuData object, operate on
+the requested modality, and write it back out. Every script opens with a `##
+VIASH START` / `## VIASH END` block so it can be run standalone while iterating
+(see [Build and test locally](development-workflow.qmd)):
+
+```python
+import mudata as mu
+import scanpy as sc
+import sys
+
+## VIASH START
+par = {"input": "input.h5mu", "output": "output.h5mu", "modality": "rna"}
+meta = {"resources_dir": "src/utils"}
+## VIASH END
+
+# shared helpers listed under resources are available at runtime
+sys.path.append(meta["resources_dir"])
+from setup_logger import setup_logger
+logger = setup_logger()
+
+data = mu.read_h5ad(par["input"], mod=par["modality"])
+data.X = sc.pp.log1p(data.X, copy=True)
+data.write_h5mu(par["output"])
+```
+
+Viash replaces the `VIASH START`/`END` block with the real arguments at run time
+and exposes them as `par`; `meta` carries build metadata such as
+`resources_dir`, where the merged helper scripts land.
+
+## Build and test
+
+There is no separate build step while developing a component: `viash run` and
+`viash test` compile it on the fly. See
+[Build and test locally](development-workflow.qmd) for the loop and
+[Testing](testing.qmd) for writing the test.
+
+:::{.callout-tip}
+## Descriptions become the reference
+The `description` fields on the component and each argument are what the
+[reference documentation](../reference/index.qmd) is generated from. Writing them
+clearly is the same task as documenting your component.
+:::
+
+## Publishing
+
+When your component is ready, open a pull request and follow
+[Open a pull request](pull-requests.qmd). Once merged, Viash Hub builds it into
+the package and publishes it with the next release.
+
+**Next:** [Create a pipeline →](creating-pipelines.qmd)

@@ -1,7 +1,7 @@
 ---
-title: "Getting started"
-description: "Install dependencies and fetch test resources."
-order: 0
+title: "Set up your environment"
+description: "Fork a package, then install Viash and Nextflow"
+order: 10
 ---
 
 ## Fork and clone the repository
@@ -49,14 +49,12 @@ git remote add upstream git@github.com:openpipelines-bio/<repo>.git
 ## Install Viash and Nextflow {#sec-install-viash-nextflow}
 
 OpenPipeline is built with [Viash](https://viash.io) and
-[Nextflow](https://www.nextflow.io/docs/latest/index.html), so you need both —
+[Nextflow](https://www.nextflow.io/docs/latest/index.html), so you need both,
 plus [Docker](https://docs.docker.com/get-docker/) and Java.
 
 :::{.callout-tip}
 ## Follow the Viash installation guide
-For detailed, up-to-date steps — the download, adding Viash to your `PATH`, and
-the Java requirement (minimum Java 11; the LTS releases 17 or 21 are
-recommended) — follow the
+For detailed, up-to-date steps, follow the
 [**Viash installation guide**](https://viash.io/installation/). Nextflow has its
 own [installation docs](https://www.nextflow.io/docs/latest/install.html).
 :::
@@ -68,24 +66,8 @@ nextflow run hello -with-docker
 viash --version
 ```
 
-## Fetch test resources
-
-Tests run against shared test data hosted in a bucket. The core `openpipeline`
-package provides the `sync_test_resources` component that downloads it, and each
-repository's `_viash.yaml` already declares which bucket to pull — you don't need
-to configure anything. From the **root of the repo you cloned**, run the
-component straight from `openpipeline` with Nextflow; it reads the local
-`_viash.yaml` and syncs into `resources_test/`:
-
-```bash
-nextflow run openpipelines-bio/openpipeline \
-  -r 4.2.0 -latest -profile docker \
-  -main-script target/nextflow/download/sync_test_resources/main.nf \
-  --input _viash.yaml \
-  --output .
-```
-
-Use the `openpipeline` version your package pins. See
-[Running tests](running-tests.qmd) for how the test data is used.
+That's everything you need to build and test locally. You'll fetch the test
+resources as part of the [local workflow](development-workflow.qmd#sec-test-resources),
+just before running your first test.
 
 **Next:** [Project structure →](project-structure.qmd)

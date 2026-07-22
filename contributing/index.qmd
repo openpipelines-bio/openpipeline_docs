@@ -1,6 +1,6 @@
 ---
 title: "Build with us"
-description: "Add a component, extend a workflow, or improve the docs."
+description: "Add a new feature, component or workflow"
 order: 0
 listing:
   id: contributing
@@ -8,9 +8,10 @@ listing:
   contents:
     - getting-started.qmd
     - project-structure.qmd
+    - development-workflow.qmd
     - creating-components.qmd
     - creating-pipelines.qmd
-    - running-tests.qmd
+    - testing.qmd
     - pull-requests.qmd
   fields: [title, description]
   field-display-names:
@@ -21,16 +22,51 @@ listing:
   sort-ui: false
 ---
 
-OpenPipeline is open source. The path in, in order:
+OpenPipeline is open-source. Whether you want to fix a typo, report a bug, or add
+a whole new workflow, contributions are welcome.
+
+## Ways to contribute
+
+You don't have to write code to help.
+
+- **Report a bug or request a feature.** Open an issue on the relevant package
+  repository (see [Getting started](getting-started.qmd) for the list). A clear
+  bug report with steps to reproduce is a real contribution.
+- **Improve the documentation.** Every page has room to be clearer. Spot
+  something wrong or missing? Open an issue or a pull request.
+- **Review or discuss.** Comment on open pull requests and issues, or help answer
+  questions from other users.
+- **Contribute code.** Add a [component](creating-components.qmd) or a
+  [pipeline](creating-pipelines.qmd), or fix an existing one. The steps below
+  walk you through it end to end.
+
+## How a code contribution flows
+
+Every code change follows the same path, regardless of the package:
+
+```
+fork & clone  →  develop locally  →  test  →  pull request  →  Viash Hub publishes
+```
+
+You work on a branch in your fork, build and test locally with Viash, then open a
+pull request against `main`. Once a maintainer merges it, [Viash
+Hub](project-structure.qmd#sec-versioning) builds and publishes the package with
+the next release. The steps below follow that path in order.
 
 :::{#contributing}
 :::
 
+## Where to get help
+
+Stuck? Open an issue on the package repository, or start a discussion on
+[GitHub](https://github.com/openpipelines-bio). Questions are welcome, including
+"is this the right place for my change?" before you start.
+
 ## Code of conduct
 
 OpenPipeline adopts the
-[Contributor Covenant](https://www.contributor-covenant.org/) — we pledge to keep
-the community welcoming, inclusive, and harassment-free. By taking part you agree
-to uphold it. Please read the full
+[Contributor Covenant](https://www.contributor-covenant.org/). We pledge to keep
+the community welcoming, inclusive, and harassment-free, and by taking part you
+agree to uphold it. Please read the full
 [Code of Conduct](https://github.com/openpipelines-bio/openpipeline/blob/main/CODE_OF_CONDUCT.md)
 before participating.
