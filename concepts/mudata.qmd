@@ -1,11 +1,11 @@
 ---
 title: "MuData as standard data format"
-description: "One HDF5-based object every component reads and writes — with converters at the edges."
+description: "The single data object every component reads and writes, with converters at the edges."
 order: 30
 ---
 
-Every component reads and writes the same HDF5-based
-[MuData](https://mudata.readthedocs.io/) object — modalities under `.mod`, cells
+Every component reads and writes the same
+[MuData](https://mudata.readthedocs.io/) object, modalities under `.mod`, cells
 in `.obs`, features in `.var`. That shared format is why components snap together
 without conversion, and is the foundation of OpenPipeline's
 [modularity](modularity.qmd).
@@ -24,7 +24,7 @@ MuData
 ```
 
 MuData is the multimodal extension of [AnnData](https://anndata.readthedocs.io).
-If you are new to it, read up on AnnData first — MuData is roughly a collection
+If you are new to it, read up on AnnData first, MuData is roughly a collection
 of AnnData objects, one per modality, stored in the `.mod` attribute.
 
 ## Anatomy of the object
@@ -32,54 +32,30 @@ of AnnData objects, one per modality, stored in the `.mod` attribute.
 Each slot has a fixed meaning, and the same slots exist both per-modality (inside
 each AnnData under `.mod`) and at the top level (across modalities):
 
-- **`.mod`** — the associative array of AnnData objects, one per modality
+- **`.mod`**: the associative array of AnnData objects, one per modality
   (`rna`, `prot`, `atac`, `vdj_t`, …).
-- **`.X` and `.layers`** — the measurement matrices. Columns are variables
+- **`.X` and `.layers`**: the measurement matrices. Columns are variables
   (genes/features), rows are observations (cells). `.layers` holds alternative
   versions of the same matrix (e.g. raw counts vs. normalized).
-- **`.var`** — metadata for the variables (annotation for the columns of `.X`).
+- **`.var`**: metadata for the variables (annotation for the columns of `.X`).
   One row per feature.
-- **`.obs`** — metadata for the observations (annotation for the rows of `.X`).
+- **`.obs`**: metadata for the observations (annotation for the rows of `.X`).
   One row per cell. At the top level, `.obs` holds cross-modality cell annotation
   such as `sample_id`.
-- **`.varm` / `.obsm`** — multi-dimensional variable / observation annotations:
+- **`.varm` / `.obsm`**: multi-dimensional variable / observation annotations:
   key → matrix mappings aligned to features (`.varm`, e.g. PCA loadings) or cells
   (`.obsm`, e.g. embeddings like `X_pca`, `X_umap`).
-- **`.uns`** — unstructured annotation, with no dimensional constraints (run
+- **`.uns`**: unstructured annotation, with no dimensional constraints (run
   parameters, colour maps, cluster metadata).
 
 ## Working with other formats
 
 You do not have to leave your existing tools behind. OpenPipeline ships
-**converter components** that translate to and from the common formats used in
-single-cell analysis, so you can bring data in from — or hand results off to —
-Scanpy (H5AD), Seurat, TileDB, or a spatial toolkit. Convert once at the edge of
-the pipeline; everything in between stays MuData.
+**converter components** in the `convert` namespace that translate to and from
+the common single-cell data formats, AnnData (H5AD), Seurat, TileDB, and 10x,
+with spatial formats (SpatialData, SpatialExperiment) added by the
+[`openpipeline_spatial`](ecosystem.qmd) package. The concept is simple: **convert
+once at the edge of the pipeline; everything in between stays MuData.**
 
-**Into MuData** (typically at ingestion):
-
-| Component | From |
-|---|---|
-| `convert/from_10xh5_to_h5mu` | 10x Genomics HDF5 (`.h5`) |
-| `convert/from_10xmtx_to_h5mu` | 10x Genomics MEX (`.mtx`) |
-| `convert/from_cellranger_multi_to_h5mu` | Cell Ranger Multi output |
-| `convert/from_bdrhap_to_h5mu` | BD Rhapsody output |
-| `convert/from_h5ad_to_h5mu` | AnnData (`.h5ad`) |
-| `convert/from_seurat_to_h5mu` | Seurat (`.rds`) |
-| `convert/from_tiledb_to_h5mu` | TileDB array |
-| `convert/velocyto_to_h5mu` | velocyto loom (RNA velocity counts) |
-
-**Out of MuData** (to hand off downstream):
-
-| Component | To |
-|---|---|
-| `convert/from_h5mu_to_h5ad` | AnnData (`.h5ad`) |
-| `convert/from_h5mu_to_seurat` | Seurat (`.rds`) |
-| `convert/from_h5mu_or_h5ad_to_seurat` | Seurat, from H5MU or H5AD |
-| `convert/from_h5ad_to_seurat` | Seurat, from H5AD |
-| `convert/from_h5mu_or_h5ad_to_tiledb` | TileDB array |
-
-Spatial workflows add their own converters (SpatialData, SpatialExperiment,
-Seurat-with-FOV, and Xenium/CosMx ingestion) in the
-[`openpipeline_spatial`](ecosystem.qmd) package. See the
-[reference](../reference/index.qmd) for the full argument list of each converter.
+Browse the [`convert` namespace](../reference/index.qmd) in the reference for the
+full list of converters and their arguments.

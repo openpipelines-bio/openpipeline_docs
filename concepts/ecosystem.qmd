@@ -14,20 +14,20 @@ dependency and adds to it rather than forking it.
 
 | Package | Role |
 |---|---|
-| [`openpipeline`]{.pkg-tag .pkg-openpipeline}<span class="swatch openpipeline"></span> | Core single-cell multi-omics — RNA, protein/ADT, ATAC, VDJ, GDO |
-| [`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial}<span class="swatch openpipeline_spatial"></span> | Spatial transcriptomics — ingests Visium, Visium HD, Xenium, Aviti24, CosMx (or any pre-ingested count matrix) |
+| [`openpipeline`]{.pkg-tag .pkg-openpipeline}<span class="swatch openpipeline"></span> | Core single-cell multi-omics, RNA, protein/ADT, ATAC, VDJ, GDO |
+| [`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial}<span class="swatch openpipeline_spatial"></span> | Spatial transcriptomics, ingests Visium, Visium HD, Xenium, Aviti24, CosMx (or any pre-ingested count matrix) |
 | [`openpipeline_qc`]{.pkg-tag .pkg-openpipeline_qc}<span class="swatch openpipeline_qc"></span> | Quality-control components and standalone reporting |
-| [`openpipeline_rapids`]{.pkg-tag .pkg-openpipeline_rapids}<span class="swatch openpipeline_rapids"></span> | GPU-accelerated drop-ins via rapids-singlecell — *coming soon* |
+| [`openpipeline_rapids`]{.pkg-tag .pkg-openpipeline_rapids}<span class="swatch openpipeline_rapids"></span> | GPU-accelerated drop-ins via rapids-singlecell, *coming soon* |
 | [`openpipeline_composed`]{.pkg-tag .pkg-openpipeline_composed}<span class="swatch openpipeline_composed"></span> | Turnkey composed pipelines that wrap the whole flow |
 
 ## How the packages relate
 
 Every package plugs into the same [pipeline architecture](architecture.qmd):
 
-- **`openpipeline`** defines all stages — ingestion, QC, processing, integration,
-  and downstream — for the RNA, protein, ATAC, VDJ, and GDO modalities.
+- **`openpipeline`** defines all stages, ingestion, QC, processing, integration,
+  and downstream, for the RNA, protein, ATAC, VDJ, and GDO modalities.
 - **`openpipeline_spatial`** brings spatial transcriptomics. It currently ingests
-  Visium, Visium HD, Xenium, Aviti24, and CosMx — or you start from an
+  Visium, Visium HD, Xenium, Aviti24, and CosMx, or you start from an
   already-ingested count matrix of any technology and run the spatial processing
   workflow.
 - **`openpipeline_qc`** slots quality-control reporting alongside ingestion,
@@ -38,12 +38,12 @@ Every package plugs into the same [pipeline architecture](architecture.qmd):
   whole cohort goes from raw data to an annotated object in one run.
 
 Because a satellite only *pins* the core, it inherits the core's components and
-[MuData](mudata.qmd) format automatically — and stays compatible as the core
+[MuData](mudata.qmd) format automatically, and stays compatible as the core
 evolves. This is [modularity](modularity.qmd) applied at the package level.
 
 :::{.callout-note appearance="simple"}
 `biobox` and `craftbox` are external component libraries that some packages
-depend on. They are dependencies, not OpenPipeline pipelines — you may see them
+depend on. They are dependencies, not OpenPipeline pipelines, you may see them
 referenced, but they are documented in their own projects.
 :::
 

@@ -1,12 +1,14 @@
 ---
 title: "Many samples at once: the param_list"
 description: "Process a whole cohort in one run, with per-sample and shared arguments."
-order: 50
+order: 65
 ---
 
-A **`param_list`** processes a whole cohort in a single run. It is a list where
-**each entry is one sample**, carrying that sample's own arguments. Any argument
-set **outside** the list applies to **every** sample.
+Real studies have many samples, and most arguments are the same for all of them
+while a few differ per sample. The **`param_list`** captures exactly that shape:
+it is a list where **each entry is one sample**, carrying that sample's own
+arguments, while any argument set **outside** the list applies to **every**
+sample.
 
 ```yaml
 param_list:
@@ -19,11 +21,24 @@ param_list:
 rna_max_counts: 1000000        # shared: applied to all samples
 ```
 
-Why it matters:
+## Why it matters
 
-- **Global vs. per-sample is explicit** — shared defaults stay in one place;
-  overrides sit next to the sample they affect.
-- **One command, many samples** — no shell loops, no repeated invocations.
-- **Parallelism** — Nextflow runs the entries concurrently.
+- **Global vs. per-sample is explicit.** Shared defaults live in one place;
+  overrides sit next to the sample they affect. Nothing is repeated, so nothing
+  drifts out of sync.
+- **One command, many samples.** No shell loops, no re-running the pipeline once
+  per sample.
+- **Parallelism for free.** Nextflow treats each entry as its own job and runs
+  them concurrently, on whatever compute the [run is on](../get-started/index.qmd).
 
-See it end-to-end in the [Get started](../get-started/index.qmd) tutorial.
+## Two ways to write it
+
+The `param_list` is the same idea whether you pass it as YAML inside a
+`-params-file`, as shown above, or as a **CSV** with one row per sample and one
+column per argument (`--param_list samples.csv`). The CSV form is handy for large
+cohorts; see [Ingest 10x Genomics data](../guides/ingest-10x.qmd#ingest-many-samples-at-once)
+for an example.
+
+See a `param_list` in a full run in the [Get started](../get-started/index.qmd)
+tutorial, and [Process many samples](../guides/process-many-samples.qmd) for the
+task recipe.

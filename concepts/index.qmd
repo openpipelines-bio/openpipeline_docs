@@ -1,60 +1,78 @@
 ---
 title: "How it works"
-description: "The ideas that make everything else make sense — read once, apply everywhere."
+description: "The core ideas behind OpenPipeline, and why it works the way it does."
 order: 0
 ---
 
-The ideas below explain how OpenPipeline is put together and why it behaves the
-way it does. Read them top to bottom for the full picture, or jump to whichever
-answers your question.
+OpenPipeline is a set of modular, containerized workflows for single-cell and
+spatial multi-omics, taking data from raw counts to a processed, annotated
+object. A few design choices set it apart:
+
+- **True modularity.** Modular not just in the source tree but at the
+  *execution* level: every step is an independently built, containerized unit you
+  can run, test, swap, or reorder on its own, and even declare as a dependency
+  from another package's repository.
+- **Standard multi-omics data object.** All modalities, RNA, protein, ATAC,
+  spatial, and more, share one standard [MuData](mudata.qmd) object, so any
+  component composes with any other.
+- **Reproducible.** Each component pins its exact dependencies in a container,
+  and every release is versioned, so the same run gives the same results today
+  and years from now.
+- **Scalable and portable.** Workflows are Nextflow pipelines, so the same run
+  goes unchanged from a laptop to an HPC cluster or the cloud, parallelizing
+  across samples.
+- **Best practices, by default.** Brings software-engineering rigor to
+  bioinformatics, and follows the single-cell community's analysis best
+  practices.
+- **Community-driven, team-maintained.** Open source and developed in the open,
+  but not a release-once academic project: actively maintained for years by a
+  dedicated team.
+
+The pages below explain how those choices play out. Read them top to bottom for
+the full picture, or jump to whichever answers your question.
 
 ```{=html}
 <div class="concept-list">
 
   <a class="concept-card" href="ecosystem.html">
     <div class="ct">The OpenPipeline ecosystem</div>
-    <p>One core package, four satellites — all built the same way, sharing the same components and data format.</p>
+    <p>A core package and a family of satellites that all share the same building blocks.</p>
     <span class="go">Read →</span>
   </a>
 
   <a class="concept-card" href="modularity.html">
-    <div class="ct">True modularity</div>
-    <p>Modular at the execution level, not just in the source tree: every step is an independently built, containerized unit.</p>
+    <div class="ct">Components, workflows &amp; modularity</div>
+    <p>Every step is a self-contained unit you can run, swap, or reorder on its own.</p>
     <span class="go">Read →</span>
   </a>
 
-  <div class="concept-card">
-    <div class="ct">Components &amp; workflows</div>
-    <p>A <b>module</b> does one job (normalize, cluster, filter). A <b>workflow</b> chains modules into a pipeline. Both are built with <a href="viash.html"><b>Viash</b></a> and containerized, so a local run and a cloud run behave identically.</p>
-  </div>
-
   <a class="concept-card" href="mudata.html">
     <div class="ct">MuData as standard data format</div>
-    <p>One HDF5 object every component reads and writes — with converters to and from H5AD, Seurat, TileDB at the edges.</p>
+    <p>The shared data format that lets any component fit together with any other.</p>
     <span class="go">Read →</span>
   </a>
 
   <a class="concept-card" href="viash.html">
     <div class="ct">The engine: Viash and Viash Hub</div>
-    <p>How components are built, containerized, tested, and published — and why the reference can be auto-generated.</p>
+    <p>How each script becomes a shareable, reproducible component.</p>
     <span class="go">Read →</span>
   </a>
 
   <a class="concept-card" href="param-list.html">
     <div class="ct">Many samples at once: the param_list</div>
-    <p>Process a whole cohort in one run, with per-sample arguments inside the list and shared settings outside it.</p>
+    <p>How a single run processes an entire cohort of samples at once.</p>
     <span class="go">Read →</span>
   </a>
 
   <a class="concept-card" href="architecture.html">
     <div class="ct">Pipeline architecture</div>
-    <p>How a dataset flows from raw sequencing to an annotated object, including QC reporting and the spatial branch.</p>
+    <p>How data flows from raw sequencing to an annotated result.</p>
     <span class="go">Read →</span>
   </a>
 
   <a class="concept-card blue" href="data-state.html">
-    <div class="ct">Advanced: the data-state view</div>
-    <p>Under the hood, processing is organized by the <em>state of the data</em> (single-sample → multi-sample → merged → integrated). A deep-dive for pipeline authors.</p>
+    <div class="ct">Advanced: data states</div>
+    <p>The pipeline seen through the changing shape of the data, a view for authors.</p>
     <span class="go">Read →</span>
   </a>
 

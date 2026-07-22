@@ -4,7 +4,7 @@ description: "How components are built, containerized, tested, and published."
 order: 40
 ---
 
-OpenPipeline's [modularity](modularity.qmd) is not hand-maintained — it is
+OpenPipeline's [modularity](modularity.qmd) is not hand-maintained, it is
 produced by two pieces of tooling: **Viash**, which builds each component, and
 **Viash Hub**, the platform that builds, tests, and publishes them.
 
@@ -23,11 +23,11 @@ Viash separates a component's **logic** (a script in Python, R, or Bash) from it
 (Nextflow). Two properties fall out of that separation:
 
 **Language independence.** Each component is written in whatever language suits
-the task — normalization in Python, a statistical test in R, a file conversion in
+the task, normalization in Python, a statistical test in R, a file conversion in
 Bash. The generated CLI makes them interchangeable regardless of language.
 
 **Modularity.** Because every component shares the [MuData](mudata.qmd) format
-and a generated CLI, they compose freely — no glue code between steps. The same
+and a generated CLI, they compose freely, no glue code between steps. The same
 component runs standalone with `viash run`, is tested with `viash test`, or is
 built into an image with `viash build`.
 
@@ -79,6 +79,6 @@ the build and the docs, it is also what lets the
 [reference](../reference/index.qmd) be auto-generated.
 
 From the catalog you can browse components, read their parameters, and launch
-workflows through a GUI — or connect to Seqera — without touching the command
+workflows through a GUI, or connect to Seqera, without touching the command
 line. Each generated reference page links to its Viash Hub entry for copy-paste
 run instructions.
