@@ -6,30 +6,11 @@ order: 0
 
 OpenPipeline is a set of modular, containerized workflows for single-cell and
 spatial multi-omics, taking data from raw counts to a processed, annotated
-object. A few design choices set it apart:
+object.
 
-- **True modularity.** Modular not just in the source tree but at the
-  *execution* level: every step is an independently built, containerized unit you
-  can run, test, swap, or reorder on its own, and even declare as a dependency
-  from another package's repository.
-- **Standard multi-omics data object.** All modalities, RNA, protein, ATAC,
-  spatial, and more, share one standard [MuData](mudata.qmd) object, so any
-  component composes with any other.
-- **Reproducible.** Each component pins its exact dependencies in a container,
-  and every release is versioned, so the same run gives the same results today
-  and years from now.
-- **Scalable and portable.** Workflows are Nextflow pipelines, so the same run
-  goes unchanged from a laptop to an HPC cluster or the cloud, parallelizing
-  across samples.
-- **Best practices, by default.** Brings software-engineering rigor to
-  bioinformatics, and follows the single-cell community's analysis best
-  practices.
-- **Community-driven, team-maintained.** Open source and developed in the open,
-  but not a release-once academic project: actively maintained for years by a
-  dedicated team.
-
-The pages below explain how those choices play out. Read them top to bottom for
-the full picture, or jump to whichever answers your question.
+The pages below explain the design choices behind it. Read top to bottom for the
+full picture, or jump to whichever answers your question. For how these ideas play
+out across the actual pipeline, see [Available workflows](architecture.qmd).
 
 ```{=html}
 <div class="concept-list">
@@ -58,21 +39,9 @@ the full picture, or jump to whichever answers your question.
     <span class="go">Read →</span>
   </a>
 
-  <a class="concept-card" href="param-list.html">
-    <div class="ct">Many samples at once: the param_list</div>
-    <p>How a single run processes an entire cohort of samples at once.</p>
-    <span class="go">Read →</span>
-  </a>
-
-  <a class="concept-card" href="architecture.html">
-    <div class="ct">Pipeline architecture</div>
-    <p>How data flows from raw sequencing to an annotated result.</p>
-    <span class="go">Read →</span>
-  </a>
-
   <a class="concept-card blue" href="data-state.html">
-    <div class="ct">Advanced: data states</div>
-    <p>The pipeline seen through the changing shape of the data, a view for authors.</p>
+    <div class="ct">Architecture: advanced</div>
+    <p>The pipeline under the hood: how the data object changes shape, fills up, and passes between components.</p>
     <span class="go">Read →</span>
   </a>
 

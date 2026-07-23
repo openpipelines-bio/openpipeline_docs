@@ -1,35 +1,48 @@
 ---
-title: "Find spatial niches"
-description: "NicheCompass niche identification."
+title: "Spatial niche identification"
+description: "Learn recurring spatial neighborhoods with NicheCompass."
 categories: [openpipeline_spatial]
-order: 70
+order: 65
 ---
 
 [`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial}<span class="swatch openpipeline_spatial"></span>
 
-A **niche** is a recurring spatial neighborhood — a local mix of cell types that
-appears across a tissue. The **`openpipeline_spatial`** package uses
-[NicheCompass](https://nichecompass.readthedocs.io/) to learn these
-neighborhoods from a spatial `.h5mu`.
+A **niche** is a recurring spatial neighborhood, a local mix of cell types that
+appears across a tissue. **`openpipeline_spatial`** uses
+[NicheCompass](https://nichecompass.readthedocs.io/) to learn niches from a
+processed spatial object, on top of curated gene programs (sets of genes that act
+together).
 
-## Prerequisite
+## Options
 
-Start from an ingested, processed spatial object (see
-[Ingest Xenium / Visium](ingest-spatial.qmd)) that carries spot/cell coordinates
-in `.obsm["spatial"]`.
+| Workflow / component | Use when |
+|---|---|
+| [`niche/nichecompass_leiden`](../reference/openpipeline_spatial/v0.5.0/workflows/niche/nichecompass_leiden.qmd) | Identify niches: embed cells niche-aware, then cluster |
+| `nichecompass/gene_program_mask` | Prepare the gene-program mask the workflow consumes |
 
-## Build the gene-program mask
+## Example: NicheCompass
 
-NicheCompass models niches on top of curated gene programs (sets of genes that
-act together). The `nichecompass/gene_program_mask` component prepares that mask,
-which the NicheCompass workflow then uses to embed cells into a niche-aware
-latent space and cluster them into niches.
+For example, on a [spatially-processed](process-spatial.qmd) object (with
+coordinates in `.obsm["spatial"]`):
 
-:::{.callout-note}
-NicheCompass niche identification is specific to `openpipeline_spatial`. See the
-[reference](../reference/index.qmd) (filter by `openpipeline_spatial`) for the
-NicheCompass components and their arguments, and open the package's Viash Hub
-page for run instructions.
-:::
+```bash
+nextflow run https://packages.viash-hub.com/vsh/openpipeline_spatial.git \
+  -r v0.5.0 -latest -profile docker \
+  -main-script target/nextflow/workflows/niche/nichecompass_leiden/main.nf \
+  --input processed_spatial.h5mu \
+  --output niches.h5mu \
+  --publish_dir results/
+```
 
-**Next:** [spatial reference →](../reference/index.qmd)
+## Key choices
+
+- **Prerequisite:** an ingested, [processed spatial](process-spatial.qmd) object
+  that carries `.obsm["spatial"]`.
+- **Gene programs:** `nichecompass/gene_program_mask` builds the mask of
+  co-acting gene sets the model reasons over; the workflow embeds cells into a
+  niche-aware latent space from it and clusters them.
+
+## Output
+
+A niche-aware embedding and per-cell niche labels written into the object,
+alongside the cell-type annotations from earlier steps.

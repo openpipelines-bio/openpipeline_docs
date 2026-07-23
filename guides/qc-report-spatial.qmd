@@ -1,0 +1,49 @@
+---
+title: "Spatial QC report generation"
+description: "The same QC report as single-cell, with a spatial ingestion method."
+categories: [openpipeline_qc]
+order: 25
+---
+
+[`openpipeline_qc`]{.pkg-tag .pkg-openpipeline_qc}<span class="swatch openpipeline_qc"></span>
+
+Spatial data uses the **same** `generate_qc_report` workflow as single-cell data,
+from the `openpipeline_qc` package. The only difference is `--ingestion_method`,
+which tells the report how the data was ingested so it computes the right metrics
+for the platform.
+
+## Options
+
+| Workflow | Use when |
+|---|---|
+| [`generate_qc_report`](../reference/openpipeline_qc/v0.3.0/workflows/generate_qc_report.qmd) | Spatial `.h5mu`; set `--ingestion_method` to the platform |
+
+## Example: Xenium QC report
+
+For example, for a [spatially-ingested](ingest-spatial.qmd) Xenium object, set
+`--ingestion_method xenium` (or `visium` / `cosmx`):
+
+```bash
+nextflow run https://packages.viash-hub.com/vsh/openpipeline_qc.git \
+  -r v0.3.0 -latest -profile docker \
+  -main-script target/nextflow/workflows/generate_qc_report/main.nf \
+  --id cohort_01 \
+  --input cohort_01.h5mu \
+  --ingestion_method xenium \
+  --output qc_report.html \
+  --publish_dir results/
+```
+
+## Key choices
+
+- **`--ingestion_method`** must match your platform: `xenium`, `visium`, or
+  `cosmx`.
+- For a whole cohort, pass a [`param_list`](process-many-samples.qmd) with one
+  entry per sample and `ingestion_method` set once as a shared argument.
+- Everything else, metrics, options, output, is identical to the core
+  [QC report](qc-report.qmd).
+
+## Output
+
+A self-contained `qc_report.html`. Use it to choose thresholds for
+[spatial sample processing](process-spatial.qmd).

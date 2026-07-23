@@ -1,8 +1,8 @@
 ---
 title: "Run a turnkey pipeline"
-description: "End-to-end composed workflow."
+description: "End-to-end composed pipeline, and reference-atlas generation."
 categories: [openpipeline_composed]
-order: 80
+order: 70
 ---
 
 [`openpipeline_composed`]{.pkg-tag .pkg-openpipeline_composed}<span class="swatch openpipeline_composed"></span>
@@ -21,7 +21,7 @@ lets you choose the integration method (Harmony, scVI, Scanorama, BBKNN) and the
 annotation method (CellTypist, harmony_knn, scANVI, scvi_knn, SingleR).
 
 ```bash
-nextflow run openpipelines-bio/openpipeline_composed \
+nextflow run https://packages.viash-hub.com/vsh/openpipeline_composed.git \
   -r v0.3.0 -latest -profile docker \
   -main-script target/nextflow/single_cell/process_integrate_annotate/main.nf \
   --param_list samples.csv \
@@ -32,6 +32,14 @@ The package also exposes `parallel_integration`, `parallel_annotation`, and
 `parallel_subtyping` for running a stage several ways at once (e.g. comparing
 integration methods on the same cohort).
 
+## Generate a reference atlas
+
+Running `process_integrate_annotate` across a large, multi-donor cohort is also
+how you build a **reference atlas**: one integrated, annotated object that later
+runs consume as the reference for [label transfer](annotate.qmd). Use
+`parallel_subtyping` to resolve fine-grained cell states within the atlas before
+publishing it.
+
 :::{.callout-note}
 `openpipeline_composed` pins core `openpipeline` plus `openpipeline_qc` and
 biobox. Check the [reference](../reference/index.qmd) (filter by
@@ -39,5 +47,13 @@ biobox. Check the [reference](../reference/index.qmd) (filter by
 run instructions.
 :::
 
-**Next:** [param_list concept →](../concepts/param-list.qmd) ·
-[composed reference →](../reference/index.qmd)
+## Reference
+
+Full parameter listings:
+
+| Workflow / component | Description |
+|---|---|
+| [`single_cell/process_integrate_annotate`](../reference/openpipeline_composed/v0.3.0/single_cell/process_integrate_annotate.qmd) | Turnkey process → integrate → annotate |
+| [`single_cell/parallel_integration`](../reference/openpipeline_composed/v0.3.0/single_cell/parallel_integration.qmd) | Multiple integration methods at once |
+| [`single_cell/parallel_annotation`](../reference/openpipeline_composed/v0.3.0/single_cell/parallel_annotation.qmd) | Multiple annotation methods at once |
+| [`single_cell/parallel_subtyping`](../reference/openpipeline_composed/v0.3.0/single_cell/parallel_subtyping.qmd) | Fine-grained cell-state subtyping |

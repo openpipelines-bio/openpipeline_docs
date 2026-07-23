@@ -1,0 +1,72 @@
+---
+title: "Running pipelines"
+description: "Launch any OpenPipeline workflow locally, on Seqera, or through Viash Hub."
+categories: [openpipeline]
+order: 80
+---
+
+Every guide's `nextflow run` command works the same way; this page covers the
+**mechanics of launching** on each of the three routes. For a full first run with
+real data, see [Get started](../get-started/index.qmd); for CPU / memory tuning,
+see [Tune compute resources](tune-resources.qmd).
+
+Whichever route you pick, workflows are pulled from **Viash Hub** and every step
+runs inside a container, so you never install a pipeline's dependencies yourself.
+
+## Local (Nextflow)
+
+Run on your own machine, an HPC node, or a cloud VM. You need Nextflow and Docker
+(see [Get started](../get-started/index.qmd) for the install), and a one-time
+registration of the Viash Hub source:
+
+```bash
+mkdir -p "$HOME/.nextflow"
+cat >> "$HOME/.nextflow/scm" <<'EOM'
+providers.vsh.platform = "gitea"
+providers.vsh.server = "packages.viash-hub.com"
+EOM
+```
+
+Then launch any workflow by pointing `-main-script` at it and passing your
+parameters:
+
+```bash
+nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
+  -r 4.2.0 -latest -profile docker \
+  -main-script target/nextflow/workflows/multiomics/process_samples/main.nf \
+  -params-file params.yaml --publish_dir results/
+```
+
+::: {.callout-warning}
+OpenPipeline's workflows don't yet run under the strict language syntax enforced
+by the newest Nextflow releases. Pin a compatible version before running:
+`export NXF_VER=25.10.2`.
+:::
+
+## Seqera Platform
+
+No local install. Set up a [compute environment](https://docs.seqera.io/platform/latest/compute-envs/overview)
+(AWS / Azure / GCP / Kubernetes / HPC) once, then launch with the `tw` CLI:
+
+```bash
+tw launch https://packages.viash-hub.com/vsh/openpipeline \
+  --revision 4.2.0 --pull-latest \
+  --main-script target/nextflow/workflows/multiomics/process_samples/main.nf \
+  --compute-env <your-env-id> --params-file params.yaml
+```
+
+Or launch and monitor the same workflow from the Seqera **Launchpad** web UI, no
+CLI required.
+
+## Viash Hub
+
+No install, no CLI. Open the package in the [Viash Hub](https://www.viash-hub.com)
+catalog, pick a workflow, and fill in the guided web form (every parameter is
+rendered with its description). Choose local execution or a connected Seqera
+environment and press **Launch**.
+
+:::{.callout-note}
+The `-main-script` / `--main-script` path is the only thing that changes between
+workflows, swap in any workflow from the [reference](../reference/index.qmd). Input
+and parameters go in a [`param_list`](process-many-samples.qmd) / params file.
+:::

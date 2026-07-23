@@ -69,5 +69,3 @@ viash --version
 That's everything you need to build and test locally. You'll fetch the test
 resources as part of the [local workflow](development-workflow.qmd#sec-test-resources),
 just before running your first test.
-
-**Next:** [Project structure →](project-structure.qmd)

@@ -43,5 +43,3 @@ bash src/workflows/<category>/<workflow>/integration_test.sh
 The same unit and integration tests run automatically on every pull request and
 on every release, so there is nothing extra to trigger. Getting them green
 locally before you push is the fastest way to a clean review.
-
-**Next:** [Open a pull request →](pull-requests.qmd)

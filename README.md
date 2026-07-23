@@ -1,6 +1,6 @@
 # openpipeline_docs
 
-Draft next-generation documentation site for the **OpenPipeline** ecosystem —
+Draft next-generation documentation site for the **OpenPipeline** ecosystem,
 covering single-cell (`openpipeline`) and spatial (`openpipeline_spatial`), plus
 the cross-cutting `openpipeline_qc`, `openpipeline_rapids`, and
 `openpipeline_composed` packages.
@@ -26,7 +26,7 @@ index.qmd            landing page (single-cell + spatial flows)
 get-started/         tutorial: guided first run (Local / Seqera / Viash Hub)
 guides/              task-oriented how-tos
 concepts/            explanation: MuData, Viash, param_list, pipeline model
-reference/           AUTO-GENERATED per package (see below) — do not hand-edit
+reference/           AUTO-GENERATED per package (see below), do not hand-edit
   openpipeline/
   openpipeline_spatial/
   openpipeline_qc/
@@ -58,4 +58,4 @@ See `.github/workflows/README.md` for the wiring plan.
 ## Status
 
 Scaffold + design mockup. Narrative content is partially ported from the current
-site and partially placeholder — see individual pages.
+site and partially placeholder, see individual pages.

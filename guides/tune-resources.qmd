@@ -2,7 +2,7 @@
 title: "Tune compute resources"
 description: "Nextflow labels for CPU, memory, and disk."
 categories: [openpipeline]
-order: 90
+order: 84
 ---
 
 [`openpipeline`]{.pkg-tag .pkg-openpipeline}<span class="swatch openpipeline"></span>
@@ -16,21 +16,21 @@ inherits sensible defaults from each step it runs.
 
 | Label | CPUs | Memory (attempt 1) |
 |---|---|---|
-| `singlecpu` | 1 | — |
-| `lowcpu` | 4 | — |
-| `midcpu` | 10 | — |
-| `highcpu` | 20 | — |
-| `lowmem` | — | 4 GB |
-| `midmem` | — | 25 GB |
-| `highmem` | — | 50 GB |
-| `veryhighmem` | — | 75 GB |
+| `singlecpu` | 1 |, |
+| `lowcpu` | 4 |, |
+| `midcpu` | 10 |, |
+| `highcpu` | 20 |, |
+| `lowmem` |, | 4 GB |
+| `midmem` |, | 25 GB |
+| `highmem` |, | 50 GB |
+| `veryhighmem` |, | 75 GB |
 
-Labels combine — a component tagged `[highcpu, midmem]` requests 20 CPUs and
+Labels combine, a component tagged `[highcpu, midmem]` requests 20 CPUs and
 25 GB. Requests scale automatically on retry, so a step that runs out of memory
 is resubmitted with more.
 
 There are also disk labels (`lowdisk`, `middisk`, `highdisk`, `veryhighdisk`),
-but unlike CPU and memory they have **no value by default** — components carry
+but unlike CPU and memory they have **no value by default**: components carry
 the label without it requesting any disk. When processing very large datasets,
 give them an effect by setting sizes in your compute environment, for example
 `withLabel: highdisk { disk = { 200.GB * task.attempt } }`.
@@ -61,7 +61,7 @@ process {
 ```
 
 ```bash
-nextflow run openpipelines-bio/openpipeline \
+nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
   -r 4.2.0 -latest -profile docker \
   -main-script target/nextflow/workflows/multiomics/process_samples/main.nf \
   --param_list samples.csv \
@@ -77,8 +77,8 @@ The same `-c config` mechanism is how you point a run at cloud executors
 
 ## GPU acceleration
 
-Components that wrap natively GPU-capable tools — such as `cellbender`, `scvi`,
-`scanvi`, `scarches`, and `celltypist` — already carry a **`gpu` label** in
+Components that wrap natively GPU-capable tools, such as `cellbender`, `scvi`,
+`scanvi`, `scarches`, and `celltypist`, already carry a **`gpu` label** in
 addition to their CPU/memory labels. They run on CPU by default; to schedule
 them onto a GPU, request GPU resources for the `gpu` label with the
 [`accelerator`](https://www.nextflow.io/docs/latest/process.html#accelerator)
@@ -98,7 +98,7 @@ process {
 nextflow run ... -c gpu.config
 ```
 
-The exact settings depend on your executor and container runtime — see the
+The exact settings depend on your executor and container runtime, see the
 [Nextflow accelerator / GPU documentation](https://www.nextflow.io/docs/latest/process.html#accelerator).
 GPU drop-ins for the steps whose tools have no native GPU path are covered in
 [Speed up with GPUs](gpu.qmd).
@@ -117,5 +117,3 @@ runners:
 
 Inside scripts, read `meta_cpus` and `meta_memory_gb` for resource-aware
 parallelism rather than hardcoding thread counts.
-
-**Next:** [Create a component →](../contributing/creating-components.qmd)

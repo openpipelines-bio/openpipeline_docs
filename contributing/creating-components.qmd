@@ -159,5 +159,3 @@ clearly is the same task as documenting your component.
 When your component is ready, open a pull request and follow
 [Open a pull request](pull-requests.qmd). Once merged, Viash Hub builds it into
 the package and publishes it with the next release.
-
-**Next:** [Create a pipeline →](creating-pipelines.qmd)

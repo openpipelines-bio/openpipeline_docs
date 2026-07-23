@@ -1,0 +1,49 @@
+---
+title: "Cell-cell communication"
+description: "Ligand-receptor interaction inference between cell types (LIANA)."
+categories: [openpipeline]
+order: 60
+---
+
+[`openpipeline`]{.pkg-tag .pkg-openpipeline}<span class="swatch openpipeline"></span>
+
+Cell-cell communication analysis infers which cell types signal to each other by
+scoring **ligand-receptor** pairs: a source cell type expressing a ligand and a
+target expressing its receptor. OpenPipeline wraps
+[LIANA](https://liana-py.readthedocs.io/), which runs several scoring methods and
+returns a consensus ranking, so results don't hinge on one method's assumptions.
+
+## Options
+
+| Component | Use when |
+|---|---|
+| [`interpret/lianapy`](../reference/openpipeline/v4.2.0/interpret/lianapy.qmd) | Rank ligand-receptor interactions between annotated cell types |
+
+## Example: LIANA
+
+For example, on an [annotated](annotate.qmd) object with cell-type labels in
+`.obs["cell_type"]`:
+
+```bash
+nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
+  -r 4.2.0 -latest -profile docker \
+  -main-script target/nextflow/interpret/lianapy/main.nf \
+  --input results/annotated.h5mu \
+  --modality rna \
+  --groupby cell_type \
+  --output communication.h5mu \
+  --publish_dir results/
+```
+
+## Key choices
+
+- **`--groupby`**: the `.obs` cell-type column, it defines the sender and
+  receiver groups, so [annotation](annotate.qmd) must run first.
+- **`--de_method`**, **`--resource_name`**, and **`--aggregate_method`** select
+  the scoring method, the ligand-receptor resource, and how methods are combined,
+  see the reference.
+
+## Output
+
+A table of ranked ligand-receptor interactions between cell-type pairs, written
+into the object.

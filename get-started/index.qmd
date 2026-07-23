@@ -1,109 +1,246 @@
 ---
 title: "Run your first pipeline"
-description: "From raw counts to an integrated object — in about 20 minutes."
+description: "From raw FASTQ files to an integrated, clustered object."
 order: 0
 ---
 
-Process a real 3-sample dataset from raw counts to an integrated object. First,
-choose **how** you want to run it — the steps adapt to your choice.
+Run a full single-cell pipeline on real, public data: raw 10x FASTQ files →
+count matrices (Cell Ranger) → a filtered, normalized cohort → one batch-corrected,
+clustered object. This is a **real run**, not a toy: you download a few GB of
+FASTQs and references, and Cell Ranger needs a good chunk of memory and time.
 
-::: {.callout-tip appearance="simple"}
-**New here?** Pick **Local** and follow every step top to bottom.
-**Already have compute?** Pick **Seqera** or **Viash Hub** — no install needed.
-:::
+This walkthrough uses **local Nextflow**. The exact same workflows run on Seqera
+(`tw launch`) or through the Viash Hub web form, see the
+[execution guides](../guides/index.qmd) for those routes.
+
+## 1 · Set up Nextflow and Docker
+
+Everything else ships inside containers, so this is all you install: a Java
+runtime (Nextflow needs it), Nextflow, and Docker.
+
+**1a · Java prerequisite.** Commands per OS. Java 17+ is recommended (11 is the
+minimum).
 
 ::: {.panel-tabset}
 
-## Local (Nextflow)
-
-**1 · Install the runtime.** You need Nextflow and Docker. Everything else ships
-inside containers — you install nothing per pipeline.
+### macOS
 
 ```bash
-# install nextflow
-curl -s https://get.nextflow.io | bash
-# check docker is running
-docker --version
+# install Homebrew (https://brew.sh) first, then:
+brew install openjdk@17
 ```
 
-**2 · Get the example data.** A tiny public dataset — three PBMC samples, already
-in MuData format.
+### Ubuntu / Debian
 
 ```bash
-aws s3 cp s3://openpipelines-data/pbmc_1k_protein_v3/ ./data --recursive
+sudo apt-get update
+sudo apt-get install openjdk-17-jdk unzip curl
 ```
 
-**3 · Run `process_samples`.**
+### RHEL / Fedora
 
 ```bash
-nextflow run openpipelines-bio/openpipeline \
-  -r 4.2.0 -latest -profile docker \
-  -main-script target/nextflow/workflows/multiomics/process_samples/main.nf \
-  -params-file params.yaml --publish_dir results/
+sudo yum install java-17-openjdk-devel unzip curl
 ```
 
-## Seqera
-
-**1 · Connect a compute environment.** No local install. In Seqera Platform, set
-up a compute environment (AWS / Azure / GCP) once — every run reuses it.
-
-**2 · Get the example data.** Point at the same public S3 dataset; Seqera reads
-it directly: `s3://openpipelines-data/pbmc_1k_protein_v3/`.
-
-**3 · Launch with `tw`** (or the Launchpad web form):
+### Arch
 
 ```bash
-tw launch openpipelines-bio/openpipeline \
-  --revision 4.2.0 --pull-latest \
-  --main-script .../workflows/multiomics/process_samples/main.nf \
-  --compute-env <your-env-id> --params-file params.yaml
+sudo pacman -Syy jdk17-openjdk unzip curl
 ```
 
-## Viash Hub
+### Windows
 
-**1 · Open the workflow.** No install, no CLI. Find `openpipeline` in the
-[Viash Hub](https://www.viash-hub.com) catalog and open `process_samples`.
-
-**2 · Fill in the form.** The GUI renders every parameter with its description —
-set your input and thresholds, no YAML required.
-
-**3 · Pick compute & run.** Choose local execution or a connected Seqera
-environment, then press **Launch**.
+Use [WSL2](https://learn.microsoft.com/windows/wsl/install) with Ubuntu, then
+follow the Ubuntu / Debian commands above.
 
 :::
 
-## One run, many samples — the `param_list`
+Check it with `java -version`.
 
-To process a whole cohort in a single command, pass a **`param_list`**: a list
-where **each entry is one sample** with its own arguments (`id`, `input`, and any
-per-sample thresholds). Arguments you set **outside** the list apply to **every**
-sample. Shared settings stay global; per-sample overrides live next to their
-sample — no scripting, no repeated commands.
+**1b · Nextflow.**
 
-```yaml
-# params.yaml — two samples, per-sample filter + a shared setting
-param_list:
-  - id: sample_1
-    input: data/sample_1.h5mu
-    rna_min_counts: 2          # only for sample_1
-  - id: sample_2
-    input: data/sample_2.h5mu
-    rna_min_counts: 1          # only for sample_2
-rna_max_counts: 1000000        # applied to every sample
+```bash
+curl -s https://get.nextflow.io | bash
+sudo mv nextflow /usr/local/bin/
+nextflow -version
 ```
 
-## Read the output
+**1c · Docker.** Install [Docker Desktop](https://docs.docker.com/get-docker/)
+(macOS/Windows) or Docker Engine (Linux), start it, then check `docker --version`.
 
-The result is one `.h5mu` file:
+::: {.callout-warning}
+**Pin your Nextflow version.** OpenPipeline's workflows don't yet run under the
+strict language syntax enforced by the newest Nextflow releases. Pin a compatible
+version before every run:
+
+```bash
+export NXF_VER=25.10.2
+```
+:::
+
+Finally, tell Nextflow where to pull the pipeline from (one time):
+
+```bash
+mkdir -p "$HOME/.nextflow"
+cat >> "$HOME/.nextflow/scm" <<'EOM'
+providers.vsh.platform = "gitea"
+providers.vsh.server = "packages.viash-hub.com"
+EOM
+```
+
+## 2 · Get the data
+
+The run uses two public 10x Genomics PBMC datasets (5' gene expression + VDJ +
+antibody capture). Each 10x dataset page lists ready-made `curl` commands; the
+loops below fetch both datasets' libraries and unpack them into a local `data/`
+folder:
+
+```bash
+mkdir -p data && cd data
+
+# Dataset 1 — Human PBMC, 10k cells, 5' v2
+base1="https://cf.10xgenomics.com/samples/cell-vdj/5.0.0/sc5p_v2_hs_PBMC_10k"
+for lib in 5gex t b 5fb; do
+  curl -O "${base1}/sc5p_v2_hs_PBMC_10k_${lib}_fastqs.tar"
+  tar -xf "sc5p_v2_hs_PBMC_10k_${lib}_fastqs.tar"
+done
+
+# Dataset 2 — Human PBMC, 10k cells, TotalSeq-C, 5' GEM-X
+# (confirm the download URL on the dataset page)
+base2="https://cf.10xgenomics.com/samples/cell-exp/9.0.0/10k_Human_PBMC_TotalSeqC_5p_gemx"
+for lib in gex tcr ig ab; do
+  curl -O "${base2}/10k_Human_PBMC_TotalSeqC_5p_gemx_${lib}_fastqs.tar"
+  tar -xf "10k_Human_PBMC_TotalSeqC_5p_gemx_${lib}_fastqs.tar"
+done
+
+cd ..
+```
+
+The transcriptome, VDJ, and antibody **feature reference** (TotalSeq-C panel) are
+all fetched automatically from URLs in the `param_list` below, so FASTQs are the
+only thing you download by hand.
+
+After both downloads, `data/` holds one folder per library:
+
+```
+data/
+├── sc5p_v2_hs_PBMC_10k_5gex_fastqs/                # sample 1 · Gene Expression
+├── sc5p_v2_hs_PBMC_10k_t_fastqs/                   # sample 1 · VDJ-T
+├── sc5p_v2_hs_PBMC_10k_b_fastqs/                   # sample 1 · VDJ-B
+├── sc5p_v2_hs_PBMC_10k_5fb_fastqs/                 # sample 1 · Antibody Capture
+├── 10k_Human_PBMC_TotalSeqC_5p_gemx_gex_fastqs/    # sample 2 · Gene Expression
+├── 10k_Human_PBMC_TotalSeqC_5p_gemx_tcr_fastqs/    # sample 2 · VDJ-T
+├── 10k_Human_PBMC_TotalSeqC_5p_gemx_ig_fastqs/     # sample 2 · VDJ-B
+└── 10k_Human_PBMC_TotalSeqC_5p_gemx_ab_fastqs/     # sample 2 · Antibody Capture
+```
+
+Each folder holds that library's `*_R1_*.fastq.gz` / `*_R2_*.fastq.gz` files.
+
+## 3 · Ingest with Cell Ranger
+
+`ingestion/cellranger_multi` aligns each library and writes one `.h5mu` per
+sample; under the hood OpenPipeline 4.2.0 runs
+[Cell Ranger `multi`](https://www.10xgenomics.com/support/software/cell-ranger/latest/analysis/running-pipelines/cr-5p-multi)
+10. Describe the samples and their libraries in a `param_list`
+(`params_cellranger.yaml`):
+
+```yaml
+# params_cellranger.yaml
+param_list:
+  - id: sc5p_v2_hs_PBMC_10k
+    input:
+      - data/sc5p_v2_hs_PBMC_10k_5gex_fastqs/*_R*.fastq.gz
+      - data/sc5p_v2_hs_PBMC_10k_t_fastqs/*_R*.fastq.gz
+      - data/sc5p_v2_hs_PBMC_10k_b_fastqs/*_R*.fastq.gz
+      - data/sc5p_v2_hs_PBMC_10k_5fb_fastqs/*_R*.fastq.gz
+    library_id: [PBMC_10k_5gex, PBMC_10k_t, PBMC_10k_b, PBMC_10k_5fb]
+    library_type: [Gene Expression, VDJ-T, VDJ-B, Antibody Capture]
+  - id: 10k_Human_PBMC_TotalSeqC_5p_gemx
+    input:
+      - data/10k_Human_PBMC_TotalSeqC_5p_gemx_gex_fastqs/*_R*.fastq.gz
+      - data/10k_Human_PBMC_TotalSeqC_5p_gemx_tcr_fastqs/*_R*.fastq.gz
+      - data/10k_Human_PBMC_TotalSeqC_5p_gemx_ig_fastqs/*_R*.fastq.gz
+      - data/10k_Human_PBMC_TotalSeqC_5p_gemx_ab_fastqs/*_R*.fastq.gz
+    library_id: [TotalSeqC_gex, TotalSeqC_tcr, TotalSeqC_ig, TotalSeqC_ab]
+    library_type: [Gene Expression, VDJ-T, VDJ-B, Antibody Capture]
+feature_reference: "<TotalSeq-C feature-reference CSV URL, from the dataset page>"
+gex_reference: https://cf.10xgenomics.com/supp/cell-exp/refdata-gex-GRCh38-2020-A.tar.gz
+vdj_reference: https://cf.10xgenomics.com/supp/cell-vdj/refdata-cellranger-vdj-GRCh38-alts-ensembl-7.0.0.tar.gz
+publish_dir: results/ingestion
+```
+
+Each entry is one **sample**; the `input` / `library_id` / `library_type` lists
+line up row-for-row to describe that sample's libraries. The
+[Process many samples](../guides/process-many-samples.qmd) guide covers the full model.
+
+```bash
+nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
+  -r 4.2.0 -latest -profile docker \
+  -main-script target/nextflow/workflows/ingestion/cellranger_multi/main.nf \
+  -params-file params_cellranger.yaml
+```
+
+## 4 · Process the samples
+
+`multiomics/process_samples` filters, normalizes, selects features, and runs PCA,
+per sample then across the cohort, emitting one merged object. Point it at the
+Cell Ranger outputs from step 3 (`params_process.yaml`):
+
+```yaml
+# params_process.yaml
+param_list:
+  - id: sc5p_v2_hs_PBMC_10k
+    input: results/ingestion/sc5p_v2_hs_PBMC_10k.cellranger_multi.output_h5mu.h5mu
+  - id: 10k_Human_PBMC_TotalSeqC_5p_gemx
+    input: results/ingestion/10k_Human_PBMC_TotalSeqC_5p_gemx.cellranger_multi.output_h5mu.h5mu
+rna_min_counts: 50           # thresholds you'd set from a QC report
+rna_min_genes_per_cell: 50
+publish_dir: results/processed
+```
+
+```bash
+nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
+  -r 4.2.0 -latest -profile docker \
+  -main-script target/nextflow/workflows/multiomics/process_samples/main.nf \
+  -params-file params_process.yaml
+```
+
+## 5 · Integrate
+
+`integration/scvi_leiden` batch-corrects across samples, then clusters and
+computes a UMAP on the corrected embedding (`params_integrate.yaml`):
+
+```yaml
+# params_integrate.yaml
+id: PBMC_scvi
+input: results/processed/merged.process_samples.output.h5mu
+obs_batch: sample_id
+publish_dir: results/integrated
+```
+
+```bash
+nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
+  -r 4.2.0 -latest -profile docker \
+  -main-script target/nextflow/workflows/integration/scvi_leiden/main.nf \
+  -params-file params_integrate.yaml
+```
+
+To stack a second method (as the reference runs do, Harmony on top of scVI), see
+[Integration](../guides/integrate.qmd).
+
+## 6 · Read the output
+
+The final `.h5mu` holds the whole result, per modality:
 
 ```
 MuData
- ├─ .mod
- │   └─ rna                  # filtered, normalized, log1p
- │       ├─ .X               # normalized counts
- │       ├─ .obsm["X_pca"]   # dimensionality reduction
- │       └─ .obs["leiden"]   # cell clusters
- └─ .obs["sample_id"]        # which sample each cell came from
+ └─ .mod
+     └─ rna
+         ├─ .layers["log_normalized"]        # normalized, log1p counts
+         ├─ .obs["sample_id"]                # which sample each cell came from
+         ├─ .obsm["X_pca"]                   # PCA from process_samples
+         ├─ .obsm["X_scvi_integrated"]       # batch-corrected embedding (scVI)
+         ├─ .obs["scvi_integration_leiden"]  # clusters on the integrated embedding
+         └─ .obsm["X_scvi_umap"]             # UMAP for plotting
 ```
-
-**Next:** [task guides →](../guides/index.qmd) · [every parameter →](../reference/index.qmd)

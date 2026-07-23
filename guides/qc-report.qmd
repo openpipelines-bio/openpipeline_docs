@@ -1,24 +1,32 @@
 ---
-title: "Generate a QC report"
-description: "Standalone quality-control report."
+title: "QC report generation"
+description: "A standalone HTML quality-control report to choose filter thresholds."
 categories: [openpipeline_qc]
-order: 50
+order: 20
 ---
 
 [`openpipeline_qc`]{.pkg-tag .pkg-openpipeline_qc}<span class="swatch openpipeline_qc"></span>
 
-The **`openpipeline_qc`** package produces a standalone HTML quality-control
-report from an ingested `.h5mu`, so you can inspect count distributions,
-mitochondrial fractions, and doublet signals before committing to
-[filter thresholds](process-filter.qmd).
+The **`openpipeline_qc`** package renders a standalone HTML quality-control report
+from an [ingested](ingest-10x.qmd) `.h5mu`, count and feature distributions,
+mitochondrial and ribosomal fractions, and doublet scores, so you can pick
+sensible cutoffs before [sample processing](process-filter.qmd).
 
-## Run the report
+## Options
 
-`generate_qc_report` detects the ingestion method, computes QC metrics, and
-renders a self-contained HTML report:
+| Workflow | Use when |
+|---|---|
+| [`generate_qc_report`](../reference/openpipeline_qc/v0.3.0/workflows/generate_qc_report.qmd) | Any ingested `.h5mu`; auto-detects the ingestion method |
+
+For spatial data, the same workflow takes an explicit ingestion method, see
+[Spatial QC report generation](qc-report-spatial.qmd).
+
+## Example: report for a cohort
+
+For example, to render a report for one ingested object:
 
 ```bash
-nextflow run openpipelines-bio/openpipeline_qc \
+nextflow run https://packages.viash-hub.com/vsh/openpipeline_qc.git \
   -r v0.3.0 -latest -profile docker \
   -main-script target/nextflow/workflows/generate_qc_report/main.nf \
   --id cohort_01 \
@@ -27,16 +35,19 @@ nextflow run openpipelines-bio/openpipeline_qc \
   --publish_dir results/
 ```
 
-Under the hood the package also exposes `ingestion_qc/detect_ingestion_method`
-and `ingestion_qc/generate_html` as individual components, in case you want to
-compute metrics and render the report as separate steps.
+## Key choices
 
-:::{.callout-note}
-`openpipeline_qc` is a separate package pinning core `openpipeline` plus
-craftbox. Check the [reference](../reference/index.qmd) (filter by
-`openpipeline_qc`) for the exact argument list, and its Viash Hub page for run
-instructions.
-:::
+- **Ingestion method** is auto-detected for single-cell data; for spatial input
+  you set it explicitly (see the spatial guide).
+- The package also exposes `ingestion_qc/detect_ingestion_method` and
+  `ingestion_qc/generate_html` as separate components if you want to compute
+  metrics and render as distinct steps.
+- Read the report to choose the `rna_min_counts` / `rna_max_counts` /
+  `max_fraction_mito` thresholds you'll pass to
+  [sample processing](process-filter.qmd).
 
-**Next:** [Process & filter samples →](process-filter.qmd) ·
-[QC reference →](../reference/index.qmd)
+## Output
+
+A self-contained `qc_report.html` you open in a browser. It doesn't modify the
+data, it informs the thresholds you set next in
+[sample processing](process-filter.qmd).

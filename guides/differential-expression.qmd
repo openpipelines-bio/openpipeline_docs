@@ -1,0 +1,64 @@
+---
+title: "Differential expression"
+description: "Pseudobulk differential expression across conditions with DESeq2."
+categories: [openpipeline]
+order: 50
+---
+
+[`openpipeline`]{.pkg-tag .pkg-openpipeline}<span class="swatch openpipeline"></span>
+
+Once cells are [annotated](annotate.qmd), you can test which genes change between
+conditions (genotype, treatment, disease vs. control). OpenPipeline uses a
+**pseudobulk** approach: within each cell type, counts are summed per sample into
+bulk-like samples that DESeq2 then models, so the unit of replication is the
+sample, not the cell, avoiding the inflated significance of treating thousands of
+cells from one donor as independent.
+
+## Options
+
+| Workflow | Use when |
+|---|---|
+| [`differential_expression/pseudobulk_deseq2`](../reference/openpipeline/v4.2.0/workflows/differential_expression/pseudobulk_deseq2.qmd) | Compare gene expression between conditions, per cell type |
+
+## Example: genotype contrast
+
+For example, comparing wildtype vs. mutant per cell type:
+
+```yaml
+# params.yaml
+id: pbmc_de
+input: results/annotated.h5mu
+obs_cell_group: cell_type          # test within each cell type
+obs_groups: [genotype, sample_id]  # columns that define a pseudobulk sample
+design_formula: "~ genotype"
+contrast_column: genotype
+contrast_values: [wildtype, mutant]
+publish_dir: results/
+```
+
+```bash
+nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
+  -r 4.2.0 -latest -profile docker \
+  -main-script target/nextflow/workflows/differential_expression/pseudobulk_deseq2/main.nf \
+  -params-file params.yaml
+```
+
+## Key choices
+
+- **`obs_cell_group`**: the `.obs` cell-type column; DE runs within each group.
+- **`obs_groups`**: the columns that define a pseudobulk sample (condition +
+  sample).
+- **`design_formula` / `contrast_column` / `contrast_values`**: the DESeq2 model
+  and the two levels compared.
+- A group needs **at least two samples per condition** to be testable, so rare
+  cell types may be dropped.
+
+## Output
+
+Per-cell-type differential-expression tables (log fold changes, p-values,
+adjusted p-values) written to the publish directory.
+
+:::{.callout-tip}
+Per-sample vs. shared arguments and file formats are covered in
+[Process many samples](process-many-samples.qmd).
+:::

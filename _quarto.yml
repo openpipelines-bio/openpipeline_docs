@@ -6,6 +6,9 @@ project:
   # Draft site: ship a crawler-blocking robots.txt into the build output.
   resources:
     - robots.txt
+    # Shared single-cell/spatial flow widget, loaded by index.qmd and
+    # concepts/architecture.qmd via <script src>.
+    - flow.js
   # NOTE: team/ is a hand-curated static page for now (sections + roles the flat
   # author registry can't express). scripts/generate_team.py is kept for the
   # eventual return to auto-generation but is intentionally NOT wired as a
@@ -31,16 +34,25 @@ website:
     logo: images/logo-mark.svg
     title: "OpenPipeline"
     left:
-      - href: get-started/index.qmd
-        text: Get started
-      - href: guides/index.qmd
-        text: Guides
       - href: concepts/index.qmd
         text: Concepts
-      - href: reference/index.qmd
-        text: Reference
-      - href: contributing/index.qmd
-        text: Contributing
+      # "Workflows" = the curated available-workflows overview. Page still lives
+      # under concepts/ (kept there to avoid breaking cross-links). The advanced
+      # developer deep-dive stays in the Concepts hub, not here.
+      - href: concepts/architecture.qmd
+        text: Workflows
+      # "Documentation" groups the practical, do-it materials. Get started is
+      # also the primary landing-page CTA, so it stays reachable from the hero.
+      - text: Documentation
+        menu:
+          - href: get-started/index.qmd
+            text: Get started
+          - href: guides/index.qmd
+            text: Guides
+          - href: reference/index.qmd
+            text: Reference
+          - href: contributing/index.qmd
+            text: Contributing
       - href: team/index.qmd
         text: Team
     right:
@@ -55,9 +67,9 @@ website:
     - id: guides
       title: "Guides"
       contents: guides/*
-    - id: concepts
-      title: "Concepts"
-      contents: concepts/*
+    # Concepts has no sidebar — the concepts index (concepts/index.qmd) is a
+    # card catalog that serves as the section hub, and the pages run wide
+    # (flow widget, workflow tables) so the reclaimed width matters.
     - id: contributing
       title: "Contributing"
       contents: contributing/*

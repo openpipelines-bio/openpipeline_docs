@@ -1,109 +1,76 @@
 ---
-title: "Integrate with Harmony or scVI"
-description: "Batch-correct and cluster across samples."
+title: "Integration"
+description: "Batch-correct across samples, then cluster and embed."
 categories: [openpipeline]
-order: 30
+order: 40
 ---
 
 [`openpipeline`]{.pkg-tag .pkg-openpipeline}<span class="swatch openpipeline"></span>
 
 Integration is a **separate workflow** run after
-[`process_samples`](process-filter.qmd). It takes the processed object as input
-and produces a batch-corrected embedding, Leiden clusters, and a UMAP.
+[sample processing](process-filter.qmd). Samples from different donors, runs, or
+preparations otherwise cluster by technical origin rather than biology; batch
+correction realigns them, then clusters and embeds the result. Each method is its
+own workflow running the same downstream chain.
 
-:::{.callout-important}
-Integration is not part of `process_samples`. Run it independently once per
-cohort, using the `process_samples` output as its input.
-:::
+## Options
 
-## Why batch correction
+| Workflow | Use when |
+|---|---|
+| [`integration/harmony_leiden`](../reference/openpipeline/v4.2.0/workflows/integration/harmony_leiden.qmd) | Fast, interpretable default for most datasets |
+| [`integration/scvi_leiden`](../reference/openpipeline/v4.2.0/workflows/integration/scvi_leiden.qmd) | Many samples (>20), strong batch effects, large data |
+| [`integration/scanorama_leiden`](../reference/openpipeline/v4.2.0/workflows/integration/scanorama_leiden.qmd) | Batches with different cell-type compositions |
+| [`integration/bbknn_leiden`](../reference/openpipeline/v4.2.0/workflows/integration/bbknn_leiden.qmd) | Lightweight; graph only, no corrected embedding |
+| [`integration/totalvi_leiden`](../reference/openpipeline/v4.2.0/workflows/integration/totalvi_leiden.qmd) | Matched RNA + ADT (CITE-seq); corrects both jointly |
+| [`single_cell/parallel_integration`](../reference/openpipeline_composed/v0.3.0/single_cell/parallel_integration.qmd) | Run several methods on the same cohort and compare |
 
-Samples from different donors, sequencing runs, or library preparations will
-cluster by technical origin rather than biology if left uncorrected. Batch
-correction aligns cell-type clusters across batches without erasing real
-biological variation.
+There is no universal best method; start with Harmony and switch if the batch
+structure or modality demands it.
 
-## The dimensionality reduction chain
+## Example: Harmony
 
-Every integration workflow runs the same fixed sequence on top of the PCA
-produced by `process_samples`:
-
-1. **Batch correction** — adjusts the embedding so cells of the same identity
-   from different batches overlap. Harmony operates in PCA space; scVI and
-   totalVI learn a corrected latent space with a variational autoencoder.
-2. **Neighbor graph** — builds a k-nearest-neighbor graph in the corrected space.
-3. **Leiden clustering** — community detection on the graph. `--leiden_resolution`
-   controls granularity: higher values give more, smaller clusters.
-4. **UMAP** — projects the graph to 2D for visualization. Local structure is
-   preserved; distances between clusters are not quantitatively meaningful.
-
-The corrected embedding (`.obsm["X_pca_integrated"]`) is what downstream tools
-use — not the UMAP coordinates.
-
-## Choose a method
-
-| Workflow | Method | When to use |
-|---|---|---|
-| `integration/harmony_leiden` | Harmony | Fast, good default for most datasets |
-| `integration/scvi_leiden` | scVI | Deep learning; complex batch structure, large datasets |
-| `integration/scanorama_leiden` | Scanorama | Partial cell-type overlap across batches |
-| `integration/bbknn_leiden` | BBKNN | Batch-balanced neighbor graph; no corrected embedding |
-| `integration/totalvi_leiden` | totalVI | Multiomics (RNA + ADT / CITE-seq); corrects both jointly |
-
-A practical guide:
-
-- Start with **Harmony** — fast, interpretable, works well for most datasets.
-- Use **scVI** with many samples (>20), strong batch effects, or when you need a
-  probabilistic latent space downstream.
-- Use **totalVI** for matched RNA + ADT (CITE-seq).
-- Use **Scanorama** when batches have different cell-type compositions.
-- **BBKNN** modifies only the neighbor graph — lighter, but no corrected
-  embedding for downstream use.
-
-## Run Harmony (recommended starting point)
+For example, batch-correcting on `sample_id`:
 
 ```bash
-nextflow run openpipelines-bio/openpipeline \
+nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
   -r 4.2.0 -latest -profile docker \
   -main-script target/nextflow/workflows/integration/harmony_leiden/main.nf \
   --id cohort_01 \
-  --input cohort_01_multisample.h5mu \
+  --input cohort_01_processed.h5mu \
   --obs_covariates "sample_id" \
   --leiden_resolution 1.0 \
   --output cohort_01_integrated.h5mu \
   --publish_dir results/
 ```
 
-:::{.callout-note}
-`--obs_covariates` must name an existing `.obs` column that identifies the
-technical source of variation — typically sample ID, batch, or donor.
-:::
+## Key choices
 
-## Run scVI (large or complex datasets)
+**The method** (see the table): Harmony is the default; scVI for scale/complex
+batches; totalVI for CITE-seq; Scanorama for uneven compositions; BBKNN when you
+only need a graph.
 
-```bash
-nextflow run openpipelines-bio/openpipeline \
-  -r 4.2.0 -latest -profile docker \
-  -main-script target/nextflow/workflows/integration/scvi_leiden/main.nf \
-  --id cohort_01 \
-  --input cohort_01_multisample.h5mu \
-  --obs_batch "sample_id" \
-  --leiden_resolution 1.0 \
-  --output cohort_01_integrated.h5mu \
-  --publish_dir results/
-```
+**The covariate.** `--obs_covariates` (Harmony) / `--obs_batch` (scVI) must name
+the `.obs` column identifying technical origin, usually sample, batch, or donor.
+
+**Resolution.** `--leiden_resolution` controls cluster granularity: higher gives
+more, smaller clusters.
+
+**The downstream chain.** Every method then runs the same steps: batch correction
+→ neighbor graph → Leiden clustering → UMAP. The corrected embedding, not the
+UMAP, is what annotation and other downstream tools consume.
 
 ## Output
 
 | Slot | Content |
 |---|---|
-| `.obsm["X_pca_integrated"]` | Batch-corrected cell embedding |
-| `.obs["leiden"]` | Leiden cluster labels |
-| `.obsm["X_umap"]` | UMAP coordinates for visualization |
-| `.obsp["distances"]` / `.obsp["connectivities"]` | Neighbor graph |
+| `.obsm["X_pca_integrated"]` | Batch-corrected embedding (name varies by method) |
+| `.obs` Leiden labels | Cluster assignments |
+| `.obsm` UMAP | 2-D coordinates for plotting |
 
-Clusters are numbered — they have no biological meaning yet. Assign labels next
-with [cell type annotation](annotate.qmd).
+Clusters are just numbers, assign biological labels next with
+[cell type annotation](annotate.qmd).
 
-**Next:** [Annotate cell types →](annotate.qmd) ·
-[every parameter →](../reference/index.qmd)
+:::{.callout-tip}
+How the data's shape changes through these steps: see
+[Advanced architecture](../concepts/data-state.qmd).
+:::

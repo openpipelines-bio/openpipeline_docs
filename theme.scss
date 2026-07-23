@@ -138,7 +138,15 @@ h1, h2, h3 { letter-spacing: -0.02em; }
   .btn.ghost:hover { border-color: var(--brand); }
 
   // flow (single-cell vs spatial)
-  .flow-card { margin-top: 8px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); padding: 22px; overflow: hidden; }
+  .flow-card { margin-top: 8px; margin-bottom: 52px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); padding: 22px; overflow: hidden; }
+  // prominent CTA sitting just under the flow diagram — pulled up into the card's bottom margin
+  .flow-cta { justify-content: center; margin-top: -34px; margin-bottom: 44px; }
+}
+
+// guides index: split into Analysis vs Over-arching/technical sections
+.guide-section-head { margin-top: 1.6rem; }
+.guide-section-sub { opacity: .7; margin-top: -.5rem; margin-bottom: 1rem; }
+.op-home {
   .seg { display: inline-flex; background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 3px; gap: 3px; }
   .seg button { font-family: var(--mono); font-size: 13px; padding: 7px 16px; border-radius: 7px; border: 0; background: none; color: var(--muted); cursor: pointer; }
   .seg button.on { background: var(--surface); color: var(--ink); box-shadow: var(--shadow); }
@@ -174,13 +182,22 @@ h1, h2, h3 { letter-spacing: -0.02em; }
   // rather than a menu of alternatives.
   .seq { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 8px; border: 1px dashed color-mix(in srgb, var(--path, var(--accent-ink)) 45%, var(--border)); border-radius: 10px; }
   .seq-arrow { font-family: var(--mono); font-size: 11px; color: var(--muted); }
-  // a choice step inside a workflow sequence (e.g. "integrate" — pick a method — within the integration workflow)
-  .substep { display: inline-flex; flex-direction: column; gap: 5px; }
+  // a choice step inside a workflow sequence (e.g. "integrate" — pick a method — within the integration workflow).
+  // Boxed so the method choice reads as one node in the sequence, not a loose menu.
+  .substep { display: inline-flex; flex-direction: column; gap: 5px; padding: 7px 9px; border: 1px solid color-mix(in srgb, var(--path, var(--accent-ink)) 35%, var(--border)); border-radius: 8px; background: var(--surface); }
   .substep-label { font-family: var(--mono); font-size: 9.5px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
   .substep .chips { gap: 5px; }
   // optional step — only meaningful inside a workflow sequence
   .chip.opt { border-style: dashed; }
   .chip.opt em { font-style: normal; opacity: .6; margin-left: 5px; font-size: 9.5px; text-transform: uppercase; letter-spacing: .06em; }
+
+  // optional stage (detailed variant) — dashed card, "optional" replaces the step number
+  .stage.optional { border-style: dashed; }
+  .stage .num.opt { color: var(--muted); text-transform: uppercase; }
+
+  // vertical layout (architecture page) — stack stages top-to-bottom, arrows point down
+  .flow.vertical { grid-auto-flow: row; grid-template-columns: 1fr; }
+  .flow.vertical .stage::after { content: "\2193"; right: auto; left: 50%; transform: translateX(-50%); top: auto; bottom: -16px; }
 
   // generic sections
   section.block { padding: 46px 0; }
@@ -209,8 +226,18 @@ h1, h2, h3 { letter-spacing: -0.02em; }
   .ways-note { font-size: 13px; color: var(--muted); margin-top: 16px; }
   .ways-note a { color: var(--accent-ink); }
 
+  // why openpipeline — strengths grid (3×2, symmetric)
+  .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .feature { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; box-shadow: var(--shadow); }
+  .feature b { font-family: var(--mono); font-size: 14px; color: var(--ink); display: block; margin-bottom: 6px; letter-spacing: -.01em; }
+  .feature p { color: var(--muted); font-size: 13.5px; margin: 0; }
+
   @media (max-width: 820px) {
     .ways { grid-template-columns: 1fr; }
+    .features { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 520px) {
+    .features { grid-template-columns: 1fr; }
   }
   @media (prefers-reduced-motion: reduce) {
     * { transition: none !important; }
@@ -282,9 +309,6 @@ a.concept-card.blue:hover { box-shadow: 0 0 0 1px var(--composed), var(--shadow)
 // Reference catalog (reference/index.qmd) — ported from design/mockup.html:
 // tag-pill facets (package + type), in-table package tags, mono table.
 // ---------------------------------------------------------------------------
-.genbanner { background: var(--op-accent-soft); border: 1px solid color-mix(in srgb, var(--op-brand) 40%, var(--op-border)); border-radius: 12px; padding: 12px 16px; margin-top: 14px; }
-.genbanner > p { margin: 0; font-size: 13.5px; color: var(--op-ink); }
-
 .ref-facets { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; margin: 16px 0 4px; }
 // facet-bar is shared between the reference catalog and the guides grid
 .facet-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }

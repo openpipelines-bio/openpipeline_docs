@@ -2,7 +2,7 @@
 title: "Speed up with GPUs"
 description: "Enable GPU for GPU-capable components today; rapids-singlecell coming soon."
 categories: [openpipeline, openpipeline_rapids]
-order: 60
+order: 86
 ---
 
 [`openpipeline`]{.pkg-tag .pkg-openpipeline}<span class="swatch openpipeline"></span>
@@ -14,7 +14,7 @@ via `openpipeline_rapids` (coming soon).
 
 ## The `gpu` label
 
-Several components wrap tools that natively support GPU acceleration — for
+Several components wrap tools that natively support GPU acceleration, for
 example `cellbender`, `scvi`, `scanvi`, `scarches`, and `celltypist`. These
 already carry a **`gpu` label** (alongside their usual CPU/memory labels), which
 marks them as able to run on a GPU. The `gpu` label works like the other
@@ -37,7 +37,7 @@ process {
 ```
 
 ```bash
-nextflow run openpipelines-bio/openpipeline \
+nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
   -r 4.2.0 -latest -profile docker \
   -main-script target/nextflow/workflows/integration/scvi_leiden/main.nf \
   --input cohort_01_multisample.h5mu --output cohort_01_integrated.h5mu \
@@ -46,7 +46,7 @@ nextflow run openpipelines-bio/openpipeline \
 ```
 
 The exact settings depend on your executor (local, AWS Batch, an HPC scheduler)
-and container runtime — see the
+and container runtime, see the
 [Nextflow accelerator / GPU documentation](https://www.nextflow.io/docs/latest/process.html#accelerator)
 for how to configure it on your platform.
 
@@ -57,8 +57,8 @@ for how to configure it on your platform.
 `openpipeline_rapids` is not released yet. This section previews what it will add.
 :::
 
-For the compute-heavy steps whose tools have **no native GPU path** — PCA,
-neighbor-graph construction, UMAP, and Leiden clustering — the
+For the compute-heavy steps whose tools have **no native GPU path**: PCA,
+neighbor-graph construction, UMAP, and Leiden clustering, the
 [`openpipeline_rapids`](../concepts/ecosystem.qmd) package will provide
 GPU-accelerated drop-in replacements via
 [rapids-singlecell](https://rapids-singlecell.readthedocs.io/). It pins the core
@@ -74,6 +74,3 @@ workflows are simpler and fast enough.
 Until the package is released, the [reference](../reference/index.qmd) shows no
 `openpipeline_rapids` entries. Track progress on the package repo via Viash Hub.
 :::
-
-**Next:** [Tune compute resources →](tune-resources.qmd) ·
-[reference →](../reference/index.qmd)

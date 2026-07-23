@@ -1,101 +1,78 @@
 ---
-title: "Process & filter samples"
-description: "Cell filtering, doublets, normalization, and highly variable features."
+title: "Sample processing"
+description: "Per-sample QC and filtering, then cohort normalization and PCA."
 categories: [openpipeline]
-order: 20
+order: 30
 ---
 
 [`openpipeline`]{.pkg-tag .pkg-openpipeline}<span class="swatch openpipeline"></span>
 
-Processing takes the per-sample `.h5mu` files from
-[ingestion](ingest-10x.qmd) and produces a clean, normalized dataset with a PCA
-embedding — ready for [integration](integrate.qmd) and
-[annotation](annotate.qmd).
+Sample processing takes the per-sample [ingested](ingest-10x.qmd) `.h5mu` files
+and produces one clean, normalized cohort object with a PCA embedding, ready for
+[integration](integrate.qmd). `process_samples` wraps the whole thing, per-sample
+QC and filtering, concatenation, normalization, highly-variable-feature
+selection, and PCA, into a single command.
 
-The recommended entry point is **`process_samples`**, which wraps per-sample QC,
-concatenation, normalization, and dimensionality reduction into one command. The
-sections below explain each step so you can tune it.
+## Options
 
-## What single-sample QC removes
+| Workflow / component | Use when |
+|---|---|
+| [`multiomics/process_samples`](../reference/openpipeline/v4.2.0/workflows/multiomics/process_samples.qmd) | The standard entry point: per-sample QC + cohort processing in one run |
+| [`correction/cellbender_remove_background`](../reference/openpipeline/v4.2.0/correction/cellbender_remove_background.qmd) | Optional first step: remove ambient RNA from raw counts before QC |
 
-The count matrix from ingestion contains more than real cells:
+## Example: process a cohort
 
-- **Empty droplets** — barcodes that captured ambient RNA rather than a cell
-  (very low counts).
-- **Dying or damaged cells** — low total counts with a high fraction of
-  mitochondrial RNA, which leaks into the cytoplasm when the membrane is damaged.
-- **Doublets** — two cells captured together and sequenced as one, appearing as
-  a barcode with roughly double the expected depth.
+For example, pass a [`param_list`](process-many-samples.qmd) of ingested samples
+with your QC thresholds:
 
-`rna_singlesample` applies per-sample QC filters to remove these:
-
-```bash
-nextflow run openpipelines-bio/openpipeline \
-  -r 4.2.0 -latest -profile docker \
-  -main-script target/nextflow/workflows/rna/rna_singlesample/main.nf \
-  --id sample_A \
-  --input sample_A.h5mu \
-  --output sample_A_filtered.h5mu \
-  --min_counts 500 \
-  --max_counts 50000 \
-  --min_genes_per_cell 200 \
-  --var_name_mitochondrial_genes "mitochondrial" \
-  --max_fraction_mito 0.2 \
-  --publish_dir results/
+```yaml
+# params.yaml
+param_list:
+  - id: sample_A
+    input: results/ingestion/sample_A.h5mu
+  - id: sample_B
+    input: results/ingestion/sample_B.h5mu
+rna_min_counts: 500
+rna_max_counts: 50000
+rna_min_genes_per_cell: 200
+max_fraction_mito: 0.2
+publish_dir: results/processed
 ```
 
-:::{.callout-tip}
-QC thresholds are dataset-specific. Inspect the count distribution
-(`total_counts`, `n_genes_by_counts`, `pct_counts_mt`) before choosing cutoffs.
-A common first pass is to plot them as violin or scatter plots and apply
-thresholds at natural breakpoints.
-:::
-
-For CITE-seq data (RNA + ADT), run `prot_singlesample` alongside
-`rna_singlesample` to apply CLR (Centered Log-Ratio) normalization to the `prot`
-modality.
-
-## Normalization and dimensionality reduction
-
-After filtering, samples are concatenated and normalized together.
-`rna_multisample` performs:
-
-1. **Concatenation** — all per-sample files are joined into one object.
-2. **Normalization** — each cell is scaled to a fixed total count (e.g. 10,000)
-   so cells are comparable regardless of sequencing depth, then log1p-transformed
-   to stabilize variance.
-3. **Highly variable feature (HVF) selection** — most genes do not vary
-   meaningfully across cells. Focusing on the 2,000–3,000 most variable genes
-   retains biological signal while cutting noise and compute.
-4. **PCA** — compresses the high-dimensional expression space into a smaller set
-   of components capturing the major axes of variation.
-
 ```bash
-nextflow run openpipelines-bio/openpipeline \
-  -r 4.2.0 -latest -profile docker \
-  -main-script target/nextflow/workflows/rna/rna_multisample/main.nf \
-  --id cohort_01 \
-  --input "results/sample_*_filtered.h5mu" \
-  --output cohort_01_multisample.h5mu \
-  --publish_dir results/
-```
-
-## Run the full pipeline in one command
-
-`process_samples` wraps `rna_singlesample`, `prot_singlesample`, concatenation,
-and `rna_multisample` into a single workflow — no need to chain steps manually:
-
-```bash
-nextflow run openpipelines-bio/openpipeline \
+nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
   -r 4.2.0 -latest -profile docker \
   -main-script target/nextflow/workflows/multiomics/process_samples/main.nf \
-  --param_list samples.csv \
-  --publish_dir results/
+  -params-file params.yaml
 ```
 
-For large cohorts, `process_batches` splits samples into groups, runs the
-multisample steps on each group in parallel, then merges — reducing peak memory.
-See [Process many samples](process-many-samples.qmd) for the `param_list` format.
+## Key choices
 
-**Next:** [Integrate with Harmony or scVI →](integrate.qmd) ·
-[every parameter →](../reference/index.qmd)
+**What QC removes.** The raw matrix holds more than real cells:
+
+- **Empty droplets**, barcodes that caught ambient RNA (very low counts).
+- **Dying / damaged cells**, low counts with a high mitochondrial fraction (mito
+  RNA leaks into the cytoplasm when the membrane is damaged).
+- **Doublets**, two cells sequenced as one, at roughly double the expected depth.
+
+**Thresholds are dataset-specific.** Inspect the distributions first with a
+[QC report](qc-report.qmd), then set `rna_min_counts` / `rna_max_counts` /
+`rna_min_genes_per_cell` / `max_fraction_mito` at natural breakpoints.
+
+**Ambient RNA.** For heavily contaminated data, run
+`cellbender_remove_background` on the raw counts before QC.
+
+**CITE-seq.** Protein (ADT) counts are normalized with CLR alongside the RNA
+steps automatically.
+
+## Output
+
+One merged `.h5mu`: normalized counts in `.layers["log_normalized"]`, selected
+features flagged in `.var`, a PCA embedding in `.obsm["X_pca"]`, and
+`.obs["sample_id"]`. Next: [integration](integrate.qmd).
+
+:::{.callout-tip}
+Why per-sample steps (QC, filtering) run before concatenation and cohort steps
+(normalization, PCA) run after: see
+[Advanced architecture](../concepts/data-state.qmd).
+:::

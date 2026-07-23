@@ -27,12 +27,6 @@ listing:
     sort-ui: false
 ---
 
-::: {.genbanner}
-⚙️ **Auto-generated.** Every page here is produced from each package's
-`config.vsh.yaml` on release, so the reference can never drift from the code.
-Filter by package or type, or search by name.
-:::
-
 ```{=html}
 <div class="ref-facets">
   <div class="facet-bar" data-facet="package"><span class="lbl">Package</span></div>
@@ -101,7 +95,7 @@ function initRefListing() {
     var p = r.querySelector(".listing-package").dataset.pkg;
     if (p && !seenPkg[p]) { seenPkg[p] = 1; makeFacet(pkgBar, p, p, PKG_VAR[p] || "core", true, apply); }
     var t = r.querySelector(".listing-type").dataset.type;
-    // default to workflows only — components are off until toggled on
+    // default to workflows only, components are off until toggled on
     if (t && !seenType[t]) { seenType[t] = 1; makeFacet(typeBar, t, TYPE_LABEL[t] || t, null, t === "workflow", apply); }
   });
 

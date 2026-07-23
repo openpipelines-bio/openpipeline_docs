@@ -1,5 +1,5 @@
 ---
-pagetitle: "OpenPipeline — best-practice single-cell & spatial pipelines"
+pagetitle: "OpenPipeline, modular single-cell & spatial pipelines"
 description: "Modular, containerized components and reproducible Nextflow workflows for single-cell and spatial data."
 toc: false
 page-layout: full
@@ -11,7 +11,7 @@ anchor-sections: false
 
   <div class="wrap hero">
     <span class="kicker">Multi-modal omics analysis · reproducible at scale</span>
-    <h1>Best-practice pipelines for<br><em>single-cell and spatial</em> data.</h1>
+    <h1>Modular, reproducible pipelines for<br><em>single-cell and spatial</em> data.</h1>
     <p class="lede">Modular, containerized components and reproducible Nextflow workflows: from raw counts to a processed, interpretable data object.</p>
     <div class="modalities">
       <span class="m"><b>RNA</b></span>
@@ -21,35 +21,64 @@ anchor-sections: false
       <span class="m"><b>GDO</b></span>
       <span class="m"><b>Spatial</b></span>
     </div>
-    <div class="cta-row">
-      <a class="btn primary" href="get-started/index.html">▸ Run your first pipeline</a>
-      <a class="btn ghost" href="concepts/index.html">How it works</a>
-    </div>
   </div>
 
   <div class="wrap">
-    <div class="flow-card">
-      <div class="seg" id="flow-seg">
-        <button class="on" data-flow="sc">Single-cell</button>
-        <button data-flow="sp">Spatial</button>
-      </div>
-      <div class="flow-hint" id="flow-hint"></div>
-      <div class="flow-scroll"><div class="flow" id="flow"></div></div>
+    <div id="op-flow"></div>
+    <div class="cta-row flow-cta">
+      <a class="btn primary" href="concepts/architecture.html">▸ Full workflow overview</a>
     </div>
   </div>
+
+  <section class="block alt">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="kicker">Why OpenPipeline</span>
+        <h2>What makes it different</h2>
+        <p>Design choices that set OpenPipeline apart from a typical analysis pipeline.</p>
+      </div>
+      <div class="features">
+        <div class="feature">
+          <b>True modularity</b>
+          <p>Modular not just in code but at the execution level: every step is an independently built, containerized unit you can run, swap, reorder, or reuse as a dependency across packages.</p>
+        </div>
+        <div class="feature">
+          <b>Standard multi-omics data object</b>
+          <p>All modalities, RNA, protein, ATAC, spatial, and more, share one standard data object (MuData), so any component works with any other.</p>
+        </div>
+        <div class="feature">
+          <b>Reproducible</b>
+          <p>Containers pin each component's exact dependencies and every release is versioned, so the same run gives the same results today and years from now.</p>
+        </div>
+        <div class="feature">
+          <b>Scalable &amp; portable</b>
+          <p>Built on Nextflow, the same pipeline runs unchanged from a laptop to an HPC cluster or the cloud, in parallel across samples.</p>
+        </div>
+        <div class="feature">
+          <b>Best practices by default</b>
+          <p>Software-engineering rigor brought to bioinformatics, following the single-cell community's analysis best practices.</p>
+        </div>
+        <div class="feature">
+          <b>Community-driven, team-maintained</b>
+          <p>Open source and developed in the open, but not a release-once academic project: actively maintained for years by a dedicated team.</p>
+        </div>
+      </div>
+      <p class="ways-note">The <a href="concepts/index.html">concepts</a> pages explain how each of these work.</p>
+    </div>
+  </section>
 
   <section class="block">
     <div class="wrap">
       <div class="sec-head">
         <span class="kicker">Where to start</span>
         <h2>Three ways in</h2>
-        <p>Three entry points — from running a workflow as-is, to assembling your own analysis, to tuning every parameter.</p>
+        <p>Three entry points, from running a workflow as-is, to assembling your own analysis, to tuning every parameter.</p>
       </div>
       <div class="cards3">
         <a class="rcard link" href="get-started/index.html">
           <div class="tag">🧪 New to single-cell</div>
           <h3>Guided first run</h3>
-          <p>Run a best-practice pipeline on provided test data and learn to read the output — no prior Nextflow knowledge needed.</p>
+          <p>Run a best-practice pipeline on provided test data and learn to read the output, no prior Nextflow knowledge needed.</p>
           <span class="go">Get started →</span>
         </a>
         <a class="rcard link" href="guides/index.html">
@@ -61,7 +90,7 @@ anchor-sections: false
         <a class="rcard link" href="reference/index.html">
           <div class="tag">⚡ Power user</div>
           <h3>Component reference</h3>
-          <p>Every workflow and module, grouped by task, with full parameter listings.</p>
+          <p>Every workflow and component, grouped by task, with full parameter listings.</p>
           <span class="go">Open reference →</span>
         </a>
       </div>
@@ -73,23 +102,23 @@ anchor-sections: false
       <div class="sec-head">
         <span class="kicker">Run it your way</span>
         <h2>Local, cloud, or no-code</h2>
-        <p>Every workflow is a <b>Viash</b>-built, containerized Nextflow pipeline — so the same run works on your laptop, on Seqera, or through the Viash Hub web interface.</p>
+        <p>Every workflow is a <b>Viash</b>-built, containerized Nextflow pipeline, so the same run works on your laptop, on Seqera, or through the Viash Hub web interface.</p>
       </div>
       <div class="ways">
         <div class="way featured">
           <span class="way-flag">Recommended</span>
           <div class="h"><a href="https://www.viash-hub.com" target="_blank" rel="noopener">Viash Hub</a> <span class="badge">no-code</span></div>
-          <p>Fill in a guided web form — no YAML — and it hands you ready-to-run instructions for the Local or Seqera routes.</p>
+          <p>Fill in a guided web form, no YAML, and it hands you ready-to-run instructions for the Local or Seqera routes.</p>
           <div class="req">requires: a browser</div>
         </div>
         <div class="way">
           <div class="h">Local <span class="badge">self-run</span></div>
-          <p>Run on your own machine, an HPC cluster, or a cloud VM with more compute — using Nextflow and Docker.</p>
+          <p>Run on your own machine, an HPC cluster, or a cloud VM with more compute, using Nextflow and Docker.</p>
           <div class="req">requires: nextflow · docker</div>
         </div>
         <div class="way">
           <div class="h"><a href="https://seqera.io" target="_blank" rel="noopener">Seqera Platform</a> <span class="badge">managed</span></div>
-          <p>Launch and monitor runs on managed compute — cloud (AWS/Azure/GCP), Kubernetes, or an HPC scheduler — from the Seqera UI or CLI.</p>
+          <p>Launch and monitor runs on managed compute, cloud (AWS/Azure/GCP), Kubernetes, or an HPC scheduler, from the Seqera UI or CLI.</p>
           <div class="req">requires: a Seqera compute environment</div>
         </div>
       </div>
@@ -101,127 +130,5 @@ anchor-sections: false
 ```
 
 ```{=html}
-<script>
-(function () {
-  // Two kinds of stage:
-  //   kind:'choice'   — pick from alternative components (options + "+N more")
-  //   kind:'workflow' — one workflow whose steps run in sequence (steps, some
-  //                     optional). "optional" is only used here, where a step
-  //                     can genuinely be toggled.
-  const FLOWS = {
-    sc: {
-      hint: 'The single-cell path — RNA, protein, ATAC, VDJ and GDO share one flow.',
-      stages: [
-        { num: 'STEP 01', title: 'Ingestion', kind: 'choice', pick: 'pick one for your data',
-          options: ['cellranger_multi', 'cellranger_count', 'cellranger_count_atac', 'bd_rhapsody'],
-          note: 'or bring your own count matrix' },
-        { num: 'STEP 02', title: 'Process samples', kind: 'workflow', pick: 'single workflow',
-          steps: [{ name: 'filter cells' }, { name: 'doublet removal', opt: true }, { name: 'normalize + log1p' }, { name: 'highly variable genes' }],
-          note: 'filtering thresholds set from a QC report' },
-        { num: 'STEP 03', title: 'Integration', kind: 'workflow', pick: 'single workflow',
-          href: 'reference/index.html',
-          steps: [
-            { name: 'integrate', options: ['scVI', 'harmony', 'totalVI'], more: ['scanvi', 'scanorama', 'bbknn'], moreLabel: 'methods' },
-            { name: 'find_neighbors' },
-            { name: 'leiden' },
-            { name: 'umap' },
-          ] },
-        { num: 'STEP 04', title: 'Downstream', kind: 'choice', pick: 'pick any',
-          options: ['cell-type annotation', 'differential expression', 'cell–cell communication'],
-          more: ['scanvi', 'celltypist', 'singler', 'onclass', 'popv'], moreLabel: 'annotation methods',
-          href: 'guides/index.html' },
-      ],
-    },
-    sp: {
-      hint: 'The spatial path — same shape, spatial-aware ingestion plus niche analysis (Visium HD · Xenium · CosMx · AVITI).',
-      stages: [
-        { num: 'STEP 01', title: 'Ingestion', kind: 'choice', pick: 'pick one for your platform',
-          options: ['visium · spaceranger', 'visium HD · spaceranger', 'xenium', 'cosmx', 'aviti'],
-          note: 'or bring your own count matrix' },
-        { num: 'STEP 02', title: 'Process samples', kind: 'workflow', pick: 'single workflow',
-          steps: [{ name: 'filter cells' }, { name: 'normalize + log1p' }, { name: 'highly variable genes' }],
-          note: 'filtering thresholds set from a QC report' },
-        { num: 'STEP 03', title: 'Integration', kind: 'workflow', pick: 'single workflow',
-          href: 'reference/index.html',
-          steps: [
-            { name: 'integrate', options: ['scVI', 'harmony', 'totalVI'], more: ['scanvi', 'scanorama', 'bbknn'], moreLabel: 'methods' },
-            { name: 'find_neighbors' },
-            { name: 'leiden' },
-            { name: 'umap' },
-          ] },
-        { num: 'STEP 04', title: 'Downstream', kind: 'choice', pick: 'pick any',
-          options: ['cell-type annotation', 'differential expression', 'cell–cell communication', 'spatial domains', 'niche domains'],
-          more: ['scanvi', 'celltypist', 'singler', 'onclass', 'popv'], moreLabel: 'annotation methods',
-          href: 'guides/index.html' },
-      ],
-    },
-  };
-  const flowEl = document.getElementById('flow');
-  const flowHint = document.getElementById('flow-hint');
-  if (!flowEl) return;
-
-  function chip(t) {
-    var cls = 'chip' + (t.alt ? ' alt' : '') + (t.opt ? ' opt' : '');
-    return '<span class="' + cls + '">' + t.name +
-      (t.opt ? ' <em>optional</em>' : '') + '</span>';
-  }
-  // "+N more" chip that expands its hidden alternatives in place
-  function moreCluster(items, href, label) {
-    var hidden = items.map(function (n) { return chip({ name: n, alt: true }); }).join('');
-    var link = href ? '<a class="chip link" href="' + href + '">all →</a>' : '';
-    var lbl = label || 'more';
-    return '<span class="chip more" data-count="' + items.length + '" data-label="' + lbl + '">+' + items.length + ' ' + lbl + '</span>' +
-      '<span class="more-wrap" hidden>' + hidden + link + '</span>';
-  }
-  function renderStage(s) {
-    var head = '<span class="station"></span>' +
-      '<div class="num">' + s.num + '</div><h4>' + s.title + '</h4>' +
-      '<div class="pick">' + s.pick + '</div>';
-    if (s.kind === 'workflow') {
-      var parts = [];
-      s.steps.forEach(function (st, i) {
-        if (i) parts.push('<span class="seq-arrow">→</span>');
-        if (st.options) {
-          // a choice step within the sequence (e.g. "integrate")
-          var optChips = st.options.map(function (n) { return chip({ name: n, alt: true }); }).join('');
-          var m = (st.more && st.more.length) ? moreCluster(st.more, s.href, st.moreLabel) : '';
-          parts.push('<span class="substep"><span class="substep-label">' + st.name + '</span>' +
-            '<span class="chips">' + optChips + m + '</span></span>');
-        } else {
-          parts.push(chip(st));
-        }
-      });
-      var wfNote = s.note ? '<div class="stage-note">' + s.note + '</div>' : '';
-      return '<div class="stage">' + head + '<div class="seq">' + parts.join('') + '</div>' + wfNote + '</div>';
-    }
-    var opts = s.options.map(function (n) { return chip({ name: n, alt: true }); }).join('');
-    var more = (s.more && s.more.length) ? moreCluster(s.more, s.href, s.moreLabel) : '';
-    var note = s.note ? '<div class="stage-note">' + s.note + '</div>' : '';
-    return '<div class="stage">' + head + '<div class="chips">' + opts + more + '</div>' + note + '</div>';
-  }
-  function renderFlow(which) {
-    const f = FLOWS[which];
-    flowHint.textContent = f.hint;
-    flowEl.style.setProperty('--path', which === 'sp' ? 'var(--spatial)' : 'var(--accent-ink)');
-    flowEl.innerHTML = f.stages.map(renderStage).join('');
-    flowEl.querySelectorAll('.chip.more').forEach(function (m) {
-      m.onclick = function () {
-        var wrap = m.nextElementSibling;
-        var open = !wrap.hidden;
-        wrap.hidden = open;
-        m.textContent = open ? ('+' + m.dataset.count + ' ' + m.dataset.label) : 'show less';
-      };
-    });
-  }
-  document.querySelectorAll('#flow-seg button').forEach(function (b) {
-    b.onclick = function () {
-      document.querySelectorAll('#flow-seg button').forEach(function (x) {
-        x.classList.toggle('on', x === b);
-      });
-      renderFlow(b.dataset.flow);
-    };
-  });
-  renderFlow('sc');
-})();
-</script>
+<script src="flow.js"></script>
 ```

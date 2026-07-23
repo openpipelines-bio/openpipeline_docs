@@ -1,74 +1,205 @@
 ---
-title: "Data states"
-description: "Advanced: how the data object changes shape as it flows, a view for pipeline authors."
+title: "Architecture: advanced"
+description: "A developer's view: how the data object is organized, changes shape, fills up, and passes between components as it flows."
 order: 70
 ---
 
-There are two ways to read the pipeline. [Pipeline
-architecture](architecture.qmd) reads it **by stage**, the way an analyst thinks.
-This page reads it **by the state of the data**, the way the workflows are
-actually organized. The unit of data is not constant: it changes shape as it
-flows, and a component only makes sense in one state. If you are writing or
-wiring components, this is the view that tells you where a step belongs.
+There are two ways to read the pipeline. The [available
+workflows](architecture.qmd) page walks it **by stage**, the way an analyst
+thinks. This page reads it the way the workflows are **actually built**, the view
+you need if you are writing or wiring components. It covers how the data object is
+organized along **two axes** (samples and modalities), what gets **written into
+it** at each step, and how components **hand data off** to one another.
+
+## The data is organized along two axes
+
+Two independent questions describe the object's shape at any point in the
+pipeline: **how many samples** does it hold, and **how many modalities**. Steps
+move the data along one axis or the other, and a given component only makes sense
+at one position. The overview below shows both axes in play; the sections after
+zoom in on each.
 
 ```{mermaid}
 %%| label: fig-data-states
-%%| fig-cap: "The data object changes shape as it flows. Ingestion produces one multimodal object per sample; the pipeline splits it by modality for per-sample work, concatenates the samples for cohort-wide work, merges the modalities back together, then integrates."
+%%| fig-cap: "The data moves through four shapes, one for each combination of the two axes (trapezoids). The axis-changing operations between them (blue) are the only steps that move data from one shape to the next; the processing done within each shape is noted inside it."
 flowchart TD
-  classDef step fill:#dae8fc,stroke:#6c8ebf,color:#000
-  classDef obj  fill:#f5f5f5,stroke:#aaaaaa,color:#444
+  classDef state fill:#e8f5e9,stroke:#70d287,color:#123
+  classDef op fill:#dae8fc,stroke:#6c8ebf,color:#000
 
-  ingested["one multimodal H5MU per sample"]:::obj
+  ingestion["Ingestion"]:::op
+  ssmm[/"<b>single-sample · multimodal</b><br>one file per sample,<br>all modalities together"\]:::state
+  splitmod["split modalities"]:::op
+  ssum[/"<b>single-sample · unimodal</b><br>QC + filtering<br>per sample, per modality"\]:::state
+  concatsamples["concatenate samples<br>adds sample_id"]:::op
+  msum[/"<b>multi-sample · unimodal</b><br>normalize · select features · PCA"\]:::state
+  mergemod["merge modalities"]:::op
+  msmm[/"<b>multi-sample · multimodal</b><br>integration · clustering · UMAP"\]:::state
 
-  subgraph SS [single-sample state]
-    split["split modalities"]:::step --> ssqc["filter + QC<br>per sample, per modality"]:::step
-  end
-
-  subgraph MS [multi-sample state]
-    concat["concatenate samples<br>adds sample_id"]:::step --> msproc["normalize, select features, PCA<br>per modality"]:::step
-  end
-
-  subgraph MG [merged state]
-    merge["merge modalities"]:::step
-  end
-
-  subgraph IN [integrated state]
-    integ["batch correction<br>clusters + UMAP"]:::step
-  end
-
-  ingested --> split
-  ssqc --> concat
-  msproc --> merge
-  merge --> integ
+  ingestion --> ssmm --> splitmod --> ssum --> concatsamples --> msum --> mergemod --> msmm
 ```
 
-## Why the state matters
+### Samples: single-sample vs multi-sample
 
-Some operations are only valid in one state. Per-sample work like QC and
-filtering reasons about a single sample's own distribution, so it runs in the
-**single-sample** state. Normalization, feature selection, and PCA need to see
-variation across the whole cohort, so they run only after concatenation, in the
-**multi-sample** state. That is what the `_singlesample` / `_multisample`
-suffixes throughout the codebase mean: they declare the state a workflow operates
-on.
+Per-sample work like QC and filtering reasons about a **single sample's own
+distribution**, so it runs while each sample is still its own file. Cross-sample
+work (normalization, feature selection, PCA) needs to see variation across the
+**whole cohort**, so it runs only after the per-sample files are
+**concatenated** into one.
 
-| State | Example workflows | Operates on |
-|---|---|---|
-| Single-sample | `rna/rna_singlesample`, `prot/prot_singlesample` | one sample, one modality |
-| Multi-sample | `rna/rna_multisample`, `prot/prot_multisample` | the concatenated cohort |
-| Merged | `process_batches` (via `dataflow/merge`) | all modalities together |
-| Integrated | `integration/harmony_leiden`, ... | the corrected embedding |
+Concatenation joins the observations of every sample into a single object, done
+for each modality separately. A `sample_id` column is added to `.obs` to record
+where each cell came from. When samples carry **conflicting** `.obs` / `.var`
+annotations, the `concatenate_h5mu` component's default `other_axis_mode: move`
+gathers the clashing columns into `.obsm` / `.varm` so you can inspect them
+instead of silently dropping one.
+
+```{mermaid}
+%%| label: fig-concatenate
+%%| fig-cap: "Concatenation joins per-sample files into one cohort object, adding a sample_id column to .obs."
+flowchart LR
+  classDef obj fill:#f5f5f5,stroke:#aaaaaa,color:#444
+  classDef op  fill:#dae8fc,stroke:#6c8ebf,color:#000
+
+  s1["sample 1"]:::obj
+  s2["sample 2"]:::obj
+  s3["sample 3"]:::obj
+  cc["concatenate<br>per modality"]:::op
+  coh["cohort object<br>+ .obs sample_id"]:::obj
+
+  s1 --> cc
+  s2 --> cc
+  s3 --> cc
+  cc --> coh
+```
+
+### Modalities: multimodal vs unimodal
+
+Ingestion produces a **multimodal** object: several modalities (`rna`, `prot`,
+`atac`, ...) living side by side under `.mod`. But many per-modality steps
+(RNA normalization, protein CLR, ...) only know how to operate on **one modality
+at a time**. So the pipeline **splits** the multimodal object into one
+**unimodal** file per modality, processes each on its own, then **merges** them
+back into a single multimodal object. Split and merge are inverse operations
+along the modality axis.
+
+```{mermaid}
+%%| label: fig-split-merge
+%%| fig-cap: "Split and merge are inverses along the modality axis: split_modalities produces one unimodal file per modality for per-modality processing; merge recombines them."
+flowchart LR
+  classDef obj fill:#f5f5f5,stroke:#aaaaaa,color:#444
+  classDef op  fill:#dae8fc,stroke:#6c8ebf,color:#000
+
+  mm["multimodal object<br>.mod: rna, prot, ..."]:::obj
+  spl["split_modalities"]:::op
+  urna["rna"]:::obj
+  uprot["prot"]:::obj
+  uother["..."]:::obj
+  prna["processed rna"]:::obj
+  pprot["processed prot"]:::obj
+  pother["..."]:::obj
+  mrg["merge"]:::op
+  out["multimodal object<br>.mod: rna, prot, ..."]:::obj
+
+  mm --> spl
+  spl --> urna
+  spl --> uprot
+  spl --> uother
+  urna --> prna
+  uprot --> pprot
+  uother --> pother
+  prna --> mrg
+  pprot --> mrg
+  pother --> mrg
+  mrg --> out
+```
+
+The same axis reappears at **integration**, where methods differ by how far
+across modalities they reach:
+
+- **Unimodal** integration aligns cells across batches within one modality:
+  `integration/harmony_leiden`, `scvi_leiden`, `scanorama_leiden`, `bbknn_leiden`.
+- **Multimodal** integration uses several modalities jointly:
+  `integration/totalvi_leiden` (RNA + protein).
+- **Mosaic** integration (batches and modalities where not every cell is profiled
+  in every modality) is not currently available in OpenPipeline.
+
+### Why the position matters
+
+The `_singlesample` / `_multisample` suffixes throughout the codebase declare
+which sample-axis position a workflow operates on. Combined with the modality
+axis, they pin down exactly what a workflow assumes about its input.
+
+| Shape | Samples | Modalities | Example workflows |
+|---|---|---|---|
+| single-sample · multimodal | one sample | all together | ingestion output; read by `dataflow/split_modalities` |
+| single-sample · unimodal | one sample | one | `rna/rna_singlesample`, `prot/prot_singlesample` |
+| multi-sample · unimodal | cohort | one | `rna/rna_multisample`, `prot/prot_multisample` |
+| multi-sample · multimodal | cohort | all together | `integration/harmony_leiden`, ... (after `dataflow/merge`) |
 
 The `multiomics` workflows (`process_samples`, and `process_batches` for large
 cohorts) move data between these states, so you rarely wire the transitions by
 hand.
 
+## The object fills up as it flows
+
+The object is never overwritten in place. Each step **adds** to it, writing its
+result into a specific MuData slot (`.X`, `.layers`, `.obs`, `.var`, `.obsm`)
+while leaving the earlier ones intact. Following which slot a step reads and which
+it writes is often the fastest way to understand where it belongs.
+
+```{mermaid}
+%%| label: fig-object-fills
+%%| fig-cap: "The same object accumulating results. Each stage adds a slot rather than replacing the data; the raw counts in .X survive all the way through."
+flowchart TD
+  classDef add fill:#e8f5e9,stroke:#70d287,color:#123
+
+  ing["<b>Ingestion</b><br>.X raw counts<br>.obs barcodes<br>.var gene metadata<br>modalities under .mod"]:::add
+  ss["<b>Single-sample QC + filter</b><br>+ .obs QC metrics &amp; filter flags"]:::add
+  cat["<b>Concatenate</b><br>+ .obs sample_id"]:::add
+  norm["<b>Log-normalize</b><br>+ .layers log_normalized"]:::add
+  hvg["<b>Highly variable genes</b><br>+ .var highly_variable"]:::add
+  pca["<b>PCA</b><br>+ .obsm X_pca"]:::add
+  intg["<b>Integration</b><br>+ .obsm corrected embedding<br>+ .obs Leiden clusters<br>+ .obsm UMAP"]:::add
+  ann["<b>Annotation</b><br>+ .obs cell-type predictions"]:::add
+
+  ing --> ss --> cat --> norm --> hvg --> pca --> intg --> ann
+```
+
+The exact slot keys (all configurable, shown here with their defaults):
+
+| Stage | Slots written |
+|---|---|
+| Ingestion | `.X` raw counts · `.obs` barcodes · `.var` gene metadata · modalities under `.mod` |
+| Single-sample QC & filter | `.obs` QC metrics (`total_counts`, `num_nonzero_vars`, mitochondrial / ribosomal fraction) and filter flags |
+| Concatenate | `.obs["sample_id"]` |
+| Log-normalize | `.layers["log_normalized"]` |
+| Highly variable genes | `.var["highly_variable"]` |
+| PCA | `.obsm["X_pca"]` |
+| Integration | corrected embedding in `.obsm` (e.g. `X_pca_integrated`), Leiden clusters in `.obs` (e.g. `harmony_integration_leiden`), UMAP in `.obsm` |
+| Annotation | predicted cell types in `.obs` (default `<target>_pred`) |
+
+Because raw counts stay in `.X` and each transform lands in its own slot, a
+downstream step can always reach back to an earlier representation, and you can
+re-run a step with different parameters without re-ingesting.
+
+## Components exchange data through disk
+
+Components do not share an in-memory object. Each one **reads an H5MU file from
+disk, does its work, and writes a new H5MU back out**; the next component reads
+that file in turn. This on-disk hand-off is what lets Nextflow run independent
+branches in parallel, cache and resume completed steps, and wire **one-to-many**
+(split one multimodal file into per-modality files) or **many-to-one**
+(concatenate per-sample files into a cohort) relationships between steps. It also
+means every intermediate is a real file you can open and inspect.
+
 ## When you author a component
 
-Before adding a component to a workflow, decide which state it reads: a **single
-sample** (so it belongs before concatenation, in a `_singlesample` workflow) or
-the **whole cohort** (so it belongs after, in a `_multisample` workflow). That
-one question tells you where the component slots in and which assumptions hold
-(is `sample_id` present yet? is the data normalized?). See
+Before adding a component to a workflow, decide where on the two axes it reads: a
+**single sample** (so it belongs before concatenation, in a `_singlesample`
+workflow) or the **whole cohort** (so it belongs after, in a `_multisample`
+workflow), and **one modality** (so it runs after a split) or **all modalities
+together** (so it runs after a merge). Those questions tell you where the
+component slots in and which assumptions hold (is `sample_id` present yet? is the
+data normalized? is this file unimodal?). See
 [Create a pipeline](../contributing/creating-pipelines.qmd) for the mechanics of
 wiring one in.

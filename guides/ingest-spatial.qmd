@@ -1,47 +1,69 @@
 ---
-title: "Ingest Xenium / Visium"
-description: "Space Ranger mapping and spatial ingestion."
+title: "Spatial ingestion"
+description: "From spatial platform output to a spatial H5MU with coordinates."
 categories: [openpipeline_spatial]
 order: 15
 ---
 
 [`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial}<span class="swatch openpipeline_spatial"></span>
 
-Spatial ingestion lives in the **`openpipeline_spatial`** package, which pins the
-core `openpipeline` as a Viash dependency and adds Space Ranger mapping plus
-spatial-aware processing.
+Spatial ingestion lives in **`openpipeline_spatial`** (which pins core
+`openpipeline`). It turns the output of a spatial platform into an `.h5mu` that
+keeps each spot's or cell's location in `.obsm["spatial"]`, ready for a
+[spatial QC report](qc-report-spatial.qmd) and
+[spatial sample processing](process-spatial.qmd).
 
-## Map with Space Ranger
+## Options
 
-`ingestion/spaceranger_mapping` runs 10x Space Ranger to align a Visium or
-Xenium run and produce a spatial `.h5mu` — the count matrix carries per-spot (or
-per-cell) coordinates in `.obsm["spatial"]`.
+One entry per technology. Sequencing-based Visium can be mapped from FASTQs;
+imaging-based platforms are converted from the vendor's output:
 
-```bash
-nextflow run openpipelines-bio/openpipeline_spatial \
-  -r v0.5.0 -latest -profile docker \
-  -main-script target/nextflow/workflows/ingestion/spaceranger_mapping/main.nf \
-  --id sample_A \
-  --input "fastq/sample_A/" \
-  --reference reference_genome/ \
-  --output sample_A.h5mu \
-  --publish_dir results/
+| Workflow / technology | Use when |
+|---|---|
+| [`ingestion/spaceranger_mapping`](../reference/openpipeline_spatial/v0.5.0/workflows/ingestion/spaceranger_mapping.qmd) | Visium: map FASTQs with Space Ranger |
+| [`convert/from_spaceranger_to_h5mu`](../reference/openpipeline_spatial/v0.5.0/convert/from_spaceranger_to_h5mu.qmd) | Visium: you already have Space Ranger output |
+| [`convert/from_xenium_to_h5mu`](../reference/openpipeline_spatial/v0.5.0/convert/from_xenium_to_h5mu.qmd) | 10x Xenium |
+| [`convert/from_cosmx_to_h5mu`](../reference/openpipeline_spatial/v0.5.0/convert/from_cosmx_to_h5mu.qmd) | NanoString CosMx |
+| [`convert/from_cells2stats_to_h5mu`](../reference/openpipeline_spatial/v0.5.0/convert/from_cells2stats_to_h5mu.qmd) | Element AVITI (cells2stats) |
+| [`convert/from_spatialdata_to_h5mu`](../reference/openpipeline_spatial/v0.5.0/convert/from_spatialdata_to_h5mu.qmd) | you already have a SpatialData object |
+
+The [Available workflows](../concepts/architecture.qmd) page shows these in
+pipeline context.
+
+## Example: Xenium → H5MU
+
+For example, to convert 10x Xenium output bundles, `convert/from_xenium_to_h5mu`
+takes a `param_list` pointing at each sample's Xenium output directory:
+
+```yaml
+# params.yaml
+param_list:
+  - id: sample_A
+    input: xenium/sample_A_outs/
+  - id: sample_B
+    input: xenium/sample_B_outs/
+publish_dir: results/ingestion
 ```
 
-## Process spatial samples
+```bash
+nextflow run https://packages.viash-hub.com/vsh/openpipeline_spatial.git \
+  -r v0.5.0 -latest -profile docker \
+  -main-script target/nextflow/convert/from_xenium_to_h5mu/main.nf \
+  -params-file params.yaml
+```
 
-After ingestion, `multiomics/spatial_process_samples` runs QC, normalization,
-and dimensionality reduction adapted for spatial data, and `qc/spatial_qc`
-produces spatial quality-control output. These mirror the core
-[process & filter](process-filter.qmd) flow but keep the spatial coordinates
-intact.
+## Key choices
 
-:::{.callout-note}
-`openpipeline_spatial` is a separate package. Check the
-[reference](../reference/index.qmd) (filter by `openpipeline_spatial`) for the
-exact argument list of each spatial workflow, and open its Viash Hub page for
-copy-paste run instructions.
-:::
+- **Imaging-based** platforms (Xenium, CosMx, AVITI) start from the vendor's
+  processed output, use the matching `convert/from_*` workflow.
+- **Sequencing-based** Visium can be mapped from FASTQs with
+  `spaceranger_mapping`, or converted from existing Space Ranger output with
+  `from_spaceranger_to_h5mu`.
+- **A whole cohort in one run:** pass a [`param_list`](process-many-samples.qmd)
+  with one entry per sample.
 
-**Next:** [Find spatial niches →](spatial-niches.qmd) ·
-[spatial reference →](../reference/index.qmd)
+## Output
+
+Each sample becomes one spatial `.h5mu`: raw counts in `.X`, and per-spot (or
+per-cell) coordinates preserved in `.obsm["spatial"]`, which every downstream
+spatial step relies on. Next: [spatial QC report](qc-report-spatial.qmd).

@@ -1,132 +1,94 @@
 ---
-title: "Ingest 10x Genomics data"
-description: "FASTQ or raw counts → MuData with Cell Ranger."
+title: "Ingestion"
+description: "From raw sequencing output to a per-sample count matrix (H5MU)."
 categories: [openpipeline]
 order: 10
 ---
 
 [`openpipeline`]{.pkg-tag .pkg-openpipeline}<span class="swatch openpipeline"></span>
 
-Ingestion takes the raw output of a 10x Genomics run and produces a per-sample
-count matrix stored as an `.h5mu` file, ready for
-[processing and filtering](process-filter.qmd).
+Ingestion turns the raw output of a sequencing run into a per-sample **count
+matrix** stored as an `.h5mu` file: reads are aligned to a reference, assigned to
+cells by barcode, and counted once per molecule by UMI. That object is the input
+to [sample processing](process-filter.qmd).
 
-## Pick a starting point
+## Options
 
-The right workflow depends on what your sequencing provider delivered.
+Pick by what your provider delivered and the platform. The full set:
 
-| Starting point | Library type | Workflow |
-|---|---|---|
-| BCL files | Any | `ingestion/demux` → then a mapping workflow |
-| FASTQ | 10x GEX only | `ingestion/cellranger_mapping` |
-| FASTQ | 10x multi (GEX + VDJ + ADT/HTO) | `ingestion/cellranger_multi` |
-| 10x HDF5 (`.h5`) | Pre-generated | `convert/from_10xh5_to_h5mu` |
-| 10x MEX (`.mtx`) | Pre-generated | `convert/from_10xmtx_to_h5mu` |
+| Workflow / technology | Use when |
+|---|---|
+| [`ingestion/cellranger_mapping`](../reference/openpipeline/v4.2.0/workflows/ingestion/cellranger_mapping.qmd) | 10x, gene expression only |
+| [`ingestion/cellranger_multi`](../reference/openpipeline/v4.2.0/workflows/ingestion/cellranger_multi.qmd) | 10x, multiple libraries (GEX + VDJ + ADT/HTO) |
+| [`ingestion/bd_rhapsody`](../reference/openpipeline/v4.2.0/workflows/ingestion/bd_rhapsody.qmd) | BD Rhapsody data |
+| [`ingestion/demux`](../reference/openpipeline/v4.2.0/workflows/ingestion/demux.qmd) | starting from raw Illumina BCL files (run first, then a mapping workflow) |
+| [`ingestion/make_reference`](../reference/openpipeline/v4.2.0/workflows/ingestion/make_reference.qmd) | building the reference genome index that mapping needs |
+| [`convert/from_10xh5_to_h5mu`](../reference/openpipeline/v4.2.0/convert/from_10xh5_to_h5mu.qmd) | you already have a Cell Ranger `.h5` matrix |
+| [`convert/from_10xmtx_to_h5mu`](../reference/openpipeline/v4.2.0/convert/from_10xmtx_to_h5mu.qmd) | you already have a 10x MEX (`.mtx`) matrix |
+| [`convert/from_h5ad_to_h5mu`](../reference/openpipeline/v4.2.0/convert/from_h5ad_to_h5mu.qmd) | you already have an AnnData `.h5ad` |
+| [`convert/from_seurat_to_h5mu`](../reference/openpipeline/v4.2.0/convert/from_seurat_to_h5mu.qmd) | you already have a Seurat object |
+| [`convert/from_tiledb_to_h5mu`](../reference/openpipeline/v4.2.0/convert/from_tiledb_to_h5mu.qmd) | you already have a TileDB store |
 
-:::{.callout-tip}
-If your provider already delivered a Cell Ranger count matrix, skip mapping and
-use one of the converters directly.
-:::
+Not sure which fits? The [Available workflows](../concepts/architecture.qmd) page
+shows all of these in pipeline context.
 
-## Build a reference genome
+## Example: 10x multi-library mapping
 
-Mapping needs a reference genome index. Build one with `make_reference`, or use
-a pre-built 10x Genomics reference directly.
+For example, to map a 10x sample with gene expression, VDJ, and antibody-capture
+libraries jointly, `ingestion/cellranger_multi` takes a `param_list` where each
+entry's `input` / `library_id` / `library_type` lists line up row-for-row:
 
-```bash
-nextflow run openpipelines-bio/openpipeline \
-  -r 4.2.0 -latest -profile docker \
-  -main-script target/nextflow/workflows/ingestion/make_reference/main.nf \
-  --id GRCh38 \
-  --genome_fasta Homo_sapiens.GRCh38.dna.primary_assembly.fa \
-  --annotation_gtf Homo_sapiens.GRCh38.111.gtf \
-  --output reference_genome/ \
-  --publish_dir results/
+```yaml
+# params.yaml
+param_list:
+  - id: sample_A
+    input:
+      - fastq/sample_A_gex/*_R*.fastq.gz
+      - fastq/sample_A_vdj/*_R*.fastq.gz
+      - fastq/sample_A_adt/*_R*.fastq.gz
+    library_id: [sample_A_gex, sample_A_vdj, sample_A_adt]
+    library_type: [Gene Expression, VDJ-T, Antibody Capture]
+gex_reference: reference_gex/
+vdj_reference: reference_vdj/
+feature_reference: feature_reference.csv
+publish_dir: results/ingestion
 ```
 
-## Demultiplex BCL files (if needed)
-
-If you start from raw Illumina BCL output, convert it to per-sample FASTQ files
-first:
-
 ```bash
-nextflow run openpipelines-bio/openpipeline \
-  -r 4.2.0 -latest -profile docker \
-  -main-script target/nextflow/workflows/ingestion/demux/main.nf \
-  --id run_001 \
-  --input /path/to/bcl_run/ \
-  --sample_sheet SampleSheet.csv \
-  --output demux_output/ \
-  --publish_dir results/
-```
-
-## Map single-library samples (GEX only)
-
-```bash
-nextflow run openpipelines-bio/openpipeline \
-  -r 4.2.0 -latest -profile docker \
-  -main-script target/nextflow/workflows/ingestion/cellranger_mapping/main.nf \
-  --id sample_A \
-  --input "fastq/sample_A/" \
-  --reference reference_genome/ \
-  --output sample_A.h5mu \
-  --publish_dir results/
-```
-
-## Map multi-library samples (GEX + ADT/HTO + VDJ)
-
-For CITE-seq or experiments with multiple library types captured from the same
-cells, Cell Ranger Multi aligns all libraries jointly. The `feature_reference.csv`
-describes the antibody or guide-RNA sequences used.
-
-```bash
-nextflow run openpipelines-bio/openpipeline \
+nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
   -r 4.2.0 -latest -profile docker \
   -main-script target/nextflow/workflows/ingestion/cellranger_multi/main.nf \
-  --id sample_A \
-  --input "fastq/sample_A/" \
-  --gex_reference reference_genome/ \
-  --feature_reference feature_reference.csv \
-  --output sample_A.h5mu \
-  --publish_dir results/
+  -params-file params.yaml
 ```
 
-## Ingest many samples at once
+## Key choices
 
-Pass a [`param_list`](../concepts/param-list.qmd) to map a whole cohort in one
-run. Example `samples.csv`:
+- **Which workflow** depends on platform and library type, see the table above.
+- **Reference genome:** build one with `ingestion/make_reference`, or point at a
+  pre-built 10x reference directly.
+- **A whole cohort in one run:** pass a [`param_list`](process-many-samples.qmd)
+  with one entry per sample.
+- **Starting from BCL files:** run `ingestion/demux` first to get per-sample
+  FASTQs, then a mapping workflow.
 
-```
-id,input,reference
-sample_A,fastq/sample_A/,reference_genome/
-sample_B,fastq/sample_B/,reference_genome/
-sample_C,fastq/sample_C/,reference_genome/
-```
+## Output
 
-```bash
-nextflow run openpipelines-bio/openpipeline \
-  -r 4.2.0 -latest -profile docker \
-  -main-script target/nextflow/workflows/ingestion/cellranger_mapping/main.nf \
-  --param_list samples.csv \
-  --publish_dir results/
-```
-
-## What the output contains
-
-Each sample becomes one `.h5mu` file. Depending on the library type it holds one
-or more modalities:
+Each sample becomes one `.h5mu` file holding one or more modalities, depending on
+the libraries:
 
 | Modality key | Content |
 |---|---|
 | `rna` | RNA count matrix (cells × genes) |
-| `prot` | ADT count matrix — antibody-derived tags (CITE-seq) |
+| `prot` | ADT count matrix, antibody-derived tags (CITE-seq) |
 | `vdj_b` / `vdj_t` | Immune repertoire (B/T cell receptor sequences) |
 | `atac` | Chromatin accessibility (ATAC-seq peaks) |
 | `gdo` | Guide RNA / CRISPR perturbation data |
 
-Each modality stores the raw counts in `.X`, cell metadata in `.obs`, and
-feature metadata in `.var`. No filtering has been applied yet — the matrix
-contains both real cells and empty droplets.
+Raw counts sit in `.X`, cell metadata in `.obs`, feature metadata in `.var`. No
+filtering has been applied yet, the matrix holds both real cells and empty
+droplets. Next: [sample processing](process-filter.qmd).
 
-**Next:** [Process & filter samples →](process-filter.qmd) ·
-[every ingestion argument →](../reference/index.qmd)
+:::{.callout-tip}
+The multimodal object and its slots (`.X`, `.obs`, `.var`, `.obsm`, `.mod`) are
+explained in [MuData](../concepts/mudata.qmd).
+:::

@@ -1,0 +1,49 @@
+---
+title: "RNA velocity"
+description: "Directional cell-state dynamics from spliced vs. unspliced counts."
+categories: [openpipeline]
+order: 55
+---
+
+[`openpipeline`]{.pkg-tag .pkg-openpipeline}<span class="swatch openpipeline"></span>
+
+RNA velocity infers where each cell is heading by comparing **unspliced** (newly
+transcribed, intron-containing) to **spliced** (mature) mRNA: a high unspliced
+fraction means a gene is being upregulated. scVelo turns these ratios into a
+velocity vector per cell, projected onto the UMAP.
+
+## Options
+
+| Component | Use when |
+|---|---|
+| [`velocity/velocyto`](../reference/openpipeline/v4.2.0/velocity/velocyto.qmd) | Extract spliced / unspliced counts from aligned BAMs (during ingestion) |
+| [`velocity/scvelo`](../reference/openpipeline/v4.2.0/velocity/scvelo.qmd) | Compute velocity from an object that carries those layers |
+
+## Example: scVelo
+
+For example, once your object carries `spliced` / `unspliced` layers:
+
+```bash
+nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
+  -r 4.2.0 -latest -profile docker \
+  -main-script target/nextflow/velocity/scvelo/main.nf \
+  --input results/integrated.h5mu \
+  --modality rna \
+  --layer_spliced spliced \
+  --layer_unspliced unspliced \
+  --output velocity.h5mu \
+  --publish_dir results/
+```
+
+## Key choices
+
+- **Spliced / unspliced counts are a prerequisite.** They come from `velocyto`
+  run against the aligned BAMs at [ingestion](ingest-10x.qmd) time, a standard
+  count matrix doesn't carry them.
+- `--n_top_genes`, `--n_principal_components`, and `--n_neighbors` tune the
+  velocity graph, see the reference for defaults.
+
+## Output
+
+Velocity estimates and a velocity-projected embedding written into the object,
+ready to plot as streamlines over the UMAP.

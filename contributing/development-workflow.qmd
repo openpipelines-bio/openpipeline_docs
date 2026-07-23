@@ -86,5 +86,3 @@ repository you are working in so you get its own bucket.
 With the data in `resources_test/`, you can run components and tests against real
 inputs. See [Testing](testing.qmd) for the component and workflow test types and
 how CI runs them.
-
-**Next:** [Create a component →](creating-components.qmd)

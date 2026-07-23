@@ -1,0 +1,54 @@
+---
+title: "Spatial sample processing"
+description: "The core processing flow, adapted for spatial data."
+categories: [openpipeline_spatial]
+order: 35
+---
+
+[`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial}<span class="swatch openpipeline_spatial"></span>
+
+`spatial_process_samples`, from **`openpipeline_spatial`**, runs the same
+per-sample and cohort steps as core [sample processing](process-filter.qmd),
+filtering, normalization, feature selection, PCA, but adapted for spatial data
+and keeping the per-spot coordinates in `.obsm["spatial"]` intact.
+
+## Options
+
+| Workflow | Use when |
+|---|---|
+| [`multiomics/spatial_process_samples`](../reference/openpipeline_spatial/v0.5.0/workflows/multiomics/spatial_process_samples.qmd) | Processing a [spatially-ingested](ingest-spatial.qmd) cohort |
+
+## Example: process a spatial cohort
+
+For example, on a [`param_list`](process-many-samples.qmd) of spatial `.h5mu`
+files:
+
+```yaml
+# params.yaml
+param_list:
+  - id: sample_A
+    input: results/ingestion/sample_A.h5mu
+  - id: sample_B
+    input: results/ingestion/sample_B.h5mu
+publish_dir: results/processed
+```
+
+```bash
+nextflow run https://packages.viash-hub.com/vsh/openpipeline_spatial.git \
+  -r v0.5.0 -latest -profile docker \
+  -main-script target/nextflow/workflows/multiomics/spatial_process_samples/main.nf \
+  -params-file params.yaml
+```
+
+## Key choices
+
+- Thresholds work as in core [sample processing](process-filter.qmd); set them
+  from a [spatial QC report](qc-report-spatial.qmd).
+- Coordinates in `.obsm["spatial"]` are carried through untouched, downstream
+  spatial steps (e.g. [niche identification](spatial-niches.qmd)) depend on them.
+
+## Output
+
+One merged, processed object (`merged.spatial_process_samples.output.h5mu`) with
+normalized counts, a PCA embedding, and the spatial coordinates preserved, ready
+for [integration](integrate.qmd).

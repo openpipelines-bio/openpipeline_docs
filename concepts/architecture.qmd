@@ -1,6 +1,6 @@
 ---
-title: "Pipeline architecture"
-description: "How OpenPipeline fits into a single-cell project"
+title: "Available workflows"
+description: "Every workflow OpenPipeline offers, arranged by where it sits in the pipeline."
 order: 60
 ---
 
@@ -54,7 +54,7 @@ This per-sample H5MU is the unit that flows through all subsequent steps. The
 right ingestion workflow depends on your sequencing platform and library type.
 
 ::: {.callout-tip appearance="simple"}
-**Guide:** [Ingest 10x Genomics data](../guides/ingest-10x.qmd): workflow selection, reference genome setup, and examples.
+**Guide:** [Ingestion](../guides/ingest-10x.qmd): workflow selection, reference genome setup, and examples.
 :::
 
 | Workflow / component | Package | Description |
@@ -148,7 +148,7 @@ The concatenated object then goes through:
 4. **PCA**: a principal-component embedding is computed.
 
 ::: {.callout-tip appearance="simple"}
-**Guide:** [Process & filter samples](../guides/process-filter.qmd): full details and examples.
+**Guide:** [Sample processing](../guides/process-filter.qmd): full details and examples.
 :::
 
 :::{.callout-note}
@@ -176,7 +176,7 @@ OpenPipeline provides one workflow per integration method. There is no single
 default; the right choice depends on dataset size and batch structure.
 
 ::: {.callout-tip appearance="simple"}
-**Guide:** [Integrate with Harmony or scVI](../guides/integrate.qmd): guidance on choosing a method.
+**Guide:** [Integration](../guides/integrate.qmd): guidance on choosing a method.
 :::
 
 | Workflow | Package | Method | Description |
@@ -198,7 +198,7 @@ separately from the core pipeline and depends on the tissue and biological
 question.
 
 ::: {.callout-tip appearance="simple"}
-**Guide:** [Annotate cell types](../guides/annotate.qmd): details and examples.
+**Guide:** [Cell type annotation](../guides/annotate.qmd): details and examples.
 :::
 
 | Workflow | Package | Description |

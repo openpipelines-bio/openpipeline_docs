@@ -130,5 +130,3 @@ details.
 When your workflow is ready, open a pull request and follow
 [Open a pull request](pull-requests.qmd). Once merged, Viash Hub builds it into
 the package and publishes it with the next release.
-
-**Next:** [Testing →](testing.qmd)

@@ -57,5 +57,3 @@ stays available there, so:
 - a run pinned to a version (e.g. `nextflow run … -r 4.2.0`) always gets exactly
   that build, and
 - the [reference](../reference/index.qmd) documents the latest published version.
-
-**Next:** [Build and test locally →](development-workflow.qmd)
