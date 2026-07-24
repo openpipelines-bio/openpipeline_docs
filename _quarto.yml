@@ -7,7 +7,7 @@ project:
   resources:
     - robots.txt
     # Shared single-cell/spatial flow widget, loaded by index.qmd and
-    # concepts/architecture.qmd via <script src>.
+    # workflows/index.qmd via <script src>.
     - flow.js
   # NOTE: team/ is a hand-curated static page for now (sections + roles the flat
   # author registry can't express). scripts/generate_team.py is kept for the
@@ -39,7 +39,7 @@ website:
       # "Workflows" = the curated available-workflows overview. Page still lives
       # under concepts/ (kept there to avoid breaking cross-links). The advanced
       # developer deep-dive stays in the Concepts hub, not here.
-      - href: concepts/architecture.qmd
+      - href: workflows/index.qmd
         text: Workflows
       # "Documentation" groups the practical, do-it materials. Get started is
       # also the primary landing-page CTA, so it stays reachable from the hero.

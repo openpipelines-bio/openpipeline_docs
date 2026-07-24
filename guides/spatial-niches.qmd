@@ -1,5 +1,5 @@
 ---
-title: "Spatial niche identification"
+title: "Identify spatial niches"
 description: "Learn recurring spatial neighborhoods with NicheCompass."
 categories: [openpipeline_spatial]
 order: 65
@@ -17,8 +17,8 @@ together).
 
 | Workflow / component | Use when |
 |---|---|
-| [`niche/nichecompass_leiden`](../reference/openpipeline_spatial/v0.5.0/workflows/niche/nichecompass_leiden.qmd) | Identify niches: embed cells niche-aware, then cluster |
-| `nichecompass/gene_program_mask` | Prepare the gene-program mask the workflow consumes |
+| `niche/nichecompass_leiden` | Identify niches: embed cells niche-aware, then cluster |
+| [`nichecompass/gene_program_mask`](../reference/openpipeline_spatial/v0.5.0/nichecompass/gene_program_mask.qmd) | Prepare the gene-program mask the workflow consumes |
 
 ## Example: NicheCompass
 

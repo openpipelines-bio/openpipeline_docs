@@ -10,7 +10,7 @@ object.
 
 The pages below explain the design choices behind it. Read top to bottom for the
 full picture, or jump to whichever answers your question. For how these ideas play
-out across the actual pipeline, see [Available workflows](architecture.qmd).
+out across the actual pipeline, see [Available workflows](../workflows/index.qmd).
 
 ```{=html}
 <div class="concept-list">

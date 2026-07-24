@@ -1,5 +1,5 @@
 ---
-title: "RNA velocity"
+title: "Estimate RNA velocity"
 description: "Directional cell-state dynamics from spliced vs. unspliced counts."
 categories: [openpipeline]
 order: 55

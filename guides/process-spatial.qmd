@@ -1,5 +1,5 @@
 ---
-title: "Spatial sample processing"
+title: "Process spatial samples"
 description: "The core processing flow, adapted for spatial data."
 categories: [openpipeline_spatial]
 order: 35
@@ -8,7 +8,7 @@ order: 35
 [`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial}<span class="swatch openpipeline_spatial"></span>
 
 `spatial_process_samples`, from **`openpipeline_spatial`**, runs the same
-per-sample and cohort steps as core [sample processing](process-filter.qmd),
+per-sample and cohort steps as core [sample processing](process-samples.qmd),
 filtering, normalization, feature selection, PCA, but adapted for spatial data
 and keeping the per-spot coordinates in `.obsm["spatial"]` intact.
 
@@ -40,9 +40,32 @@ nextflow run https://packages.viash-hub.com/vsh/openpipeline_spatial.git \
   -params-file params.yaml
 ```
 
+## How it works
+
+`spatial_process_samples` runs the same two phases as core
+[sample processing](process-samples.qmd), minus doublet detection (spatial spots
+aren't droplets, so Scrublet doesn't apply).
+
+**Per sample, before concatenation.** Each sample is filtered on its own
+distribution:
+
+- **Count-based**: drop spots/cells whose total counts or detected features fall
+  outside a defined range.
+- **Quantile-based**: derive thresholds from the data's own distribution rather
+  than fixed cutoffs.
+- **Feature-based**: keep or drop cells based on specific features or feature sets.
+- **Mitochondrial / ribosomal fraction**: remove cells with a high fraction of
+  mitochondrial or ribosomal counts.
+
+**Across the cohort, after concatenation.** Samples are concatenated (a
+`sample_id` column records each cell's origin), then processed together:
+log-normalization, optional scaling, highly variable gene (HVG) selection, and
+PCA. Throughout, the per-spot coordinates in `.obsm["spatial"]` are carried
+untouched.
+
 ## Key choices
 
-- Thresholds work as in core [sample processing](process-filter.qmd); set them
+- Thresholds work as in core [sample processing](process-samples.qmd); set them
   from a [spatial QC report](qc-report-spatial.qmd).
 - Coordinates in `.obsm["spatial"]` are carried through untouched, downstream
   spatial steps (e.g. [niche identification](spatial-niches.qmd)) depend on them.

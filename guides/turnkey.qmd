@@ -1,6 +1,6 @@
 ---
 title: "Run a turnkey pipeline"
-description: "End-to-end composed pipeline, and reference-atlas generation."
+description: "End-to-end composed pipelines, and reference-atlas generation."
 categories: [openpipeline_composed]
 order: 70
 ---
@@ -9,16 +9,43 @@ order: 70
 
 The **`openpipeline_composed`** package bundles the individual stages into
 turnkey, end-to-end pipelines. Instead of running
-[ingestion](ingest-10x.qmd) → [processing](process-filter.qmd) →
+[ingestion](ingest-10x.qmd) → [processing](process-samples.qmd) →
 [integration](integrate.qmd) → [annotation](annotate.qmd) as separate commands,
 one composed workflow chains them together.
 
-## process_integrate_annotate
+## The turnkey pipelines
 
-The flagship `single_cell/process_integrate_annotate` workflow processes,
-integrates, and annotates single-cell (multi-)omics data in a single run. It
-lets you choose the integration method (Harmony, scVI, Scanorama, BBKNN) and the
-annotation method (CellTypist, harmony_knn, scANVI, scvi_knn, SingleR).
+| Workflow | What it does |
+|---|---|
+| [`single_cell/process_integrate_annotate`](../reference/openpipeline_composed/v0.3.0/single_cell/process_integrate_annotate.qmd) | The flagship: process → integrate → annotate in one run. Pick the integration method (Harmony, scVI, Scanorama, BBKNN) and annotation method (CellTypist, harmony_knn, scANVI, scvi_knn, SingleR). |
+| [`single_cell/parallel_integration`](../reference/openpipeline_composed/v0.3.0/single_cell/parallel_integration.qmd) | Run several integration methods on the same cohort and compare them. |
+| [`single_cell/parallel_annotation`](../reference/openpipeline_composed/v0.3.0/single_cell/parallel_annotation.qmd) | Run several annotation methods and combine them by **consensus vote**, more robust than any single method. |
+| [`single_cell/parallel_subtyping`](../reference/openpipeline_composed/v0.3.0/single_cell/parallel_subtyping.qmd) | Resolve fine-grained cell states (subtypes) within annotated clusters. |
+
+## Build a reference atlas
+
+::: {.callout-important}
+Reference-atlas generation is the headline use case for these pipelines. Running
+`process_integrate_annotate` across a large, multi-donor cohort produces **one
+integrated, annotated object** that every later run can consume as the reference
+for [label transfer](annotate.qmd), the annotation methods (`harmony_knn`,
+`scvi_knn`, scANVI/scArches) all map new query cells onto exactly this kind of
+atlas.
+:::
+
+Build the atlas once, reuse it everywhere:
+
+- **Integrate the whole cohort** so donor and batch effects are corrected across
+  every sample that will define the reference.
+- **Annotate it**, ideally combining methods with `parallel_annotation`'s
+  consensus vote for labels you can trust as ground truth.
+- **Refine cell states** with `parallel_subtyping` to resolve fine-grained
+  populations before publishing.
+
+The resulting atlas becomes the fixed reference new datasets are annotated
+against, so every downstream analysis speaks the same set of cell-type labels.
+
+## Example: process_integrate_annotate
 
 ```bash
 nextflow run https://packages.viash-hub.com/vsh/openpipeline_composed.git \
@@ -28,32 +55,9 @@ nextflow run https://packages.viash-hub.com/vsh/openpipeline_composed.git \
   --publish_dir results/
 ```
 
-The package also exposes `parallel_integration`, `parallel_annotation`, and
-`parallel_subtyping` for running a stage several ways at once (e.g. comparing
-integration methods on the same cohort).
-
-## Generate a reference atlas
-
-Running `process_integrate_annotate` across a large, multi-donor cohort is also
-how you build a **reference atlas**: one integrated, annotated object that later
-runs consume as the reference for [label transfer](annotate.qmd). Use
-`parallel_subtyping` to resolve fine-grained cell states within the atlas before
-publishing it.
-
 :::{.callout-note}
 `openpipeline_composed` pins core `openpipeline` plus `openpipeline_qc` and
 biobox. Check the [reference](../reference/index.qmd) (filter by
 `openpipeline_composed`) for the exact argument list, and its Viash Hub page for
 run instructions.
 :::
-
-## Reference
-
-Full parameter listings:
-
-| Workflow / component | Description |
-|---|---|
-| [`single_cell/process_integrate_annotate`](../reference/openpipeline_composed/v0.3.0/single_cell/process_integrate_annotate.qmd) | Turnkey process → integrate → annotate |
-| [`single_cell/parallel_integration`](../reference/openpipeline_composed/v0.3.0/single_cell/parallel_integration.qmd) | Multiple integration methods at once |
-| [`single_cell/parallel_annotation`](../reference/openpipeline_composed/v0.3.0/single_cell/parallel_annotation.qmd) | Multiple annotation methods at once |
-| [`single_cell/parallel_subtyping`](../reference/openpipeline_composed/v0.3.0/single_cell/parallel_subtyping.qmd) | Fine-grained cell-state subtyping |

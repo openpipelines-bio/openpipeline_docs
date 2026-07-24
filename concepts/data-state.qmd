@@ -5,7 +5,7 @@ order: 70
 ---
 
 There are two ways to read the pipeline. The [available
-workflows](architecture.qmd) page walks it **by stage**, the way an analyst
+workflows](../workflows/index.qmd) page walks it **by stage**, the way an analyst
 thinks. This page reads it the way the workflows are **actually built**, the view
 you need if you are writing or wiring components. It covers how the data object is
 organized along **two axes** (samples and modalities), what gets **written into

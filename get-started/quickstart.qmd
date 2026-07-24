@@ -1,0 +1,110 @@
+---
+title: "Quickstart"
+description: "See a full run in ~10 minutes, starting from pre-computed counts."
+order: 1
+---
+
+The fastest way to see OpenPipeline work end to end. This skips the heavy
+alignment step (Cell Ranger) and starts from a **pre-computed count matrix** for a
+small, single PBMC sample: convert it to MuData, process it, cluster it, and read
+the result. It runs in about **10 minutes** on a laptop.
+
+When you're ready for a real run, from raw FASTQ files, two samples, and batch
+correction, do the full [Run your first pipeline](index.qmd) walkthrough. This
+Quickstart is the express lane; that page is the real thing.
+
+::: {.callout-note appearance="simple"}
+**You need Nextflow and Docker.** If you don't have them yet, follow
+[step 1 of the full walkthrough](index.qmd#sec-setup-nextflow-and-docker) to
+install them and point Nextflow at the Viash Hub package registry. The version
+pin (`export NXF_VER=25.10.2`) and one-time `~/.nextflow/scm` setup are the same.
+:::
+
+## 1 · Get the data
+
+One small file: the filtered count matrix for 10x Genomics' public **1k PBMC**
+dataset (~1,000 cells, a few MB).
+
+```bash
+mkdir -p data
+curl -o data/pbmc_1k_v3.h5 \
+  https://cf.10xgenomics.com/samples/cell-exp/3.0.0/pbmc_1k_v3/pbmc_1k_v3_filtered_feature_bc_matrix.h5
+```
+
+This is the Cell Ranger output you would otherwise generate yourself. Starting
+from it lets you skip alignment and reference downloads entirely.
+
+## 2 · Convert to MuData
+
+Every OpenPipeline workflow speaks [MuData](../concepts/mudata.qmd). Convert the
+10x HDF5 file to a `.h5mu` with `convert/from_10xh5_to_h5mu`:
+
+```bash
+nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
+  -r 4.2.0 -latest -profile docker \
+  -main-script target/nextflow/convert/from_10xh5_to_h5mu/main.nf \
+  --id pbmc_1k \
+  --input data/pbmc_1k_v3.h5 \
+  --output pbmc_1k.h5mu \
+  --publish_dir results/
+```
+
+## 3 · Process the sample
+
+`multiomics/process_samples` filters low-quality cells, normalizes, selects
+highly variable genes, and computes a PCA embedding, all in one command:
+
+```bash
+nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
+  -r 4.2.0 -latest -profile docker \
+  -main-script target/nextflow/workflows/multiomics/process_samples/main.nf \
+  --id pbmc_1k \
+  --input results/pbmc_1k.h5mu \
+  --output pbmc_1k_processed.h5mu \
+  --publish_dir results/
+```
+
+## 4 · Cluster and embed
+
+With one sample there's no batch effect to correct, so you can skip integration
+and cluster directly on the PCA embedding. `multiomics/neighbors_leiden_umap`
+builds the neighbor graph, runs Leiden clustering, and computes a UMAP:
+
+```bash
+nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
+  -r 4.2.0 -latest -profile docker \
+  -main-script target/nextflow/workflows/multiomics/neighbors_leiden_umap/main.nf \
+  --id pbmc_1k \
+  --input results/pbmc_1k_processed.h5mu \
+  --obsm_input X_pca \
+  --uns_neighbors neighbors \
+  --obs_cluster leiden \
+  --leiden_resolution 1.0 \
+  --obsm_umap X_umap \
+  --output pbmc_1k_clustered.h5mu \
+  --publish_dir results/
+```
+
+## 5 · Read the output
+
+`results/pbmc_1k_clustered.h5mu` holds the whole result for the `rna` modality:
+
+```
+MuData
+ └─ .mod
+     └─ rna
+         ├─ .layers["log_normalized"]   # normalized, log1p counts
+         ├─ .obsm["X_pca"]              # PCA from process_samples
+         ├─ .obs["leiden_1.0"]          # cluster labels (one column per resolution)
+         └─ .obsm["X_umap"]             # UMAP for plotting
+```
+
+The clusters are just numbers so far. Assigning biological identities to them is
+[cell type annotation](../guides/annotate.qmd), a separate step.
+
+## Where to go next
+
+- **The real run:** [Run your first pipeline](index.qmd), raw FASTQ → Cell Ranger
+  → two samples → batch-corrected, integrated object.
+- **Pick individual tasks:** the [task guides](../guides/index.qmd).
+- **Understand the design:** [How it works](../concepts/index.qmd).

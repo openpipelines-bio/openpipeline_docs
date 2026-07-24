@@ -26,7 +26,7 @@ anchor-sections: false
   <div class="wrap">
     <div id="op-flow"></div>
     <div class="cta-row flow-cta">
-      <a class="btn primary" href="concepts/architecture.html">▸ Full workflow overview</a>
+      <a class="btn primary" href="workflows/index.html">▸ Full workflow overview</a>
     </div>
   </div>
 

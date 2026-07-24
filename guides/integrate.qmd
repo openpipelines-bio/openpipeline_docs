@@ -1,5 +1,5 @@
 ---
-title: "Integration"
+title: "Integrate across samples"
 description: "Batch-correct across samples, then cluster and embed."
 categories: [openpipeline]
 order: 40
@@ -8,7 +8,7 @@ order: 40
 [`openpipeline`]{.pkg-tag .pkg-openpipeline}<span class="swatch openpipeline"></span>
 
 Integration is a **separate workflow** run after
-[sample processing](process-filter.qmd). Samples from different donors, runs, or
+[sample processing](process-samples.qmd). Samples from different donors, runs, or
 preparations otherwise cluster by technical origin rather than biology; batch
 correction realigns them, then clusters and embeds the result. Each method is its
 own workflow running the same downstream chain.

@@ -22,7 +22,7 @@ dependency and adds to it rather than forking it.
 
 ## How the packages relate
 
-Every package plugs into the same [pipeline architecture](architecture.qmd):
+Every package plugs into the same [pipeline architecture](../workflows/index.qmd):
 
 - **`openpipeline`** defines all stages, ingestion, QC, processing, integration,
   and downstream, for the RNA, protein, ATAC, VDJ, and GDO modalities.

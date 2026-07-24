@@ -1,5 +1,5 @@
 ---
-title: "Cell-cell communication"
+title: "Infer cell-cell communication"
 description: "Ligand-receptor interaction inference between cell types (LIANA)."
 categories: [openpipeline]
 order: 60

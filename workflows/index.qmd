@@ -54,7 +54,9 @@ This per-sample H5MU is the unit that flows through all subsequent steps. The
 right ingestion workflow depends on your sequencing platform and library type.
 
 ::: {.callout-tip appearance="simple"}
-**Guide:** [Ingestion](../guides/ingest-10x.qmd): workflow selection, reference genome setup, and examples.
+**Guides:** [Ingestion](../guides/ingest-10x.qmd) covers workflow selection,
+reference genome setup, and examples; [Spatial ingestion](../guides/ingest-spatial.qmd)
+covers the spatial platforms.
 :::
 
 | Workflow / component | Package | Description |
@@ -76,7 +78,7 @@ If your data is already quantified but stored in another format (AnnData, Seurat
 
 | Component | Package | Converts |
 |---|---|---|
-| [`convert/from_10xh5_to_h5mu`](../reference/openpipeline/v4.2.0/convert/from_10xh5_to_h5mu.qmd) | [<span class="swatch openpipeline"></span>`openpipeline`]{.pkg-tag .pkg-openpipeline} | 10x HDF5 → H5MU |
+| [`convert/from_cellranger_multi_to_h5mu`](../reference/openpipeline/v4.2.0/convert/from_cellranger_multi_to_h5mu.qmd) | [<span class="swatch openpipeline"></span>`openpipeline`]{.pkg-tag .pkg-openpipeline} | Cell Ranger `multi` output → H5MU (preferred: keeps full metadata) |
 | [`convert/from_10xmtx_to_h5mu`](../reference/openpipeline/v4.2.0/convert/from_10xmtx_to_h5mu.qmd) | [<span class="swatch openpipeline"></span>`openpipeline`]{.pkg-tag .pkg-openpipeline} | 10x MEX (MTX) → H5MU |
 | [`convert/from_h5ad_to_h5mu`](../reference/openpipeline/v4.2.0/convert/from_h5ad_to_h5mu.qmd) | [<span class="swatch openpipeline"></span>`openpipeline`]{.pkg-tag .pkg-openpipeline} | AnnData (.h5ad) → H5MU |
 | [`convert/from_seurat_to_h5mu`](../reference/openpipeline/v4.2.0/convert/from_seurat_to_h5mu.qmd) | [<span class="swatch openpipeline"></span>`openpipeline`]{.pkg-tag .pkg-openpipeline} | Seurat → H5MU |
@@ -88,9 +90,14 @@ results back out to other ecosystems.
 
 ## QC report
 
-A QC report computes the key QC metrics up front (counts, detected features,
-mitochondrial and ribosomal fractions, doublet scores) so you can choose sensible
-filtering thresholds. A spatial-specific version is available too.
+A QC report computes the key QC metrics up front (counts, detected features, and
+mitochondrial and ribosomal fractions) so you can choose sensible filtering
+thresholds. A spatial-specific version is available too.
+
+::: {.callout-tip appearance="simple"}
+**Guides:** [QC report](../guides/qc-report.qmd) and
+[Spatial QC report](../guides/qc-report-spatial.qmd).
+:::
 
 | Workflow | Package | Description |
 |---|---|---|
@@ -112,44 +119,15 @@ directly:
 | [`multiomics/spatial_process_samples`](../reference/openpipeline_spatial/v0.5.0/workflows/multiomics/spatial_process_samples.qmd) | [<span class="swatch openpipeline_spatial"></span>`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial} | End-to-end processing for spatial data |
 | [`correction/cellbender_remove_background`](../reference/openpipeline/v4.2.0/correction/cellbender_remove_background.qmd) | [<span class="swatch openpipeline"></span>`openpipeline`]{.pkg-tag .pkg-openpipeline} | Optional stand-alone step: remove ambient RNA from raw counts |
 
-### Single-sample processing
-
-Each sample is split by modality and filtered on its own distribution, before any
-cross-sample step. Low-quality barcodes, empty or ambient-RNA droplets, and
-damaged cells are flagged and removed using one or more strategies:
-
-- **Count-based filtering**: drop barcodes whose total counts or number of
-  detected features fall outside a defined range.
-- **Quantile-based filtering**: derive the thresholds from the data's own
-  distribution (e.g. trimming the extreme percentiles) rather than fixed cutoffs.
-- **Feature-based filtering**: keep or drop cells based on specific features or
-  feature sets.
-- **Mitochondrial and/or ribosomal fraction filtering**: remove cells with a high
-  fraction of counts in mitochondrial or ribosomal genes, a hallmark of damaged
-  cells.
-- **Doublet detection (Scrublet)**: flag likely doublet cells for removal, for
-  droplet-based RNA count data only.
-
-### Multi-sample processing
-
-After per-sample filtering, samples are **concatenated together**, not normalized
-per sample, because normalization needs to see variation across the full cohort.
-A `sample_id` column is added to `.obs` to record each cell's origin; conflicting
-metadata columns are moved to `.obsm` or `.varm` for inspection.
-
-The concatenated object then goes through:
-
-1. **Log-normalization**: each cell's counts are normalized by library size (the
-   median total count across cells by default), or a chosen target sum, then
-   log1p transformed.
-2. **Scaling** (optional): features are scaled to unit variance and zero mean.
-3. **Highly variable genes (HVG) selection**: the most variable genes are
-   identified and retained for downstream steps.
-4. **PCA**: a principal-component embedding is computed.
-
-::: {.callout-tip appearance="simple"}
-**Guide:** [Sample processing](../guides/process-filter.qmd): full details and examples.
-:::
+`process_samples` runs the whole chain in one command. Each sample is first
+filtered on its own distribution (count, quantile, feature, and
+mitochondrial/ribosomal thresholds, plus Scrublet doublet detection); all samples
+are then concatenated and processed together, normalization, highly variable gene
+selection, and PCA, because those cohort steps need to see the full range of
+variation across samples. The [Sample processing](../guides/process-samples.qmd)
+and [Spatial sample processing](../guides/process-spatial.qmd) guides cover the
+filtering strategies, the per-sample-then-cohort sequence, and threshold choices
+in detail.
 
 :::{.callout-note}
 ATAC data is carried through `process_samples` without dedicated QC or
@@ -218,3 +196,10 @@ downstream analyses, available as OpenPipeline workflows or components:
 | [`velocity/scvelo`](../reference/openpipeline/v4.2.0/velocity/scvelo.qmd) | [<span class="swatch openpipeline"></span>`openpipeline`]{.pkg-tag .pkg-openpipeline} | RNA velocity (scVelo) |
 | [`interpret/lianapy`](../reference/openpipeline/v4.2.0/interpret/lianapy.qmd) | [<span class="swatch openpipeline"></span>`openpipeline`]{.pkg-tag .pkg-openpipeline} | Cell-cell communication (LIANA) |
 | [`differential_expression/pseudobulk_deseq2`](../reference/openpipeline/v4.2.0/workflows/differential_expression/pseudobulk_deseq2.qmd) | [<span class="swatch openpipeline"></span>`openpipeline`]{.pkg-tag .pkg-openpipeline} | Pseudobulk differential expression (DESeq2) |
+
+::: {.callout-tip appearance="simple"}
+**Guides:** [Differential expression](../guides/differential-expression.qmd),
+[RNA velocity](../guides/rna-velocity.qmd),
+[Cell-cell communication](../guides/cell-cell-communication.qmd), and
+[Spatial niches](../guides/spatial-niches.qmd).
+:::

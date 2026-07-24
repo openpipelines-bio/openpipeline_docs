@@ -63,7 +63,7 @@ neighbor-graph construction, UMAP, and Leiden clustering, the
 GPU-accelerated drop-in replacements via
 [rapids-singlecell](https://rapids-singlecell.readthedocs.io/). It pins the core
 `openpipeline` as a Viash dependency, so the pattern will be the same standard
-[processing](process-filter.qmd) and [integration](integrate.qmd) flow with the
+[processing](process-samples.qmd) and [integration](integrate.qmd) flow with the
 accelerated components scheduled onto a GPU.
 
 GPU acceleration pays off on large cohorts (hundreds of thousands of cells and

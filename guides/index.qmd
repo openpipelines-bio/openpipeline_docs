@@ -31,73 +31,73 @@ one run end to end.
 
   <a class="rcard link" href="ingest-10x.html" data-pkgs="openpipeline">
     <div class="tag"><span class="swatch" style="background:var(--core)"></span>openpipeline</div>
-    <h3>Ingestion</h3>
-    <p>FASTQ or raw counts → MuData with Cell Ranger.</p>
+    <h3>Ingest data</h3>
+    <p>FASTQ or existing counts → MuData (Cell Ranger, BD Rhapsody).</p>
   </a>
 
   <a class="rcard link" href="ingest-spatial.html" data-pkgs="openpipeline_spatial">
     <div class="tag"><span class="swatch" style="background:var(--spatial)"></span>openpipeline_spatial</div>
-    <h3>Spatial ingestion</h3>
+    <h3>Ingest spatial data</h3>
     <p>Space Ranger mapping and spatial ingestion.</p>
   </a>
 
   <a class="rcard link" href="qc-report.html" data-pkgs="openpipeline_qc">
     <div class="tag"><span class="swatch" style="background:var(--qc)"></span>openpipeline_qc</div>
-    <h3>QC report generation</h3>
+    <h3>Generate a QC report</h3>
     <p>Standalone quality-control report.</p>
   </a>
 
   <a class="rcard link" href="qc-report-spatial.html" data-pkgs="openpipeline_qc">
     <div class="tag"><span class="swatch" style="background:var(--qc)"></span>openpipeline_qc</div>
-    <h3>Spatial QC report generation</h3>
+    <h3>Generate a spatial QC report</h3>
     <p>The same QC report, with a spatial ingestion method.</p>
   </a>
 
-  <a class="rcard link" href="process-filter.html" data-pkgs="openpipeline">
+  <a class="rcard link" href="process-samples.html" data-pkgs="openpipeline">
     <div class="tag"><span class="swatch" style="background:var(--core)"></span>openpipeline</div>
-    <h3>Sample processing</h3>
+    <h3>Process samples</h3>
     <p>Cell filtering, doublets, normalization, and highly variable features.</p>
   </a>
 
   <a class="rcard link" href="process-spatial.html" data-pkgs="openpipeline_spatial">
     <div class="tag"><span class="swatch" style="background:var(--spatial)"></span>openpipeline_spatial</div>
-    <h3>Spatial sample processing</h3>
+    <h3>Process spatial samples</h3>
     <p>Processing adapted for spatial data, coordinates kept intact.</p>
   </a>
 
   <a class="rcard link" href="integrate.html" data-pkgs="openpipeline">
     <div class="tag"><span class="swatch" style="background:var(--core)"></span>openpipeline</div>
-    <h3>Integration</h3>
+    <h3>Integrate across samples</h3>
     <p>Batch-correct and cluster across samples.</p>
   </a>
 
   <a class="rcard link" href="annotate.html" data-pkgs="openpipeline">
     <div class="tag"><span class="swatch" style="background:var(--core)"></span>openpipeline</div>
-    <h3>Cell type annotation</h3>
+    <h3>Annotate cell types</h3>
     <p>CellTypist, scANVI, KNN label transfer.</p>
   </a>
 
   <a class="rcard link" href="differential-expression.html" data-pkgs="openpipeline">
     <div class="tag"><span class="swatch" style="background:var(--core)"></span>openpipeline</div>
-    <h3>Differential expression</h3>
+    <h3>Run differential expression</h3>
     <p>Pseudobulk DESeq2 across conditions.</p>
   </a>
 
   <a class="rcard link" href="rna-velocity.html" data-pkgs="openpipeline">
     <div class="tag"><span class="swatch" style="background:var(--core)"></span>openpipeline</div>
-    <h3>RNA velocity</h3>
+    <h3>Estimate RNA velocity</h3>
     <p>Directional cell-state dynamics with scVelo.</p>
   </a>
 
   <a class="rcard link" href="cell-cell-communication.html" data-pkgs="openpipeline">
     <div class="tag"><span class="swatch" style="background:var(--core)"></span>openpipeline</div>
-    <h3>Cell-cell communication</h3>
+    <h3>Infer cell-cell communication</h3>
     <p>Ligand-receptor inference with LIANA.</p>
   </a>
 
   <a class="rcard link" href="spatial-niches.html" data-pkgs="openpipeline_spatial">
     <div class="tag"><span class="swatch" style="background:var(--spatial)"></span>openpipeline_spatial</div>
-    <h3>Spatial niche identification</h3>
+    <h3>Identify spatial niches</h3>
     <p>NicheCompass niche identification.</p>
   </a>
 

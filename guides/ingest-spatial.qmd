@@ -1,5 +1,5 @@
 ---
-title: "Spatial ingestion"
+title: "Ingest spatial data"
 description: "From spatial platform output to a spatial H5MU with coordinates."
 categories: [openpipeline_spatial]
 order: 15
@@ -27,28 +27,32 @@ imaging-based platforms are converted from the vendor's output:
 | [`convert/from_cells2stats_to_h5mu`](../reference/openpipeline_spatial/v0.5.0/convert/from_cells2stats_to_h5mu.qmd) | Element AVITI (cells2stats) |
 | [`convert/from_spatialdata_to_h5mu`](../reference/openpipeline_spatial/v0.5.0/convert/from_spatialdata_to_h5mu.qmd) | you already have a SpatialData object |
 
-The [Available workflows](../concepts/architecture.qmd) page shows these in
+The [Available workflows](../workflows/index.qmd) page shows these in
 pipeline context.
 
-## Example: Xenium → H5MU
+## Example: Visium with Space Ranger
 
-For example, to convert 10x Xenium output bundles, `convert/from_xenium_to_h5mu`
-takes a `param_list` pointing at each sample's Xenium output directory:
+For example, to map Visium FASTQs, `ingestion/spaceranger_mapping` takes a
+`param_list` with each sample's reads, tissue image, and slide/area; the
+reference and probe set are shared across samples:
 
 ```yaml
 # params.yaml
 param_list:
   - id: sample_A
-    input: xenium/sample_A_outs/
-  - id: sample_B
-    input: xenium/sample_B_outs/
+    input: fastq/sample_A/*_R*.fastq.gz
+    image: images/sample_A.tif
+    slide: V10J25-015
+    area: A1
+gex_reference: reference_gex/
+probe_set: Visium_Human_Transcriptome_Probe_Set_v2.0_GRCh38-2020-A.csv
 publish_dir: results/ingestion
 ```
 
 ```bash
 nextflow run https://packages.viash-hub.com/vsh/openpipeline_spatial.git \
   -r v0.5.0 -latest -profile docker \
-  -main-script target/nextflow/convert/from_xenium_to_h5mu/main.nf \
+  -main-script target/nextflow/workflows/ingestion/spaceranger_mapping/main.nf \
   -params-file params.yaml
 ```
 

@@ -1,5 +1,5 @@
 ---
-title: "QC report generation"
+title: "Generate a QC report"
 description: "A standalone HTML quality-control report to choose filter thresholds."
 categories: [openpipeline_qc]
 order: 20
@@ -8,46 +8,56 @@ order: 20
 [`openpipeline_qc`]{.pkg-tag .pkg-openpipeline_qc}<span class="swatch openpipeline_qc"></span>
 
 The **`openpipeline_qc`** package renders a standalone HTML quality-control report
-from an [ingested](ingest-10x.qmd) `.h5mu`, count and feature distributions,
-mitochondrial and ribosomal fractions, and doublet scores, so you can pick
-sensible cutoffs before [sample processing](process-filter.qmd).
+from an [ingested](ingest-10x.qmd) `.h5mu`, count and feature distributions and
+mitochondrial and ribosomal fractions, so you can pick sensible cutoffs before
+[sample processing](process-samples.qmd).
 
 ## Options
 
 | Workflow | Use when |
 |---|---|
-| [`generate_qc_report`](../reference/openpipeline_qc/v0.3.0/workflows/generate_qc_report.qmd) | Any ingested `.h5mu`; auto-detects the ingestion method |
+| [`generate_qc_report`](../reference/openpipeline_qc/v0.3.0/workflows/generate_qc_report.qmd) | Any ingested `.h5mu`; you name the ingestion method the data came from |
 
-For spatial data, the same workflow takes an explicit ingestion method, see
+For spatial data, use the spatial ingestion methods, see
 [Spatial QC report generation](qc-report-spatial.qmd).
 
 ## Example: report for a cohort
 
-For example, to render a report for one ingested object:
+For example, to render one report across two ingested samples, list both inputs
+and name the ingestion method they came from (`cellranger_multi` here):
+
+```yaml
+# params.yaml
+id: cohort_01
+input:
+  - results/ingestion/sample_A.h5mu
+  - results/ingestion/sample_B.h5mu
+ingestion_method: cellranger_multi
+output_qc_report: qc_report.html
+publish_dir: results/
+```
 
 ```bash
 nextflow run https://packages.viash-hub.com/vsh/openpipeline_qc.git \
   -r v0.3.0 -latest -profile docker \
   -main-script target/nextflow/workflows/generate_qc_report/main.nf \
-  --id cohort_01 \
-  --input cohort_01.h5mu \
-  --output qc_report.html \
-  --publish_dir results/
+  -params-file params.yaml
 ```
 
 ## Key choices
 
-- **Ingestion method** is auto-detected for single-cell data; for spatial input
-  you set it explicitly (see the spatial guide).
+- **Ingestion method** is required: name the method the data came from
+  (`cellranger_multi`, `cellranger`, `bd_rhapsody`, ...); for spatial input see
+  the spatial guide.
 - The package also exposes `ingestion_qc/detect_ingestion_method` and
   `ingestion_qc/generate_html` as separate components if you want to compute
   metrics and render as distinct steps.
 - Read the report to choose the `rna_min_counts` / `rna_max_counts` /
   `max_fraction_mito` thresholds you'll pass to
-  [sample processing](process-filter.qmd).
+  [sample processing](process-samples.qmd).
 
 ## Output
 
 A self-contained `qc_report.html` you open in a browser. It doesn't modify the
 data, it informs the thresholds you set next in
-[sample processing](process-filter.qmd).
+[sample processing](process-samples.qmd).

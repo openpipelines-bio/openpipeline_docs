@@ -13,7 +13,24 @@ This walkthrough uses **local Nextflow**. The exact same workflows run on Seqera
 (`tw launch`) or through the Viash Hub web form, see the
 [execution guides](../guides/index.qmd) for those routes.
 
-## 1 · Set up Nextflow and Docker
+::: {.callout-note appearance="simple"}
+**Before you start**
+
+- **Prerequisites:** a Unix-like shell (macOS, Linux, or WSL2 on Windows). No
+  prior Nextflow or single-cell experience needed, every command is here.
+- **Hardware:** Cell Ranger (step 3) is the heavy step. Budget **~32 GB RAM**,
+  **~8 CPU cores**, and **~50 GB free disk** for the downloads plus Cell Ranger's
+  intermediate files.
+- **Time:** roughly **2–4 hours** end to end on a laptop, almost all of it in Cell
+  Ranger mapping. The processing, integration, and read-output steps are minutes each.
+- **What you'll have at the end:** one batch-corrected, Leiden-clustered `.h5mu`
+  object with a UMAP, built from two public PBMC samples.
+
+Just want to see the shape of a run first? The [Quickstart](quickstart.qmd) skips
+Cell Ranger and takes about 10 minutes on pre-computed counts.
+:::
+
+## 1 · Set up Nextflow and Docker {#sec-setup-nextflow-and-docker}
 
 Everything else ships inside containers, so this is all you install: a Java
 runtime (Nextflow needs it), Nextflow, and Docker.
@@ -91,25 +108,24 @@ EOM
 
 ## 2 · Get the data
 
-The run uses two public 10x Genomics PBMC datasets (5' gene expression + VDJ +
-antibody capture). Each 10x dataset page lists ready-made `curl` commands; the
-loops below fetch both datasets' libraries and unpack them into a local `data/`
-folder:
+The run uses two public 10x Genomics PBMC datasets, each with 5' gene expression
+and VDJ (T- and B-cell) libraries. Each 10x dataset page lists ready-made `curl`
+commands; the loops below fetch both datasets' libraries and unpack them into a
+local `data/` folder:
 
 ```bash
 mkdir -p data && cd data
 
 # Dataset 1 — Human PBMC, 10k cells, 5' v2
 base1="https://cf.10xgenomics.com/samples/cell-vdj/5.0.0/sc5p_v2_hs_PBMC_10k"
-for lib in 5gex t b 5fb; do
+for lib in 5gex t b; do
   curl -O "${base1}/sc5p_v2_hs_PBMC_10k_${lib}_fastqs.tar"
   tar -xf "sc5p_v2_hs_PBMC_10k_${lib}_fastqs.tar"
 done
 
-# Dataset 2 — Human PBMC, 10k cells, TotalSeq-C, 5' GEM-X
-# (confirm the download URL on the dataset page)
+# Dataset 2 — Human PBMC, 10k cells, 5' GEM-X
 base2="https://cf.10xgenomics.com/samples/cell-exp/9.0.0/10k_Human_PBMC_TotalSeqC_5p_gemx"
-for lib in gex tcr ig ab; do
+for lib in gex tcr ig; do
   curl -O "${base2}/10k_Human_PBMC_TotalSeqC_5p_gemx_${lib}_fastqs.tar"
   tar -xf "10k_Human_PBMC_TotalSeqC_5p_gemx_${lib}_fastqs.tar"
 done
@@ -117,9 +133,8 @@ done
 cd ..
 ```
 
-The transcriptome, VDJ, and antibody **feature reference** (TotalSeq-C panel) are
-all fetched automatically from URLs in the `param_list` below, so FASTQs are the
-only thing you download by hand.
+The transcriptome and VDJ **references** are fetched automatically from URLs in the
+`param_list` below, so FASTQs are the only thing you download by hand.
 
 After both downloads, `data/` holds one folder per library:
 
@@ -128,11 +143,9 @@ data/
 ├── sc5p_v2_hs_PBMC_10k_5gex_fastqs/                # sample 1 · Gene Expression
 ├── sc5p_v2_hs_PBMC_10k_t_fastqs/                   # sample 1 · VDJ-T
 ├── sc5p_v2_hs_PBMC_10k_b_fastqs/                   # sample 1 · VDJ-B
-├── sc5p_v2_hs_PBMC_10k_5fb_fastqs/                 # sample 1 · Antibody Capture
 ├── 10k_Human_PBMC_TotalSeqC_5p_gemx_gex_fastqs/    # sample 2 · Gene Expression
 ├── 10k_Human_PBMC_TotalSeqC_5p_gemx_tcr_fastqs/    # sample 2 · VDJ-T
-├── 10k_Human_PBMC_TotalSeqC_5p_gemx_ig_fastqs/     # sample 2 · VDJ-B
-└── 10k_Human_PBMC_TotalSeqC_5p_gemx_ab_fastqs/     # sample 2 · Antibody Capture
+└── 10k_Human_PBMC_TotalSeqC_5p_gemx_ig_fastqs/     # sample 2 · VDJ-B
 ```
 
 Each folder holds that library's `*_R1_*.fastq.gz` / `*_R2_*.fastq.gz` files.
@@ -141,8 +154,8 @@ Each folder holds that library's `*_R1_*.fastq.gz` / `*_R2_*.fastq.gz` files.
 
 `ingestion/cellranger_multi` aligns each library and writes one `.h5mu` per
 sample; under the hood OpenPipeline 4.2.0 runs
-[Cell Ranger `multi`](https://www.10xgenomics.com/support/software/cell-ranger/latest/analysis/running-pipelines/cr-5p-multi)
-10. Describe the samples and their libraries in a `param_list`
+[Cell Ranger `multi`](https://www.10xgenomics.com/support/software/cell-ranger/latest/analysis/running-pipelines/cr-5p-multi).
+Describe the samples and their libraries in a `param_list`
 (`params_cellranger.yaml`):
 
 ```yaml
@@ -153,18 +166,15 @@ param_list:
       - data/sc5p_v2_hs_PBMC_10k_5gex_fastqs/*_R*.fastq.gz
       - data/sc5p_v2_hs_PBMC_10k_t_fastqs/*_R*.fastq.gz
       - data/sc5p_v2_hs_PBMC_10k_b_fastqs/*_R*.fastq.gz
-      - data/sc5p_v2_hs_PBMC_10k_5fb_fastqs/*_R*.fastq.gz
-    library_id: [PBMC_10k_5gex, PBMC_10k_t, PBMC_10k_b, PBMC_10k_5fb]
-    library_type: [Gene Expression, VDJ-T, VDJ-B, Antibody Capture]
+    library_id: [PBMC_10k_5gex, PBMC_10k_t, PBMC_10k_b]
+    library_type: [Gene Expression, VDJ-T, VDJ-B]
   - id: 10k_Human_PBMC_TotalSeqC_5p_gemx
     input:
       - data/10k_Human_PBMC_TotalSeqC_5p_gemx_gex_fastqs/*_R*.fastq.gz
       - data/10k_Human_PBMC_TotalSeqC_5p_gemx_tcr_fastqs/*_R*.fastq.gz
       - data/10k_Human_PBMC_TotalSeqC_5p_gemx_ig_fastqs/*_R*.fastq.gz
-      - data/10k_Human_PBMC_TotalSeqC_5p_gemx_ab_fastqs/*_R*.fastq.gz
-    library_id: [TotalSeqC_gex, TotalSeqC_tcr, TotalSeqC_ig, TotalSeqC_ab]
-    library_type: [Gene Expression, VDJ-T, VDJ-B, Antibody Capture]
-feature_reference: "<TotalSeq-C feature-reference CSV URL, from the dataset page>"
+    library_id: [TotalSeqC_gex, TotalSeqC_tcr, TotalSeqC_ig]
+    library_type: [Gene Expression, VDJ-T, VDJ-B]
 gex_reference: https://cf.10xgenomics.com/supp/cell-exp/refdata-gex-GRCh38-2020-A.tar.gz
 vdj_reference: https://cf.10xgenomics.com/supp/cell-vdj/refdata-cellranger-vdj-GRCh38-alts-ensembl-7.0.0.tar.gz
 publish_dir: results/ingestion

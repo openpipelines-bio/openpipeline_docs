@@ -1,5 +1,5 @@
 ---
-title: "Sample processing"
+title: "Process samples"
 description: "Per-sample QC and filtering, then cohort normalization and PCA."
 categories: [openpipeline]
 order: 30
@@ -45,6 +45,35 @@ nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
   -main-script target/nextflow/workflows/multiomics/process_samples/main.nf \
   -params-file params.yaml
 ```
+
+## How it works
+
+`process_samples` runs in two phases.
+
+**Per sample, before concatenation.** Each sample is split by modality and
+filtered on its own distribution, so one noisy sample can't skew another's
+thresholds. Combine filtering strategies as needed:
+
+- **Count-based**: drop barcodes whose total counts or number of detected
+  features fall outside a defined range.
+- **Quantile-based**: derive thresholds from the data's own distribution (e.g.
+  trimming extreme percentiles) rather than fixed cutoffs.
+- **Feature-based**: keep or drop cells based on specific features or feature sets.
+- **Mitochondrial / ribosomal fraction**: remove cells with a high fraction of
+  counts in mitochondrial or ribosomal genes, a hallmark of damaged cells.
+- **Doublet detection (Scrublet)**: flag likely doublet cells, droplet-based RNA
+  count data only.
+
+**Across the cohort, after concatenation.** Samples are concatenated (a
+`sample_id` column records each cell's origin; conflicting metadata columns move
+to `.obsm` / `.varm`), then processed together, because normalization needs to
+see variation across the full cohort:
+
+1. **Log-normalization** by library size (median total count by default, or a
+   chosen target sum), then log1p.
+2. **Scaling** (optional) to unit variance and zero mean.
+3. **Highly variable gene (HVG) selection**.
+4. **PCA**.
 
 ## Key choices
 

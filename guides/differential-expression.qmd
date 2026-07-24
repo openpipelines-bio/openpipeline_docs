@@ -1,5 +1,5 @@
 ---
-title: "Differential expression"
+title: "Run differential expression"
 description: "Pseudobulk differential expression across conditions with DESeq2."
 categories: [openpipeline]
 order: 50

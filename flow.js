@@ -1,5 +1,5 @@
 // Single-cell / spatial pipeline flow widget.
-// Shared by the landing page and the architecture concept page.
+// Shared by the landing page and the workflows overview page.
 // Injects itself into #op-flow. Set window.FLOW_BASE to the site-root-relative
 // prefix (e.g. '../') on pages below the site root so the 'all →' links resolve.
 (function () {
@@ -75,7 +75,7 @@
       '</div>';
   }
 
-  // Detailed variant (architecture page): surface the two optional stages that
+  // Detailed variant (workflows page): surface the two optional stages that
   // the landing overview intentionally leaves out.
   if (detailed) {
     var demux = {

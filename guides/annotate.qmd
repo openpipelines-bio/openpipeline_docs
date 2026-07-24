@@ -1,5 +1,5 @@
 ---
-title: "Cell type annotation"
+title: "Annotate cell types"
 description: "Assign biological cell-type labels to clusters or cells."
 categories: [openpipeline]
 order: 45

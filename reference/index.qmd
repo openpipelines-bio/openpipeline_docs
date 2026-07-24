@@ -27,6 +27,12 @@ listing:
     sort-ui: false
 ---
 
+::: {.callout-note appearance="simple"}
+`openpipeline_rapids` (GPU-accelerated components) is part of the ecosystem, but
+its reference pages are not generated yet, so it does not appear in the filter
+below. See [Speed up with GPUs](../guides/gpu.qmd) for what is available today.
+:::
+
 ```{=html}
 <div class="ref-facets">
   <div class="facet-bar" data-facet="package"><span class="lbl">Package</span></div>

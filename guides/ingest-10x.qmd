@@ -1,5 +1,5 @@
 ---
-title: "Ingestion"
+title: "Ingest data"
 description: "From raw sequencing output to a per-sample count matrix (H5MU)."
 categories: [openpipeline]
 order: 10
@@ -10,27 +10,33 @@ order: 10
 Ingestion turns the raw output of a sequencing run into a per-sample **count
 matrix** stored as an `.h5mu` file: reads are aligned to a reference, assigned to
 cells by barcode, and counted once per molecule by UMI. That object is the input
-to [sample processing](process-filter.qmd).
+to [sample processing](process-samples.qmd).
 
-## Options
+## Overview
 
-Pick by what your provider delivered and the platform. The full set:
+Ingestion is at most three steps; run only the ones you need:
 
-| Workflow / technology | Use when |
+1. **Demultiplex, only if you start from raw Illumina BCL.** `ingestion/demux`
+   turns BCL into per-sample FASTQs. Skip it if your provider already delivered
+   FASTQs.
+2. **Build a reference, if you don't have one.** `ingestion/make_reference`
+   builds the genome index the mapper needs. Skip it if you already have a
+   pre-built reference.
+3. **Map.** Pick the mapper for your platform:
+   - **10x Genomics:** `ingestion/cellranger_mapping` (gene expression only) or
+     `ingestion/cellranger_multi` (multiple libraries: GEX + VDJ + ADT/HTO).
+   - **BD Rhapsody:** `ingestion/bd_rhapsody`.
+
+| Workflow | Use when |
 |---|---|
+| [`ingestion/demux`](../reference/openpipeline/v4.2.0/workflows/ingestion/demux.qmd) | Starting from raw Illumina BCL files (run first) |
+| [`ingestion/make_reference`](../reference/openpipeline/v4.2.0/workflows/ingestion/make_reference.qmd) | Building the reference genome index the mapper needs |
 | [`ingestion/cellranger_mapping`](../reference/openpipeline/v4.2.0/workflows/ingestion/cellranger_mapping.qmd) | 10x, gene expression only |
 | [`ingestion/cellranger_multi`](../reference/openpipeline/v4.2.0/workflows/ingestion/cellranger_multi.qmd) | 10x, multiple libraries (GEX + VDJ + ADT/HTO) |
 | [`ingestion/bd_rhapsody`](../reference/openpipeline/v4.2.0/workflows/ingestion/bd_rhapsody.qmd) | BD Rhapsody data |
-| [`ingestion/demux`](../reference/openpipeline/v4.2.0/workflows/ingestion/demux.qmd) | starting from raw Illumina BCL files (run first, then a mapping workflow) |
-| [`ingestion/make_reference`](../reference/openpipeline/v4.2.0/workflows/ingestion/make_reference.qmd) | building the reference genome index that mapping needs |
-| [`convert/from_10xh5_to_h5mu`](../reference/openpipeline/v4.2.0/convert/from_10xh5_to_h5mu.qmd) | you already have a Cell Ranger `.h5` matrix |
-| [`convert/from_10xmtx_to_h5mu`](../reference/openpipeline/v4.2.0/convert/from_10xmtx_to_h5mu.qmd) | you already have a 10x MEX (`.mtx`) matrix |
-| [`convert/from_h5ad_to_h5mu`](../reference/openpipeline/v4.2.0/convert/from_h5ad_to_h5mu.qmd) | you already have an AnnData `.h5ad` |
-| [`convert/from_seurat_to_h5mu`](../reference/openpipeline/v4.2.0/convert/from_seurat_to_h5mu.qmd) | you already have a Seurat object |
-| [`convert/from_tiledb_to_h5mu`](../reference/openpipeline/v4.2.0/convert/from_tiledb_to_h5mu.qmd) | you already have a TileDB store |
 
-Not sure which fits? The [Available workflows](../concepts/architecture.qmd) page
-shows all of these in pipeline context.
+Not sure which fits? The [Available workflows](../workflows/index.qmd) page shows
+these in pipeline context.
 
 ## Example: 10x multi-library mapping
 
@@ -61,15 +67,33 @@ nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
   -params-file params.yaml
 ```
 
+## Already have a count matrix?
+
+If your data is already quantified but not in `.h5mu`, convert it, no mapping
+needed:
+
+| Format you have | Convert with |
+|---|---|
+| Cell Ranger `multi` output | [`convert/from_cellranger_multi_to_h5mu`](../reference/openpipeline/v4.2.0/convert/from_cellranger_multi_to_h5mu.qmd) |
+| 10x MEX (`.mtx`) | [`convert/from_10xmtx_to_h5mu`](../reference/openpipeline/v4.2.0/convert/from_10xmtx_to_h5mu.qmd) |
+| AnnData (`.h5ad`) | [`convert/from_h5ad_to_h5mu`](../reference/openpipeline/v4.2.0/convert/from_h5ad_to_h5mu.qmd) |
+| Seurat | [`convert/from_seurat_to_h5mu`](../reference/openpipeline/v4.2.0/convert/from_seurat_to_h5mu.qmd) |
+| TileDB | [`convert/from_tiledb_to_h5mu`](../reference/openpipeline/v4.2.0/convert/from_tiledb_to_h5mu.qmd) |
+
+::: {.callout-tip}
+For Cell Ranger data, convert from the **full output directory**
+(`from_cellranger_multi_to_h5mu`), not a bare `.h5` matrix. The full output
+carries the cell and feature metadata (feature types, per-sample metrics) that a
+standalone `.h5` drops, so downstream steps annotate correctly.
+:::
+
 ## Key choices
 
-- **Which workflow** depends on platform and library type, see the table above.
+- **Which mapper** depends on platform and library type, see the overview table.
 - **Reference genome:** build one with `ingestion/make_reference`, or point at a
-  pre-built 10x reference directly.
+  pre-built reference directly.
 - **A whole cohort in one run:** pass a [`param_list`](process-many-samples.qmd)
   with one entry per sample.
-- **Starting from BCL files:** run `ingestion/demux` first to get per-sample
-  FASTQs, then a mapping workflow.
 
 ## Output
 
@@ -86,7 +110,7 @@ the libraries:
 
 Raw counts sit in `.X`, cell metadata in `.obs`, feature metadata in `.var`. No
 filtering has been applied yet, the matrix holds both real cells and empty
-droplets. Next: [sample processing](process-filter.qmd).
+droplets. Next: [sample processing](process-samples.qmd).
 
 :::{.callout-tip}
 The multimodal object and its slots (`.X`, `.obs`, `.var`, `.obsm`, `.mod`) are
