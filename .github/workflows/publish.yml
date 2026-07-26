@@ -32,9 +32,6 @@ jobs:
 
       - name: Render site
         run: quarto render
-        env:
-          # Used by scripts/generate_team.py to authenticate the GitHub API call.
-          GITHUB_TOKEN: ${{ github.token }}
 
       - uses: actions/upload-pages-artifact@v3
         with:

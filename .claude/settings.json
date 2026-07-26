@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 scripts/gen_versions_manifest.py)",
+      "Bash(python3 -c \"import json;m=json.load\\(open\\('reference/versions.json'\\)\\);[print\\(p, list\\(v['versions'].keys\\(\\)\\), 'latest='+v['latest'], str\\(sum\\(len\\(x\\) for x in v['versions'].values\\(\\)\\)\\)+' comps'\\) for p,v in m.items\\(\\)]\")",
+      "Bash(python3 -c \"import json;print\\('valid json,',len\\(json.load\\(open\\('_site/reference/versions.json'\\)\\)\\),'packages'\\)\")",
+      "Bash(git rm *)",
+      "Bash(curl -s --max-time 25 \"https://pypi.org/pypi/anndata/json\")",
+      "Bash(python3 -c \"import sys,json; v=list\\(json.load\\(sys.stdin\\)['releases']\\); import re; v=[x for x in v if re.match\\(r'^\\\\d+\\\\.\\\\d+\\\\.\\\\d+$',x\\)]; v.sort\\(key=lambda s:[int\\(p\\) for p in s.split\\('.'\\)]\\); print\\(v[-15:]\\)\")",
+      "Bash(curl -s --max-time 25 \"https://pypi.org/pypi/mudata/json\")",
+      "Bash(python3 -c \"import sys,json; v=list\\(json.load\\(sys.stdin\\)['releases']\\); import re; v=[x for x in v if re.match\\(r'^\\\\d+\\\\.\\\\d+\\\\.\\\\d+$',x\\)]; v.sort\\(key=lambda s:[int\\(p\\) for p in s.split\\('.'\\)]\\); print\\(v[-10:]\\)\")",
+      "Bash(python3 -c ' *)",
+      "Bash(python3 -c \"import sys,json; f=json.load\\(sys.stdin\\)['releases']['0.3.8']; print\\(f[0]['requires_python'] if f else 'N/A'\\)\")",
+      "Bash(grep -vE '^\\\\.git$|^\\\\.$|^\\\\.\\\\.$')",
+      "Bash(grep -vE '\\\\.qmd$|^images/|^reference/')"
+    ]
+  }
+}
