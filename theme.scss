@@ -497,3 +497,28 @@ main.content table:not(.quarto-listing-table) tbody tr:hover { background: var(-
   font-size: 13px;
 }
 .nav-footer a { color: var(--op-accent-ink); }
+
+// ---- reference version switcher ----
+.ref-version-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  margin: 0 0 1.25rem;
+  font-family: var(--mono);
+  font-size: 13px;
+}
+.ref-version-switcher .rvs-label {
+  color: var(--op-muted);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.ref-version-switcher .rvs-select {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--op-ink);
+  background: var(--op-surface);
+  border: 1px solid var(--op-border);
+  border-radius: 6px;
+  padding: .15rem .5rem;
+  cursor: pointer;
+}

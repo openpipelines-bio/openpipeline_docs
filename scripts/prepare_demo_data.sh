@@ -1,97 +1,72 @@
 #!/usr/bin/env bash
-# Prepare lightweight two-sample demo data for the "first pipeline" tutorial.
+# Generate the two pre-computed .h5mu samples the Quickstart uses.
 #
-# Downloads two public 10x Genomics 3' PBMC datasets (~1k cells each, different
-# chemistry -> a real batch effect worth integrating), subsamples the reads so a
-# full Cell Ranger -> process_samples -> integration run finishes in minutes,
-# and lays the result out ready to upload to a demo bucket.
+# Downloads two small public 10x PBMC filtered count matrices (different
+# chemistries -> a technical batch effect for integration to correct) and
+# converts each to MuData (.h5mu) with openpipeline's from_10xh5_to_h5mu. Upload
+# the two resulting .h5mu to your demo host and point get-started/index.qmd
+# (step 2) at them.
 #
-# Why these two: both are plain single-sample Gene Expression runs, so each maps
-# with ingestion/cellranger_mapping and converts cleanly to one .h5mu. This is
-# deliberately NOT barcode-multiplexed data (e.g. Flex 4-plex): the
-# convert/from_cellranger_multi_to_h5mu step "does not allow parsing the output
-# from cell barcode demultiplexing", so multiplexed data cannot flow through to
-# integration.
+# The Quickstart deliberately starts from these pre-computed counts, so the demo
+# needs no Cell Ranger run and no genome reference. (Cell Ranger from raw FASTQ is
+# covered separately in the ingestion guide.)
 #
-# The subsampled reads only need to be hosted once; the tutorial then downloads
-# a few hundred MB instead of ~10 GB.
-#
-# Requires: curl, tar, gzip, and seqkit (https://bioinf.shenwei.me/seqkit/).
+# Requires: nextflow, docker, curl.
 #
 # Usage:
-#   scripts/prepare_demo_data.sh [OUTPUT_DIR] [N_READS]
-#     OUTPUT_DIR   where to write the subsampled data   (default: ./demo_data)
-#     N_READS      reads to keep per FASTQ file          (default: 3000000)
-#
-# Tuning N_READS: too few reads and Cell Ranger calls almost no cells (an empty
-# object breaks process_samples/integration); more reads means a bigger upload
-# and a slower run. It interacts with the reference the tutorial uses: against
-# the chr1-only reference (below) only chr1 reads map, so keep N_READS on the
-# higher side there. Start at the default, bump it if too few cells survive.
-#
-# After running, upload OUTPUT_DIR/* to your demo bucket and point the tutorial
-# at it. The matching chr1-only Cell Ranger reference is already public:
-#   https://openpipelines-data.s3.amazonaws.com/reference_gencodev41_chr1/reference_cellranger.tar.gz
+#   scripts/prepare_demo_data.sh [OUTPUT_DIR]     (default: ./demo_data)
 
 set -euo pipefail
 
 OUT="${1:-./demo_data}"
-N_READS="${2:-3000000}"
+export NXF_VER="${NXF_VER:-25.10.2}"   # openpipeline needs a compatible Nextflow
 
-# Origin that serves 10x public sample files to non-browser clients (the cf.
-# 10xgenomics.com CDN blocks scripted downloads; this S3 origin does not).
-BASE="https://s3-us-west-2.amazonaws.com/10x.files/samples/cell-exp/3.0.0"
-
-# Datasets to include. Same tissue (human PBMC), different 10x chemistry, which
-# is the batch effect the integration step corrects. Edit this list to swap in
-# other single-sample Gene Expression datasets.
+# sample id  ->  10x filtered_feature_bc_matrix.h5 URL. Uses the S3 origin; the
+# cf.10xgenomics.com CDN blocks scripted downloads. Edit to pick your two
+# datasets (the ids become the .h5mu filenames the Quickstart curls).
 SAMPLES=(
-  "pbmc_1k_v2"
-  "pbmc_1k_v3"
+  "pbmc_1k_v2|https://s3-us-west-2.amazonaws.com/10x.files/samples/cell-exp/3.0.0/pbmc_1k_v2/pbmc_1k_v2_filtered_feature_bc_matrix.h5"
+  "pbmc_1k_v3|https://s3-us-west-2.amazonaws.com/10x.files/samples/cell-exp/3.0.0/pbmc_1k_v3/pbmc_1k_v3_filtered_feature_bc_matrix.h5"
 )
 
-command -v seqkit >/dev/null 2>&1 || {
-  echo "ERROR: seqkit not found on PATH. Install it: https://bioinf.shenwei.me/seqkit/" >&2
-  exit 1
-}
+command -v nextflow >/dev/null 2>&1 || { echo "ERROR: nextflow not found on PATH." >&2; exit 1; }
+command -v curl >/dev/null 2>&1 || { echo "ERROR: curl not found on PATH." >&2; exit 1; }
+
+# One-time: tell Nextflow where to pull openpipeline from.
+scm="$HOME/.nextflow/scm"
+if ! grep -q "packages.viash-hub.com" "$scm" 2>/dev/null; then
+  mkdir -p "$HOME/.nextflow"
+  cat >> "$scm" <<'EOM'
+providers.vsh.platform = "gitea"
+providers.vsh.server = "packages.viash-hub.com"
+EOM
+fi
 
 mkdir -p "$OUT"
-tmp="$(mktemp -d)"
-trap 'rm -rf "$tmp"' EXIT
+for entry in "${SAMPLES[@]}"; do
+  id="${entry%%|*}"
+  url="${entry#*|}"
+  echo "=== $id ==="
+  h5="$OUT/${id}_filtered_feature_bc_matrix.h5"
 
-for s in "${SAMPLES[@]}"; do
-  echo "=== $s ==="
-  tar_path="$tmp/${s}_fastqs.tar"
-  echo "Downloading ${s} FASTQs..."
-  curl -fL --retry 3 -o "$tar_path" "${BASE}/${s}/${s}_fastqs.tar"
+  echo "Downloading counts..."
+  curl -fL --retry 3 -o "$h5" "$url"
 
-  echo "Extracting..."
-  ext="$tmp/${s}_extracted"
-  mkdir -p "$ext"
-  tar -xf "$tar_path" -C "$ext"
+  echo "Converting to MuData (.h5mu)..."
+  nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
+    -r v4.2.0 -latest -profile docker \
+    -main-script target/nextflow/convert/from_10xh5_to_h5mu/main.nf \
+    --id "$id" \
+    --input "$h5" \
+    --output "${id}.h5mu" \
+    --publish_dir "$OUT"
 
-  # Subsample every R1/R2 pair, keeping the original filenames so the output
-  # still reads as standard bcl2fastq/mkfastq naming to Cell Ranger. seqkit head
-  # takes the first N records deterministically, so R1 and R2 stay paired.
-  dest="$OUT/$s"
-  mkdir -p "$dest"
-  while IFS= read -r r1; do
-    r2="${r1/_R1_/_R2_}"
-    for read_file in "$r1" "$r2"; do
-      if [ ! -f "$read_file" ]; then
-        echo "  WARN: missing mate for $(basename "$r1"), skipping" >&2
-        continue
-      fi
-      base="$(basename "$read_file")"
-      echo "  subsampling $base -> first $N_READS reads"
-      seqkit head -n "$N_READS" "$read_file" | gzip > "$dest/$base"
-    done
-  done < <(find "$ext" -name '*_R1_*.fastq.gz' | sort)
-
-  echo "  wrote: $dest"
+  rm -f "$h5"
 done
 
 echo
-echo "Done. Subsampled demo data in: $OUT"
-echo "Upload the following to your demo bucket, then point the tutorial at it:"
-find "$OUT" -type f | sort | sed 's/^/  /'
+echo "Done. Quickstart demo objects in: $OUT"
+find "$OUT" -name '*.h5mu' | sort | sed 's/^/  /'
+echo
+echo "Next: upload the two .h5mu to your demo host, then set <demo-data-host> in"
+echo "get-started/index.qmd (step 2) to match, keeping the pbmc_1k_v2 / pbmc_1k_v3 filenames."

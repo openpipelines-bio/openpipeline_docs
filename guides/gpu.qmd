@@ -38,7 +38,7 @@ process {
 
 ```bash
 nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
-  -r 4.2.0 -latest -profile docker \
+  -r v4.2.0 -latest -profile docker \
   -main-script target/nextflow/workflows/integration/scvi_leiden/main.nf \
   --input cohort_01_multisample.h5mu --output cohort_01_integrated.h5mu \
   --publish_dir results/ \

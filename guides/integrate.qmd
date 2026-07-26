@@ -33,7 +33,7 @@ For example, batch-correcting on `sample_id`:
 
 ```bash
 nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
-  -r 4.2.0 -latest -profile docker \
+  -r v4.2.0 -latest -profile docker \
   -main-script target/nextflow/workflows/integration/harmony_leiden/main.nf \
   --id cohort_01 \
   --input cohort_01_processed.h5mu \

@@ -72,7 +72,7 @@ the **root of the repository you are working in**; it reads the local
 
 ```bash
 nextflow run openpipelines-bio/openpipeline \
-  -r 4.2.0 -latest -profile docker \
+  -r v4.2.0 -latest -profile docker \
   -main-script target/nextflow/download/sync_test_resources/main.nf \
   --input _viash.yaml \
   --output .

@@ -1,33 +1,30 @@
 ---
-title: "Run your first pipeline"
-description: "From raw FASTQ files to an integrated, clustered object."
+title: "Quickstart"
+description: "From two public samples to a batch-corrected, clustered object."
 order: 0
 ---
 
-Run a full single-cell pipeline on real, public data: raw 10x FASTQ files →
-count matrices (Cell Ranger) → a filtered, normalized cohort → one batch-corrected,
-clustered object. This is a **real run**, not a toy: you download a few GB of
-FASTQs and references, and Cell Ranger needs a good chunk of memory and time.
+Run a best-practice single-cell pipeline end to end on two small public PBMC
+samples: from per-sample count matrices to one filtered, normalized,
+**batch-corrected and clustered** object. No prior Nextflow or single-cell
+experience needed, every command is here.
 
-This walkthrough uses **local Nextflow**. The exact same workflows run on Seqera
-(`tw launch`) or through the Viash Hub web form, see the
-[execution guides](../guides/index.qmd) for those routes.
+This starts from **pre-computed counts**, so it skips the heavy alignment step and
+runs in minutes. To do that mapping step yourself (raw FASTQ → counts with Cell
+Ranger), see [Ingest data](../guides/ingest-10x.qmd).
 
 ::: {.callout-note appearance="simple"}
 **Before you start**
 
-- **Prerequisites:** a Unix-like shell (macOS, Linux, or WSL2 on Windows). No
-  prior Nextflow or single-cell experience needed, every command is here.
-- **Hardware:** Cell Ranger (step 3) is the heavy step. Budget **~32 GB RAM**,
-  **~8 CPU cores**, and **~50 GB free disk** for the downloads plus Cell Ranger's
-  intermediate files.
-- **Time:** roughly **2–4 hours** end to end on a laptop, almost all of it in Cell
-  Ranger mapping. The processing, integration, and read-output steps are minutes each.
+- **Prerequisites:** macOS, Linux, or Windows with WSL2, Nextflow needs a
+  Unix-like environment. Python 3.11+ is used only for the inspection commands. No
+  prior Nextflow or single-cell experience needed.
+- **Hardware:** modest, the run is capped to 4 GB RAM per step (step 1), so any
+  laptop works. The two samples are ~1,000 cells each.
+- **Time:** about 15 minutes once set up; the first run also pulls Docker images,
+  a one-time download.
 - **What you'll have at the end:** one batch-corrected, Leiden-clustered `.h5mu`
-  object with a UMAP, built from two public PBMC samples.
-
-Just want to see the shape of a run first? The [Quickstart](quickstart.qmd) skips
-Cell Ranger and takes about 10 minutes on pre-computed counts.
+  object with a UMAP, built from two PBMC samples.
 :::
 
 ## 1 · Set up Nextflow and Docker {#sec-setup-nextflow-and-docker}
@@ -86,16 +83,6 @@ nextflow -version
 **1c · Docker.** Install [Docker Desktop](https://docs.docker.com/get-docker/)
 (macOS/Windows) or Docker Engine (Linux), start it, then check `docker --version`.
 
-::: {.callout-warning}
-**Pin your Nextflow version.** OpenPipeline's workflows don't yet run under the
-strict language syntax enforced by the newest Nextflow releases. Pin a compatible
-version before every run:
-
-```bash
-export NXF_VER=25.10.2
-```
-:::
-
 Finally, tell Nextflow where to pull the pipeline from (one time):
 
 ```bash
@@ -106,151 +93,199 @@ providers.vsh.server = "packages.viash-hub.com"
 EOM
 ```
 
+The demo data is tiny, so cap the pipeline's default resource requests, otherwise
+a step may ask for more CPU or memory than a laptop has (the defaults are sized
+for full-scale cohorts). Write a small Nextflow config, see
+[Tune compute resources](../guides/tune-resources.qmd) for how these labels work:
+
+```bash
+cat > /tmp/demo.config <<'EOF'
+process {
+  withLabel: lowcpu      { cpus = 2 }
+  withLabel: midcpu      { cpus = 2 }
+  withLabel: highcpu     { cpus = 2 }
+  withLabel: lowmem      { memory = 4.GB }
+  withLabel: midmem      { memory = 4.GB }
+  withLabel: highmem     { memory = 4.GB }
+  withLabel: veryhighmem { memory = 4.GB }
+}
+EOF
+```
+
 ## 2 · Get the data
 
-The run uses two public 10x Genomics PBMC datasets, each with 5' gene expression
-and VDJ (T- and B-cell) libraries. Each 10x dataset page lists ready-made `curl`
-commands; the loops below fetch both datasets' libraries and unpack them into a
-local `data/` folder:
+Two small public PBMC samples, sequenced with different 10x chemistries, so they
+carry a technical **batch effect** for the pipeline to correct. They come as
+ready-made MuData (`.h5mu`) count objects, one per sample:
 
 ```bash
 mkdir -p data && cd data
-
-# Dataset 1 — Human PBMC, 10k cells, 5' v2
-base1="https://cf.10xgenomics.com/samples/cell-vdj/5.0.0/sc5p_v2_hs_PBMC_10k"
-for lib in 5gex t b; do
-  curl -O "${base1}/sc5p_v2_hs_PBMC_10k_${lib}_fastqs.tar"
-  tar -xf "sc5p_v2_hs_PBMC_10k_${lib}_fastqs.tar"
-done
-
-# Dataset 2 — Human PBMC, 10k cells, 5' GEM-X
-base2="https://cf.10xgenomics.com/samples/cell-exp/9.0.0/10k_Human_PBMC_TotalSeqC_5p_gemx"
-for lib in gex tcr ig; do
-  curl -O "${base2}/10k_Human_PBMC_TotalSeqC_5p_gemx_${lib}_fastqs.tar"
-  tar -xf "10k_Human_PBMC_TotalSeqC_5p_gemx_${lib}_fastqs.tar"
-done
-
+base="https://openpipelines-bio.s3.amazonaws.com/openpipeline_docs/data"
+curl -O "$base/pbmc_1k_v2.h5mu"
+curl -O "$base/pbmc_1k_v3.h5mu"
 cd ..
 ```
 
-The transcriptome and VDJ **references** are fetched automatically from URLs in the
-`param_list` below, so FASTQs are the only thing you download by hand.
-
-After both downloads, `data/` holds one folder per library:
-
-```
-data/
-├── sc5p_v2_hs_PBMC_10k_5gex_fastqs/                # sample 1 · Gene Expression
-├── sc5p_v2_hs_PBMC_10k_t_fastqs/                   # sample 1 · VDJ-T
-├── sc5p_v2_hs_PBMC_10k_b_fastqs/                   # sample 1 · VDJ-B
-├── 10k_Human_PBMC_TotalSeqC_5p_gemx_gex_fastqs/    # sample 2 · Gene Expression
-├── 10k_Human_PBMC_TotalSeqC_5p_gemx_tcr_fastqs/    # sample 2 · VDJ-T
-└── 10k_Human_PBMC_TotalSeqC_5p_gemx_ig_fastqs/     # sample 2 · VDJ-B
-```
-
-Each folder holds that library's `*_R1_*.fastq.gz` / `*_R2_*.fastq.gz` files.
-
-## 3 · Ingest with Cell Ranger
-
-`ingestion/cellranger_multi` aligns each library and writes one `.h5mu` per
-sample; under the hood OpenPipeline 4.2.0 runs
-[Cell Ranger `multi`](https://www.10xgenomics.com/support/software/cell-ranger/latest/analysis/running-pipelines/cr-5p-multi).
-Describe the samples and their libraries in a `param_list`
-(`params_cellranger.yaml`):
-
-```yaml
-# params_cellranger.yaml
-param_list:
-  - id: sc5p_v2_hs_PBMC_10k
-    input:
-      - data/sc5p_v2_hs_PBMC_10k_5gex_fastqs/*_R*.fastq.gz
-      - data/sc5p_v2_hs_PBMC_10k_t_fastqs/*_R*.fastq.gz
-      - data/sc5p_v2_hs_PBMC_10k_b_fastqs/*_R*.fastq.gz
-    library_id: [PBMC_10k_5gex, PBMC_10k_t, PBMC_10k_b]
-    library_type: [Gene Expression, VDJ-T, VDJ-B]
-  - id: 10k_Human_PBMC_TotalSeqC_5p_gemx
-    input:
-      - data/10k_Human_PBMC_TotalSeqC_5p_gemx_gex_fastqs/*_R*.fastq.gz
-      - data/10k_Human_PBMC_TotalSeqC_5p_gemx_tcr_fastqs/*_R*.fastq.gz
-      - data/10k_Human_PBMC_TotalSeqC_5p_gemx_ig_fastqs/*_R*.fastq.gz
-    library_id: [TotalSeqC_gex, TotalSeqC_tcr, TotalSeqC_ig]
-    library_type: [Gene Expression, VDJ-T, VDJ-B]
-gex_reference: https://cf.10xgenomics.com/supp/cell-exp/refdata-gex-GRCh38-2020-A.tar.gz
-vdj_reference: https://cf.10xgenomics.com/supp/cell-vdj/refdata-cellranger-vdj-GRCh38-alts-ensembl-7.0.0.tar.gz
-publish_dir: results/ingestion
-```
-
-Each entry is one **sample**; the `input` / `library_id` / `library_type` lists
-line up row-for-row to describe that sample's libraries. The
-[Process many samples](../guides/process-many-samples.qmd) guide covers the full model.
+Each file holds one sample's raw RNA counts. Open both in Python with the
+[`mudata`](https://mudata.readthedocs.io/) package to see what's inside:
 
 ```bash
-nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
-  -r 4.2.0 -latest -profile docker \
-  -main-script target/nextflow/workflows/ingestion/cellranger_multi/main.nf \
-  -params-file params_cellranger.yaml
+pip install 'mudata~=0.3.8' 'anndata~=0.12.16'   # matches openpipeline v4.2.0; needs Python >=3.11
+for s in pbmc_1k_v2 pbmc_1k_v3; do
+  echo "== $s =="
+  python -c "import mudata; print(mudata.read_h5mu('data/$s.h5mu'))"
+done
 ```
 
-## 4 · Process the samples
+```
+== pbmc_1k_v2 ==
+MuData object with n_obs × n_vars = 996 × 33538
+  var:  'gene_symbol', 'feature_types', 'genome'
+  1 modality
+    rna:  996 × 33538
+      var:  'gene_symbol', 'feature_types', 'genome'
+== pbmc_1k_v3 ==
+MuData object with n_obs × n_vars = 1222 × 33538
+  var:  'gene_symbol', 'feature_types', 'genome'
+  1 modality
+    rna:  1222 × 33538
+      var:  'gene_symbol', 'feature_types', 'genome'
+```
 
-`multiomics/process_samples` filters, normalizes, selects features, and runs PCA,
-per sample then across the cohort, emitting one merged object. Point it at the
-Cell Ranger outputs from step 3 (`params_process.yaml`):
+Two **separate** objects, one per sample, each a single `rna` modality of raw
+counts (cells × genes) with gene metadata in `.var` and nothing computed yet.
+Step 3 filters and **concatenates them into one** object (watch the cell count
+grow as the two merge), and the later steps add normalized counts and embeddings
+to it.
 
-```yaml
-# params_process.yaml
+## 3 · Process the samples
+
+`multiomics/process_samples` filters low-quality cells on each sample's own
+distribution, then concatenates all samples and processes them together:
+normalization, highly variable gene selection, PCA, and a neighbor graph and UMAP.
+Write the sample list and QC thresholds to a params file, then run it:
+
+```bash
+cat > /tmp/params_process.yaml <<'EOF'
 param_list:
-  - id: sc5p_v2_hs_PBMC_10k
-    input: results/ingestion/sc5p_v2_hs_PBMC_10k.cellranger_multi.output_h5mu.h5mu
-  - id: 10k_Human_PBMC_TotalSeqC_5p_gemx
-    input: results/ingestion/10k_Human_PBMC_TotalSeqC_5p_gemx.cellranger_multi.output_h5mu.h5mu
-rna_min_counts: 50           # thresholds you'd set from a QC report
-rna_min_genes_per_cell: 50
+  - id: pbmc_1k_v2
+    input: data/pbmc_1k_v2.h5mu
+  - id: pbmc_1k_v3
+    input: data/pbmc_1k_v3.h5mu
+rna_min_counts: 500           # thresholds you'd normally read off a QC report
+rna_min_genes_per_cell: 200
+max_fraction_mito: 0.2
+output: pbmc_processed.h5mu
 publish_dir: results/processed
-```
+EOF
 
-```bash
 nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
-  -r 4.2.0 -latest -profile docker \
+  -r v4.2.0 -latest -profile docker \
   -main-script target/nextflow/workflows/multiomics/process_samples/main.nf \
-  -params-file params_process.yaml
+  -params-file /tmp/params_process.yaml \
+  -c /tmp/demo.config
 ```
 
-## 5 · Integrate
+Each entry is one **sample**; the `id` labels it and `input` points at its
+`.h5mu`. The [Process many samples](../guides/process-many-samples.qmd) guide
+covers the full `param_list` model, and [Generate a QC report](../guides/qc-report.qmd)
+covers choosing the thresholds.
 
-`integration/scvi_leiden` batch-corrects across samples, then clusters and
-computes a UMAP on the corrected embedding (`params_integrate.yaml`):
-
-```yaml
-# params_integrate.yaml
-id: PBMC_scvi
-input: results/processed/merged.process_samples.output.h5mu
-obs_batch: sample_id
-publish_dir: results/integrated
-```
+Inspect the result to see what processing added:
 
 ```bash
+python -c "import mudata; print(mudata.read_h5mu('results/processed/pbmc_processed.h5mu'))"
+```
+
+```
+MuData object with n_obs × n_vars = 2171 × 33538
+  var:  'genome', 'filter_with_counts', 'gene_symbol', 'feature_types', 'filter_with_hvg', 'obs_mean', 'log1p_obs_mean', 'total_counts', 'log1p_total_counts', 'num_nonzero_obs', 'pct_dropout'
+  1 modality
+    rna:        2171 × 33538
+      obs:      'filter_with_scrublet', 'filter_with_counts', 'scrublet_doublet_score', 'sample_id', 'num_nonzero_vars', 'log1p_num_nonzero_vars', 'total_counts', 'log1p_total_counts', 'pct_of_counts_in_top_50_vars', 'pct_of_counts_in_top_100_vars', 'pct_of_counts_in_top_200_vars', 'pct_of_counts_in_top_500_vars'
+      var:      'genome', 'filter_with_counts', 'gene_symbol', 'feature_types', 'filter_with_hvg', 'obs_mean', 'log1p_obs_mean', 'total_counts', 'log1p_total_counts', 'num_nonzero_obs', 'pct_dropout'
+      uns:      'log1p', 'neighbors', 'pca_variance'
+      obsm:     'X_pca', 'X_umap'
+      varm:     'pca_loadings'
+      layers:   'log_normalized'
+      obsp:     'connectivities', 'distances'
+```
+
+Both samples are now concatenated into one object; the cell count sits a little
+below the two samples' combined total because low-quality cells were filtered out.
+`.obs['sample_id']` records which initial sample each observation (cell) came
+from, so even after merging you can tell them apart, and it's the column
+integration corrects on next. Processing filled in much more besides: per-cell and
+per-gene QC metrics (`total_counts`, `pct_dropout`, `scrublet_doublet_score`, …),
+normalized counts in `.layers['log_normalized']`, the highly variable genes
+flagged as `filter_with_hvg`, a PCA embedding in `.obsm['X_pca']`, and a neighbor
+graph and UMAP (`.obsm['X_umap']`, `.obsp`), all computed on the uncorrected data.
+Integration will redo the graph, clustering, and UMAP on the *corrected* space
+next.
+
+## 4 · Integrate
+
+With two samples there's a batch effect to correct. `integration/harmony_leiden`
+batch-corrects across samples on `sample_id`, then builds a neighbor graph,
+clusters with Leiden, and computes a UMAP on the corrected embedding:
+
+```bash
+cat > /tmp/params_integrate.yaml <<'EOF'
+id: pbmc_integrated
+input: results/processed/pbmc_processed.h5mu
+obs_covariates: sample_id
+output: pbmc_integrated.h5mu
+publish_dir: results/integrated
+EOF
+
 nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
-  -r 4.2.0 -latest -profile docker \
-  -main-script target/nextflow/workflows/integration/scvi_leiden/main.nf \
-  -params-file params_integrate.yaml
+  -r v4.2.0 -latest -profile docker \
+  -main-script target/nextflow/workflows/integration/harmony_leiden/main.nf \
+  -params-file /tmp/params_integrate.yaml \
+  -c /tmp/demo.config
 ```
 
-To stack a second method (as the reference runs do, Harmony on top of scVI), see
-[Integration](../guides/integrate.qmd).
+To choose a different method (scVI, Scanorama, …) or compare several, see
+[Integrate across samples](../guides/integrate.qmd).
 
-## 6 · Read the output
+## 5 · Read the output
 
-The final `.h5mu` holds the whole result, per modality:
+Inspect the integrated object the same way:
+
+```bash
+python -c "import mudata; print(mudata.read_h5mu('results/integrated/pbmc_integrated.h5mu'))"
+```
 
 ```
-MuData
- └─ .mod
-     └─ rna
-         ├─ .layers["log_normalized"]        # normalized, log1p counts
-         ├─ .obs["sample_id"]                # which sample each cell came from
-         ├─ .obsm["X_pca"]                   # PCA from process_samples
-         ├─ .obsm["X_scvi_integrated"]       # batch-corrected embedding (scVI)
-         ├─ .obs["scvi_integration_leiden"]  # clusters on the integrated embedding
-         └─ .obsm["X_scvi_umap"]             # UMAP for plotting
+MuData object with n_obs × n_vars = 2171 × 33538
+  var:  'genome', 'filter_with_counts', 'gene_symbol', 'feature_types', 'filter_with_hvg', 'obs_mean', 'log1p_obs_mean', 'total_counts', 'log1p_total_counts', 'num_nonzero_obs', 'pct_dropout'
+  1 modality
+    rna:        2171 × 33538
+      obs:      'filter_with_scrublet', 'filter_with_counts', 'scrublet_doublet_score', 'sample_id', 'num_nonzero_vars', 'log1p_num_nonzero_vars', 'total_counts', 'log1p_total_counts', 'pct_of_counts_in_top_50_vars', 'pct_of_counts_in_top_100_vars', 'pct_of_counts_in_top_200_vars', 'pct_of_counts_in_top_500_vars', 'harmony_integration_leiden_1.0'
+      var:      'genome', 'filter_with_counts', 'gene_symbol', 'feature_types', 'filter_with_hvg', 'obs_mean', 'log1p_obs_mean', 'total_counts', 'log1p_total_counts', 'num_nonzero_obs', 'pct_dropout'
+      uns:      'harmonypy_integration_neighbors', 'log1p', 'neighbors', 'pca_variance'
+      obsm:     'X_leiden_harmony_umap', 'X_pca', 'X_pca_integrated', 'X_umap'
+      varm:     'pca_loadings'
+      layers:   'log_normalized'
+      obsp:     'connectivities', 'distances', 'harmonypy_integration_connectivities', 'harmonypy_integration_distances'
 ```
+
+Integration added, on top of everything `process_samples` produced:
+
+- `.obsm['X_pca_integrated']`, the batch-corrected embedding (Harmony).
+- `.obs['harmony_integration_leiden_1.0']`, the cluster labels computed on that
+  corrected embedding.
+- `.obsm['X_leiden_harmony_umap']`, a UMAP of the corrected space, distinct from
+  the uncorrected `X_umap` from step 3, plus its own neighbor graph
+  (the `harmonypy_integration_*` entries in `.uns` / `.obsp`).
+
+The clusters are just numbers so far. Assigning biological identities to them is
+[cell type annotation](../guides/annotate.qmd), a separate step.
+
+## Where to go next
+
+- **Map your own raw data:** [Ingest data](../guides/ingest-10x.qmd), FASTQ → counts
+  with Cell Ranger or BD Rhapsody.
+- **Pick individual tasks:** the [task guides](../guides/index.qmd).
+- **See the whole pipeline:** the [pipeline overview](../workflows/index.qmd).
+- **Understand the design:** [How it works](../concepts/index.qmd).

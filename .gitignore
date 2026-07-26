@@ -12,3 +12,6 @@
 # registry (data/packages.yaml) and the member overlay (data/members/). It
 # is committed so the site builds without network access; those data/ sources
 # are the single source of truth.
+
+# Generated at render by scripts/gen_versions_manifest.py (pre-render step)
+reference/versions.json

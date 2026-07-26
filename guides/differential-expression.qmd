@@ -38,7 +38,7 @@ publish_dir: results/
 
 ```bash
 nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
-  -r 4.2.0 -latest -profile docker \
+  -r v4.2.0 -latest -profile docker \
   -main-script target/nextflow/workflows/differential_expression/pseudobulk_deseq2/main.nf \
   -params-file params.yaml
 ```

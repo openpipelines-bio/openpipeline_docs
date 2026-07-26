@@ -26,7 +26,7 @@ anchor-sections: false
   <div class="wrap">
     <div id="op-flow"></div>
     <div class="cta-row flow-cta">
-      <a class="btn primary" href="workflows/index.html">▸ Full workflow overview</a>
+      <a class="btn primary" href="workflows/index.html">▸ Explore the full pipeline</a>
     </div>
   </div>
 
@@ -77,7 +77,7 @@ anchor-sections: false
       <div class="cards3">
         <a class="rcard link" href="get-started/index.html">
           <div class="tag">🧪 New to single-cell</div>
-          <h3>Guided first run</h3>
+          <h3>Quickstart</h3>
           <p>Run a best-practice pipeline on provided test data and learn to read the output, no prior Nextflow knowledge needed.</p>
           <span class="go">Get started →</span>
         </a>

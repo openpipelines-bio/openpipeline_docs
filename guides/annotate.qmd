@@ -30,7 +30,7 @@ your own:
 
 ```bash
 nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
-  -r 4.2.0 -latest -profile docker \
+  -r v4.2.0 -latest -profile docker \
   -main-script target/nextflow/workflows/annotation/celltypist/main.nf \
   --id cohort_01 \
   --input cohort_01_integrated.h5mu \

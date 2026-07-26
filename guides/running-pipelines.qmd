@@ -7,7 +7,7 @@ order: 80
 
 Every guide's `nextflow run` command works the same way; this page covers the
 **mechanics of launching** on each of the three routes. For a full first run with
-real data, see [Get started](../get-started/index.qmd); for CPU / memory tuning,
+real data, see the [Quickstart](../get-started/index.qmd); for CPU / memory tuning,
 see [Tune compute resources](tune-resources.qmd).
 
 Whichever route you pick, workflows are pulled from **Viash Hub** and every step
@@ -16,7 +16,7 @@ runs inside a container, so you never install a pipeline's dependencies yourself
 ## Local (Nextflow)
 
 Run on your own machine, an HPC node, or a cloud VM. You need Nextflow and Docker
-(see [Get started](../get-started/index.qmd) for the install), and a one-time
+(see the [Quickstart](../get-started/index.qmd) for the install), and a one-time
 registration of the Viash Hub source:
 
 ```bash
@@ -32,7 +32,7 @@ parameters:
 
 ```bash
 nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
-  -r 4.2.0 -latest -profile docker \
+  -r v4.2.0 -latest -profile docker \
   -main-script target/nextflow/workflows/multiomics/process_samples/main.nf \
   -params-file params.yaml --publish_dir results/
 ```

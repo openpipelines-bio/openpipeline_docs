@@ -35,8 +35,8 @@ Ingestion is at most three steps; run only the ones you need:
 | [`ingestion/cellranger_multi`](../reference/openpipeline/v4.2.0/workflows/ingestion/cellranger_multi.qmd) | 10x, multiple libraries (GEX + VDJ + ADT/HTO) |
 | [`ingestion/bd_rhapsody`](../reference/openpipeline/v4.2.0/workflows/ingestion/bd_rhapsody.qmd) | BD Rhapsody data |
 
-Not sure which fits? The [Available workflows](../workflows/index.qmd) page shows
-these in pipeline context.
+Not sure which fits? The [pipeline overview](../workflows/index.qmd) shows where
+these fit.
 
 ## Example: 10x multi-library mapping
 
@@ -62,7 +62,7 @@ publish_dir: results/ingestion
 
 ```bash
 nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
-  -r 4.2.0 -latest -profile docker \
+  -r v4.2.0 -latest -profile docker \
   -main-script target/nextflow/workflows/ingestion/cellranger_multi/main.nf \
   -params-file params.yaml
 ```

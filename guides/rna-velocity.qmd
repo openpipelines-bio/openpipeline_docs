@@ -25,7 +25,7 @@ For example, once your object carries `spliced` / `unspliced` layers:
 
 ```bash
 nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
-  -r 4.2.0 -latest -profile docker \
+  -r v4.2.0 -latest -profile docker \
   -main-script target/nextflow/velocity/scvelo/main.nf \
   --input results/integrated.h5mu \
   --modality rna \

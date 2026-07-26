@@ -3,12 +3,19 @@ project:
   output-dir: _site
   preview:
     port: 4200
+  # Build the reference version-switcher manifest (reference/versions.json)
+  # before every render, so it always reflects the versions currently on disk.
+  pre-render:
+    - python3 scripts/gen_versions_manifest.py
   # Draft site: ship a crawler-blocking robots.txt into the build output.
   resources:
     - robots.txt
     # Shared single-cell/spatial flow widget, loaded by index.qmd and
     # workflows/index.qmd via <script src>.
     - flow.js
+    # Version-switcher manifest (written by the pre-render step above), fetched
+    # at runtime by reference-versions.html.
+    - reference/versions.json
   # NOTE: team/ is a hand-curated static page for now (sections + roles the flat
   # author registry can't express). scripts/generate_team.py is kept for the
   # eventual return to auto-generation but is intentionally NOT wired as a
@@ -33,26 +40,23 @@ website:
     # under the mark, which turned to mush at navbar height.
     logo: images/logo-mark.svg
     title: "OpenPipeline"
+    # Flat, orientation-first: understand it -> see what it does -> try it ->
+    # do tasks -> look up -> contribute. Fits the educational, mixed-audience
+    # mission. "Pipeline" is the curated stage-by-stage overview (page lives
+    # under workflows/ to avoid breaking cross-links; label only).
     left:
       - href: concepts/index.qmd
         text: Concepts
-      # "Workflows" = the curated available-workflows overview. Page still lives
-      # under concepts/ (kept there to avoid breaking cross-links). The advanced
-      # developer deep-dive stays in the Concepts hub, not here.
       - href: workflows/index.qmd
-        text: Workflows
-      # "Documentation" groups the practical, do-it materials. Get started is
-      # also the primary landing-page CTA, so it stays reachable from the hero.
-      - text: Documentation
-        menu:
-          - href: get-started/index.qmd
-            text: Get started
-          - href: guides/index.qmd
-            text: Guides
-          - href: reference/index.qmd
-            text: Reference
-          - href: contributing/index.qmd
-            text: Contributing
+        text: Pipeline overview
+      - href: get-started/index.qmd
+        text: Quickstart
+      - href: guides/index.qmd
+        text: Guides
+      - href: reference/index.qmd
+        text: Reference
+      - href: contributing/index.qmd
+        text: Contributing
       - href: team/index.qmd
         text: Team
     right:
@@ -92,4 +96,7 @@ format:
     include-in-header:
       - text: |
           <meta name="robots" content="noindex, nofollow">
+    # Per-page reference version switcher (no-ops on non-reference pages).
+    include-after-body:
+      - reference-versions.html
 

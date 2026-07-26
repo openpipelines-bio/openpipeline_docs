@@ -90,7 +90,7 @@ processed object:
 
 ```bash
 nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
-  -r 4.2.0 -latest -profile docker \
+  -r v4.2.0 -latest -profile docker \
   -main-script target/nextflow/workflows/multiomics/process_samples/main.nf \
   --param_list samples.csv \
   --publish_dir results/

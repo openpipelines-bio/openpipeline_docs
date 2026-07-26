@@ -26,7 +26,7 @@ For example, on an [annotated](annotate.qmd) object with cell-type labels in
 
 ```bash
 nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
-  -r 4.2.0 -latest -profile docker \
+  -r v4.2.0 -latest -profile docker \
   -main-script target/nextflow/interpret/lianapy/main.nf \
   --input results/annotated.h5mu \
   --modality rna \

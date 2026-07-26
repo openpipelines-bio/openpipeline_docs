@@ -11,8 +11,8 @@ guides are cross-cutting and apply to every package.
 ::: {.callout-note appearance="simple"}
 These guides assume you already have a working setup, local Nextflow + Docker, or
 a Seqera / Viash Hub account. If not, start with
-[Run your first pipeline](../get-started/index.qmd): it covers install and walks
-one run end to end.
+[Quickstart](../get-started/index.qmd): it covers install and walks one run end
+to end.
 :::
 
 ```{=html}

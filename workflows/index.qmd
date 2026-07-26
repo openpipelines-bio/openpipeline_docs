@@ -1,5 +1,5 @@
 ---
-title: "Available workflows"
+title: "The analysis pipeline"
 description: "Every workflow OpenPipeline offers, arranged by where it sits in the pipeline."
 order: 60
 ---
