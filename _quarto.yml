@@ -40,15 +40,16 @@ website:
     # under the mark, which turned to mush at navbar height.
     logo: images/logo-mark.svg
     title: "OpenPipeline"
-    # Flat, orientation-first: understand it -> see what it does -> try it ->
-    # do tasks -> look up -> contribute. Fits the educational, mixed-audience
-    # mission. "Pipeline" is the curated stage-by-stage overview (page lives
-    # under workflows/ to avoid breaking cross-links; label only).
+    # Flat, orientation-first: see the whole pipeline -> understand why -> try it
+    # -> do tasks -> look up -> contribute. Fits the educational, mixed-audience
+    # mission. "Overview" is the curated stage-by-stage pipeline map (page lives
+    # under workflows/ to avoid breaking cross-links; its H1 stays "The analysis
+    # pipeline" so the short nav label isn't ambiguous).
     left:
+      - href: workflows/index.qmd
+        text: Overview
       - href: concepts/index.qmd
         text: Concepts
-      - href: workflows/index.qmd
-        text: Pipeline overview
       - href: get-started/index.qmd
         text: Quickstart
       - href: guides/index.qmd
