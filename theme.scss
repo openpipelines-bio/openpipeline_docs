@@ -151,7 +151,9 @@ h1, h2, h3 { letter-spacing: -0.02em; }
   .seg button { font-family: var(--mono); font-size: 13px; padding: 7px 16px; border-radius: 7px; border: 0; background: none; color: var(--muted); cursor: pointer; }
   .seg button.on { background: var(--surface); color: var(--ink); box-shadow: var(--shadow); }
   .flow-hint { font-size: 13px; color: var(--muted); margin: 14px 0 16px; }
-  .flow-scroll { overflow-x: auto; padding-bottom: 4px; }
+  // padding-top clears the stages' station dots (top:-6px): overflow-x:auto
+  // forces overflow-y:auto, which would otherwise clip them.
+  .flow-scroll { overflow-x: auto; padding-top: 10px; padding-bottom: 4px; }
   .flow { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(160px, 1fr); gap: 12px; align-items: stretch; }
   .stage { background: var(--surface-2); border: 1px solid var(--border); border-top: 2px solid var(--path, var(--accent-ink)); border-radius: 12px; padding: 16px 14px 14px; position: relative; }
   .stage::after { content: "\2192"; position: absolute; right: -11px; top: 24px; color: var(--path, var(--muted)); font-family: var(--mono); z-index: 2; }

@@ -43,8 +43,8 @@ anchor-sections: false
           <p>Modular not just in code but at the execution level: every step is an independently built, containerized unit you can run, swap, reorder, or reuse as a dependency across packages.</p>
         </div>
         <div class="feature">
-          <b>Standard multi-omics data object</b>
-          <p>All modalities, RNA, protein, ATAC, spatial, and more, share one standard data object (MuData), so any component works with any other.</p>
+          <b>Standard multi-omics data format</b>
+          <p>Every component and workflow takes in and writes out the same format (MuData), so any two can be chained together, and one object holds every modality, RNA, protein, ATAC, spatial, and more, for multi-modal analysis.</p>
         </div>
         <div class="feature">
           <b>Reproducible</b>
@@ -60,7 +60,7 @@ anchor-sections: false
         </div>
         <div class="feature">
           <b>Community-driven, team-maintained</b>
-          <p>Open source and developed in the open, but not a release-once academic project: actively maintained for years by a dedicated team.</p>
+          <p>Open source and built for the long haul: a dedicated team keeps it actively maintained, release after release.</p>
         </div>
       </div>
       <p class="ways-note">The <a href="concepts/index.html">concepts</a> pages explain how each of these work.</p>
@@ -109,17 +109,14 @@ anchor-sections: false
           <span class="way-flag">Recommended</span>
           <div class="h"><a href="https://www.viash-hub.com" target="_blank" rel="noopener">Viash Hub</a> <span class="badge">no-code</span></div>
           <p>Fill in a guided web form, no YAML, and it hands you ready-to-run instructions for the Local or Seqera routes.</p>
-          <div class="req">requires: a browser</div>
         </div>
         <div class="way">
-          <div class="h">Local <span class="badge">self-run</span></div>
+          <div class="h">Local</div>
           <p>Run on your own machine, an HPC cluster, or a cloud VM with more compute, using Nextflow and Docker.</p>
-          <div class="req">requires: nextflow · docker</div>
         </div>
         <div class="way">
-          <div class="h"><a href="https://seqera.io" target="_blank" rel="noopener">Seqera Platform</a> <span class="badge">managed</span></div>
+          <div class="h"><a href="https://seqera.io" target="_blank" rel="noopener">Seqera Platform</a></div>
           <p>Launch and monitor runs on managed compute, cloud (AWS/Azure/GCP), Kubernetes, or an HPC scheduler, from the Seqera UI or CLI.</p>
-          <div class="req">requires: a Seqera compute environment</div>
         </div>
       </div>
       <p class="ways-note">Step-by-step how-tos for each route live in the <a href="guides/index.html">guides</a>.</p>
