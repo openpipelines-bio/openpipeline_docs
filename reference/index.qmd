@@ -37,7 +37,7 @@ below. See [Speed up with GPUs](../guides/gpu.qmd) for what is available today.
 <div class="ref-facets">
   <div class="facet-bar" data-facet="package"><span class="lbl">Package</span></div>
   <div class="facet-bar" data-facet="type"><span class="lbl">Type</span></div>
-  <input class="ref-search-input" type="search" placeholder="Search…  e.g. harmony, cellranger or xenium" aria-label="Search components">
+  <input class="ref-search-input" type="search" placeholder="Search…  e.g. harmony or cellranger" aria-label="Search components">
 </div>
 ```
 
