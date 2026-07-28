@@ -4,8 +4,7 @@ description: "Enable GPU for GPU-capable components today; rapids-singlecell com
 order: 86
 ---
 
-[`openpipeline`]{.pkg-tag .pkg-openpipeline}<span class="swatch openpipeline"></span>
-[`openpipeline_rapids`]{.pkg-tag .pkg-openpipeline_rapids}<span class="swatch openpipeline_rapids"></span>
+[all packages]{.pkg-tag}
 
 There are two paths to GPU acceleration: components that wrap **natively
 GPU-capable tools** (available today), and GPU drop-ins for the remaining steps

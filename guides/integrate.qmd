@@ -5,6 +5,7 @@ order: 40
 ---
 
 [`openpipeline`]{.pkg-tag .pkg-openpipeline}<span class="swatch openpipeline"></span>
+[`openpipeline_composed`]{.pkg-tag .pkg-openpipeline_composed}<span class="swatch openpipeline_composed"></span>
 
 Integration is a **separate workflow** run after
 [sample processing](process-samples.qmd). Samples from different donors, runs, or
