@@ -1,11 +1,10 @@
 ---
 title: "Tune compute resources"
 description: "Nextflow labels for CPU, memory, and disk."
-categories: [openpipeline]
 order: 84
 ---
 
-[`openpipeline`]{.pkg-tag .pkg-openpipeline}<span class="swatch openpipeline"></span>
+[all packages]{.pkg-tag}
 
 Every OpenPipeline component declares its CPU and memory needs through a
 **resource label**. Labels are defined once in

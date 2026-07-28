@@ -1,7 +1,6 @@
 ---
 title: "Generate a QC report"
 description: "A standalone HTML quality-control report to choose filter thresholds."
-categories: [openpipeline_qc]
 order: 20
 ---
 

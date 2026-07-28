@@ -1,7 +1,6 @@
 ---
 title: "Speed up with GPUs"
 description: "Enable GPU for GPU-capable components today; rapids-singlecell coming soon."
-categories: [openpipeline, openpipeline_rapids]
 order: 86
 ---
 

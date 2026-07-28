@@ -1,7 +1,6 @@
 ---
 title: "Generate a spatial QC report"
 description: "The same QC report as single-cell, with a spatial ingestion method."
-categories: [openpipeline_qc]
 order: 25
 ---
 

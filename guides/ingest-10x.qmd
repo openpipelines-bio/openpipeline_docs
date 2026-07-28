@@ -1,7 +1,6 @@
 ---
 title: "Ingest data"
 description: "From raw sequencing output to a per-sample count matrix (H5MU)."
-categories: [openpipeline]
 order: 10
 ---
 

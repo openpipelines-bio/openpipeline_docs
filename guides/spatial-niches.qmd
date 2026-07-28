@@ -1,7 +1,6 @@
 ---
 title: "Identify spatial niches"
 description: "Learn recurring spatial neighborhoods with NicheCompass."
-categories: [openpipeline_spatial]
 order: 65
 ---
 

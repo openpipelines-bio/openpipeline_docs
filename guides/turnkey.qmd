@@ -1,7 +1,6 @@
 ---
 title: "Run a turnkey pipeline"
 description: "End-to-end composed pipelines, and reference-atlas generation."
-categories: [openpipeline_composed]
 order: 70
 ---
 

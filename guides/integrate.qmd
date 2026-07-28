@@ -1,7 +1,6 @@
 ---
 title: "Integrate across samples"
 description: "Batch-correct across samples, then cluster and embed."
-categories: [openpipeline]
 order: 40
 ---
 

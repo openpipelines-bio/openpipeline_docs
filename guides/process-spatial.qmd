@@ -1,7 +1,6 @@
 ---
 title: "Process spatial samples"
 description: "The core processing flow, adapted for spatial data."
-categories: [openpipeline_spatial]
 order: 35
 ---
 

@@ -1,7 +1,6 @@
 ---
 title: "Ingest spatial data"
 description: "From spatial platform output to a spatial H5MU with coordinates."
-categories: [openpipeline_spatial]
 order: 15
 ---
 

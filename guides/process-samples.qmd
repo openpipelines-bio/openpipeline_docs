@@ -1,7 +1,6 @@
 ---
 title: "Process samples"
 description: "Per-sample QC and filtering, then cohort normalization and PCA."
-categories: [openpipeline]
 order: 30
 ---
 

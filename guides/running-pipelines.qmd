@@ -1,9 +1,10 @@
 ---
 title: "Running pipelines"
 description: "Launch any OpenPipeline workflow locally, on Seqera, or through Viash Hub."
-categories: [openpipeline]
 order: 80
 ---
+
+[all packages]{.pkg-tag}
 
 Every guide's `nextflow run` command works the same way; this page covers the
 **mechanics of launching** on each of the three routes. For a full first run with

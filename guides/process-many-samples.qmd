@@ -1,11 +1,10 @@
 ---
 title: "Process many samples (param_list)"
 description: "Per-sample arguments plus shared settings in one run."
-categories: [openpipeline]
 order: 82
 ---
 
-[`openpipeline`]{.pkg-tag .pkg-openpipeline}<span class="swatch openpipeline"></span>
+[all packages]{.pkg-tag}
 
 A **`param_list`** processes a whole cohort in a single command. It is a list
 where each entry is one sample carrying that sample's own arguments; any argument
