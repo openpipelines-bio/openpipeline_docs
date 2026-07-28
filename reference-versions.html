@@ -1,0 +1,74 @@
+<script>
+// Per-page version switcher for reference pages. Runs on every page but no-ops
+// unless the URL is a versioned reference component page
+// (.../reference/<pkg>/<version>/<namespace>/<name>.html). Reads the build-time
+// manifest reference/versions.json and offers the versions in which THIS
+// component exists. Reference pages are auto-generated and frozen, so the
+// switcher is injected here rather than baked into each page.
+(function () {
+  var parts = window.location.pathname.split("/").filter(Boolean);
+  var ri = parts.lastIndexOf("reference");
+  if (ri < 0 || parts.length < ri + 4) return;            // need pkg/version/.../name
+  var pkg = parts[ri + 1];
+  var version = parts[ri + 2];
+  if (!/^v?\d+\./.test(version)) return;                  // second segment must be a version
+  var rest = parts.slice(ri + 3).join("/").replace(/\.html$/, "");
+  var refBase = "/" + parts.slice(0, ri + 1).join("/");   // .../reference (base-path agnostic)
+
+  function cmp(a, b) {
+    var na = a.replace(/[^0-9.]/g, "").split(".");
+    var nb = b.replace(/[^0-9.]/g, "").split(".");
+    for (var i = 0; i < Math.max(na.length, nb.length); i++) {
+      var d = (parseInt(na[i] || 0, 10)) - (parseInt(nb[i] || 0, 10));
+      if (d) return d;
+    }
+    return 0;
+  }
+
+  fetch(refBase + "/versions.json").then(function (r) {
+    return r.ok ? r.json() : null;
+  }).then(function (manifest) {
+    if (!manifest) return;
+    var data = manifest[pkg];
+    if (!data) return;
+    var vers = Object.keys(data.versions).filter(function (v) {
+      return data.versions[v].indexOf(rest) !== -1;       // only versions with this component
+    }).sort(function (a, b) { return cmp(b, a); });
+    if (!vers.length) return;
+    render(vers, data.latest);
+  }).catch(function () {});
+
+  function render(vers, latest) {
+    var wrap = document.createElement("div");
+    wrap.className = "ref-version-switcher";
+
+    var label = document.createElement("span");
+    label.className = "rvs-label";
+    label.textContent = "version";
+    wrap.appendChild(label);
+
+    var sel = document.createElement("select");
+    sel.className = "rvs-select";
+    sel.setAttribute("aria-label", "Select reference version");
+    vers.forEach(function (v) {
+      var o = document.createElement("option");
+      o.value = v;
+      o.textContent = v + (v === latest ? " (latest)" : "");
+      if (v === version) o.selected = true;
+      sel.appendChild(o);
+    });
+    sel.addEventListener("change", function () {
+      window.location.href = refBase + "/" + pkg + "/" + sel.value + "/" + rest + ".html";
+    });
+    wrap.appendChild(sel);
+
+    var header = document.getElementById("title-block-header");
+    if (header && header.parentNode) {
+      header.parentNode.insertBefore(wrap, header.nextSibling);
+    } else {
+      var main = document.querySelector("main");
+      if (main) main.insertBefore(wrap, main.firstChild);
+    }
+  }
+})();
+</script>
