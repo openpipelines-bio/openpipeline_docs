@@ -48,10 +48,10 @@ website:
     left:
       - href: workflows/index.qmd
         text: Overview
-      - href: concepts/index.qmd
-        text: Concepts
       - href: get-started/index.qmd
         text: Quickstart
+      - href: concepts/index.qmd
+        text: Concepts
       - href: guides/index.qmd
         text: Guides
       - href: reference/index.qmd
