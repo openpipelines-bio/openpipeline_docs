@@ -10,15 +10,15 @@
   //                     can genuinely be toggled.
   const FLOWS = {
     sc: {
-      hint: 'The single-cell path, RNA, protein, ATAC, VDJ and GDO share one flow.',
+      hint: 'Single-cell multi-omics data (RNA, protein, ATAC, VDJ, GDO).',
       stages: [
-        { num: 'STEP 01', title: 'Ingestion', kind: 'choice', pick: 'pick one for your data',
+        { num: 'STEP 01', title: 'Ingestion', kind: 'choice', pick: 'Convert raw data to a standard format',
           options: ['cellranger_multi', 'cellranger_count', 'cellranger_count_atac', 'bd_rhapsody'],
-          note: 'or bring your own count matrix' },
-        { num: 'STEP 02', title: 'Process samples', kind: 'workflow', pick: 'single workflow',
+          note: 'Or bring your own count matrix' },
+        { num: 'STEP 02', title: 'Process samples', kind: 'workflow', pick: 'Normalize, filter, process',
           steps: [{ name: 'filter cells' }, { name: 'doublet removal', opt: true }, { name: 'normalize + log1p' }, { name: 'highly variable genes' }],
-          note: 'filtering thresholds set from a QC report' },
-        { num: 'STEP 03', title: 'Integration', kind: 'workflow', pick: 'single workflow',
+        },
+        { num: 'STEP 03', title: 'Integration', kind: 'workflow', pick: 'Remove batch effects',
           href: 'reference/index.html',
           steps: [
             { name: 'integrate', options: ['scVI', 'harmony', 'totalVI'], more: ['scanvi', 'scanorama', 'bbknn'], moreLabel: 'methods' },
@@ -26,22 +26,22 @@
             { name: 'leiden' },
             { name: 'umap' },
           ] },
-        { num: 'STEP 04', title: 'Downstream', kind: 'choice', pick: 'pick any',
+        { num: 'STEP 04', title: 'Downstream', kind: 'choice', pick: 'Perform further analysis',
           options: ['cell-type annotation', 'differential expression', 'rna velocity', 'cell–cell communication'],
           more: ['scanvi', 'celltypist', 'singler', 'onclass', 'popv'], moreLabel: 'annotation methods',
           href: 'guides/index.html' },
       ],
     },
     sp: {
-      hint: 'The spatial path, same shape, spatial-aware ingestion plus niche analysis (Visium HD · Xenium · CosMx · AVITI).',
+      hint: 'Spatial transcriptomics (Xenium · Visium · Visium HD · CosMx · AVITI).',
       stages: [
-        { num: 'STEP 01', title: 'Ingestion', kind: 'choice', pick: 'pick one for your platform',
+        { num: 'STEP 01', title: 'Ingestion', kind: 'choice', pick: 'Convert raw data to a standard format',
           options: ['visium · spaceranger', 'visium HD · spaceranger', 'xenium', 'cosmx', 'aviti'],
-          note: 'or bring your own count matrix' },
-        { num: 'STEP 02', title: 'Process samples', kind: 'workflow', pick: 'single workflow',
+          note: 'Or bring your own count matrix' },
+        { num: 'STEP 02', title: 'Process samples', kind: 'workflow', pick: 'Normalize, filter, process',
           steps: [{ name: 'filter cells' }, { name: 'normalize + log1p' }, { name: 'highly variable genes' }],
-          note: 'filtering thresholds set from a QC report' },
-        { num: 'STEP 03', title: 'Integration', kind: 'workflow', pick: 'single workflow',
+        },
+        { num: 'STEP 03', title: 'Integration', kind: 'workflow', pick: 'Remove batch effects',
           href: 'reference/index.html',
           steps: [
             { name: 'integrate', options: ['scVI', 'harmony', 'totalVI'], more: ['scanvi', 'scanorama', 'bbknn'], moreLabel: 'methods' },
@@ -49,7 +49,7 @@
             { name: 'leiden' },
             { name: 'umap' },
           ] },
-        { num: 'STEP 04', title: 'Downstream', kind: 'choice', pick: 'pick any',
+        { num: 'STEP 04', title: 'Downstream', kind: 'choice', pick: 'Perform further analysis',
           options: ['cell-type annotation', 'differential expression', 'cell–cell communication', 'spatial domains', 'niche domains'],
           more: ['scanvi', 'celltypist', 'singler', 'onclass', 'popv'], moreLabel: 'annotation methods',
           href: 'guides/index.html' },
@@ -79,14 +79,13 @@
   // the landing overview intentionally leaves out.
   if (detailed) {
     var demux = {
-      title: 'Demultiplexing', kind: 'choice', pick: 'if starting from BCL', opt: true,
+      title: 'Demultiplexing', kind: 'choice', pick: 'Split multiplexed samples', opt: true,
       options: ['bcl2fastq', 'bcl-convert', 'cellranger mkfastq'],
-      note: 'often already done by your sequencing provider'
     };
     var qcReport = {
-      title: 'QC report', kind: 'choice', pick: 'inspect quality', opt: true,
+      title: 'QC report', kind: 'choice', pick: 'Inspect data quality', opt: true,
       options: ['generate_qc_report'],
-      note: 'sets the filtering thresholds for the next step'
+      note: 'Select filtering thresholds'
     };
     // single-cell: demux before ingestion, QC report between ingestion and processing
     FLOWS.sc.stages = [demux, FLOWS.sc.stages[0], qcReport].concat(FLOWS.sc.stages.slice(1));
