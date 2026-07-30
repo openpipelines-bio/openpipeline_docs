@@ -72,9 +72,9 @@ website:
     - id: guides
       title: "Guides"
       contents: guides/*
-    # Concepts has no sidebar — the concepts index (concepts/index.qmd) is a
-    # card catalog that serves as the section hub, and the pages run wide
-    # (flow widget, workflow tables) so the reclaimed width matters.
+    - id: concepts
+      title: "Concepts"
+      contents: concepts/*
     - id: contributing
       title: "Contributing"
       contents: contributing/*
