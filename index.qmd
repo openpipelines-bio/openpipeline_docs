@@ -150,6 +150,16 @@ anchor-sections: false
           <b>Docker</b>
           <p>Every component has a matching container so the dependencies are the same wherever you run.</p>
         </a>
+        <a class="infra-card" href="https://scverse.org" target="_blank" rel="noopener">
+          <img src="images/scverse-logo.svg" alt="scverse logo">
+          <b>scverse</b>
+          <p>Python components build on the scverse ecosystem, including AnnData, MuData and scanpy.</p>
+        </a>
+        <a class="infra-card" href="https://bioconductor.org" target="_blank" rel="noopener">
+          <img src="images/bioconductor-logo.svg" alt="Bioconductor logo">
+          <b>Bioconductor</b>
+          <p>R components draw on Bioconductor's peer-reviewed packages for genomic data analysis.</p>
+        </a>
       </div>
     </div>
   </section>
