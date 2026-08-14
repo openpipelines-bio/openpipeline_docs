@@ -1,46 +1,42 @@
 ---
-title: "The engine: Viash and Viash Hub"
+title: "Viash and Viash Hub"
 description: "How components are built, containerized, tested, and published."
 order: 40
 ---
 
-OpenPipeline's [modularity](modularity.qmd) is not hand-maintained, it is
-produced by two pieces of tooling: **Viash**, which builds each component, and
-**Viash Hub**, the platform that builds, tests, and publishes them.
+OpenPipeline is underpinned by two tools: **Viash**, which is used to create each component, and **Viash Hub**, the platform that builds, tests and publishes them.
 
 ## Viash: config + script → component
 
-**[Viash](https://viash.io)** turns a config (`config.vsh.yaml`) plus a script
-into a self-contained component. From that one description it generates:
+**[Viash](https://viash.io)** turns a config (`config.vsh.yaml`) plus a script into a self-contained component.
+From these two files it generates:
 
-- a **command-line interface**, parsing and injecting the declared arguments into
-  the script;
-- a **Docker image** pinning the component's exact dependencies;
-- a **Nextflow (VDSL3) module** that can be chained into a workflow.
+- A **command-line interface**, parsing and injecting the declared arguments into the script
+- A **Docker image** pinning the component's exact dependencies
+- A **Nextflow (VDSL3) module** that can be chained into a workflow
 
-Viash separates a component's **logic** (a script in Python, R, or Bash) from its
-**execution environment** (the container) and its **orchestration layer**
-(Nextflow). Two properties fall out of that separation:
+Viash separates a component's **logic** (a script in Python, R, or Bash) from its **execution environment** (the container) and its **orchestration layer** (Nextflow).
 
-**Language independence.** Each component is written in whatever language suits
-the task, normalization in Python, a statistical test in R, a file conversion in
-Bash. The generated CLI makes them interchangeable regardless of language.
+## Language independence
 
-**Modularity.** Because every component shares the [MuData](mudata.qmd) format
-and a generated CLI, they compose freely, no glue code between steps. The same
-component runs standalone with `viash run`, is tested with `viash test`, or is
-built into an image with `viash build`.
+Viash components can be written in whichever language is most suitable for that task.
+A component that performs statistical testing might use R, one that trains a machine learning model might use Python and one that runs a command line tool might use Bash.
+Whichever language is used, the config is defined in the same way.
+This means arguments can be defined consistently across components and avoids needing to write repetitive boilerplate code.
+Language independence is supported by the environment defined for each component, enabling the creation of the correct environment for each language and allowing components from the same language to have conflicting dependencies.
+The independent, language-agnostic components created by Viash allow OpenPipeline to take advantage of the strengths of different ecosystems when building unified workflows.
 
-## The technology stack
+## The build step
 
-At build time Viash compiles each component into a Nextflow module. Workflows
-chain these modules using Nextflow DSL2, with data flowing as MuData files on a
-shared channel. The same pipeline runs unchanged from a laptop to an HPC cluster
-or the cloud.
+At build time, Viash performs several steps
+From the config and script, it creates an executable that can be run locally as well as a compiled Nextflow module
+At the same time, it builds the matching container with the environment the script runs in.
+The created Nextflow modules can be run directly or included as dependencies in workflow components that chain them into pipelines.
+The final Nextflow workflows can be run locally, on an HPC cluster or in the cloud.
 
 ```{mermaid}
 %%| label: fig-techstack
-%%| fig-cap: "Components (code in R, Python, or Bash) are wrapped by Viash into Docker images and Nextflow modules, assembled into Nextflow workflows that run unchanged on local, cloud, and HPC platforms."
+%%| fig-cap: "Components (code in R, Python, or Bash) are wrapped by Viash into Docker images and Nextflow modules, assembled into Nextflow workflows that run unchanged on local, cloud and HPC platforms."
 %%{init: {"theme":"base", "themeVariables":{"fontSize":"14px"}}}%%
 graph LR
     classDef input fill:#f5f5f5,stroke:#aaaaaa,color:#444
@@ -71,14 +67,7 @@ graph LR
 
 ## Viash Hub: build, test, publish
 
-**[Viash Hub](https://www.viash-hub.com)** is the platform that runs this
-machinery continuously. It acts as the CI backing OpenPipeline: it **builds the
-containers**, **runs the unit and workflow tests**, and **publishes** the
-resulting components to a versioned catalog. Because the same configs drive both
-the build and the docs, it is also what lets the
-[reference](../reference/index.qmd) be auto-generated.
-
-From the catalog you can browse components, read their parameters, and launch
-workflows through a GUI, or connect to Seqera, without touching the command
-line. Each generated reference page links to its Viash Hub entry for copy-paste
-run instructions.
+**[Viash Hub](https://www.viash-hub.com)** is the platform used by OpenPipeline to build and host Viash components.
+When new versions of OpenPipeline packages are ready, Viash Hub builds the components and containers, runs the component and workflow tests and publishes the package to a versioned catalogue.
+From the catalog you can browse components, read their parameters, and launch workflows.
+The same component and workflow documentation is available in the [reference](../reference/index.qmd) which links to the matching Viash Hub catalogue pages.
