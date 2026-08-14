@@ -1,14 +1,16 @@
 ---
-title: "MuData as standard data format"
-description: "The single data object every component reads and writes, with converters at the edges."
+title: "MuData as a standard data format"
+description: "The core data format used by OpenPipeline."
 order: 30
 ---
 
-Every component reads and writes the same
-[MuData](https://mudata.readthedocs.io/) object, modalities under `.mod`, cells
-in `.obs`, features in `.var`. That shared format is why components snap together
-without conversion, and is the foundation of OpenPipeline's
-[modularity](modularity.qmd).
+The core data format used by OpenPipeline is the [MuData](https://mudata.readthedocs.io/) object.
+The majority of components read and write this format, providing interoperability and [modularity](modularity.qmd) throughout workflows.
+
+MuData is the multimodal extension of [AnnData](https://anndata.readthedocs.io).
+Within a MuData object, each modality is stored as an AnnData object under the `.mod` slot.
+Inside a modality, expression matrices are stores in `.X` and `.layers`, cell metadata is stored in `.obs` and feature metadata in `.var`.
+Other fields store additional information. including cross-modality annotations.
 
 ```
 MuData
@@ -23,16 +25,12 @@ MuData
 └─ .var
 ```
 
-MuData is the multimodal extension of [AnnData](https://anndata.readthedocs.io).
-If you are new to it, read up on AnnData first, MuData is roughly a collection
-of AnnData objects, one per modality, stored in the `.mod` attribute.
-
 ## Anatomy of the object
 
 Each slot has a fixed meaning, and the same slots exist both per-modality (inside
 each AnnData under `.mod`) and at the top level (across modalities):
 
-- **`.mod`**: the associative array of AnnData objects, one per modality
+- **`.mod`**: the array of AnnData objects, one per modality
   (`rna`, `prot`, `atac`, `vdj_t`, …).
 - **`.X` and `.layers`**: the measurement matrices. Columns are variables
   (genes/features), rows are observations (cells). `.layers` holds alternative
@@ -50,12 +48,16 @@ each AnnData under `.mod`) and at the top level (across modalities):
 
 ## Working with other formats
 
-You do not have to leave your existing tools behind. OpenPipeline ships
-**converter components** in the `convert` namespace that translate to and from
-the common single-cell data formats, AnnData (H5AD), Seurat, TileDB, and 10x,
-with spatial formats (SpatialData, SpatialExperiment) added by the
-[`openpipeline_spatial`](ecosystem.qmd) package. The concept is simple: **convert
-once at the edge of the pipeline; everything in between stays MuData.**
+To enable interoperability with other ecosystems, OpenPipeline provides a series of conversion components.
+These allow you to transform your data to the format needed to run an OpenPipeline workflow or to take the output from a workflow and convert it the format needed for your downstream analysis.
 
-Browse the [`convert` namespace](../reference/index.qmd) in the reference for the
-full list of converters and their arguments.
+Supported conversion formats include:
+
+- [`AnnData`](https://anndata.readthedocs.io/)
+- [`Seurat`](https://satijalab.org/seurat/)
+- [`TileDB`](https://tiledb.com/)
+- [10x Cell Ranger/Space Ranger outputs](https://www.10xgenomics.com/)
+- [`SpatialData`](https://spatialdata.scverse.org/en/stable/)
+- [`SpatialExperiment`](https://bioconductor.org/packages/SpatialExperiment/)
+
+See the [documentation](../reference/index.qmd) for more details of specific conversion components.
