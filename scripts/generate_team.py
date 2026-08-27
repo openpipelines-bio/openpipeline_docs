@@ -13,7 +13,7 @@ Two independent sources — no merging:
 
 Field visibility:
   email         -> package maintainers only
-  organization  -> package maintainers, advisors, sponsors (never code contributors)
+  organization  -> package maintainers, sponsors (never advisors or code contributors)
 
 Run:  python scripts/generate_team.py
 The set of source repos comes from the package registry (data/packages.yaml,
@@ -185,7 +185,7 @@ def main():
         section("Code contributors",
                 [card(p, show_org=False, allow_email=False) for p in contributors]),
         section("Scientific advisors",
-                [card(p, show_org=True, allow_email=False) for p in advisors]),
+                [card(p, show_org=False, allow_email=False) for p in advisors]),
         section("Project sponsors",
                 [card(p, show_org=True, allow_email=False) for p in sponsors]),
     ]
