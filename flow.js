@@ -10,7 +10,10 @@
   //                     can genuinely be toggled.
   const FLOWS = {
     sc: {
-      hint: 'Single-cell multi-omics data (RNA, protein, ATAC, VDJ, GDO).',
+      hint: 'Single-cell multi-omics data.',
+      // pills shown next to the toggle — what this flow's data consists of
+      modalities: { label: 'Data modalities',
+        pills: ['<b>RNA</b>', '<b>Protein</b> (ADT)', '<b>ATAC</b>', '<b>VDJ</b>', '<b>GDO</b>'] },
       stages: [
         { num: 'STEP 01', title: 'Ingestion', kind: 'choice', pick: 'Convert raw data to a standard format',
           options: ['cellranger_multi', 'cellranger_count', 'cellranger_count_atac', 'bd_rhapsody'],
@@ -27,13 +30,18 @@
             { name: 'umap' },
           ] },
         { num: 'STEP 04', title: 'Downstream', kind: 'choice', pick: 'Perform further analysis',
-          options: ['cell-type annotation', 'differential expression', 'rna velocity', 'cell–cell communication'],
-          more: ['scanvi', 'celltypist', 'singler', 'onclass', 'popv'], moreLabel: 'annotation methods',
-          href: 'guides/index.html' },
+          options: [
+            { name: 'cell-type annotation', options: ['scanvi', 'celltypist', 'singler'], more: ['onclass', 'popv'], moreLabel: 'methods', href: 'guides/index.html' },
+            'differential expression', 'rna velocity', 'cell–cell communication',
+          ] },
       ],
     },
     sp: {
-      hint: 'Spatial transcriptomics (Xenium · Visium · Visium HD · CosMx · AVITI).',
+      hint: 'Spatial transcriptomics data.',
+      // pills shown next to the toggle — spatial has one data type (transcriptomics)
+      // across several instrument platforms, so these tag platforms, not modalities
+      modalities: { label: 'Technology platforms',
+        pills: ['<b>Visium</b>', '<b>Visium HD</b>', '<b>Xenium</b>', '<b>CosMx</b>', '<b>AVITI</b>'] },
       stages: [
         { num: 'STEP 01', title: 'Ingestion', kind: 'choice', pick: 'Convert raw data to a standard format',
           options: ['visium · spaceranger', 'visium HD · spaceranger', 'xenium', 'cosmx', 'aviti'],
@@ -50,9 +58,10 @@
             { name: 'umap' },
           ] },
         { num: 'STEP 04', title: 'Downstream', kind: 'choice', pick: 'Perform further analysis',
-          options: ['cell-type annotation', 'differential expression', 'cell–cell communication', 'spatial domains', 'niche domains'],
-          more: ['scanvi', 'celltypist', 'singler', 'onclass', 'popv'], moreLabel: 'annotation methods',
-          href: 'guides/index.html' },
+          options: [
+            { name: 'cell-type annotation', options: ['scanvi', 'celltypist', 'singler'], more: ['onclass', 'popv'], moreLabel: 'methods', href: 'guides/index.html' },
+            'differential expression', 'cell–cell communication', 'spatial domains', 'niche domains',
+          ] },
       ],
     },
   };
@@ -63,12 +72,16 @@
   var mount = document.getElementById('op-flow');
   var vertical = !!(mount && mount.dataset.layout === 'vertical');
   var detailed = !!(mount && mount.dataset.detailed === 'true');
+  var showModalities = !!(mount && mount.dataset.modalities === 'true');
   if (mount && !document.getElementById('flow')) {
     mount.innerHTML =
       '<div class="flow-card">' +
+      '<div class="seg-row">' +
       '<div class="seg" id="flow-seg">' +
       '<button class="on" data-flow="sc">Single-cell</button>' +
       '<button data-flow="sp">Spatial</button>' +
+      '</div>' +
+      (showModalities ? '<div class="modalities" id="flow-modalities"></div>' : '') +
       '</div>' +
       '<div class="flow-hint" id="flow-hint"></div>' +
       '<div class="flow-scroll"><div class="flow' + (vertical ? ' vertical' : '') + '" id="flow"></div></div>' +
@@ -110,6 +123,15 @@
     return '<span class="chip more" data-count="' + items.length + '" data-label="' + lbl + '">+' + items.length + ' ' + lbl + '</span>' +
       '<span class="more-wrap" hidden>' + hidden + link + '</span>';
   }
+  // a labeled, bordered group of alternatives (e.g. "integrate" ->
+  // scVI/harmony/totalVI, or "cell-type annotation" -> its methods) —
+  // shared by workflow steps and choice options so both read the same way.
+  function renderSubstep(label, options, more, href, moreLabel) {
+    var optChips = options.map(function (n) { return chip({ name: n, alt: true }); }).join('');
+    var m = (more && more.length) ? moreCluster(more, href, moreLabel) : '';
+    return '<span class="substep"><span class="substep-label">' + label + '</span>' +
+      '<span class="chips">' + optChips + m + '</span></span>';
+  }
   function renderStage(s) {
     var num = s.opt ? '<div class="num opt">optional</div>' : '<div class="num">' + s.num + '</div>';
     var head = '<span class="station"></span>' +
@@ -122,10 +144,7 @@
         if (i) parts.push('<span class="seq-arrow">→</span>');
         if (st.options) {
           // a choice step within the sequence (e.g. "integrate")
-          var optChips = st.options.map(function (n) { return chip({ name: n, alt: true }); }).join('');
-          var m = (st.more && st.more.length) ? moreCluster(st.more, s.href, st.moreLabel) : '';
-          parts.push('<span class="substep"><span class="substep-label">' + st.name + '</span>' +
-            '<span class="chips">' + optChips + m + '</span></span>');
+          parts.push(renderSubstep(st.name, st.options, st.more, s.href, st.moreLabel));
         } else {
           parts.push(chip(st));
         }
@@ -133,16 +152,24 @@
       var wfNote = s.note ? '<div class="stage-note">' + s.note + '</div>' : '';
       return '<div class="' + stageCls + '">' + head + '<div class="seq">' + parts.join('') + '</div>' + wfNote + '</div>';
     }
-    var opts = s.options.map(function (n) { return chip({ name: n, alt: true }); }).join('');
+    var opts = s.options.map(function (o) {
+      if (typeof o === 'string') return chip({ name: o, alt: true });
+      return renderSubstep(o.name, o.options, o.more, o.href, o.moreLabel);
+    }).join('');
     var more = (s.more && s.more.length) ? moreCluster(s.more, s.href, s.moreLabel) : '';
     var note = s.note ? '<div class="stage-note">' + s.note + '</div>' : '';
     return '<div class="' + stageCls + '">' + head + '<div class="chips">' + opts + more + '</div>' + note + '</div>';
   }
+  const flowModalities = document.getElementById('flow-modalities');
   function renderFlow(which) {
     const f = FLOWS[which];
     flowHint.textContent = f.hint;
     flowEl.style.setProperty('--path', which === 'sp' ? 'var(--spatial)' : 'var(--accent-ink)');
     flowEl.innerHTML = f.stages.map(renderStage).join('');
+    if (flowModalities && f.modalities) {
+      flowModalities.innerHTML = '<span class="modalities-label">' + f.modalities.label + '</span>' +
+        f.modalities.pills.map(function (p) { return '<span class="m">' + p + '</span>'; }).join('');
+    }
     flowEl.querySelectorAll('.chip.more').forEach(function (m) {
       m.onclick = function () {
         var wrap = m.nextElementSibling;

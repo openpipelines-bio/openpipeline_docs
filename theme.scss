@@ -126,10 +126,17 @@ h1, h2, h3 { letter-spacing: -0.02em; }
   .hero { padding: 66px 0 34px; }
   .hero h1 { font-family: var(--mono); font-weight: 700; letter-spacing: -.02em; font-size: clamp(30px, 5vw, 50px); line-height: 1.05; margin: 14px 0 0; }
   .hero h1 em { font-style: normal; color: var(--accent-ink); }
-  .hero p.lede { font-size: clamp(16px, 2vw, 20px); color: var(--muted); max-width: 60ch; margin: 20px 0 0; }
-  .modalities { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+  .hero p.lede { font-size: clamp(16px, 2vw, 20px); color: var(--muted); margin: 20px 0 0; }
+  .modalities { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 22px; }
   .modalities .m { font-family: var(--mono); font-size: 12px; padding: 5px 10px; border-radius: 20px; background: var(--surface); border: 1px solid var(--border); color: var(--muted); }
   .modalities .m b { color: var(--ink); font-weight: 600; }
+  // caption naming what kind of tag the pills are (data modalities vs. tech
+  // platforms) — the two flows tag different things and that distinction
+  // needs to be explicit, not implied by position.
+  .modalities-label { font-family: var(--mono); font-size: 10px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); margin-right: 2px; }
+  // modality tags sitting beside the single-cell/spatial toggle, inside the flow card
+  .seg-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
+  .seg-row .modalities { margin-top: 0; }
   .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
   .btn { font-family: var(--mono); font-size: 14px; font-weight: 600; cursor: pointer; padding: 11px 18px; border-radius: 9px; border: 1px solid transparent; display: inline-flex; gap: 8px; align-items: center; text-decoration: none; }
   .btn.primary { background: var(--brand); color: #0b1a10; }
@@ -168,7 +175,10 @@ h1, h2, h3 { letter-spacing: -0.02em; }
   .stage-note { font-size: 11px; font-style: italic; color: var(--muted); margin-top: 9px; }
 
   // tool chips
-  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  // align-items: flex-start keeps plain pill chips from stretching to match
+  // a taller .substep box (e.g. the grouped "cell-type annotation" methods)
+  // sharing the same row.
+  .chips { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 6px; }
   .chip { font-family: var(--mono); font-size: 11px; line-height: 1.4; padding: 3px 8px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); color: var(--muted); white-space: nowrap; }
   // choice options carry a bullet — they read as "pick from these alternatives"
   .chip.alt::before { content: ""; display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--path, var(--accent-ink)); margin-right: 6px; vertical-align: middle; opacity: .75; }
