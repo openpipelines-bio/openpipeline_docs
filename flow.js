@@ -15,13 +15,13 @@
       modalities: { label: 'Data modalities',
         pills: ['<b>RNA</b>', '<b>Protein</b> (ADT)', '<b>ATAC</b>', '<b>VDJ</b>', '<b>GDO</b>'] },
       stages: [
-        { num: 'STEP 01', title: 'Ingestion', kind: 'choice', pick: 'Convert raw data to a standard format',
+        { num: 'STEP 01', title: 'Ingestion', anchor: 'ingestion', kind: 'choice', pick: 'Convert raw data to a standard format',
           options: ['cellranger_multi', 'cellranger_count', 'cellranger_count_atac', 'bd_rhapsody'],
           note: 'Or bring your own count matrix' },
-        { num: 'STEP 02', title: 'Process samples', kind: 'workflow', pick: 'Normalize, filter, process',
+        { num: 'STEP 02', title: 'Process samples', anchor: 'process-samples', kind: 'workflow', pick: 'Normalize, filter, process',
           steps: [{ name: 'filter cells' }, { name: 'doublet removal', opt: true }, { name: 'normalize + log1p' }, { name: 'highly variable genes' }],
         },
-        { num: 'STEP 03', title: 'Integration', kind: 'workflow', pick: 'Remove batch effects',
+        { num: 'STEP 03', title: 'Integration', anchor: 'integration', kind: 'workflow', pick: 'Remove batch effects',
           href: 'reference/index.html',
           steps: [
             { name: 'integrate', options: ['scVI', 'harmony', 'totalVI'], more: ['scanvi', 'scanorama', 'bbknn'], moreLabel: 'methods' },
@@ -29,7 +29,7 @@
             { name: 'leiden' },
             { name: 'umap' },
           ] },
-        { num: 'STEP 04', title: 'Downstream', kind: 'choice', pick: 'Perform further analysis',
+        { num: 'STEP 04', title: 'Downstream', anchor: 'downstream', kind: 'choice', pick: 'Perform further analysis',
           options: [
             { name: 'cell-type annotation', options: ['scanvi', 'celltypist', 'singler'], more: ['onclass', 'popv'], moreLabel: 'methods', href: 'guides/index.html' },
             'differential expression', 'rna velocity', 'cell–cell communication',
@@ -43,13 +43,13 @@
       modalities: { label: 'Technology platforms',
         pills: ['<b>Visium</b>', '<b>Visium HD</b>', '<b>Xenium</b>', '<b>CosMx</b>', '<b>AVITI</b>'] },
       stages: [
-        { num: 'STEP 01', title: 'Ingestion', kind: 'choice', pick: 'Convert raw data to a standard format',
+        { num: 'STEP 01', title: 'Ingestion', anchor: 'ingestion', kind: 'choice', pick: 'Convert raw data to a standard format',
           options: ['visium · spaceranger', 'visium HD · spaceranger', 'xenium', 'cosmx', 'aviti'],
           note: 'Or bring your own count matrix' },
-        { num: 'STEP 02', title: 'Process samples', kind: 'workflow', pick: 'Normalize, filter, process',
+        { num: 'STEP 02', title: 'Process samples', anchor: 'process-samples', kind: 'workflow', pick: 'Normalize, filter, process',
           steps: [{ name: 'filter cells' }, { name: 'normalize + log1p' }, { name: 'highly variable genes' }],
         },
-        { num: 'STEP 03', title: 'Integration', kind: 'workflow', pick: 'Remove batch effects',
+        { num: 'STEP 03', title: 'Integration', anchor: 'integration', kind: 'workflow', pick: 'Remove batch effects',
           href: 'reference/index.html',
           steps: [
             { name: 'integrate', options: ['scVI', 'harmony', 'totalVI'], more: ['scanvi', 'scanorama', 'bbknn'], moreLabel: 'methods' },
@@ -57,7 +57,7 @@
             { name: 'leiden' },
             { name: 'umap' },
           ] },
-        { num: 'STEP 04', title: 'Downstream', kind: 'choice', pick: 'Perform further analysis',
+        { num: 'STEP 04', title: 'Downstream', anchor: 'downstream', kind: 'choice', pick: 'Perform further analysis',
           options: [
             { name: 'cell-type annotation', options: ['scanvi', 'celltypist', 'singler'], more: ['onclass', 'popv'], moreLabel: 'methods', href: 'guides/index.html' },
             'differential expression', 'cell–cell communication', 'spatial domains', 'niche domains',
@@ -73,6 +73,11 @@
   var vertical = !!(mount && mount.dataset.layout === 'vertical');
   var detailed = !!(mount && mount.dataset.detailed === 'true');
   var showModalities = !!(mount && mount.dataset.modalities === 'true');
+  // when true, each stage's header links to its matching section id
+  // (id="<anchor>") further down the same page — only set on the workflows
+  // overview page, which actually has those sections; the landing page's
+  // diagram has nothing to link to.
+  var anchorsEnabled = !!(mount && mount.dataset.anchors === 'true');
   if (mount && !document.getElementById('flow')) {
     mount.innerHTML =
       '<div class="flow-card">' +
@@ -92,11 +97,11 @@
   // the landing overview intentionally leaves out.
   if (detailed) {
     var demux = {
-      title: 'Demultiplexing', kind: 'choice', pick: 'Split multiplexed samples', opt: true,
+      title: 'Demultiplexing', anchor: 'demultiplexing', kind: 'choice', pick: 'Split multiplexed samples', opt: true,
       options: ['bcl2fastq', 'bcl-convert', 'cellranger mkfastq'],
     };
     var qcReport = {
-      title: 'QC report', kind: 'choice', pick: 'Inspect data quality', opt: true,
+      title: 'QC report', anchor: 'qc-report', kind: 'choice', pick: 'Inspect data quality', opt: true,
       options: ['generate_qc_report'],
       note: 'Select filtering thresholds'
     };
@@ -134,9 +139,12 @@
   }
   function renderStage(s) {
     var num = s.opt ? '<div class="num opt">optional</div>' : '<div class="num">' + s.num + '</div>';
-    var head = '<span class="station"></span>' +
+    var headInner = '<span class="station"></span>' +
       num + '<h4>' + s.title + '</h4>' +
       '<div class="pick">' + s.pick + '</div>';
+    var head = (anchorsEnabled && s.anchor)
+      ? '<a class="stage-head-link" href="#' + s.anchor + '">' + headInner + '</a>'
+      : headInner;
     var stageCls = 'stage' + (s.opt ? ' optional' : '');
     if (s.kind === 'workflow') {
       var parts = [];
