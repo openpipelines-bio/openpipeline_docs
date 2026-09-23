@@ -11,26 +11,21 @@ OpenPipeline is underpinned by two tools: **Viash**, which is used to create eac
 **[Viash](https://viash.io)** turns a config (`config.vsh.yaml`) plus a script into a self-contained component.
 From these two files it generates:
 
-- A **command-line interface**, parsing and injecting the declared arguments into the script
-- A **Docker image** pinning the component's exact dependencies
-- A **Nextflow (VDSL3) module** that can be chained into a workflow
+- A **command-line interface**, parsing and injecting the declared arguments into the script.
+- A **Docker image** pinning the component's exact dependencies.
+- A **Nextflow (VDSL3) module** that can be chained into a workflow.
 
 Viash separates a component's **logic** (a script in Python, R, or Bash) from its **execution environment** (the container) and its **orchestration layer** (Nextflow).
 
 ## Language independence
 
-Viash components can be written in whichever language is most suitable for that task.
-A component that performs statistical testing might use R, one that trains a machine learning model might use Python and one that runs a command line tool might use Bash.
-Whichever language is used, the config is defined in the same way.
-This means arguments can be defined consistently across components and avoids needing to write repetitive boilerplate code.
-Language independence is supported by the environment defined for each component, enabling the creation of the correct environment for each language and allowing components from the same language to have conflicting dependencies.
-The independent, language-agnostic components created by Viash allow OpenPipeline to take advantage of the strengths of different ecosystems when building unified workflows.
+Viash components can be written in whichever language suits the task: statistical testing might use R, a machine learning model might use Python, a command-line wrapper might use Bash.
+The config is defined the same way regardless of language, so arguments are declared consistently across components without repetitive boilerplate code.
+Each component gets its own environment, so even components written in the same language can pin conflicting dependency versions without clashing.
 
 ## The build step
 
-At build time, Viash performs several steps
-From the config and script, it creates an executable that can be run locally as well as a compiled Nextflow module
-At the same time, it builds the matching container with the environment the script runs in.
+At build time, Viash creates an executable that can be run locally, a compiled Nextflow module, and the matching container with the environment the script needs.
 The created Nextflow modules can be run directly or included as dependencies in workflow components that chain them into pipelines.
 The final Nextflow workflows can be run locally, on an HPC cluster or in the cloud.
 
