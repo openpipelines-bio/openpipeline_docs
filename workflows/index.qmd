@@ -8,6 +8,10 @@ OpenPipeline takes single-cell and spatial data from raw sequencing output, or f
 This includes ingestion, per-sample processing (filtering, quality control, normalization), integration and downstream analysis.
 The workflows and tools used depend on the data modality and the technology platform.
 
+::: {.callout-tip appearance="simple" title="New to OpenPipeline?"}
+This page maps the complete analysis pipeline end to end. If terms like *component*, *workflow* or *Viash Hub* are unfamiliar, start with [Concepts](../concepts/index.qmd) instead.
+:::
+
 ```{=html}
 <div class="op-home">
   <div id="op-flow" data-layout="vertical" data-detailed="true" data-anchors="true"></div>
