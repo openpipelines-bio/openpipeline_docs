@@ -5,7 +5,7 @@ title: "score_genes_cell_cycle_scanpy"
 namespace: "Feature annotation"
 description: "Calculates the score associated to S phase and G2M phase and annotates the cell cycle phase for each cell, as implemented by scanpy."
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

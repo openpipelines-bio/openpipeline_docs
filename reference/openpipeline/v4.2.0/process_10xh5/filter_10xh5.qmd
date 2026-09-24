@@ -5,7 +5,7 @@ title: "filter_10xh5"
 namespace: "Process 10xh5"
 description: "Filter a 10x h5 dataset"
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

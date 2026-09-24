@@ -5,7 +5,7 @@ title: "harmony_knn"
 namespace: "Workflows/annotation"
 description: "Cell type annotation workflow by performing harmony integration of reference and query dataset followed by KNN label transfer."
 type: "workflow"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

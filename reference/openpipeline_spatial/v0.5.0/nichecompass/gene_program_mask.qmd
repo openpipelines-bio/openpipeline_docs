@@ -5,7 +5,7 @@ title: "gene_program_mask"
 namespace: "Nichecompass"
 description: "Generation of a prior knowledge gene program mask for NicheCompass."
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline_spatial v0.5.0"
 ---

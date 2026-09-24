@@ -5,7 +5,7 @@ title: "split_h5mu"
 namespace: "Dataflow"
 description: "Split the samples of a single modality from a .h5mu (multimodal) sample into seperate .h5mu files based on the values of an .obs column of this modality."
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

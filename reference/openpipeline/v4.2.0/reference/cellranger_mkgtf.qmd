@@ -5,7 +5,7 @@ title: "cellranger_mkgtf"
 namespace: "Reference"
 description: "Make a GTF file - filter by a specific attribute."
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

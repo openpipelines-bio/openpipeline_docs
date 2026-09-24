@@ -5,7 +5,7 @@ title: "bd_rhapsody"
 namespace: "Mapping"
 description: "BD Rhapsody Sequence Analysis CWL pipeline v2.2.1    This pipeline performs analysis of single-cell multiomic sequence read (FASTQ) data."
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

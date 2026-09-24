@@ -5,7 +5,7 @@ title: "join_graphs"
 namespace: "Neighbors"
 description: "Combine spatial and expression neighborhood graphs into a single graph for  use in downstream clustering or trajectory analysis."
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline_spatial v0.5.0"
 ---

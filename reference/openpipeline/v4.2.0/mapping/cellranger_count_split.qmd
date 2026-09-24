@@ -5,7 +5,7 @@ title: "cellranger_count_split"
 namespace: "Mapping"
 description: "Split 10x Cell Ranger output directory into separate output fields."
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

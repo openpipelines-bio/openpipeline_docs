@@ -5,7 +5,7 @@ title: "samtools_sort"
 namespace: "Mapping"
 description: "Sort and (optionally) index alignments."
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

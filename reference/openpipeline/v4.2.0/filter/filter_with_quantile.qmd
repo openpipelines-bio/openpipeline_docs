@@ -5,7 +5,7 @@ title: "filter_with_quantile"
 namespace: "Filter"
 description: "Filter observations or features from an .h5mu file based on quantile thresholds of numeric values."
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

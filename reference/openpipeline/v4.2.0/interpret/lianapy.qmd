@@ -5,7 +5,7 @@ title: "lianapy"
 namespace: "Interpret"
 description: "Performs LIANA integration based as described in https://github.com/saezlab/liana-py"
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

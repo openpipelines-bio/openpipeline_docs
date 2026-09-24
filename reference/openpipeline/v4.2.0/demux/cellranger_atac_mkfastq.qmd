@@ -5,7 +5,7 @@ title: "cellranger_atac_mkfastq"
 namespace: "Demux"
 description: "Demultiplex raw sequencing data for ATAC experiments"
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

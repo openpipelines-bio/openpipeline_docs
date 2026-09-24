@@ -5,7 +5,7 @@ title: "process_singlesample"
 namespace: "Workflows/multiomics"
 description: "A pipeline to analyse a single multiomics sample."
 type: "workflow"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

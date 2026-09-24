@@ -276,12 +276,15 @@ jobs:
                           "[![](" + logo + "){.vh-icon} Get run instructions](" +
                           base + "/" + tag + "/components/" + rest + ")")
               body = re.sub(r'### Links\n\[Source\]\((?P<src>[^)]*)\)\{[^}]*\}', links, body, count=1)
-              # we own these fields; keep everything else the generator emitted
+              # we own these fields; keep everything else the generator emitted.
+              # toc: the generator always emits `toc: false`, but these pages
+              # (Argument groups, often a dozen+ subsections) badly need one —
+              # override it rather than keep the generator's value.
               keep = [ln for ln in fm.split("\n")
                       if (ln.split(":", 1)[0].strip() if ":" in ln else "") not in
-                      ("package", "version", "title", "subtitle", "latest")]
+                      ("package", "version", "title", "subtitle", "latest", "toc")]
               head = [f'package: "{pkg}"', f'version: "{tag}"', f'title: "{cid}"',
-                      f'subtitle: "{pkg} {tag}"']
+                      f'subtitle: "{pkg} {tag}"', 'toc: true']
               open(f, "w", encoding="utf-8").write(
                   "---\n" + "\n".join(head + keep + ['latest: "true"']) + body)
           for pkg, (build, tag) in plan.items():

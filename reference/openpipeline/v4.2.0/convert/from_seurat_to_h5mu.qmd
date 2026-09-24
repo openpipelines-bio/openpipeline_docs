@@ -5,7 +5,7 @@ title: "from_seurat_to_h5mu"
 namespace: "Convert"
 description: "Converts a Seurat file into an H5MU file"
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

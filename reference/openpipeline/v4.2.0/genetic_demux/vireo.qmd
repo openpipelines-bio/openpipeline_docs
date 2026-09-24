@@ -5,7 +5,7 @@ title: "vireo"
 namespace: "Genetic demux"
 description: "Vireo is primarily designed for demultiplexing cells into donors by modelling of expressed alleles."
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

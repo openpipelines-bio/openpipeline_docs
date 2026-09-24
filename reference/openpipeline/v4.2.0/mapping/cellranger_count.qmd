@@ -5,7 +5,7 @@ title: "cellranger_count"
 namespace: "Mapping"
 description: "Align fastq files using Cell Ranger count."
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

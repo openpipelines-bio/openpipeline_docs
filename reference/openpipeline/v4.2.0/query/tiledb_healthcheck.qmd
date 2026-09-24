@@ -5,7 +5,7 @@ title: "tiledb_healthcheck"
 namespace: "Query"
 description: "Checks if a provided location can be queried as a TileDB-SOMA database"
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

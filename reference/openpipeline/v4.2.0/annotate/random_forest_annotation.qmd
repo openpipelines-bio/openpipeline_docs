@@ -5,7 +5,7 @@ title: "random_forest_annotation"
 namespace: "Annotate"
 description: "Automated cell type annotation tool for scRNA-seq datasets on the basis of random forest."
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

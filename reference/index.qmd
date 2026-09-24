@@ -81,48 +81,90 @@ function initRefListing() {
     }
   });
 
-  // 2) build facet pills from the data actually present
-  function makeFacet(bar, value, label, swatchVar, pressed, onToggle) {
+  // 2) build facet pills from the data actually present.
+  // Semantics per facet group (package / type), chosen to match how checkbox
+  // filters usually work (Amazon, GitHub, …): empty selection = no
+  // restriction from that group (everything shown); checking a value narrows
+  // to rows matching ANY checked value in that group (OR within the group),
+  // and groups combine with AND. Each group also gets an explicit "All" pill
+  // that's highlighted whenever nothing else in the group is checked, so the
+  // "unrestricted" state is always visibly obvious rather than implied by an
+  // absence of highlighted pills.
+  function makeAllPill(bar, onClick) {
     var b = document.createElement("button");
     b.className = "facet";
-    b.setAttribute("aria-pressed", pressed ? "true" : "false");
+    b.dataset.value = "__all__";
+    b.setAttribute("aria-pressed", "true");
+    b.innerHTML = '<span class="swatch swatch-all"></span>All';
+    b.addEventListener("click", onClick);
+    bar.appendChild(b);
+    return b;
+  }
+  function makeFacet(bar, value, label, swatchVar, onToggle) {
+    var b = document.createElement("button");
+    b.className = "facet";
+    b.setAttribute("aria-pressed", "false");
     b.dataset.value = value;
     b.innerHTML = (swatchVar ? '<span class="swatch" style="background:var(--' + swatchVar + ')"></span>' : "") + label;
-    b.addEventListener("click", function () {
-      b.setAttribute("aria-pressed", b.getAttribute("aria-pressed") === "true" ? "false" : "true");
-      onToggle();
-    });
+    b.addEventListener("click", onToggle);
     bar.appendChild(b);
   }
   var pkgBar = document.querySelector('.facet-bar[data-facet="package"]');
   var typeBar = document.querySelector('.facet-bar[data-facet="type"]');
+
+  function wireGroup(bar) {
+    var allPill = makeAllPill(bar, function () {
+      Array.prototype.slice.call(bar.querySelectorAll(".facet")).forEach(function (f) {
+        f.setAttribute("aria-pressed", f === allPill ? "true" : "false");
+      });
+      apply();
+    });
+    return {
+      bar: bar,
+      allPill: allPill,
+      addValue: function (value, label, swatchVar) {
+        makeFacet(bar, value, label, swatchVar, function (ev) {
+          var pressed = ev.currentTarget.getAttribute("aria-pressed") === "true";
+          ev.currentTarget.setAttribute("aria-pressed", pressed ? "false" : "true");
+          var anySpecific = Array.prototype.slice.call(bar.querySelectorAll(".facet"))
+            .some(function (f) { return f !== allPill && f.getAttribute("aria-pressed") === "true"; });
+          allPill.setAttribute("aria-pressed", anySpecific ? "false" : "true");
+          apply();
+        });
+      },
+    };
+  }
+  var pkgGroup = wireGroup(pkgBar);
+  var typeGroup = wireGroup(typeBar);
   var seenPkg = {}, seenType = {};
   rows.forEach(function (r) {
     var p = r.querySelector(".listing-package").dataset.pkg;
-    if (p && !seenPkg[p]) { seenPkg[p] = 1; makeFacet(pkgBar, p, p, PKG_VAR[p] || "core", true, apply); }
+    if (p && !seenPkg[p]) { seenPkg[p] = 1; pkgGroup.addValue(p, p, PKG_VAR[p] || "core"); }
     var t = r.querySelector(".listing-type").dataset.type;
-    // default to workflows only, components are off until toggled on
-    if (t && !seenType[t]) { seenType[t] = 1; makeFacet(typeBar, t, TYPE_LABEL[t] || t, null, t === "workflow", apply); }
+    if (t && !seenType[t]) { seenType[t] = 1; typeGroup.addValue(t, TYPE_LABEL[t] || t, null); }
   });
 
   var search = document.querySelector(".ref-search-input");
   var count = document.querySelector(".ref-count");
 
-  function activeVals(bar) {
-    return Array.prototype.slice.call(bar.querySelectorAll(".facet"))
-      .filter(function (f) { return f.getAttribute("aria-pressed") === "true"; })
+  // null = group unrestricted ("All" active or nothing checked); otherwise
+  // the list of checked values (OR'd together).
+  function restriction(bar) {
+    var active = Array.prototype.slice.call(bar.querySelectorAll(".facet"))
+      .filter(function (f) { return f.dataset.value !== "__all__" && f.getAttribute("aria-pressed") === "true"; })
       .map(function (f) { return f.dataset.value; });
+    return active.length ? active : null;
   }
 
   function apply() {
-    var ap = activeVals(pkgBar), at = activeVals(typeBar);
+    var rp = restriction(pkgBar), rt = restriction(typeBar);
     var q = (search.value || "").trim().toLowerCase();
     var shown = 0;
     rows.forEach(function (r) {
       var pkg = r.querySelector(".listing-package").dataset.pkg;
       var typ = r.querySelector(".listing-type").dataset.type;
       var hay = (cellText(r, ".listing-title") + " " + cellText(r, ".listing-namespace") + " " + cellText(r, ".listing-description")).toLowerCase();
-      var vis = ap.indexOf(pkg) >= 0 && at.indexOf(typ) >= 0 && (!q || hay.indexOf(q) !== -1);
+      var vis = (!rp || rp.indexOf(pkg) >= 0) && (!rt || rt.indexOf(typ) >= 0) && (!q || hay.indexOf(q) !== -1);
       r.style.display = vis ? "" : "none";
       if (vis) shown++;
     });

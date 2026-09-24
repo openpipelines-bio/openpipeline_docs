@@ -5,7 +5,7 @@ title: "cellxgene_census"
 namespace: "Query"
 description: "Query cells from a CellxGene Census or custom TileDBSoma object."
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

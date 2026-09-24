@@ -5,7 +5,7 @@ title: "create_pseudobulk"
 namespace: "Differential expression"
 description: "Generation of pseudobulk samples from single-cell transcriptomics data, by aggregating raw gene expression counts from individual cells to create  bulk-like expression profiles suitable for differential expression analysis with methods designed for bulk differential expression analysis."
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

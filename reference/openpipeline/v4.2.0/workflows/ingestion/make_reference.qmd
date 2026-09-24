@@ -5,7 +5,7 @@ title: "make_reference"
 namespace: "Workflows/ingestion"
 description: "Build a transcriptomics reference into one of many formats"
 type: "workflow"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---
