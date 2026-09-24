@@ -18,10 +18,11 @@ to end.
 ```{=html}
 <div class="facet-bar guide-facets" id="guide-facets">
   <span class="lbl">package</span>
-  <button class="facet" data-pkg="openpipeline" aria-pressed="true"><span class="swatch" style="background:var(--core)"></span>openpipeline</button>
-  <button class="facet" data-pkg="openpipeline_spatial" aria-pressed="true"><span class="swatch" style="background:var(--spatial)"></span>openpipeline_spatial</button>
-  <button class="facet" data-pkg="openpipeline_qc" aria-pressed="true"><span class="swatch" style="background:var(--qc)"></span>openpipeline_qc</button>
-  <button class="facet" data-pkg="openpipeline_composed" aria-pressed="true"><span class="swatch" style="background:var(--composed)"></span>openpipeline_composed</button>
+  <button class="facet" data-pkg="all" aria-pressed="true"><span class="swatch swatch-all"></span>All</button>
+  <button class="facet" data-pkg="openpipeline" aria-pressed="false"><span class="swatch" style="background:var(--core)"></span>openpipeline</button>
+  <button class="facet" data-pkg="openpipeline_spatial" aria-pressed="false"><span class="swatch" style="background:var(--spatial)"></span>openpipeline_spatial</button>
+  <button class="facet" data-pkg="openpipeline_qc" aria-pressed="false"><span class="swatch" style="background:var(--qc)"></span>openpipeline_qc</button>
+  <button class="facet" data-pkg="openpipeline_composed" aria-pressed="false"><span class="swatch" style="background:var(--composed)"></span>openpipeline_composed</button>
 </div>
 
 <h2 class="guide-section-head">Analysis guides</h2>
@@ -145,21 +146,23 @@ to end.
   var facets = Array.prototype.slice.call(document.querySelectorAll("#guide-facets .facet"));
   var cards = Array.prototype.slice.call(document.querySelectorAll(".guide-grid .rcard"));
   if (!facets.length || !cards.length) return;
-  function active() {
-    return facets.filter(function (f) { return f.getAttribute("aria-pressed") === "true"; })
-                 .map(function (f) { return f.dataset.pkg; });
+  // Single-select: clicking a package isolates it, rather than toggling it
+  // out of an all-shown set. "All" resets back to showing everything.
+  function activePkg() {
+    var pressed = facets.filter(function (f) { return f.getAttribute("aria-pressed") === "true"; })[0];
+    return pressed ? pressed.dataset.pkg : "all";
   }
   function apply() {
-    var a = active();
+    var pkg = activePkg();
     cards.forEach(function (c) {
       var pk = (c.dataset.pkgs || "").split(" ");
-      var vis = pk.indexOf("all") !== -1 || pk.some(function (p) { return a.indexOf(p) !== -1; });
+      var vis = pkg === "all" || pk.indexOf("all") !== -1 || pk.indexOf(pkg) !== -1;
       c.style.display = vis ? "" : "none";
     });
   }
   facets.forEach(function (f) {
     f.addEventListener("click", function () {
-      f.setAttribute("aria-pressed", f.getAttribute("aria-pressed") === "true" ? "false" : "true");
+      facets.forEach(function (x) { x.setAttribute("aria-pressed", x === f ? "true" : "false"); });
       apply();
     });
   });

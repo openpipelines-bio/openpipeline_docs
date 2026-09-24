@@ -349,6 +349,8 @@ a.concept-card.blue:hover { box-shadow: 0 0 0 1px var(--composed), var(--shadow)
 // clickable filter pill
 .facet { font-family: var(--mono); font-size: 12.5px; cursor: pointer; user-select: none; padding: 6px 11px; border-radius: 20px; border: 1px solid var(--op-border); background: var(--op-surface); color: var(--op-ink); display: inline-flex; align-items: center; gap: 7px; }
 .facet .swatch { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+// "All" facet swatch — same conic gradient as the cards' "applies to all packages" tag
+.facet .swatch.swatch-all { background: conic-gradient(from 0deg, var(--core), var(--spatial), var(--qc), var(--composed), var(--core)); }
 .facet[aria-pressed="false"] { opacity: .4; }
 .facet:hover { border-color: currentColor; }
 
