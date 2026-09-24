@@ -4,9 +4,14 @@ description: "Goal-oriented recipes. Each is standalone and links into the refer
 order: 0
 ---
 
-Pick a task. Each guide is standalone and links into the
-[reference](../reference/index.qmd). Filter by the package it applies to, some
-guides are cross-cutting and apply to every package.
+Pick a task and get hands-on: the reasoning behind it, a runnable example, and the
+decisions you'll actually need to make. Guides are standalone, so read the one you
+need rather than the whole set in order. For the sequential map of the whole
+pipeline, see the [Overview](../workflows/index.qmd); for exhaustive parameter
+listings, see the [reference](../reference/index.qmd).
+
+Filter by the package a guide applies to below; some guides are cross-cutting and
+apply to every package.
 
 ::: {.callout-note appearance="simple"}
 These guides assume you already have a working setup, local Nextflow + Docker, or
