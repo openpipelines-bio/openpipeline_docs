@@ -22,7 +22,7 @@ project:
   # pre-render step.
 
 website:
-  title: "OpenPipeline"
+  title: "OpenPipelines"
   description: "Best-practice workflows for single-cell and spatial multi-omics data"
   image: images/logo.svg
   # Draft rebuild — deploys to its own GitHub Pages project URL, NOT the
@@ -32,14 +32,14 @@ website:
   repo-actions: none
 
   page-footer:
-    left: "© OpenPipeline"
+    left: "© OpenPipelines"
 
   navbar:
     # Mark only (theme-adapting) + the wordmark as title text — the clearer
     # treatment from design/mockup.html. The old logo.svg stacked the wordmark
     # under the mark, which turned to mush at navbar height.
     logo: images/logo-mark.svg
-    title: "OpenPipeline"
+    title: "OpenPipelines"
     # Flat, orientation-first: see the whole pipeline -> understand why -> try it
     # -> do tasks -> look up -> contribute. Fits the educational, mixed-audience
     # mission. "Overview" is the curated stage-by-stage pipeline map (page lives

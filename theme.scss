@@ -228,7 +228,7 @@ h1, h2, h3 { letter-spacing: -0.02em; }
   .ways-note { font-size: 13px; color: var(--muted); margin-top: 16px; }
   .ways-note a { color: var(--accent-ink); }
 
-  // why openpipeline — strengths grid (3×2, symmetric)
+  // why openpipelines — strengths grid (3×2, symmetric)
   .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
   .feature { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; box-shadow: var(--shadow); }
   .feature b { font-family: var(--mono); font-size: 14px; color: var(--ink); display: block; margin-bottom: 6px; letter-spacing: -.01em; }

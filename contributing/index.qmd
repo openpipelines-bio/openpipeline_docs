@@ -22,7 +22,7 @@ listing:
   sort-ui: false
 ---
 
-OpenPipeline is open-source. Whether you want to fix a typo, report a bug, or add
+OpenPipelines is open-source. Whether you want to fix a typo, report a bug, or add
 a whole new workflow, contributions are welcome.
 
 ## Ways to contribute
@@ -38,7 +38,7 @@ You don't have to write code to help.
 
 ## Making code contributions
 
-Contributing code to an OpenPipeline package follows these steps:
+Contributing code to an OpenPipelines package follows these steps:
 
 ```{mermaid}
 %%| label: fig-contributing-flow
@@ -76,7 +76,7 @@ Stuck? Open an issue on the package repository, or start a discussion on
 
 ## Code of conduct
 
-OpenPipeline adopts the
+OpenPipelines adopts the
 [Contributor Covenant](https://www.contributor-covenant.org/). We pledge to keep
 the community welcoming, inclusive, and harassment-free, and by taking part you
 agree to uphold it. Please read the full

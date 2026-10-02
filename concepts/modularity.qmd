@@ -6,9 +6,9 @@ order: 20
 
 ## The building blocks
 
-OpenPipeline is assembled from components built using  [Viash](viash.qmd), a tool that turns a plain script into a runnable, containerized unit.
+OpenPipelines is assembled from components built using  [Viash](viash.qmd), a tool that turns a plain script into a runnable, containerized unit.
 
-We use these terms to refer to different parts of OpenPipeline:
+We use these terms to refer to different parts of OpenPipelines:
 
 ```{=html}
 <div class="concept-list">
@@ -44,7 +44,7 @@ We use these terms to refer to different parts of OpenPipeline:
 
 ## Code-level vs. execution-level modularity
 
-OpenPipeline is modular at both the code and execution levels.
+OpenPipelines is modular at both the code and execution levels.
 
 ### Code-level modularity
 
@@ -54,18 +54,18 @@ Shared code such as environment definitions or helper functions ensure consisten
 
 ### Execution-level modularity
 
-OpenPipeline components are also modular at the execution level.
+OpenPipelines components are also modular at the execution level.
 Every module is an independent containerized unit that can be run on its own or chained together to form workflows.
 
 - **Self-contained**: Each component has its own Docker image with the packages it requires.
   Two components can have conflicting dependencies but still run in the same workflow.
 - **Independently runnable**: Each component can be executed, tested or built without needing the rest of the project.
   Built components can be run as executables or Nextflow modules.
-- **Consistent data format**: Components in OpenPipeline store data in the [MuData](mudata.qmd) format.
+- **Consistent data format**: Components in OpenPipelines store data in the [MuData](mudata.qmd) format.
   Using a consistent data format means components can easily be rearranged or substituted without needing additional data manipulation.
 
 ## Why modularity is important
 
-The modular design of OpenPipeline means that constructing a workflow becomes a matter of combining the correct steps.
+The modular design of OpenPipelines means that constructing a workflow becomes a matter of combining the correct steps.
 Adding, removing or swapping a processing step is a change to the pipeline definition but does not need modifying individual components.
-Components can be reused in multiple workflows and shared across the OpenPipeline [ecosystem](ecosystem.qmd).
+Components can be reused in multiple workflows and shared across the OpenPipelines [ecosystem](ecosystem.qmd).

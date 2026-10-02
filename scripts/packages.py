@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Read the package registry (data/packages.yaml).
 
-This is the single source of truth for which OpenPipeline packages the
+This is the single source of truth for which OpenPipelines packages the
 generation tooling operates on. Both scripts/generate_team.py and
 .github/workflows/generate-reference.yml consume it through here.
 

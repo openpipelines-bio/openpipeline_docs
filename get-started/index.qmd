@@ -1,12 +1,12 @@
 ---
 title: "Quickstart"
-description: "Try out OpenPipeline on your system."
+description: "Try out OpenPipelines on your system."
 order: 0
 number-sections: true
 shift-heading-level-by: -1
 ---
 
-This tutorial walks you through the process of setting up OpenPipeline on your system and processing an example dataset.
+This tutorial walks you through the process of setting up OpenPipelines on your system and processing an example dataset.
 No prior experience with Viash, Nextflow or single-cell analysis is required.
 
 <!-- Add a link to a no-code Viash Hub guide? -->
@@ -30,7 +30,7 @@ We don't assume any prior experience with Viash, Nextflow or single-cell analysi
 
 ## General setup {#sec-setup-nextflow-and-docker}
 
-These instructions show how to set up an environment for running OpenPipeline workflows.
+These instructions show how to set up an environment for running OpenPipelines workflows.
 The main tools we require are [Nextflow](https://www.nextflow.io/) and [Docker](https://www.docker.com/) (or alternatives, see below).
 Nextflow also requires a Java runtime.
 
@@ -112,7 +112,7 @@ EOM
 ## Example setup
 
 These instructions are specific to the example in this tutorial.
-You do not need to follow them if you plan to run OpenPipeline workflows on your own data.
+You do not need to follow them if you plan to run OpenPipelines workflows on your own data.
 
 ### Create resource labels
 
@@ -211,7 +211,7 @@ The [Process many samples](../guides/process-many-samples.qmd) guide covers the 
 
 
 We then run the workflow with these parameters.
-Notice that we specify a specific version of OpenPipeline (`-r v4.2.0`) to ensure reproducibility.
+Notice that we specify a specific version of OpenPipelines (`-r v4.2.0`) to ensure reproducibility.
 
 ```bash
 nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
@@ -255,7 +255,7 @@ We also added a range of other calculated values:
 ## Integrate
 
 These two samples contain a batch effect we want to correct before further analysis.
-In this example we use the `integration/harmony_leiden` workflow but there are a range of other integration methods available in OpenPipeline, see [Integrate across samples](../guides/integrate.qmd) for details.
+In this example we use the `integration/harmony_leiden` workflow but there are a range of other integration methods available in OpenPipelines, see [Integrate across samples](../guides/integrate.qmd) for details.
 
 ```bash
 # Create a parameters file

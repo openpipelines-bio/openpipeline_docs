@@ -7,7 +7,7 @@ order: 50
 [`openpipeline`]{.pkg-tag .pkg-openpipeline}<span class="swatch openpipeline"></span>
 
 Once cells are [annotated](annotate.qmd), you can test which genes change between
-conditions (genotype, treatment, disease vs. control). OpenPipeline uses a
+conditions (genotype, treatment, disease vs. control). OpenPipelines uses a
 **pseudobulk** approach: within each cell type, counts are summed per sample into
 bulk-like samples that DESeq2 then models, so the unit of replication is the
 sample, not the cell, avoiding the inflated significance of treating thousands of

@@ -121,7 +121,7 @@ across modalities they reach:
 - **Multimodal** integration uses several modalities jointly:
   `integration/totalvi_leiden` (RNA + protein).
 - **Mosaic** integration (batches and modalities where not every cell is profiled
-  in every modality) is not currently available in OpenPipeline.
+  in every modality) is not currently available in OpenPipelines.
 
 ### Why the position matters
 

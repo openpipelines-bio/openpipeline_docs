@@ -1,6 +1,6 @@
 ---
 title: "Running pipelines"
-description: "Launch any OpenPipeline workflow locally, on Seqera, or through Viash Hub."
+description: "Launch any OpenPipelines workflow locally, on Seqera, or through Viash Hub."
 order: 80
 ---
 

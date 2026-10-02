@@ -4,7 +4,7 @@ description: "How components are built, containerized, tested, and published."
 order: 40
 ---
 
-OpenPipeline is underpinned by two tools: **Viash**, which is used to create each component, and **Viash Hub**, the platform that builds, tests and publishes them.
+OpenPipelines is underpinned by two tools: **Viash**, which is used to create each component, and **Viash Hub**, the platform that builds, tests and publishes them.
 
 ## Viash: config + script → component
 
@@ -24,7 +24,7 @@ A component that performs statistical testing might use R, one that trains a mac
 Whichever language is used, the config is defined in the same way.
 This means arguments can be defined consistently across components and avoids needing to write repetitive boilerplate code.
 Language independence is supported by the environment defined for each component, enabling the creation of the correct environment for each language and allowing components from the same language to have conflicting dependencies.
-The independent, language-agnostic components created by Viash allow OpenPipeline to take advantage of the strengths of different ecosystems when building unified workflows.
+The independent, language-agnostic components created by Viash allow OpenPipelines to take advantage of the strengths of different ecosystems when building unified workflows.
 
 ## The build step
 
@@ -67,7 +67,7 @@ graph LR
 
 ## Viash Hub: build, test, publish
 
-**[Viash Hub](https://www.viash-hub.com)** is the platform used by OpenPipeline to build and host Viash components.
-When new versions of OpenPipeline packages are ready, Viash Hub builds the components and containers, runs the component and workflow tests and publishes the package to a versioned catalogue.
+**[Viash Hub](https://www.viash-hub.com)** is the platform used by OpenPipelines to build and host Viash components.
+When new versions of OpenPipelines packages are ready, Viash Hub builds the components and containers, runs the component and workflow tests and publishes the package to a versioned catalogue.
 From the catalogue you can browse components, read their parameters, and launch workflows.
 The same component and workflow documentation is available in the [reference](../reference/index.qmd) which links to the matching Viash Hub catalogue pages.

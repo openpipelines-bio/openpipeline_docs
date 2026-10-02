@@ -1,5 +1,5 @@
 ---
-pagetitle: "OpenPipeline, modular single-cell & spatial pipelines"
+pagetitle: "OpenPipelines, modular single-cell & spatial pipelines"
 description: "Modular, containerized components and reproducible Nextflow workflows for single-cell and spatial data."
 toc: false
 page-layout: full
@@ -12,7 +12,7 @@ anchor-sections: false
   <div class="wrap hero">
     <span class="kicker">Multi-modal omics analysis · reproducible at scale</span>
     <h1>Modular, reproducible pipelines for<br><em>single-cell and spatial</em> data.</h1>
-    <p class="lede">From raw counts to an interpretable data object, OpenPipeline reliable and robustly processes your data.</p>
+    <p class="lede">From raw counts to an interpretable data object, OpenPipelines reliable and robustly processes your data.</p>
     <div class="modalities">
       <span class="m"><b>RNA</b></span>
       <span class="m"><b>Protein</b> (ADT)</span>
@@ -33,9 +33,9 @@ anchor-sections: false
   <section class="block alt">
     <div class="wrap">
       <div class="sec-head">
-        <span class="kicker">Why OpenPipeline?</span>
+        <span class="kicker">Why OpenPipelines?</span>
         <h2>What makes it different?</h2>
-        <p>Design choices that set OpenPipeline apart from a typical analysis pipeline.</p>
+        <p>Design choices that set OpenPipelines apart from a typical analysis pipeline.</p>
       </div>
       <div class="features">
         <div class="feature">
@@ -127,7 +127,7 @@ anchor-sections: false
       <div class="sec-head">
         <span class="kicker">Under the hood</span>
         <h2>Built on proven infrastructure</h2>
-        <p>OpenPipeline is built on established open-source tools, using infrastructure you can trust.</p>
+        <p>OpenPipelines is built on established open-source tools, using infrastructure you can trust.</p>
       </div>
       <div class="infra">
         <a class="infra-card" href="https://viash.io" target="_blank" rel="noopener">

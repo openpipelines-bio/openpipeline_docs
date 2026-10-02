@@ -1,6 +1,6 @@
 # openpipeline_docs
 
-Draft next-generation documentation site for the **OpenPipeline** ecosystem,
+Draft next-generation documentation site for the **OpenPipelines** ecosystem,
 covering single-cell (`openpipeline`) and spatial (`openpipeline_spatial`), plus
 the cross-cutting `openpipeline_qc`, `openpipeline_rapids`, and
 `openpipeline_composed` packages.

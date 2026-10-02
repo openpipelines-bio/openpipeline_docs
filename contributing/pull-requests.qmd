@@ -4,7 +4,7 @@ description: "Get your change reviewed, merged and released"
 order: 70
 ---
 
-Changes reach OpenPipeline through pull requests against the **`main`** branch of
+Changes reach OpenPipelines through pull requests against the **`main`** branch of
 the package repository (see
 [Versioning and releases](project-structure.qmd#sec-versioning)).
 

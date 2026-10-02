@@ -1,6 +1,6 @@
 ---
 title: "Reference"
-description: "Every component and workflow across the OpenPipeline ecosystem."
+description: "Every component and workflow across the OpenPipelines ecosystem."
 toc: false
 page-layout: full
 listing:

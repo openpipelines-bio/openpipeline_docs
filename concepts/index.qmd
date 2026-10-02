@@ -1,10 +1,10 @@
 ---
 title: "How it works"
-description: "The core ideas behind OpenPipeline, and why it works the way it does."
+description: "The core ideas behind OpenPipelines, and why it works the way it does."
 order: 0
 ---
 
-OpenPipeline is a set of modular, containerized workflows for single-cell and
+OpenPipelines is a set of modular, containerized workflows for single-cell and
 spatial multi-omics, taking data from raw counts to a processed, annotated
 object.
 
@@ -16,7 +16,7 @@ out across the actual pipeline, see [the pipeline overview](../workflows/index.q
 <div class="concept-list">
 
   <a class="concept-card" href="ecosystem.html">
-    <div class="ct">The OpenPipeline ecosystem</div>
+    <div class="ct">The OpenPipelines ecosystem</div>
     <p>A core package and a family of satellites that all share the same building blocks.</p>
     <span class="go">Read →</span>
   </a>

@@ -1,10 +1,10 @@
 ---
 title: "MuData as a standard data format"
-description: "The core data format used by OpenPipeline."
+description: "The core data format used by OpenPipelines."
 order: 30
 ---
 
-The core data format used by OpenPipeline is the [MuData](https://mudata.readthedocs.io/) object.
+The core data format used by OpenPipelines is the [MuData](https://mudata.readthedocs.io/) object.
 All components read and write this format, providing interoperability and [modularity](modularity.qmd) throughout workflows.
 
 MuData is the multimodal extension of [AnnData](https://anndata.readthedocs.io).
@@ -48,8 +48,8 @@ each AnnData under `.mod`) and at the top level (across modalities):
 
 ## Working with other formats
 
-To enable interoperability with other ecosystems, OpenPipeline provides a series of conversion components.
-These allow you to transform your data to the format needed to run an OpenPipeline workflow or to take the output from a workflow and convert it the format needed for your downstream analysis.
+To enable interoperability with other ecosystems, OpenPipelines provides a series of conversion components.
+These allow you to transform your data to the format needed to run an OpenPipelines workflow or to take the output from a workflow and convert it the format needed for your downstream analysis.
 
 Supported conversion formats include:
 

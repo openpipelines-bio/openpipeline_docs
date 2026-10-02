@@ -1,10 +1,10 @@
 ---
 title: "Workflows overview"
-description: "Workflows offered by OpenPipeline and where they fit in the analysis process."
+description: "Workflows offered by OpenPipelines and where they fit in the analysis process."
 order: 60
 ---
 
-OpenPipeline takes single-cell and spatial data from raw sequencing output to a processed, standardized dataset. 
+OpenPipelines takes single-cell and spatial data from raw sequencing output to a processed, standardized dataset. 
 This includes ingestion, per-sample processing (filtering, quality control, normalization), integration and downstream analysis.
 The workflows and tools used depend on the data modality.
 
@@ -17,7 +17,7 @@ The workflows and tools used depend on the data modality.
 ## Demultiplexing
 
 If your sequencing provider delivers raw Illumina BCL files, convert them to per-sample FASTQ files.
-This step is **often already performed upstream** by your sequencing provider, but is also available within OpenPipeline.
+This step is **often already performed upstream** by your sequencing provider, but is also available within OpenPipelines.
 
 The `ingestion/demux` workflow supports three demultiplexers selected via
 `--demultiplexer`:
@@ -37,7 +37,7 @@ If you already have FASTQ files or a pre-built count matrix, skip directly to
 ## Ingestion
 
 Ingestion workflows convert raw sequencing outputs to a standardised MuData format.
-OpenPipeline supports a range of common single-cell multi-omics and spatial transcriptomics platforms, or if you have existing data convert to MuData from common formats (`AnnData`, `Seurat`, TileDB etc.).
+OpenPipelines supports a range of common single-cell multi-omics and spatial transcriptomics platforms, or if you have existing data convert to MuData from common formats (`AnnData`, `Seurat`, TileDB etc.).
 
 ::: {.callout-tip appearance="simple" title="Guides"}
 [Ingestion](../guides/ingest-10x.qmd) covers workflow selection, reference genome setup, and examples.
@@ -110,7 +110,7 @@ ATAC ingestion (`ingestion/cellranger_atac_count`) and a standalone QC metrics m
 
 Samples from different donors, sequencing runs or library preparations often include batch effects that complicate analysis.
 Integration workflows remove these effects, producing a clean multi-sample dataset for analysis.
-OpenPipeline supports several integration methods operating on different data representations, each with different assumptions and strengths.
+OpenPipelines supports several integration methods operating on different data representations, each with different assumptions and strengths.
 
 ::: {.callout-tip appearance="simple" title="Guides"}
 See [Integration](../guides/integrate.qmd) for guidance on choosing a method.
@@ -132,7 +132,7 @@ These workflows move beyond standard processing to perform biological analysis.
 ### Annotation
 
 A key downstream task is annotation, assigning labels to clusters or individual observations.
-In OpenPipeline, this is always reference-based, transferring labels from an in-house model, an open-source model or a reference dataset.
+In OpenPipelines, this is always reference-based, transferring labels from an in-house model, an open-source model or a reference dataset.
 Which tool to use depends on the available references, the tissue and the biological question.
 
 ::: {.callout-tip appearance="simple"}
@@ -150,7 +150,7 @@ Which tool to use depends on the available references, the tissue and the biolog
 ### Other analyses
 
 Beyond annotation, the integrated object is the starting point for a range of
-downstream analyses, available as OpenPipeline workflows or components:
+downstream analyses, available as OpenPipelines workflows or components:
 
 | Workflow / component | Package | Description |
 |---|---|---|

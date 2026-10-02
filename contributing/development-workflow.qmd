@@ -4,7 +4,7 @@ description: "The local edit-run-test loop and the test data it needs"
 order: 30
 ---
 
-OpenPipeline is built with [Viash](https://viash.io), so the whole local loop
+OpenPipelines is built with [Viash](https://viash.io), so the whole local loop
 runs through the `viash` CLI. You edit source, run it, and test it, all without a
 separate build step. This page covers how that loop works and where the test data
 comes from. The [component](creating-components.qmd) and

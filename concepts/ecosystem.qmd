@@ -1,6 +1,6 @@
 ---
-title: "The OpenPipeline ecosystem"
-description: "Get to know the OpenPipeline packages."
+title: "The OpenPipelines ecosystem"
+description: "Get to know the OpenPipelines packages."
 order: 10
 ---
 

@@ -1,18 +1,18 @@
 ---
 title: "Create a component"
-description: "Write a Viash component that fits OpenPipeline conventions"
+description: "Write a Viash component that fits OpenPipelines conventions"
 order: 40
 ---
 
 A component is one step of a pipeline: a script plus a `config.vsh.yaml` that
-describes its inputs, outputs, dependencies, and container. OpenPipeline builds
+describes its inputs, outputs, dependencies, and container. OpenPipelines builds
 every component with [Viash](https://viash.io). The how-to for writing a config
 lives in the [Viash guide](https://viash.io/guide/) and
 [config reference](https://viash.io/reference/config/); this page covers the
-conventions specific to OpenPipeline and walks through the anatomy of a real
+conventions specific to OpenPipelines and walks through the anatomy of a real
 component.
 
-## OpenPipeline conventions
+## OpenPipelines conventions
 
 :::{.callout-tip}
 ## Check the reference first
@@ -103,7 +103,7 @@ runners:
       label: [midmem, lowcpu, highdisk]     # resource labels
 ```
 
-A few OpenPipeline habits show up here: `--input`/`--output` are `file`
+A few OpenPipelines habits show up here: `--input`/`--output` are `file`
 arguments carrying the [MuData](../concepts/mudata.qmd) object, a `--modality`
 argument selects which modality to act on, shared Python requirements and helper
 scripts are pulled in with `__merge__` instead of copied, and the `nextflow`
@@ -111,7 +111,7 @@ runner carries [resource labels](../guides/tune-resources.qmd).
 
 ### The script
 
-The script does the work. OpenPipeline scripts read the MuData object, operate on
+The script does the work. OpenPipelines scripts read the MuData object, operate on
 the requested modality, and write it back out. Every script opens with a `##
 VIASH START` / `## VIASH END` block so it can be run standalone while iterating
 (see [Build and test locally](development-workflow.qmd)):
