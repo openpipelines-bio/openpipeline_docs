@@ -6,10 +6,8 @@ order: 10
 
 ## Fork and clone the repository
 
-Each package's **source** lives in its own GitHub repository under
-[openpipelines-bio](https://github.com/openpipelines-bio). These repos hold only
-source code; the built packages are produced by Viash Hub (see
-[Project structure](project-structure.qmd#sec-project-structure)).
+Each package's **source** lives in its own GitHub repository under the [openpipelines-bio](https://github.com/openpipelines-bio) organization.
+These repos hold only source code, the built packages are produced by Viash Hub (see [Project structure](project-structure.qmd#sec-project-structure)).
 
 | Package | Repository |
 |---|---|
@@ -48,16 +46,10 @@ git remote add upstream git@github.com:openpipelines-bio/<repo>.git
 
 ## Install Viash and Nextflow {#sec-install-viash-nextflow}
 
-OpenPipeline is built with [Viash](https://viash.io) and
-[Nextflow](https://www.nextflow.io/docs/latest/index.html), so you need both,
-plus [Docker](https://docs.docker.com/get-docker/) and Java.
+To develop an OpenPipelines package you will need [Viash](https://viash.io), [Nextflow](https://www.nextflow.io/docs/latest/index.html) (plus Java) and [Docker](https://docs.docker.com/get-docker/) (or an alternative):
 
-:::{.callout-tip}
-## Follow the Viash installation guide
-For detailed, up-to-date steps, follow the
-[**Viash installation guide**](https://viash.io/installation/). Nextflow has its
-own [installation docs](https://www.nextflow.io/docs/latest/install.html).
-:::
+- Follow the setup instructions in the [getting started](../get-started/index.qmd#sec-setup-nextflow-and-docker) guide to install Nextflow and Docker
+- Viash is only required during development so you will also need to follow the instructions in the [**Viash installation guide**](https://viash.io/installation/)
 
 Once installed, check both work:
 
@@ -65,7 +57,3 @@ Once installed, check both work:
 nextflow run hello -with-docker
 viash --version
 ```
-
-That's everything you need to build and test locally. You'll fetch the test
-resources as part of the [local workflow](development-workflow.qmd#sec-test-resources),
-just before running your first test.

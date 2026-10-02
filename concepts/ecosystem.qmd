@@ -1,16 +1,11 @@
 ---
-title: "The OpenPipeline ecosystem"
-description: "One core package, four satellites, all built the same way."
+title: "The OpenPipelines ecosystem"
+description: "Get to know the OpenPipelines packages."
 order: 10
 ---
 
-OpenPipeline is not a single monolith. It is a **core package** plus a set of
-**satellite packages** that extend it for specific domains and hardware. All are
-[Viash](viash.qmd) packages built the same way, so the same components,
-data format, and tooling carry across every one of them.
-
-The core defines the whole single-cell flow; each satellite pins the core as a
-dependency and adds to it rather than forking it.
+OpenPipeline consists of a core package with extension packages for specific domains and processing steps.
+Each package uses [Viash](viash.qmd) so components, data format and tooling are shared between them.
 
 | Package | Role |
 |---|---|
@@ -22,30 +17,18 @@ dependency and adds to it rather than forking it.
 
 ## How the packages relate
 
-Every package plugs into the same [pipeline architecture](../workflows/index.qmd):
+Each package plans a role in the overall [process](../workflows/index.qmd):
 
-- **`openpipeline`** defines all stages, ingestion, QC, processing, integration,
-  and downstream, for the RNA, protein, ATAC, VDJ, and GDO modalities.
-- **`openpipeline_spatial`** brings spatial transcriptomics. It currently ingests
-  Visium, Visium HD, Xenium, Aviti24, and CosMx, or you start from an
-  already-ingested count matrix of any technology and run the spatial processing
-  workflow.
-- **`openpipeline_qc`** slots quality-control reporting alongside ingestion,
-  producing a standalone HTML report before you commit to filter thresholds.
-- **`openpipeline_rapids`** (*coming soon*) will provide GPU drop-in
-  replacements for the compute-heavy processing and integration steps.
-- **`openpipeline_composed`** bundles the stages into end-to-end pipelines, so a
-  whole cohort goes from raw data to an annotated object in one run.
+- **`openpipeline`** defines most stages for ingestion, QC, processing, integration and downstream analysis for RNA, protein, ATAC, VDJ and GDO modalities.
+- **`openpipeline_spatial`** contains functionality for spatial transcriptomics (Xenium, Visium, Visium HD, Aviti24, CosMx).
+- **`openpipeline_qc`** generates interactive HTML reports for visualising quality control metrics and selecting filtering thresholds.
+- **`openpipeline_rapids`** (*coming soon*) provides drop-in GPU replacements for computationally intensive steps using the `rapids-singlecell` package.
+- **`openpipeline_composed`** provides end-to-end processing workflows that combine multiple stages.
 
-Because a satellite only *pins* the core, it inherits the core's components and
-[MuData](mudata.qmd) format automatically, and stays compatible as the core
-evolves. This is [modularity](modularity.qmd) applied at the package level.
+Each extension package depends on a pinned version of the core package and uses the same [MuData](mudata.qmd) format so components and workflows from different packages can be chained together.
 
-:::{.callout-note appearance="simple"}
-`biobox` and `craftbox` are external component libraries that some packages
-depend on. They are dependencies, not OpenPipeline pipelines, you may see them
-referenced, but they are documented in their own projects.
+:::{.callout-note appearance="simple" title="External packages"}
+`biobox` and `craftbox` are external component libraries that some packages depend on. These provide generic components for common bioinformatics tools or data manipulation tasks. You might see them referenced, but they are documented in their own respective projects.
 :::
 
-Browse every component and workflow across all packages in the
-[reference](../reference/index.qmd).
+Browse every component and workflow across all packages in the [reference](../reference/index.qmd).

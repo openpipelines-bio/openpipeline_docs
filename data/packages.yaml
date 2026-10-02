@@ -1,4 +1,4 @@
-# Canonical registry of the OpenPipeline packages.
+# Canonical registry of the OpenPipelines packages.
 #
 # Single source of truth for the generation tooling:
 #   * scripts/generate_team.py           — pulls src/authors/ from each repo

@@ -8,7 +8,7 @@ order: 60
 
 Cell-cell communication analysis infers which cell types signal to each other by
 scoring **ligand-receptor** pairs: a source cell type expressing a ligand and a
-target expressing its receptor. OpenPipeline wraps
+target expressing its receptor. OpenPipelines wraps
 [LIANA](https://liana-py.readthedocs.io/), which runs several scoring methods and
 returns a consensus ranking, so results don't hinge on one method's assumptions.
 

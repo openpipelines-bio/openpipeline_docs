@@ -1,39 +1,42 @@
 ---
 title: "Quickstart"
-description: "From two public samples to a batch-corrected, clustered object."
+description: "Try out OpenPipelines on your system."
 order: 0
+number-sections: true
+shift-heading-level-by: -1
 ---
 
-Run a best-practice single-cell pipeline end to end on two small public PBMC
-samples: from per-sample count matrices to one filtered, normalized,
-**batch-corrected and clustered** object. No prior Nextflow or single-cell
-experience needed, every command is here.
+This tutorial walks you through the process of setting up OpenPipelines on your system and processing an example dataset.
+No prior experience with Viash, Nextflow or single-cell analysis is required.
 
-This starts from **pre-computed counts**, so it skips the heavy alignment step and
-runs in minutes. To do that mapping step yourself (raw FASTQ → counts with Cell
-Ranger), see [Ingest data](../guides/ingest-10x.qmd).
+<!-- Add a link to a no-code Viash Hub guide? -->
 
-::: {.callout-note appearance="simple"}
-**Before you start**
+::: {.callout-note appearance="simple" title="Prerequisites"}
 
-- **Prerequisites:** macOS, Linux, or Windows with WSL2, Nextflow needs a
-  Unix-like environment. Python 3.11+ is used only for the inspection commands. No
-  prior Nextflow or single-cell experience needed.
-- **Hardware:** modest, the run is capped to 4 GB RAM per step (step 1), so any
-  laptop works. The two samples are ~1,000 cells each.
-- **Time:** about 15 minutes once set up; the first run also pulls Docker images,
-  a one-time download.
-- **What you'll have at the end:** one batch-corrected, Leiden-clustered `.h5mu`
-  object with a UMAP, built from two PBMC samples.
+**Environment**
+
+macOS, Linux, or Windows with WSL2, Nextflow needs a Unix-like environment.
+We use Python to inspect output but it is not required for running workflows.
+
+**Hardware**
+
+We use a small example dataset (~1000 cells) and runs are capped to 4 GB RAM so they should run on a laptop.
+To try with real data you may require more resources.
+
+**Experience**
+
+We don't assume any prior experience with Viash, Nextflow or single-cell analysis but we do assume you are comfortable running commands in a terminal and installing software.
 :::
 
-## 1 · Set up Nextflow and Docker {#sec-setup-nextflow-and-docker}
+## General setup {#sec-setup-nextflow-and-docker}
 
-Everything else ships inside containers, so this is all you install: a Java
-runtime (Nextflow needs it), Nextflow, and Docker.
+These instructions show how to set up an environment for running OpenPipelines workflows.
+The main tools we require are [Nextflow](https://www.nextflow.io/) and [Docker](https://www.docker.com/) (or alternatives, see below).
+Nextflow also requires a Java runtime.
 
-**1a · Java prerequisite.** Commands per OS. Java 17+ is recommended (11 is the
-minimum).
+### Java
+
+Java 17+ is recommended (11 is the minimum).
 
 ::: {.panel-tabset}
 
@@ -70,20 +73,33 @@ follow the Ubuntu / Debian commands above.
 
 :::
 
-Check it with `java -version`.
+Check it is installed correctly by running `java -version`.
 
-**1b · Nextflow.**
+### Nextflow
+
+Follow the instructions in the [Nextflow installation guide](https://docs.seqera.io/nextflow/install#install-nextflow) or run these commands:
 
 ```bash
 curl -s https://get.nextflow.io | bash
-sudo mv nextflow /usr/local/bin/
-nextflow -version
+chmod +x nextflow
+mkdir -p $HOME/.local/bin/
+mv nextflow $HOME/.local/bin/
+nextflow info
 ```
 
-**1c · Docker.** Install [Docker Desktop](https://docs.docker.com/get-docker/)
-(macOS/Windows) or Docker Engine (Linux), start it, then check `docker --version`.
+### Docker
 
-Finally, tell Nextflow where to pull the pipeline from (one time):
+Install [Docker Desktop](https://docs.docker.com/get-docker/) (macOS/Windows) or Docker Engine (Linux).
+Start it, then check `docker --version`.
+
+::: {.callout-tip appearance="simple" title="Docker alternatives"}
+If Docker is not available or you prefer to not to use it, you can instead use [Singularity](https://sylabs.io/singularity/)/[Apptainer](https://apptainer.org/) or [Podman](https://podman.io/).
+In that case you need to swap the `-profile docker` flag in the commands below for `-profile singularity` or `-profile podman`.
+:::
+
+### Add Viash Hub
+
+Finally, tell Nextflow how to locate workflows on Viash Hub:
 
 ```bash
 mkdir -p "$HOME/.nextflow"
@@ -93,10 +109,17 @@ providers.vsh.server = "packages.viash-hub.com"
 EOM
 ```
 
-The demo data is tiny, so cap the pipeline's default resource requests, otherwise
-a step may ask for more CPU or memory than a laptop has (the defaults are sized
-for full-scale cohorts). Write a small Nextflow config, see
-[Tune compute resources](../guides/tune-resources.qmd) for how these labels work:
+## Example setup
+
+These instructions are specific to the example in this tutorial.
+You do not need to follow them if you plan to run OpenPipelines workflows on your own data.
+
+### Create resource labels
+
+To limit the resources used during the example runs we create a custom config file.
+Every OpenPipeline component has an assigned resource label.
+In this file, we override those labels to limit the CPU and memory used for each step instead of the default values.
+See [Tune compute resources](../guides/tune-resources.qmd) for more information on how these labels work.
 
 ```bash
 cat > /tmp/demo.config <<'EOF'
@@ -112,11 +135,10 @@ process {
 EOF
 ```
 
-## 2 · Get the data
+### Get the data
 
-Two small public PBMC samples, sequenced with different 10x chemistries, so they
-carry a technical **batch effect** for the pipeline to correct. They come as
-ready-made MuData (`.h5mu`) count objects, one per sample:
+We use two small public PBMC samples, sequenced with different 10x chemistries, so they carry a technical batch effect for the pipeline to correct.
+They come as ready-made MuDate (`.h5mu`) objects matching the output of an ingestion workflow, one per sample.
 
 ```bash
 mkdir -p data && cd data
@@ -126,11 +148,11 @@ curl -O "$base/pbmc_1k_v3.h5mu"
 cd ..
 ```
 
-Each file holds one sample's raw RNA counts. Open both in Python with the
-[`mudata`](https://mudata.readthedocs.io/) package to see what's inside:
+Each file holds one sample's raw RNA counts.
+Open both in Python with the [`mudata`](https://mudata.readthedocs.io/) package to see what's inside:
 
 ```bash
-pip install 'mudata~=0.3.8' 'anndata~=0.12.16'   # matches openpipeline v4.2.0; needs Python >=3.11
+pip install 'mudata~=0.3.8' 'anndata~=0.12.16'   # matches openpipeline v4.2.0, needs Python >=3.11
 for s in pbmc_1k_v2 pbmc_1k_v3; do
   echo "== $s =="
   python -c "import mudata; print(mudata.read_h5mu('data/$s.h5mu'))"
@@ -152,18 +174,19 @@ MuData object with n_obs × n_vars = 1222 × 33538
       var:  'gene_symbol', 'feature_types', 'genome'
 ```
 
-Two **separate** objects, one per sample, each a single `rna` modality of raw
-counts (cells × genes) with gene metadata in `.var` and nothing computed yet.
-Step 3 filters and **concatenates them into one** object (watch the cell count
-grow as the two merge), and the later steps add normalized counts and embeddings
-to it.
+Each sample is a separate object with a single `rna` modaulity of raw counts (cells × genes) and gene metadata in `.var`.
 
-## 3 · Process the samples
+## Process the samples
 
-`multiomics/process_samples` filters low-quality cells on each sample's own
-distribution, then concatenates all samples and processes them together:
-normalization, highly variable gene selection, PCA, and a neighbor graph and UMAP.
-Write the sample list and QC thresholds to a params file, then run it:
+::: {.callout-tip appearance="simple" title="Ingestion"}
+To reduce the time and resources needed for this tutorial we have skipped the ingestion step and provided pre-ingested `.h5mu` files.
+See [Ingest data](../guides/ingest-10x.qmd) for instructions on how to run the ingestion workflow yourself.
+:::
+
+The `multiomics/process_samples` workflow filters low-quality cells from each sample, then concatenates the samples and performs normalization, highly variable gene selection, PCA, neighborhood graph calculation and UMAP.
+
+We create a parameters file containing the setting we want to use.
+Parameters can also be passed directly to the `nextflow run` command but a file is more flexible and provides a record of what was run.
 
 ```bash
 cat > /tmp/params_process.yaml <<'EOF'
@@ -179,17 +202,25 @@ output: pbmc_processed.h5mu
 publish_dir: results/processed
 EOF
 
+```
+Each entry in `param_list` is one sample.
+The the `id` field provides a name and the `input` points at the file to process.
+The remaining fields are global parameters applied to all samples.
+If we wanted to use different thresholds for each sample we could add them to the individual entries in `param_list` instead of the global section.
+The [Process many samples](../guides/process-many-samples.qmd) guide covers the full `param_list` model, and [Generate a QC report](../guides/qc-report.qmd) covers choosing the thresholds.
+
+
+We then run the workflow with these parameters.
+Notice that we specify a specific version of OpenPipelines (`-r v4.2.0`) to ensure reproducibility.
+
+```bash
 nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
-  -r v4.2.0 -latest -profile docker \
+  -r v4.2.0 \
+  -profile docker \
   -main-script target/nextflow/workflows/multiomics/process_samples/main.nf \
   -params-file /tmp/params_process.yaml \
   -c /tmp/demo.config
 ```
-
-Each entry is one **sample**; the `id` labels it and `input` points at its
-`.h5mu`. The [Process many samples](../guides/process-many-samples.qmd) guide
-covers the full `param_list` model, and [Generate a QC report](../guides/qc-report.qmd)
-covers choosing the thresholds.
 
 Inspect the result to see what processing added:
 
@@ -211,25 +242,23 @@ MuData object with n_obs × n_vars = 2171 × 33538
       obsp:     'connectivities', 'distances'
 ```
 
-Both samples are now concatenated into one object; the cell count sits a little
-below the two samples' combined total because low-quality cells were filtered out.
-`.obs['sample_id']` records which initial sample each observation (cell) came
-from, so even after merging you can tell them apart, and it's the column
-integration corrects on next. Processing filled in much more besides: per-cell and
-per-gene QC metrics (`total_counts`, `pct_dropout`, `scrublet_doublet_score`, …),
-normalized counts in `.layers['log_normalized']`, the highly variable genes
-flagged as `filter_with_hvg`, a PCA embedding in `.obsm['X_pca']`, and a neighbor
-graph and UMAP (`.obsm['X_umap']`, `.obsp`), all computed on the uncorrected data.
-Integration will redo the graph, clustering, and UMAP on the *corrected* space
-next.
+Low-quality cells have been removed and the two samples have been concatenated into a single object.
+The `.obs["sample_id"]` column records which sample each cell came from.
+We also added a range of other calculated values:
 
-## 4 · Integrate
+- Per-cell and per-gene QC metrics (`total_counts`, `pct_dropout`, `scrublet_doublet_score`, …)
+- Normalized counts (`.layers['log_normalized']`)
+- Highly variable genes (`filter_with_hvg`)
+- PCA (`.obsm['X_pca']`) and UMAP (`.obsm['X_umap']`) embeddings
+- A neighbor graph (`.obsp['connectivities']`, `.obsp['distances']`) built on the PCA embedding
 
-With two samples there's a batch effect to correct. `integration/harmony_leiden`
-batch-corrects across samples on `sample_id`, then builds a neighbor graph,
-clusters with Leiden, and computes a UMAP on the corrected embedding:
+## Integrate
+
+These two samples contain a batch effect we want to correct before further analysis.
+In this example we use the `integration/harmony_leiden` workflow but there are a range of other integration methods available in OpenPipelines, see [Integrate across samples](../guides/integrate.qmd) for details.
 
 ```bash
+# Create a parameters file
 cat > /tmp/params_integrate.yaml <<'EOF'
 id: pbmc_integrated
 input: results/processed/pbmc_processed.h5mu
@@ -238,17 +267,14 @@ output: pbmc_integrated.h5mu
 publish_dir: results/integrated
 EOF
 
+# Run the integration workflow
 nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
-  -r v4.2.0 -latest -profile docker \
+  -r v4.2.0 \
+  -profile docker \
   -main-script target/nextflow/workflows/integration/harmony_leiden/main.nf \
   -params-file /tmp/params_integrate.yaml \
   -c /tmp/demo.config
 ```
-
-To choose a different method (scVI, Scanorama, …) or compare several, see
-[Integrate across samples](../guides/integrate.qmd).
-
-## 5 · Read the output
 
 Inspect the integrated object the same way:
 
@@ -270,22 +296,18 @@ MuData object with n_obs × n_vars = 2171 × 33538
       obsp:     'connectivities', 'distances', 'harmonypy_integration_connectivities', 'harmonypy_integration_distances'
 ```
 
-Integration added, on top of everything `process_samples` produced:
+Integration added the following fields:
 
-- `.obsm['X_pca_integrated']`, the batch-corrected embedding (Harmony).
-- `.obs['harmony_integration_leiden_1.0']`, the cluster labels computed on that
-  corrected embedding.
-- `.obsm['X_leiden_harmony_umap']`, a UMAP of the corrected space, distinct from
-  the uncorrected `X_umap` from step 3, plus its own neighbor graph
-  (the `harmonypy_integration_*` entries in `.uns` / `.obsp`).
+- `.obsm['X_pca_integrated']`: the batch-corrected embedding (Harmony)
+- `.obs['harmony_integration_leiden_1.0']`: cluster labels computed on that corrected embedding.
+- `.obsm['X_leiden_harmony_umap']`: a UMAP of the corrected space
+- `.obsp['harmonypy_integration_connectivities']` and `.obsp['harmonypy_integration_distances']`: a neighbor graph built on the corrected embedding
 
-The clusters are just numbers so far. Assigning biological identities to them is
-[cell type annotation](../guides/annotate.qmd), a separate step.
+Assigning biological identities to the clusters can be done using an annotation workflow as described in [cell type annotation](../guides/annotate.qmd).
 
-## Where to go next
+## What next?
 
-- **Map your own raw data:** [Ingest data](../guides/ingest-10x.qmd), FASTQ → counts
-  with Cell Ranger or BD Rhapsody.
+- **Map your own raw data:** [Ingest data](../guides/ingest-10x.qmd), FASTQ → counts with Cell Ranger or BD Rhapsody.
 - **Pick individual tasks:** the [task guides](../guides/index.qmd).
 - **See the whole pipeline:** the [pipeline overview](../workflows/index.qmd).
 - **Understand the design:** [How it works](../concepts/index.qmd).

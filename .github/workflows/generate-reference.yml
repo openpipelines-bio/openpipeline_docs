@@ -103,7 +103,7 @@ jobs:
       # looped). The package SET is driven by the registry (data/packages.yaml),
       # but each package still needs its own modules+workflows pair here. When you
       # add a package to the registry, add a matching pair below.
-      - name: Generate — openpipeline (modules)
+      - name: Generate — openpipelines (modules)
         if: steps.plan.outputs.openpipeline_build == 'true'
         uses: viash-io/viash-actions/pro/generate-documentation-qmd@v6
         with:

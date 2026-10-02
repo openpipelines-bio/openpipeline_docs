@@ -6,7 +6,7 @@ order: 20
 
 ## Source code {#sec-project-structure}
 
-An OpenPipeline repository holds **only source code** under `src/`, never the
+An OpenPipelines repository holds **only source code** under `src/`, never the
 target code produced from it. Each component is a `config.vsh.yaml` (its
 metadata: inputs, outputs, dependencies, container) plus a script; each workflow
 is a config plus a `main.nf`.
@@ -38,7 +38,7 @@ always built first. That build happens in two places:
 
 ## Release management {#sec-versioning}
 
-OpenPipeline uses [semantic versioning](https://semver.org/), every release is
+OpenPipelines uses [semantic versioning](https://semver.org/), every release is
 numbered `MAJOR.MINOR.PATCH`:
 
 - **MAJOR**: breaking changes to the public interface.

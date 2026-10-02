@@ -6,7 +6,7 @@ order: 84
 
 [all packages]{.pkg-tag}
 
-Every OpenPipeline component declares its CPU and memory needs through a
+Every OpenPipelines component declares its CPU and memory needs through a
 **resource label**. Labels are defined once in
 `src/workflows/utils/labels.config` and applied per component, so a workflow
 inherits sensible defaults from each step it runs.
