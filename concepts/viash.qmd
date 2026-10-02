@@ -69,5 +69,5 @@ graph LR
 
 **[Viash Hub](https://www.viash-hub.com)** is the platform used by OpenPipeline to build and host Viash components.
 When new versions of OpenPipeline packages are ready, Viash Hub builds the components and containers, runs the component and workflow tests and publishes the package to a versioned catalogue.
-From the catalog you can browse components, read their parameters, and launch workflows.
+From the catalogue you can browse components, read their parameters, and launch workflows.
 The same component and workflow documentation is available in the [reference](../reference/index.qmd) which links to the matching Viash Hub catalogue pages.

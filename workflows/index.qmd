@@ -74,7 +74,7 @@ You can also convert from MuData to these formats for export to other ecosystems
 
 ## Quality control
 
-Quality control workflows calculate quality control metrics and generate an interactive report allowing you to inspect them metrics and select filtering thresholds for further processing.
+Quality control workflows calculate quality control metrics and generate an interactive report allowing you to inspect the metrics and select filtering thresholds for further processing.
 
 ::: {.callout-tip appearance="simple" title="Guides"}
 [QC report](../guides/qc-report.qmd) and [Spatial QC report](../guides/qc-report-spatial.qmd).

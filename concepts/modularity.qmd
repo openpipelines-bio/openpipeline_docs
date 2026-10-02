@@ -26,7 +26,7 @@ We use these terms to refer to different parts of OpenPipeline:
     <div class="ct">Workflow</div>
     <p>
       A workflow is a component where the script is a Nextflow <code>main.nf</code> file that runs other components in order, passing data between them.
-      Every component can become a step in a workflow so can be composed to create complex pipelines.
+      Every component can become a step in a workflow, and every workflow can be composed as a subworkflow within a larger workflow, to create complex pipelines.
     </p>
   </div>
 
@@ -55,7 +55,7 @@ Shared code such as environment definitions or helper functions ensure consisten
 ### Execution-level modularity
 
 OpenPipeline components are also modular at the execution level.
-Every built non-workflow component is an independent containerized unit that can be run on its own or chained together to form workflows.
+Every module is an independent containerized unit that can be run on its own or chained together to form workflows.
 
 - **Self-contained**: Each component has its own Docker image with the packages it requires.
   Two components can have conflicting dependencies but still run in the same workflow.

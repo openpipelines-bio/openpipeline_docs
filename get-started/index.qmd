@@ -7,7 +7,7 @@ shift-heading-level-by: -1
 ---
 
 This tutorial walks you through the process of setting up OpenPipeline on your system and processing an example dataset.
-We do not assume any prior experience with Viash, Nextflow or single-cell analysis.
+No prior experience with Viash, Nextflow or single-cell analysis is required.
 
 <!-- Add a link to a no-code Viash Hub guide? -->
 
@@ -185,7 +185,7 @@ See [Ingest data](../guides/ingest-10x.qmd) for instructions on how to run the i
 
 The `multiomics/process_samples` workflow filters low-quality cells from each sample, then concatenates the samples and performs normalization, highly variable gene selection, PCA, neighborhood graph calculation and UMAP.
 
-We create a paramters file containing the setting we want to use.
+We create a parameters file containing the setting we want to use.
 Parameters can also be passed directly to the `nextflow run` command but a file is more flexible and provides a record of what was run.
 
 ```bash
@@ -216,7 +216,7 @@ Notice that we specify a specific version of OpenPipeline (`-r v4.2.0`) to ensur
 ```bash
 nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
   -r v4.2.0 \
-  -latest -profile docker \
+  -profile docker \
   -main-script target/nextflow/workflows/multiomics/process_samples/main.nf \
   -params-file /tmp/params_process.yaml \
   -c /tmp/demo.config
@@ -270,7 +270,7 @@ EOF
 # Run the integration workflow
 nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
   -r v4.2.0 \
-  -latest -profile docker \
+  -profile docker \
   -main-script target/nextflow/workflows/integration/harmony_leiden/main.nf \
   -params-file /tmp/params_integrate.yaml \
   -c /tmp/demo.config

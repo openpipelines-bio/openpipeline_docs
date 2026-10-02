@@ -5,11 +5,11 @@ order: 30
 ---
 
 The core data format used by OpenPipeline is the [MuData](https://mudata.readthedocs.io/) object.
-The majority of components read and write this format, providing interoperability and [modularity](modularity.qmd) throughout workflows.
+All components read and write this format, providing interoperability and [modularity](modularity.qmd) throughout workflows.
 
 MuData is the multimodal extension of [AnnData](https://anndata.readthedocs.io).
 Within a MuData object, each modality is stored as an AnnData object under the `.mod` slot.
-Inside a modality, expression matrices are stores in `.X` and `.layers`, cell metadata is stored in `.obs` and feature metadata in `.var`.
+Inside a modality, expression matrices are stored in `.X` and `.layers`, cell metadata is stored in `.obs` and feature metadata in `.var`.
 Other fields store additional information. including cross-modality annotations.
 
 ```
@@ -56,7 +56,9 @@ Supported conversion formats include:
 - [`AnnData`](https://anndata.readthedocs.io/)
 - [`Seurat`](https://satijalab.org/seurat/)
 - [`TileDB`](https://tiledb.com/)
-- [10x Cell Ranger/Space Ranger outputs](https://www.10xgenomics.com/)
+- [10x CellRanger, SpaceRanger or XeniumRanger outputs](https://www.10xgenomics.com/)
+- [Bruker AtoMx output](https://brukerspatialbiology.com/)
+- [Element Aviti24 output](https://www.elementbiosciences.com/)
 - [`SpatialData`](https://spatialdata.scverse.org/en/stable/)
 - [`SpatialExperiment`](https://bioconductor.org/packages/SpatialExperiment/)
 

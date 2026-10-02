@@ -20,16 +20,15 @@ Each package uses [Viash](viash.qmd) so components, data format and tooling are 
 Each package plans a role in the overall [process](../workflows/index.qmd):
 
 - **`openpipeline`** defines most stages for ingestion, QC, processing, integration and downstream analysis for RNA, protein, ATAC, VDJ and GDO modalities.
-- **`openpipeline_spatial`** contains functionality for spatial transcriptomics (Xenium, Visium, Visium HD,, Aviti24, CosMx)
-- **`openpipeline_qc`** generates interactiveHTML reports for visualising quality control metrics and selecting filtering thresholds
-- **`openpipeline_rapids`** (*coming soon*) provides drop-in GPU replacements computationally intensive steps using the `rapids-singlecell` package
-- **`openpipeline_composed`** provides end-to-end processing workflows that combine multiple steps
+- **`openpipeline_spatial`** contains functionality for spatial transcriptomics (Xenium, Visium, Visium HD, Aviti24, CosMx).
+- **`openpipeline_qc`** generates interactive HTML reports for visualising quality control metrics and selecting filtering thresholds.
+- **`openpipeline_rapids`** (*coming soon*) provides drop-in GPU replacements for computationally intensive steps using the `rapids-singlecell` package.
+- **`openpipeline_composed`** provides end-to-end processing workflows that combine multiple stages.
 
 Each extension package depends on a pinned version of the core package and uses the same [MuData](mudata.qmd) format so components and workflows from different packages can be chained together.
 
 :::{.callout-note appearance="simple" title="External packages"}
-`biobox` and `craftbox` are external component libraries that some packages depend on.
-These provide generic components for common bioinformatics tools or data manipulation tasks.
+`biobox` and `craftbox` are external component libraries that some packages depend on. These provide generic components for common bioinformatics tools or data manipulation tasks. You might see them referenced, but they are documented in their own respective projects.
 :::
 
 Browse every component and workflow across all packages in the [reference](../reference/index.qmd).

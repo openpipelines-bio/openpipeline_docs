@@ -28,13 +28,13 @@ out across the actual pipeline, see [the pipeline overview](../workflows/index.q
   </a>
 
   <a class="concept-card" href="mudata.html">
-    <div class="ct">MuData as standard data format</div>
+    <div class="ct">MuData as the standard data format</div>
     <p>The shared data format that lets any component fit together with any other.</p>
     <span class="go">Read →</span>
   </a>
 
   <a class="concept-card" href="viash.html">
-    <div class="ct">The engine: Viash and Viash Hub</div>
+    <div class="ct">Viash and Viash Hub</div>
     <p>How each script becomes a shareable, reproducible component.</p>
     <span class="go">Read →</span>
   </a>
