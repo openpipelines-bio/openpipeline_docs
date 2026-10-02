@@ -12,7 +12,7 @@ anchor-sections: false
   <div class="wrap hero">
     <span class="kicker">Multi-modal omics analysis · reproducible at scale</span>
     <h1>Modular, reproducible pipelines for<br><em>single-cell and spatial</em> data.</h1>
-    <p class="lede">Modular, containerized components and reproducible Nextflow workflows: from raw counts to a processed, interpretable data object.</p>
+    <p class="lede">From raw counts to an interpretable data object, OpenPipeline reliable and robustly processes your data.</p>
     <div class="modalities">
       <span class="m"><b>RNA</b></span>
       <span class="m"><b>Protein</b> (ADT)</span>
@@ -33,26 +33,26 @@ anchor-sections: false
   <section class="block alt">
     <div class="wrap">
       <div class="sec-head">
-        <span class="kicker">Why OpenPipeline</span>
-        <h2>What makes it different</h2>
+        <span class="kicker">Why OpenPipeline?</span>
+        <h2>What makes it different?</h2>
         <p>Design choices that set OpenPipeline apart from a typical analysis pipeline.</p>
       </div>
       <div class="features">
         <div class="feature">
           <b>True modularity</b>
-          <p>Modular not just in code but at the execution level: every step is an independently built, containerized unit you can run, swap, reorder, or reuse as a dependency across packages.</p>
+          <p>Modular code and execution. Every step is a self-contained component that can be run independently or used as a dependency.</p>
         </div>
         <div class="feature">
           <b>Standard multi-omics data format</b>
-          <p>Every component and workflow takes in and writes out the same format (MuData), so any two can be chained together, and one object holds every modality, RNA, protein, ATAC, spatial, and more, for multi-modal analysis.</p>
+          <p>Every component and workflow uses the same format (MuData), so any two can be chained together. All modalities are stored in one place, enabling multi-modal analysis.</p>
         </div>
         <div class="feature">
           <b>Reproducible</b>
-          <p>Containers pin each component's exact dependencies and every release is versioned, so the same run gives the same results today and years from now.</p>
+          <p>Every component has it's own container with fixed dependencies and every package is versioned letting you trust what tools are being used.</p>
         </div>
         <div class="feature">
           <b>Scalable &amp; portable</b>
-          <p>Built on Nextflow, the same pipeline runs unchanged from a laptop to an HPC cluster or the cloud, in parallel across samples.</p>
+          <p>Built on Nextflow, the same workflow runs on a laptop, an HPC cluster, or the cloud.</p>
         </div>
         <div class="feature">
           <b>Best practices by default</b>
@@ -60,10 +60,10 @@ anchor-sections: false
         </div>
         <div class="feature">
           <b>Community-driven, team-maintained</b>
-          <p>Open source and built for the long haul: a dedicated team keeps it actively maintained, release after release.</p>
+          <p>Open source and built for the long haul. Code is publicly available and actively maintained.</p>
         </div>
       </div>
-      <p class="ways-note">The <a href="concepts/index.html">concepts</a> pages explain how each of these work.</p>
+      <p class="ways-note">The <a href="concepts/index.html">concepts</a> pages explains these in more detail.</p>
     </div>
   </section>
 
@@ -71,14 +71,14 @@ anchor-sections: false
     <div class="wrap">
       <div class="sec-head">
         <span class="kicker">Where to start</span>
-        <h2>Three ways in</h2>
-        <p>Three entry points, from running a workflow as-is, to assembling your own analysis, to tuning every parameter.</p>
+        <h2>Three ways to get started</h2>
+        <p>Run a default workflow, assemble a custom workflow for your analysis or tune every parameter for your data.</p>
       </div>
       <div class="cards3">
         <a class="rcard link" href="get-started/index.html">
           <div class="tag">🧪 New to single-cell</div>
           <h3>Quickstart</h3>
-          <p>Run a best-practice pipeline on provided test data and learn to read the output, no prior Nextflow knowledge needed.</p>
+          <p>Run a best-practice pipeline on provided test data and learn to read the output.</p>
           <span class="go">Get started →</span>
         </a>
         <a class="rcard link" href="guides/index.html">
@@ -90,7 +90,7 @@ anchor-sections: false
         <a class="rcard link" href="reference/index.html">
           <div class="tag">⚡ Power user</div>
           <h3>Component reference</h3>
-          <p>Every workflow and component, grouped by task, with full parameter listings.</p>
+          <p>See the full reference and parameter set for each component and workflow.</p>
           <span class="go">Open reference →</span>
         </a>
       </div>
@@ -102,24 +102,65 @@ anchor-sections: false
       <div class="sec-head">
         <span class="kicker">Run it your way</span>
         <h2>Local, cloud, or no-code</h2>
-        <p>Every workflow is a <b>Viash</b>-built, containerized Nextflow pipeline, so the same run works on your laptop, on Seqera, or through the Viash Hub web interface.</p>
+        <p>Every workflow is a containerized Nextflow pipeline built using <b>Viash</b>, so the same workflow runs on your laptop, on Seqera Cloud or through the Viash Hub web interface.</p>
       </div>
       <div class="ways">
         <div class="way featured">
           <span class="way-flag">Recommended</span>
           <div class="h"><a href="https://www.viash-hub.com" target="_blank" rel="noopener">Viash Hub</a> <span class="badge">no-code</span></div>
-          <p>Fill in a guided web form, no YAML, and it hands you ready-to-run instructions for the Local or Seqera routes.</p>
+          <p>Fill in a guided web form and get the instruction to run locally or on Seqera Cloud.</p>
         </div>
         <div class="way">
           <div class="h">Local</div>
-          <p>Run on your own machine, an HPC cluster, or a cloud VM with more compute, using Nextflow and Docker.</p>
+          <p>Run on your own machine, an HPC cluster or a cloud VM, using Nextflow and Docker.</p>
         </div>
         <div class="way">
           <div class="h"><a href="https://seqera.io" target="_blank" rel="noopener">Seqera Platform</a></div>
           <p>Launch and monitor runs on managed compute, cloud (AWS/Azure/GCP), Kubernetes, or an HPC scheduler, from the Seqera UI or CLI.</p>
         </div>
       </div>
-      <p class="ways-note">Step-by-step how-tos for each route live in the <a href="guides/index.html">guides</a>.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="kicker">Under the hood</span>
+        <h2>Built on proven infrastructure</h2>
+        <p>OpenPipeline is built on established open-source tools, using infrastructure you can trust.</p>
+      </div>
+      <div class="infra">
+        <a class="infra-card" href="https://viash.io" target="_blank" rel="noopener">
+          <img src="images/viash-logo.svg" alt="Viash logo">
+          <b>Viash</b>
+          <p>Create reusable, containerised modules from a config and script.</p>
+        </a>
+        <a class="infra-card" href="https://www.viash-hub.com" target="_blank" rel="noopener">
+          <img src="images/viash-hub-logo.svg" alt="Viash Hub logo">
+          <b>Viash Hub</b>
+          <p>Hosts published components and provides a no-code interface to run workflows.</p>
+        </a>
+        <a class="infra-card" href="https://www.nextflow.io" target="_blank" rel="noopener">
+          <img src="images/nextflow-logo.svg" alt="Nextflow logo">
+          <b>Nextflow</b>
+          <p>Built workflows run reproducibly anywhere, from your laptop to the cloud.</p>
+        </a>
+        <a class="infra-card" href="https://www.docker.com" target="_blank" rel="noopener">
+          <img src="images/docker-logo.svg" alt="Docker logo">
+          <b>Docker</b>
+          <p>Every component has a matching container so the dependencies are the same wherever you run.</p>
+        </a>
+        <a class="infra-card" href="https://scverse.org" target="_blank" rel="noopener">
+          <img src="images/scverse-logo.svg" alt="scverse logo">
+          <b>scverse</b>
+          <p>Python components build on the scverse ecosystem, including AnnData, MuData and scanpy.</p>
+        </a>
+        <a class="infra-card" href="https://bioconductor.org" target="_blank" rel="noopener">
+          <img src="images/bioconductor-logo.svg" alt="Bioconductor logo">
+          <b>Bioconductor</b>
+          <p>R components draw on Bioconductor's peer-reviewed packages for genomic data analysis.</p>
+        </a>
+      </div>
     </div>
   </section>
 
