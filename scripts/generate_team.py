@@ -192,9 +192,9 @@ def main():
 
     frontmatter = (
         "---\n"
-        'pagetitle: "Team — OpenPipeline"\n'
+        'pagetitle: "Team — OpenPipelines"\n'
         'title: "Team"\n'
-        'description: "The people building and maintaining OpenPipeline."\n'
+        'description: "The people building and maintaining OpenPipelines."\n'
         "toc: false\n"
         "page-layout: full\n"
         "anchor-sections: false\n"
