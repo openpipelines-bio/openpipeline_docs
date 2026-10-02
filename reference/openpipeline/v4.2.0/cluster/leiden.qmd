@@ -5,7 +5,7 @@ title: "leiden"
 namespace: "Cluster"
 description: "Cluster cells using the [Leiden algorithm] [Traag18] implemented in the [Scanpy framework] [Wolf18]."
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

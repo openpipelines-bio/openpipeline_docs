@@ -5,7 +5,7 @@ title: "souporcell"
 namespace: "Genetic demux"
 description: "souporcell is a method for clustering mixed-genotype scRNAseq experiments by individual."
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

@@ -11,9 +11,9 @@ OpenPipelines is underpinned by two tools: **Viash**, which is used to create ea
 **[Viash](https://viash.io)** turns a config (`config.vsh.yaml`) plus a script into a self-contained component.
 From these two files it generates:
 
-- A **command-line interface**, parsing and injecting the declared arguments into the script
-- A **Docker image** pinning the component's exact dependencies
-- A **Nextflow (VDSL3) module** that can be chained into a workflow
+- A **command-line interface**, parsing and injecting the declared arguments into the script.
+- A **Docker image** pinning the component's exact dependencies.
+- A **Nextflow (VDSL3) module** that can be chained into a workflow.
 
 Viash separates a component's **logic** (a script in Python, R, or Bash) from its **execution environment** (the container) and its **orchestration layer** (Nextflow).
 
@@ -28,9 +28,7 @@ The independent, language-agnostic components created by Viash allow OpenPipelin
 
 ## The build step
 
-At build time, Viash performs several steps
-From the config and script, it creates an executable that can be run locally as well as a compiled Nextflow module
-At the same time, it builds the matching container with the environment the script runs in.
+At build time, Viash creates an executable that can be run locally, a compiled Nextflow module, and the matching container with the environment the script needs.
 The created Nextflow modules can be run directly or included as dependencies in workflow components that chain them into pipelines.
 The final Nextflow workflows can be run locally, on an HPC cluster or in the cloud.
 

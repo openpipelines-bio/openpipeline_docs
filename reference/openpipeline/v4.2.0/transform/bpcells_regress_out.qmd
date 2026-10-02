@@ -5,7 +5,7 @@ title: "bpcells_regress_out"
 namespace: "Transform"
 description: "Regress out the effects of confounding variables using a linear least squares regression model with BPCells"
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

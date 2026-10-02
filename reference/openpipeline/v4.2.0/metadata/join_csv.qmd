@@ -5,7 +5,7 @@ title: "join_csv"
 namespace: "Metadata"
 description: "Join a csv containing metadata to the .obs or .var field of a mudata file."
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

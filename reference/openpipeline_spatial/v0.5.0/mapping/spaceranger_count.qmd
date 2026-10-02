@@ -5,7 +5,7 @@ title: "spaceranger_count"
 namespace: "Mapping"
 description: "Count gene expression and protein expression reads from a single capture area."
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline_spatial v0.5.0"
 ---

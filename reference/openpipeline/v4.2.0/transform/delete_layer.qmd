@@ -5,7 +5,7 @@ title: "delete_layer"
 namespace: "Transform"
 description: "Delete an anndata layer from one or more modalities"
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

@@ -5,7 +5,7 @@ title: "bcftools"
 namespace: "Genetic demux"
 description: "Filter the variants called by freebayes or cellSNP"
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

@@ -5,7 +5,7 @@ title: "prot_singlesample"
 namespace: "Workflows/prot"
 description: "Processing unimodal single-sample CITE-seq data."
 type: "workflow"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

@@ -87,6 +87,11 @@ mv nextflow $HOME/.local/bin/
 nextflow info
 ```
 
+::: {.callout-warning}
+OpenPipeline's workflows don't yet run under the strict language syntax enforced
+by the newest Nextflow releases. Pin a compatible version before running: `export NXF_VER=25.10.2`
+:::
+
 ### Docker
 
 Install [Docker Desktop](https://docs.docker.com/get-docker/) (macOS/Windows) or Docker Engine (Linux).
@@ -149,9 +154,14 @@ cd ..
 ```
 
 Each file holds one sample's raw RNA counts.
-Open both in Python with the [`mudata`](https://mudata.readthedocs.io/) package to see what's inside:
+Open both in Python with the [`mudata`](https://mudata.readthedocs.io/) package to see what's inside.
+
+Install it into a virtual environment rather than the system Python: most current Linux distributions (and Homebrew's Python on macOS) refuse a plain `pip install` outside one, to keep Python packages isolated from OS-managed dependencies.
+The environment created here stays active for the rest of this tutorial, so later `python` commands don't need to repeat this step.
 
 ```bash
+python3 -m venv .venv
+source .venv/bin/activate
 pip install 'mudata~=0.3.8' 'anndata~=0.12.16'   # matches openpipeline v4.2.0, needs Python >=3.11
 for s in pbmc_1k_v2 pbmc_1k_v3; do
   echo "== $s =="

@@ -5,7 +5,7 @@ title: "scanvi_scarches"
 namespace: "Workflows/annotation"
 description: "Cell type annotation workflow using ScanVI with scArches for reference mapping."
 type: "workflow"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

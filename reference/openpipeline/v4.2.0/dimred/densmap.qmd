@@ -5,7 +5,7 @@ title: "densmap"
 namespace: "Dimred"
 description: "A modification of UMAP that adds an extra cost term in order to preserve information  about the relative local density of the data."
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

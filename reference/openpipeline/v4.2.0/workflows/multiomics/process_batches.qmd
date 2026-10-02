@@ -5,7 +5,7 @@ title: "process_batches"
 namespace: "Workflows/multiomics"
 description: "This workflow serves as an entrypoint into the 'full_pipeline' in order to re-run the multisample processing and the integration setup."
 type: "workflow"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

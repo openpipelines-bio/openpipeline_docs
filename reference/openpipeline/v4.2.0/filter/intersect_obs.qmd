@@ -5,7 +5,7 @@ title: "intersect_obs"
 namespace: "Filter"
 description: "Create an intersection between two or more modalities."
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

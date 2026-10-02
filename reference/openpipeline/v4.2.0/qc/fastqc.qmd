@@ -5,7 +5,7 @@ title: "fastqc"
 namespace: "Qc"
 description: "Fastqc component, please see https://www.bioinformatics.babraham.ac.uk/projects/fastqc/."
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

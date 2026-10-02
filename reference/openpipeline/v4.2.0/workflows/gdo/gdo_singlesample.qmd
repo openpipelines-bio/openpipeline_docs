@@ -5,7 +5,7 @@ title: "gdo_singlesample"
 namespace: "Workflows/gdo"
 description: "Processing unimodal single-sample guide-derived oligonucleotide (GDO) data."
 type: "workflow"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

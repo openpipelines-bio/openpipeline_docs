@@ -5,7 +5,7 @@ title: "filter_with_scrublet"
 namespace: "Filter"
 description: "Doublet detection using the Scrublet method (Wolock, Lopez and Klein, 2019)."
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

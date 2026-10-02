@@ -5,7 +5,7 @@ title: "scvi"
 namespace: "Integrate"
 description: "Performs scvi integration as done in the human lung cell atlas https://github.com/LungCellAtlas/HLCA"
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

@@ -5,7 +5,7 @@ title: "bcl2fastq"
 namespace: "Demux"
 description: "Convert bcl files to fastq files using bcl2fastq"
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

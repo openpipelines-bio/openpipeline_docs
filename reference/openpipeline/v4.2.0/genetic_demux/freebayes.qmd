@@ -5,7 +5,7 @@ title: "freebayes"
 namespace: "Genetic demux"
 description: "Freebayes is a Bayesian genetic variant detector designed to find small polymorphisms, specifically SNPs"
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

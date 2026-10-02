@@ -5,7 +5,7 @@ title: "calculate_qc_metrics"
 namespace: "Qc"
 description: "Add basic quality control metrics to an .h5mu file."
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

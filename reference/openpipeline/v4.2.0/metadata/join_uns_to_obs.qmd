@@ -5,7 +5,7 @@ title: "join_uns_to_obs"
 namespace: "Metadata"
 description: "Join a data frame of length 1 (1 row index value) in .uns containing metadata to the .obs of a mudata file."
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

@@ -10,21 +10,13 @@ anchor-sections: false
 <div class="op-home">
 
   <div class="wrap hero">
-    <span class="kicker">Multi-modal omics analysis · reproducible at scale</span>
+    <span class="kicker">Multi-modal omics analysis</span>
     <h1>Modular, reproducible pipelines for<br><em>single-cell and spatial</em> data.</h1>
     <p class="lede">From raw counts to an interpretable data object, OpenPipelines reliable and robustly processes your data.</p>
-    <div class="modalities">
-      <span class="m"><b>RNA</b></span>
-      <span class="m"><b>Protein</b> (ADT)</span>
-      <span class="m"><b>ATAC</b></span>
-      <span class="m"><b>VDJ</b></span>
-      <span class="m"><b>GDO</b></span>
-      <span class="m"><b>Spatial</b></span>
-    </div>
   </div>
 
   <div class="wrap">
-    <div id="op-flow"></div>
+    <div id="op-flow" data-modalities="true"></div>
     <div class="cta-row flow-cta">
       <a class="btn primary" href="workflows/index.html">▸ Explore the full pipeline</a>
     </div>

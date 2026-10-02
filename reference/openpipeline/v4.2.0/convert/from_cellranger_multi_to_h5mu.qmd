@@ -5,7 +5,7 @@ title: "from_cellranger_multi_to_h5mu"
 namespace: "Convert"
 description: "Converts the output from cellranger multi to a single .h5mu file."
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

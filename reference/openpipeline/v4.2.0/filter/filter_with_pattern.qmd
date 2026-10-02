@@ -5,7 +5,7 @@ title: "filter_with_pattern"
 namespace: "Filter"
 description: "Filter a MuData object based on gene names using a regex"
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

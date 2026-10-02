@@ -5,7 +5,7 @@ title: "regress_out"
 namespace: "Transform"
 description: "Regress out (mostly) unwanted sources of variation."
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

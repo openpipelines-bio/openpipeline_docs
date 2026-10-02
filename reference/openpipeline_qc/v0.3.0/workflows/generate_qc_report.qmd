@@ -5,7 +5,7 @@ title: "generate_qc_report"
 namespace: "Workflows"
 description: "Run the ingestion QC report generation"
 type: "workflow"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline_qc v0.3.0"
 ---

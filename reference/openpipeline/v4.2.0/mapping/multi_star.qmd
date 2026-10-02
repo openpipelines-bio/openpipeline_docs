@@ -5,7 +5,7 @@ title: "multi_star"
 namespace: "Mapping"
 description: "Align fastq files using STAR."
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

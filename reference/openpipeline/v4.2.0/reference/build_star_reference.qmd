@@ -5,7 +5,7 @@ title: "build_star_reference"
 namespace: "Reference"
 description: "Create a reference for STAR from a set of fasta files."
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

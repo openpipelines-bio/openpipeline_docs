@@ -5,7 +5,7 @@ title: "compress_h5mu"
 namespace: "Compression"
 description: "Compress a MuData file."
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

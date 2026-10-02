@@ -10,17 +10,17 @@ Each package uses [Viash](viash.qmd) so components, data format and tooling are 
 | Package | Role |
 |---|---|
 | [`openpipeline`]{.pkg-tag .pkg-openpipeline}<span class="swatch openpipeline"></span> | Core single-cell multi-omics, RNA, protein/ADT, ATAC, VDJ, GDO |
-| [`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial}<span class="swatch openpipeline_spatial"></span> | Spatial transcriptomics, ingests Visium, Visium HD, Xenium, Aviti24, CosMx (or any pre-ingested count matrix) |
+| [`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial}<span class="swatch openpipeline_spatial"></span> | Spatial transcriptomics, ingests Visium, Visium HD, Xenium, AVITI24, CosMx (or any pre-ingested count matrix) |
 | [`openpipeline_qc`]{.pkg-tag .pkg-openpipeline_qc}<span class="swatch openpipeline_qc"></span> | Quality-control components and standalone reporting |
 | [`openpipeline_rapids`]{.pkg-tag .pkg-openpipeline_rapids}<span class="swatch openpipeline_rapids"></span> | GPU-accelerated drop-ins via rapids-singlecell, *coming soon* |
 | [`openpipeline_composed`]{.pkg-tag .pkg-openpipeline_composed}<span class="swatch openpipeline_composed"></span> | Turnkey composed pipelines that wrap the whole flow |
 
 ## How the packages relate
 
-Each package plans a role in the overall [process](../workflows/index.qmd):
+Each package plays a role in the overall [process](../workflows/index.qmd):
 
 - **`openpipeline`** defines most stages for ingestion, QC, processing, integration and downstream analysis for RNA, protein, ATAC, VDJ and GDO modalities.
-- **`openpipeline_spatial`** contains functionality for spatial transcriptomics (Xenium, Visium, Visium HD, Aviti24, CosMx).
+- **`openpipeline_spatial`** contains functionality for spatial transcriptomics (Xenium, Visium, Visium HD, AVITI24, CosMx).
 - **`openpipeline_qc`** generates interactive HTML reports for visualising quality control metrics and selecting filtering thresholds.
 - **`openpipeline_rapids`** (*coming soon*) provides drop-in GPU replacements for computationally intensive steps using the `rapids-singlecell` package.
 - **`openpipeline_composed`** provides end-to-end processing workflows that combine multiple stages.
