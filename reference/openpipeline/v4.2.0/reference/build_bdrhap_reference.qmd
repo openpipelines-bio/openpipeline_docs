@@ -5,7 +5,7 @@ title: "build_bdrhap_reference"
 namespace: "Reference"
 description: "The Reference Files Generator creates an archive containing Genome Index and Transcriptome annotation files needed for the BD Rhapsody Sequencing Analysis Pipeline."
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

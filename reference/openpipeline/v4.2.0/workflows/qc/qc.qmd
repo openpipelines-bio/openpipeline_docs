@@ -5,7 +5,7 @@ title: "qc"
 namespace: "Workflows/qc"
 description: "A pipeline to add basic qc statistics to a MuData"
 type: "workflow"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

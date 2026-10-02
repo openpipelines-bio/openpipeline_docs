@@ -5,7 +5,7 @@ title: "htseq_count"
 namespace: "Mapping"
 description: "Quantify gene expression for subsequent testing for differential expression."
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

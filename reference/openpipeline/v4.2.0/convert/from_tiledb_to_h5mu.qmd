@@ -5,7 +5,7 @@ title: "from_tiledb_to_h5mu"
 namespace: "Convert"
 description: ""
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

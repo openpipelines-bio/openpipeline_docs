@@ -5,7 +5,7 @@ title: "from_h5ad_to_seurat"
 namespace: "Convert"
 description: "Converts an h5ad file into a Seurat file"
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

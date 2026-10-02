@@ -5,7 +5,7 @@ title: "remove_modality"
 namespace: "Filter"
 description: "Remove a modality from a .h5mu file"
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

@@ -5,7 +5,7 @@ title: "scanorama_leiden"
 namespace: "Workflows/integration"
 description: "Run scanorama integration followed by neighbour calculations, leiden clustering and run umap on the result."
 type: "workflow"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

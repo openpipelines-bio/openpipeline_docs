@@ -5,7 +5,7 @@ title: "bbknn"
 namespace: "Neighbors"
 description: "BBKNN network generation"
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

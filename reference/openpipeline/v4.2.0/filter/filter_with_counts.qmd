@@ -5,7 +5,7 @@ title: "filter_with_counts"
 namespace: "Filter"
 description: "Filter scRNA-seq data based on the primary QC metrics."
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

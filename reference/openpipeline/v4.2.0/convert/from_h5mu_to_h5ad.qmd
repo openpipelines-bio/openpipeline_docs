@@ -5,7 +5,7 @@ title: "from_h5mu_to_h5ad"
 namespace: "Convert"
 description: "Converts a h5mu file into a h5ad file"
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

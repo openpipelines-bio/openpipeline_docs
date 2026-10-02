@@ -5,7 +5,7 @@ title: "totalvi"
 namespace: "Integrate"
 description: "Performs TotalVI integration of CITE-seq and scRNA-seq data."
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

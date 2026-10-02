@@ -5,7 +5,7 @@ title: "cellbender_remove_background"
 namespace: "Correction"
 description: "Eliminating technical artifacts from high-throughput single-cell RNA sequencing data."
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

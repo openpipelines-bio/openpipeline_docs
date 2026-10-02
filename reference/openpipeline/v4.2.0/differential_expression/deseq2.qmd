@@ -5,7 +5,7 @@ title: "deseq2"
 namespace: "Differential expression"
 description: "Performs differential expression analysis using DESeq2 on bulk samples or pseudobulk samples aggregated from single-cell data."
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

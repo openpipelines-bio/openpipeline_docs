@@ -5,7 +5,7 @@ title: "harmonypy"
 namespace: "Integrate"
 description: "Performs Harmony integration based as described in https://github.com/immunogenomics/harmony."
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

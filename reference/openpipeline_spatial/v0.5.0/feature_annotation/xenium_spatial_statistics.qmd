@@ -5,7 +5,7 @@ title: "xenium_spatial_statistics"
 namespace: "Feature annotation"
 description: "Calculate various spatial statistics from Xenium data including cell morphology ratios, position-based features, local density metrics, and global spatial patterns."
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline_spatial v0.5.0"
 ---

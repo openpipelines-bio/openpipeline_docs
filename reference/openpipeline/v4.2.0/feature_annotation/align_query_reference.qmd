@@ -5,7 +5,7 @@ title: "align_query_reference"
 namespace: "Feature annotation"
 description: "Alignment of a query and reference dataset by: * Alignment of layers * Harmonization of .obs field names for batch and cell type labels * Harmonization of .var field name for gene names * Sanitation of gene names * Cross-checking of genes * Assignment of an id to the query and reference datasets"
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

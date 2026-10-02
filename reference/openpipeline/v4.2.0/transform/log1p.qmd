@@ -5,7 +5,7 @@ title: "log1p"
 namespace: "Transform"
 description: "Logarithmize the data matrix."
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

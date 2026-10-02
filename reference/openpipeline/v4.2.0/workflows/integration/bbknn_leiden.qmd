@@ -5,7 +5,7 @@ title: "bbknn_leiden"
 namespace: "Workflows/integration"
 description: "Run bbknn followed by leiden clustering and run umap on the result."
 type: "workflow"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

@@ -5,7 +5,7 @@ title: "celltypist"
 namespace: "Workflows/annotation"
 description: "Cell type annotation workflow by performing lognormalization of the raw counts layer followed by cell type annotation with CellTypist."
 type: "workflow"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

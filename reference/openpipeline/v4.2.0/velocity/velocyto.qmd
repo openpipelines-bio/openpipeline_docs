@@ -5,7 +5,7 @@ title: "velocyto"
 namespace: "Velocity"
 description: "Runs the velocity analysis on a BAM file, outputting a loom file."
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

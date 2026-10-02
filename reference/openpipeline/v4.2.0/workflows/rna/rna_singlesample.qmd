@@ -5,7 +5,7 @@ title: "rna_singlesample"
 namespace: "Workflows/rna"
 description: "Processing unimodal single-sample RNA transcriptomics data."
 type: "workflow"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

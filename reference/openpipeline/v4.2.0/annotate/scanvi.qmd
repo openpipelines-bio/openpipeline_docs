@@ -5,7 +5,7 @@ title: "scanvi"
 namespace: "Annotate"
 description: "scANVI () is a semi-supervised model for single-cell transcriptomics data."
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

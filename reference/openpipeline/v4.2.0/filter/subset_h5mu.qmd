@@ -5,7 +5,7 @@ title: "subset_h5mu"
 namespace: "Filter"
 description: "Create a subset of a mudata file by selecting the first number of observations"
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

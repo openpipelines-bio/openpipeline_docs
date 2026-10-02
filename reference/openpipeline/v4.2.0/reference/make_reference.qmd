@@ -5,7 +5,7 @@ title: "make_reference"
 namespace: "Reference"
 description: "Preprocess and build a transcriptome reference."
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

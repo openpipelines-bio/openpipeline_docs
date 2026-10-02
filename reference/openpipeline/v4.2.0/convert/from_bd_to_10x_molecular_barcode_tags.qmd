@@ -5,7 +5,7 @@ title: "from_bd_to_10x_molecular_barcode_tags"
 namespace: "Convert"
 description: "Convert the molecular barcode sequence SAM tag from BD format (MA) to 10X format (UB)"
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

@@ -5,7 +5,7 @@ title: "clear_slots"
 namespace: "Transform"
 description: "Clear one or more AnnData slot containers from a modality in an h5mu file"
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

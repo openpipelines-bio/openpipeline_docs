@@ -5,7 +5,7 @@ title: "move_layer"
 namespace: "Transform"
 description: "Move a data matrix stored at the .layers or .X attributes in a MuData object to another layer."
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

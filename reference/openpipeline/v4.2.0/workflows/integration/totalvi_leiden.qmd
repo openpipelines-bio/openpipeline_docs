@@ -5,7 +5,7 @@ title: "totalvi_leiden"
 namespace: "Workflows/integration"
 description: "Run totalVI integration, followed by neighbour calculations, leiden clustering and UMAP."
 type: "workflow"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

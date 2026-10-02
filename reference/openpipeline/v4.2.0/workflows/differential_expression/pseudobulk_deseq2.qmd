@@ -5,7 +5,7 @@ title: "pseudobulk_deseq2"
 namespace: "Workflows/differential expression"
 description: "Performs pseudobulk generation and subsequent differential expression analysis using DESeq2"
 type: "workflow"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

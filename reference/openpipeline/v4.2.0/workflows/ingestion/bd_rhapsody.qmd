@@ -5,7 +5,7 @@ title: "bd_rhapsody"
 namespace: "Workflows/ingestion"
 description: "BD Rhapsody Sequence Analysis CWL pipeline v2.2.1"
 type: "workflow"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

@@ -5,7 +5,7 @@ title: "cellmapper"
 namespace: "Labels transfer"
 description: "Transfer labels from a reference to a query using CellMapper in a shared embedding space"
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

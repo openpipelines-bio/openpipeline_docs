@@ -5,7 +5,7 @@ title: "build_cellranger_reference"
 namespace: "Reference"
 description: "Build a Cell Ranger-compatible reference folder from user-supplied genome FASTA and gene GTF files."
 type: "module"
-toc: false
+toc: true
 latest: "true"
 subtitle: "openpipeline v4.2.0"
 ---

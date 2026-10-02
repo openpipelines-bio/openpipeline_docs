@@ -70,8 +70,35 @@ website:
       title: "Get started"
       contents: get-started/*
     - id: guides
-      title: "Guides"
-      contents: guides/*
+      title: "Task guides"
+      # Hand-ordered (matches each page's `order:`) instead of guides/* so the
+      # single-cell / spatial pairs can nest under one shared section label
+      # rather than appear as separate, similarly-named top-level entries.
+      contents:
+        - guides/index.qmd
+        - section: "Ingestion"
+          contents:
+            - guides/ingest-10x.qmd
+            - guides/ingest-spatial.qmd
+        - section: "QC report"
+          contents:
+            - guides/qc-report.qmd
+            - guides/qc-report-spatial.qmd
+        - section: "Process samples"
+          contents:
+            - guides/process-samples.qmd
+            - guides/process-spatial.qmd
+        - guides/integrate.qmd
+        - guides/annotate.qmd
+        - guides/differential-expression.qmd
+        - guides/rna-velocity.qmd
+        - guides/cell-cell-communication.qmd
+        - guides/spatial-niches.qmd
+        - guides/turnkey.qmd
+        - guides/running-pipelines.qmd
+        - guides/process-many-samples.qmd
+        - guides/tune-resources.qmd
+        - guides/gpu.qmd
     - id: concepts
       title: "Concepts"
       contents: concepts/*
