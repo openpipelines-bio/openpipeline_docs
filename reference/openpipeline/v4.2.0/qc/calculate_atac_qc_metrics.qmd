@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "calculate_atac_qc_metrics"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Qc"
 description: "Add basic ATAC quality control metrics to an .h5mu file."
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

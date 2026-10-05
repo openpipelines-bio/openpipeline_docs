@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "from_h5mu_or_h5ad_to_seurat"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Convert"
 description: "Converts an h5ad file or a single modality of an h5mu file into a Seurat file"
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

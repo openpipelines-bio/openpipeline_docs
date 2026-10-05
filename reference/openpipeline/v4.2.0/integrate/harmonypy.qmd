@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "harmonypy"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Integrate"
 description: "Performs Harmony integration based as described in https://github.com/immunogenomics/harmony."
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

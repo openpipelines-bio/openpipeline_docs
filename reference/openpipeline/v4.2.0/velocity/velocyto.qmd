@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "velocyto"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Velocity"
 description: "Runs the velocity analysis on a BAM file, outputting a loom file."
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "filter_with_counts"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Filter"
 description: "Filter scRNA-seq data based on the primary QC metrics."
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

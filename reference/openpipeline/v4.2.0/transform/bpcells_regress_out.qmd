@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "bpcells_regress_out"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Transform"
 description: "Regress out the effects of confounding variables using a linear least squares regression model with BPCells"
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

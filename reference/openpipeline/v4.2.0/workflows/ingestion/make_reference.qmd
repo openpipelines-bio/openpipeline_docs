@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "make_reference"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Workflows/ingestion"
 description: "Build a transcriptomics reference into one of many formats"
 type: "workflow"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}
@@ -26,6 +26,9 @@ Namespace: `workflows/ingestion`
 [![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/ingestion/make_reference)
 
 :::
+
+
+
 ## Visualisation
 
 ```{mermaid}
@@ -47,6 +50,7 @@ flowchart TB
 ```
 
 *Dashed nodes are optional steps.*
+
 
 
 ## Argument groups

@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "consensus_vote"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Annotate"
 description: "Combines cell type predictions from multiple annotation methods into a single consensus prediction using a weighted majority vote."
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "clear_slots"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Transform"
 description: "Clear one or more AnnData slot containers from a modality in an h5mu file"
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

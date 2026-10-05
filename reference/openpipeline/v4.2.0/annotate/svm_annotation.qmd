@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "svm_annotation"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Annotate"
 description: "Automated cell type annotation tool for scRNA-seq datasets on the basis of SVMs."
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

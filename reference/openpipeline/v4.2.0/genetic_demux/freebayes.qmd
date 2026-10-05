@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "freebayes"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Genetic demux"
 description: "Freebayes is a Bayesian genetic variant detector designed to find small polymorphisms, specifically SNPs"
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

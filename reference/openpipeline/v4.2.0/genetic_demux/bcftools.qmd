@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "bcftools"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Genetic demux"
 description: "Filter the variants called by freebayes or cellSNP"
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

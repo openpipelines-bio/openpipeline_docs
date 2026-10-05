@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "bbknn_leiden"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Workflows/integration"
 description: "Run bbknn followed by leiden clustering and run umap on the result."
 type: "workflow"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}
@@ -26,6 +26,9 @@ Namespace: `workflows/integration`
 [![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/integration/bbknn_leiden)
 
 :::
+
+
+
 ## Visualisation
 
 ```{mermaid}
@@ -43,6 +46,7 @@ flowchart TB
     style c_metadata_move_obsm_to_obs fill:#e2f4e7,stroke:#2b8f52,color:#13201a
     style c_neighbors_bbknn fill:#e2f4e7,stroke:#2b8f52,color:#13201a
 ```
+
 
 
 ## Argument groups

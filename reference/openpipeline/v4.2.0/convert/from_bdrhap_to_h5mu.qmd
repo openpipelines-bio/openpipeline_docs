@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "from_bdrhap_to_h5mu"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Convert"
 description: "Convert the output of a BD Rhapsody pipeline v2.x to a MuData h5 file"
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

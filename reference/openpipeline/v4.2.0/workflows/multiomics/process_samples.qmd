@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "process_samples"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Workflows/multiomics"
 description: "A pipeline to analyse multiple multiomics samples."
 type: "workflow"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}
@@ -26,6 +26,9 @@ Namespace: `workflows/multiomics`
 [![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/multiomics/process_samples)
 
 :::
+
+
+
 ## Visualisation
 
 ```{mermaid}
@@ -55,6 +58,7 @@ flowchart TB
 ```
 
 *Trapezoids split or combine data.*
+
 
 
 ## Argument groups

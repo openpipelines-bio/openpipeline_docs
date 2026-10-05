@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "onclass"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Annotate"
 description: "OnClass is a python package for single-cell cell type annotation."
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

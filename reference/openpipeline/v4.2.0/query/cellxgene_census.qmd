@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "cellxgene_census"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Query"
 description: "Query cells from a CellxGene Census or custom TileDBSoma object."
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

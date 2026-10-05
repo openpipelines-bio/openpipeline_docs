@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "tar_extract"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Compression"
 description: "Extract files from a tar archive"
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

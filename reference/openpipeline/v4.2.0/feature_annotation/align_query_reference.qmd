@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "align_query_reference"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Feature annotation"
 description: "Alignment of a query and reference dataset by: * Alignment of layers * Harmonization of .obs field names for batch and cell type labels * Harmonization of .var field name for gene names * Sanitation of gene names * Cross-checking of genes * Assignment of an id to the query and reference datasets"
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

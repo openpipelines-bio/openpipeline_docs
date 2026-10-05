@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "bd_rhapsody"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Workflows/ingestion"
 description: "BD Rhapsody Sequence Analysis CWL pipeline v2.2.1"
 type: "workflow"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}
@@ -33,6 +33,8 @@ mRNA, Targeted mRNA, AbSeq Antibody-Oligonucleotides, Single-Cell Multiplexing, 
 ATAC-Seq
 
 The CWL pipeline file is obtained by cloning 'https://bitbucket.org/CRSwDev/cwl' and removing all objects with class 'DockerRequirement' from the YAML.
+
+
 ## Visualisation
 
 ```{mermaid}
@@ -43,6 +45,7 @@ flowchart TB
     style c_convert_from_bdrhap_to_h5mu fill:#e2f4e7,stroke:#2b8f52,color:#13201a
     style c_mapping_bd_rhapsody fill:#e2f4e7,stroke:#2b8f52,color:#13201a
 ```
+
 
 
 ## Argument groups
