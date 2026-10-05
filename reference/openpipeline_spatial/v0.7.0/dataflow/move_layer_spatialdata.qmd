@@ -5,7 +5,7 @@ title: "move_layer_spatialdata"
 subtitle: "openpipeline_spatial v0.7.0"
 toc: true
 namespace: "Dataflow"
-description: "
+description: ""
 type: "module"
 latest: "true"
 ---

@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "cellsnp"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Genetic demux"
 description: "cellSNP aims to pileup the expressed alleles in single-cell or bulk RNA-seq data."
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

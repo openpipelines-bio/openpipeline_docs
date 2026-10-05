@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "tiledb_healthcheck"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Query"
 description: "Checks if a provided location can be queried as a TileDB-SOMA database"
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

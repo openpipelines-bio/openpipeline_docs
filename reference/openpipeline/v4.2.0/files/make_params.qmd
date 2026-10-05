@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "make_params"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Files"
 description: "Looks for files in a directory and turn it in a params file."
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

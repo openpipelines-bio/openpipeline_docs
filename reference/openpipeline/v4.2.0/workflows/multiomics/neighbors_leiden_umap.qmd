@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "neighbors_leiden_umap"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Workflows/multiomics"
 description: "Performs neighborhood search, leiden clustering and run umap on an integrated embedding."
 type: "workflow"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}
@@ -26,6 +26,9 @@ Namespace: `workflows/multiomics`
 [![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/multiomics/neighbors_leiden_umap)
 
 :::
+
+
+
 ## Visualisation
 
 ```{mermaid}
@@ -44,6 +47,7 @@ flowchart TB
 ```
 
 *Dashed nodes are optional steps.*
+
 
 
 ## Argument groups

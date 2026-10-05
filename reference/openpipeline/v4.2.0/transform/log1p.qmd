@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "log1p"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Transform"
 description: "Logarithmize the data matrix."
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

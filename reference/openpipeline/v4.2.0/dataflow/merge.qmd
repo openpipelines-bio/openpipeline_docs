@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "merge"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Dataflow"
 description: "Combine one or more single-modality .h5mu files together into one .h5mu file"
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

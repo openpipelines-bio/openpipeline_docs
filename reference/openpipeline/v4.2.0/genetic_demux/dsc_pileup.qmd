@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "dsc_pileup"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Genetic demux"
 description: "Dsc-pileup is a software tool to pileup reads and corresponding base quality  for each overlapping SNPs and each barcode."
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

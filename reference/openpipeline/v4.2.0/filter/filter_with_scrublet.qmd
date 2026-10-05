@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "filter_with_scrublet"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Filter"
 description: "Doublet detection using the Scrublet method (Wolock, Lopez and Klein, 2019)."
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

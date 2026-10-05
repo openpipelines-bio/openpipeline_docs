@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "scanvi"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Annotate"
 description: "scANVI () is a semi-supervised model for single-cell transcriptomics data."
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

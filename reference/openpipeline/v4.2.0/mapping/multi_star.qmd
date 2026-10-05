@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "multi_star"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Mapping"
 description: "Align fastq files using STAR."
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

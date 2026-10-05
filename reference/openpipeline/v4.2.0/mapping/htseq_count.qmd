@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "htseq_count"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Mapping"
 description: "Quantify gene expression for subsequent testing for differential expression."
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "move_layer"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Transform"
 description: "Move a data matrix stored at the .layers or .X attributes in a MuData object to another layer."
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

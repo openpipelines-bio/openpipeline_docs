@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "samtools_sort"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Mapping"
 description: "Sort and (optionally) index alignments."
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

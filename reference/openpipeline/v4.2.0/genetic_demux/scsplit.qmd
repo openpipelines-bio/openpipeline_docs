@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "scsplit"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Genetic demux"
 description: "scsplit is a genotype-free demultiplexing methode of pooled single-cell RNA-seq, using a hidden state model for identifying genetically distinct samples within a mixed population."
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

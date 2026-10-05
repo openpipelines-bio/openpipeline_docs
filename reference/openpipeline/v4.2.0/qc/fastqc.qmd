@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "fastqc"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Qc"
 description: "Fastqc component, please see https://www.bioinformatics.babraham.ac.uk/projects/fastqc/."
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

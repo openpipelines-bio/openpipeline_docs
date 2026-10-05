@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "tsne"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Dimred"
 description: "t-SNE (t-Distributed Stochastic Neighbor Embedding) is a dimensionality reduction technique used to visualize high-dimensional data in a low-dimensional space, revealing patterns and clusters by preserving local data similarities"
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

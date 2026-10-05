@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "freemuxlet"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Genetic demux"
 description: "Freemuxlet is a software tool to deconvolute sample identity and identify multiplets when multiple samples are pooled by barcoded single cell sequencing."
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

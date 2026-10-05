@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "filter_with_pattern"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Filter"
 description: "Filter a MuData object based on gene names using a regex"
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

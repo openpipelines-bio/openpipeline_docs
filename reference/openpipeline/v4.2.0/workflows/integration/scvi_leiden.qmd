@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "scvi_leiden"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Workflows/integration"
 description: "Run scvi integration followed by neighbour calculations, leiden clustering and run umap on the result."
 type: "workflow"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}
@@ -26,6 +26,9 @@ Namespace: `workflows/integration`
 [![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/integration/scvi_leiden)
 
 :::
+
+
+
 ## Visualisation
 
 ```{mermaid}
@@ -47,6 +50,7 @@ flowchart TB
 ```
 
 *Dashed nodes are optional steps.*
+
 
 
 ## Argument groups

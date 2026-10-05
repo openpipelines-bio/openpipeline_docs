@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "harmony_knn"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Workflows/annotation"
 description: "Cell type annotation workflow by performing harmony integration of reference and query dataset followed by KNN label transfer."
 type: "workflow"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}
@@ -26,6 +26,9 @@ Namespace: `workflows/annotation`
 [![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/annotation/harmony_knn)
 
 :::
+
+
+
 ## Visualisation
 
 ```{mermaid}
@@ -63,6 +66,7 @@ flowchart TB
 ```
 
 *Trapezoids split or combine data.*
+
 
 
 ## Argument groups
