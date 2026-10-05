@@ -108,13 +108,13 @@ def render_links(person, allow_email):
     links = links_of(person)
     out = []
     if allow_email and links.get("email"):
-        out.append(("bi-envelope", "E-mail", "mailto:" + links["email"]))
+        out.append(("bi bi-envelope", "E-mail", "mailto:" + links["email"]))
     if links.get("github"):
-        out.append(("bi-github", "GitHub", "https://github.com/" + links["github"]))
+        out.append(("bi bi-github", "GitHub", "https://github.com/" + links["github"]))
     if links.get("orcid"):
-        out.append(("orcid", "ORCID", "https://orcid.org/" + str(links["orcid"])))
+        out.append(("fa-brands fa-orcid", "ORCID", "https://orcid.org/" + str(links["orcid"])))
     if links.get("linkedin"):
-        out.append(("bi-linkedin", "LinkedIn", "https://www.linkedin.com/in/" + links["linkedin"]))
+        out.append(("bi bi-linkedin", "LinkedIn", "https://www.linkedin.com/in/" + links["linkedin"]))
     return out
 
 
@@ -142,9 +142,7 @@ def card(person, *, team_role=None, show_org=False, allow_email=False):
     if lnks:
         out.append('      <div class="network">')
         for icon, text, href in lnks:
-            inner = (f'<i class="bi {icon}"></i>' if icon.startswith("bi-")
-                     else f'<span class="link-text">{html.escape(text)}</span>')
-            out.append(f'        <a class="network-icon" href="{href}" title="{html.escape(text)}">{inner}</a>')
+            out.append(f'        <a class="network-icon" href="{href}" title="{html.escape(text)}"><i class="{icon}"></i></a>')
         out.append("      </div>")
     out.append("    </div>")
     out.append("  </div>")
@@ -204,6 +202,10 @@ def main():
         "     Code contributors come from each package repo's src/authors/;\n"
         "     maintainers, advisors and sponsors come from data/members/.\n"
         "     See design/team-authorship.md. -->\n\n"
+        # Bootstrap Icons has no ORCID icon, so that link uses Font Awesome.
+        # The fa shortcode renders nothing inside the cards' raw HTML blocks,
+        # so this hidden one exists only to load the bundled Font Awesome CSS.
+        "[{{< fa brands orcid >}}]{.d-none}\n\n"
     )
 
     with open(OUT, "w", encoding="utf-8") as f:
