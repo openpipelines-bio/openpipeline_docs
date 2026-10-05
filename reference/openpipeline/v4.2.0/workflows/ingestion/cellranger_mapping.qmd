@@ -26,9 +26,6 @@ Namespace: `workflows/ingestion`
 [![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/ingestion/cellranger_mapping)
 
 :::
-
-
-
 ## Visualisation
 
 ```{mermaid}
@@ -44,7 +41,6 @@ flowchart TB
 ```
 
 *Trapezoids split or combine data.*
-
 
 
 ## Argument groups

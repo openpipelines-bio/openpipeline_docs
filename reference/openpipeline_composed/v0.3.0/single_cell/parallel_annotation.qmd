@@ -38,8 +38,6 @@ Available annotation methods:
 - SingleR
 - SCVI integration followed by KNN label transfer
 - Harmony integration followed by KNN label transfer
-
-
 ## Visualisation
 
 ```{mermaid}
@@ -67,7 +65,6 @@ flowchart TB
 ```
 
 *Dashed nodes are optional steps.*
-
 
 
 ## Argument groups

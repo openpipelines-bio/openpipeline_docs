@@ -40,7 +40,6 @@ Available annotation methods:
 - SingleR
 When more than one annotation method is selected, a final consensus vote
 combines the per-method predictions into a single consensus label
-
 ## Visualisation
 
 ```{mermaid}
@@ -56,7 +55,6 @@ flowchart TB
 ```
 
 *Dashed nodes are optional steps.*
-
 
 
 ## Argument groups

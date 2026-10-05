@@ -6,7 +6,7 @@ namespace: "Ingestion qc"
 description: "Generate an HTML report from the QC metrics"
 type: "module"
 toc: true
-latest: "true"
+latest: "false"
 subtitle: "openpipeline_qc v0.3.0"
 ---
 

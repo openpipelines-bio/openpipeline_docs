@@ -1,0 +1,87 @@
+---
+package: "openpipeline_spatial"
+version: "v0.7.0"
+title: "from_h5mu_to_spatialexperiment"
+subtitle: "openpipeline_spatial v0.7.0"
+toc: true
+namespace: "Convert"
+description: "Converts an h5mu file into a SpatialExperiment object"
+type: "module"
+latest: "true"
+---
+
+::: {.column-margin}
+
+### Info
+
+ID: `from_h5mu_to_spatialexperiment`  
+Namespace: `convert`
+
+### Links
+
+[{{< fa brands github >}} View source code](https://github.com/openpipelines-bio/openpipeline_spatial/tree/v0.7.0/src/convert/from_h5mu_to_spatialexperiment)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Browse all versions](https://www.viash-hub.com/packages/openpipeline_spatial)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline_spatial/v0.7.0/components/convert/from_h5mu_to_spatialexperiment)
+
+:::
+
+
+
+
+## Argument group
+
+### Arguments
+
+|Name                         |Description                                                                                                                     |Attributes                                |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`                    |Input h5mu file                                                                                                                 |`file`, required, example: `"input.h5mu"` |
+|`--modality`                 |Name of the modality to be converted.                                                                                           |`string`, required, default: `"rna"`      |
+|`--obsm_spatial_coordinates` |Key in the .obsm field that contains the spatial coordinates.  Will be mapped to spatialCoords in the SpatialExperiment object. |`string`                                  |
+|`--output`                   |Output SpatialExperiment file                                                                                                   |`file`, required, example: `"output.rds"` |
+
+## Authors
+
+
+  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author)
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline_spatial \
+  -r v0.7.0 -latest \
+  -main-script target/nextflow/convert/from_h5mu_to_spatialexperiment/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+
+Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline_spatial/v0.7.0/components/convert/from_h5mu_to_spatialexperiment).
+
+</details>
+
+Run locally with:
+
+```bash
+nextflow run openpipelines-bio/openpipeline_spatial \
+  -r v0.7.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/convert/from_h5mu_to_spatialexperiment/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

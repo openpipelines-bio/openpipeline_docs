@@ -26,9 +26,6 @@ Namespace: `workflows/ingestion`
 [![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/ingestion/conversion)
 
 :::
-
-
-
 ## Visualisation
 
 ```{mermaid}
@@ -40,7 +37,6 @@ flowchart TB
     style c_convert_from_10xmtx_to_h5mu fill:#e2f4e7,stroke:#2b8f52,color:#13201a
     style c_convert_from_h5ad_to_h5mu fill:#e2f4e7,stroke:#2b8f52,color:#13201a
 ```
-
 
 
 ## Argument groups
