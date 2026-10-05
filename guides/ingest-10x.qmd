@@ -4,7 +4,7 @@ description: "From raw sequencing output to a per-sample count matrix (H5MU)."
 order: 10
 ---
 
-[`openpipeline`]{.pkg-tag .pkg-openpipeline}<span class="swatch openpipeline"></span>
+[<span class="swatch openpipeline"></span>`openpipeline`]{.pkg-tag .pkg-openpipeline}
 
 Ingestion turns the raw output of a sequencing run into a per-sample **count
 matrix** stored as an `.h5mu` file: reads are aligned to a reference, assigned to
@@ -34,12 +34,12 @@ Ingestion is at most three steps; run only the ones you need:
 | [`ingestion/cellranger_multi`](../reference/openpipeline/v4.2.0/workflows/ingestion/cellranger_multi.qmd) | 10x, multiple libraries (GEX + VDJ + ADT/HTO) |
 | [`ingestion/bd_rhapsody`](../reference/openpipeline/v4.2.0/workflows/ingestion/bd_rhapsody.qmd) | BD Rhapsody data |
 
-Not sure which fits? The [pipeline overview](../workflows/index.qmd) shows where
+Not sure which to use? The [Workflows overview](../workflows/index.qmd) shows where
 these fit.
 
 ## Example: 10x multi-library mapping
 
-For example, to map a 10x sample with gene expression, VDJ, and antibody-capture
+To map a 10x sample with gene expression, VDJ, and antibody-capture
 libraries jointly, `ingestion/cellranger_multi` takes a `param_list` where each
 entry's `input` / `library_id` / `library_type` lists line up row-for-row:
 
@@ -68,8 +68,8 @@ nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
 
 ## Already have a count matrix?
 
-If your data is already quantified but not in `.h5mu`, convert it, no mapping
-needed:
+If your data is already quantified but not in `.h5mu`, convert it (no mapping
+needed):
 
 | Format you have | Convert with |
 |---|---|
@@ -88,10 +88,10 @@ standalone `.h5` drops, so downstream steps annotate correctly.
 
 ## Key choices
 
-- **Which mapper** depends on platform and library type, see the overview table.
-- **Reference genome:** build one with `ingestion/make_reference`, or point at a
+- **Which mapper**: depends on platform and library type; see the table above.
+- **Reference genome**: build one with `ingestion/make_reference`, or point at a
   pre-built reference directly.
-- **A whole cohort in one run:** pass a [`param_list`](process-many-samples.qmd)
+- **A whole cohort in one run**: pass a [`param_list`](process-many-samples.qmd)
   with one entry per sample.
 
 ## Output
@@ -107,11 +107,11 @@ the libraries:
 | `atac` | Chromatin accessibility (ATAC-seq peaks) |
 | `gdo` | Guide RNA / CRISPR perturbation data |
 
-Raw counts sit in `.X`, cell metadata in `.obs`, feature metadata in `.var`. No
-filtering has been applied yet, the matrix holds both real cells and empty
+Raw counts sit in `.X`, cell metadata in `.obs`, and feature metadata in `.var`. No
+filtering has been applied yet: the matrix holds both real cells and empty
 droplets. Next: [sample processing](process-samples.qmd).
 
-:::{.callout-tip}
+::: {.callout-tip appearance="simple"}
 The multimodal object and its slots (`.X`, `.obs`, `.var`, `.obsm`, `.mod`) are
 explained in [MuData](../concepts/mudata.qmd).
 :::

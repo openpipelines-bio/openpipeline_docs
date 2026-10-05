@@ -4,8 +4,8 @@ description: "Batch-correct across samples, then cluster and embed."
 order: 40
 ---
 
-[`openpipeline`]{.pkg-tag .pkg-openpipeline}<span class="swatch openpipeline"></span>
-[`openpipeline_composed`]{.pkg-tag .pkg-openpipeline_composed}<span class="swatch openpipeline_composed"></span>
+[<span class="swatch openpipeline"></span>`openpipeline`]{.pkg-tag .pkg-openpipeline}
+[<span class="swatch openpipeline_composed"></span>`openpipeline_composed`]{.pkg-tag .pkg-openpipeline_composed}
 
 Integration is a **separate workflow** run after
 [sample processing](process-samples.qmd). Samples from different donors, runs, or
@@ -29,7 +29,7 @@ structure or modality demands it.
 
 ## Example: Harmony
 
-For example, batch-correcting on `sample_id`:
+Batch-correcting on `sample_id`:
 
 ```bash
 nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
@@ -45,7 +45,7 @@ nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
 
 ## Key choices
 
-**The method** (see the table): Harmony is the default; scVI for scale/complex
+**The method.** Harmony is the default (see the table); scVI for scale/complex
 batches; totalVI for CITE-seq; Scanorama for uneven compositions; BBKNN when you
 only need a graph.
 
@@ -67,10 +67,10 @@ UMAP, is what annotation and other downstream tools consume.
 | `.obs` Leiden labels | Cluster assignments |
 | `.obsm` UMAP | 2-D coordinates for plotting |
 
-Clusters are just numbers, assign biological labels next with
-[cell type annotation](annotate.qmd).
+Clusters are just numbers; assign biological labels next with
+[cell-type annotation](annotate.qmd).
 
-:::{.callout-tip}
+::: {.callout-tip appearance="simple"}
 How the data's shape changes through these steps: see
-[Advanced architecture](../concepts/data-state.qmd).
+[Architecture: advanced](../concepts/data-state.qmd).
 :::

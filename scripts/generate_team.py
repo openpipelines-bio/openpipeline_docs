@@ -184,7 +184,7 @@ def main():
                 [card(p, team_role=role(p), show_org=True, allow_email=True) for p in maintainers]),
         section("Code contributors",
                 [card(p, show_org=False, allow_email=False) for p in contributors]),
-        section("Scientific advisors",
+        section("Scientific and technical advisors",
                 [card(p, show_org=False, allow_email=False) for p in advisors]),
         section("Project sponsors",
                 [card(p, show_org=True, allow_email=False) for p in sponsors]),
@@ -192,7 +192,7 @@ def main():
 
     frontmatter = (
         "---\n"
-        'pagetitle: "Team — OpenPipelines"\n'
+        'pagetitle: "Team"\n'
         'title: "Team"\n'
         'description: "The people building and maintaining OpenPipelines."\n'
         "toc: false\n"

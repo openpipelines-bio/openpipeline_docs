@@ -4,7 +4,7 @@ description: "The same QC report as single-cell, with a spatial ingestion method
 order: 25
 ---
 
-[`openpipeline_qc`]{.pkg-tag .pkg-openpipeline_qc}<span class="swatch openpipeline_qc"></span>
+[<span class="swatch openpipeline_qc"></span>`openpipeline_qc`]{.pkg-tag .pkg-openpipeline_qc}
 
 Spatial data uses the **same** `generate_qc_report` workflow as single-cell data,
 from the `openpipeline_qc` package. The only difference is `--ingestion_method`,
@@ -19,7 +19,7 @@ for the platform.
 
 ## Example: Xenium QC report
 
-For example, for a [spatially-ingested](ingest-spatial.qmd) Xenium object, set
+For a [spatially ingested](ingest-spatial.qmd) Xenium object, set
 `--ingestion_method xenium` (or `visium` / `cosmx`):
 
 ```bash
@@ -39,7 +39,7 @@ nextflow run https://packages.viash-hub.com/vsh/openpipeline_qc.git \
   `cosmx`.
 - For a whole cohort, pass a [`param_list`](process-many-samples.qmd) with one
   entry per sample and `ingestion_method` set once as a shared argument.
-- Everything else, metrics, options, output, is identical to the core
+- Everything else (metrics, options, and output) is identical to the core
   [QC report](qc-report.qmd).
 
 ## Output

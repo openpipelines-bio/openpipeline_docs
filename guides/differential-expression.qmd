@@ -4,13 +4,13 @@ description: "Pseudobulk differential expression across conditions with DESeq2."
 order: 50
 ---
 
-[`openpipeline`]{.pkg-tag .pkg-openpipeline}<span class="swatch openpipeline"></span>
+[<span class="swatch openpipeline"></span>`openpipeline`]{.pkg-tag .pkg-openpipeline}
 
 Once cells are [annotated](annotate.qmd), you can test which genes change between
-conditions (genotype, treatment, disease vs. control). OpenPipelines uses a
+conditions (genotype, treatment, or disease vs. control). OpenPipelines uses a
 **pseudobulk** approach: within each cell type, counts are summed per sample into
-bulk-like samples that DESeq2 then models, so the unit of replication is the
-sample, not the cell, avoiding the inflated significance of treating thousands of
+bulk-like samples that DESeq2 then models. The unit of replication is therefore the
+sample, not the cell. This avoids the inflated significance of treating thousands of
 cells from one donor as independent.
 
 ## Options
@@ -21,7 +21,7 @@ cells from one donor as independent.
 
 ## Example: genotype contrast
 
-For example, comparing wildtype vs. mutant per cell type:
+Comparing wild-type vs. mutant per cell type:
 
 ```yaml
 # params.yaml
@@ -49,15 +49,15 @@ nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
   sample).
 - **`design_formula` / `contrast_column` / `contrast_values`**: the DESeq2 model
   and the two levels compared.
-- A group needs **at least two samples per condition** to be testable, so rare
-  cell types may be dropped.
+- **Minimum replicates**: a group needs at least two samples per condition to be
+  testable, so rare cell types may be dropped.
 
 ## Output
 
-Per-cell-type differential-expression tables (log fold changes, p-values,
+Per-cell-type differential-expression tables (log fold changes, p-values, and
 adjusted p-values) written to the publish directory.
 
-:::{.callout-tip}
+::: {.callout-tip appearance="simple"}
 Per-sample vs. shared arguments and file formats are covered in
 [Process many samples](process-many-samples.qmd).
 :::

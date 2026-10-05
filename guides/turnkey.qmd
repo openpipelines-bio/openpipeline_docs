@@ -4,7 +4,7 @@ description: "End-to-end composed pipelines, and reference-atlas generation."
 order: 70
 ---
 
-[`openpipeline_composed`]{.pkg-tag .pkg-openpipeline_composed}<span class="swatch openpipeline_composed"></span>
+[<span class="swatch openpipeline_composed"></span>`openpipeline_composed`]{.pkg-tag .pkg-openpipeline_composed}
 
 The **`openpipeline_composed`** package bundles the individual stages into
 turnkey, end-to-end pipelines. Instead of running
@@ -16,23 +16,21 @@ one composed workflow chains them together.
 
 | Workflow | What it does |
 |---|---|
-| [`single_cell/process_integrate_annotate`](../reference/openpipeline_composed/v0.3.0/single_cell/process_integrate_annotate.qmd) | The flagship: process → integrate → annotate in one run. Pick the integration method (Harmony, scVI, Scanorama, BBKNN) and annotation method (CellTypist, harmony_knn, scANVI, scvi_knn, SingleR). |
+| [`single_cell/process_integrate_annotate`](../reference/openpipeline_composed/v0.3.0/single_cell/process_integrate_annotate.qmd) | The flagship: process → integrate → annotate in one run. Pick the integration method (Harmony, scVI, Scanorama, BBKNN) and annotation method (CellTypist, `harmony_knn`, scANVI, `scvi_knn`, SingleR). |
 | [`single_cell/parallel_integration`](../reference/openpipeline_composed/v0.3.0/single_cell/parallel_integration.qmd) | Run several integration methods on the same cohort and compare them. |
 | [`single_cell/parallel_annotation`](../reference/openpipeline_composed/v0.3.0/single_cell/parallel_annotation.qmd) | Run several annotation methods and combine them by **consensus vote**, more robust than any single method. |
 | [`single_cell/parallel_subtyping`](../reference/openpipeline_composed/v0.3.0/single_cell/parallel_subtyping.qmd) | Resolve fine-grained cell states (subtypes) within annotated clusters. |
 
 ## Build a reference atlas
 
-::: {.callout-important}
 Reference-atlas generation is the headline use case for these pipelines. Running
 `process_integrate_annotate` across a large, multi-donor cohort produces **one
 integrated, annotated object** that every later run can consume as the reference
-for [label transfer](annotate.qmd), the annotation methods (`harmony_knn`,
+for [label transfer](annotate.qmd): the annotation methods (`harmony_knn`,
 `scvi_knn`, scANVI/scArches) all map new query cells onto exactly this kind of
 atlas.
-:::
 
-Build the atlas once, reuse it everywhere:
+Build the atlas once and reuse it everywhere:
 
 - **Integrate the whole cohort** so donor and batch effects are corrected across
   every sample that will define the reference.
@@ -54,7 +52,7 @@ nextflow run https://packages.viash-hub.com/vsh/openpipeline_composed.git \
   --publish_dir results/
 ```
 
-:::{.callout-note}
+::: {.callout-note appearance="simple"}
 `openpipeline_composed` pins core `openpipeline` plus `openpipeline_qc` and
 biobox. Check the [reference](../reference/index.qmd) (filter by
 `openpipeline_composed`) for the exact argument list, and its Viash Hub page for

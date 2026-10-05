@@ -7,7 +7,7 @@ order: 10
 ## Fork and clone the repository
 
 Each package's **source** lives in its own GitHub repository under the [openpipelines-bio](https://github.com/openpipelines-bio) organization.
-These repos hold only source code, the built packages are produced by Viash Hub (see [Project structure](project-structure.qmd#sec-project-structure)).
+These repos hold only source code; the built packages are produced by Viash Hub (see [Project structure](project-structure.qmd#sec-project-structure)).
 
 | Package | Repository |
 |---|---|
@@ -16,7 +16,7 @@ These repos hold only source code, the built packages are produced by Viash Hub 
 | `openpipeline_qc` | [github.com/openpipelines-bio/openpipeline_qc](https://github.com/openpipelines-bio/openpipeline_qc) |
 | `openpipeline_composed` | [github.com/openpipelines-bio/openpipeline_composed](https://github.com/openpipelines-bio/openpipeline_composed) |
 
-:::{.callout-note appearance="simple"}
+::: {.callout-note appearance="simple"}
 `openpipeline_rapids` is [coming soon](../guides/gpu.qmd).
 :::
 
@@ -46,12 +46,12 @@ git remote add upstream git@github.com:openpipelines-bio/<repo>.git
 
 ## Install Viash and Nextflow {#sec-install-viash-nextflow}
 
-To develop an OpenPipelines package you will need [Viash](https://viash.io), [Nextflow](https://www.nextflow.io/docs/latest/index.html) (plus Java) and [Docker](https://docs.docker.com/get-docker/) (or an alternative):
+To develop an OpenPipelines package you will need [Viash](https://viash.io), [Nextflow](https://www.nextflow.io/docs/latest/index.html) (plus Java), and [Docker](https://docs.docker.com/get-docker/) (or an alternative):
 
-- Follow the setup instructions in the [getting started](../get-started/index.qmd#sec-setup-nextflow-and-docker) guide to install Nextflow and Docker
-- Viash is only required during development so you will also need to follow the instructions in the [**Viash installation guide**](https://viash.io/installation/)
+- Follow the setup instructions in the [Get started](../get-started/index.qmd#sec-setup-nextflow-and-docker) guide to install Nextflow and Docker.
+- Viash is only needed for development, so install it separately by following the [Viash installation guide](https://viash.io/installation/).
 
-Once installed, check both work:
+Once installed, check that they work:
 
 ```bash
 nextflow run hello -with-docker

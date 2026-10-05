@@ -4,11 +4,11 @@ description: "How components are built, containerized, tested, and published."
 order: 40
 ---
 
-OpenPipelines is underpinned by two tools: **Viash**, which is used to create each component, and **Viash Hub**, the platform that builds, tests and publishes them.
+OpenPipelines is underpinned by two tools: **Viash**, which is used to create each component, and **Viash Hub**, the platform that builds, tests, and publishes them.
 
 ## Viash: config + script → component
 
-**[Viash](https://viash.io)** turns a config (`config.vsh.yaml`) plus a script into a self-contained component.
+[Viash](https://viash.io) turns a config (`config.vsh.yaml`) plus a script into a self-contained component.
 From these two files it generates:
 
 - A **command-line interface**, parsing and injecting the declared arguments into the script.
@@ -20,9 +20,9 @@ Viash separates a component's **logic** (a script in Python, R, or Bash) from it
 ## Language independence
 
 Viash components can be written in whichever language is most suitable for that task.
-A component that performs statistical testing might use R, one that trains a machine learning model might use Python and one that runs a command line tool might use Bash.
+A component that performs statistical testing might use R, one that trains a machine-learning model might use Python, and one that runs a command-line tool might use Bash.
 Whichever language is used, the config is defined in the same way.
-This means arguments can be defined consistently across components and avoids needing to write repetitive boilerplate code.
+This means arguments can be defined consistently across components, and it avoids repetitive boilerplate code.
 Language independence is supported by the environment defined for each component, enabling the creation of the correct environment for each language and allowing components from the same language to have conflicting dependencies.
 The independent, language-agnostic components created by Viash allow OpenPipelines to take advantage of the strengths of different ecosystems when building unified workflows.
 
@@ -30,11 +30,11 @@ The independent, language-agnostic components created by Viash allow OpenPipelin
 
 At build time, Viash creates an executable that can be run locally, a compiled Nextflow module, and the matching container with the environment the script needs.
 The created Nextflow modules can be run directly or included as dependencies in workflow components that chain them into pipelines.
-The final Nextflow workflows can be run locally, on an HPC cluster or in the cloud.
+The final Nextflow workflows can be run locally, on an HPC cluster, or in the cloud.
 
 ```{mermaid}
 %%| label: fig-techstack
-%%| fig-cap: "Components (code in R, Python, or Bash) are wrapped by Viash into Docker images and Nextflow modules, assembled into Nextflow workflows that run unchanged on local, cloud and HPC platforms."
+%%| fig-cap: "Components (code in R, Python, or Bash) are wrapped by Viash into Docker images and Nextflow modules, assembled into Nextflow workflows that run unchanged on local, cloud, and HPC platforms."
 %%{init: {"theme":"base", "themeVariables":{"fontSize":"14px"}}}%%
 graph LR
     classDef input fill:#f5f5f5,stroke:#aaaaaa,color:#444
@@ -65,7 +65,7 @@ graph LR
 
 ## Viash Hub: build, test, publish
 
-**[Viash Hub](https://www.viash-hub.com)** is the platform used by OpenPipelines to build and host Viash components.
-When new versions of OpenPipelines packages are ready, Viash Hub builds the components and containers, runs the component and workflow tests and publishes the package to a versioned catalogue.
-From the catalogue you can browse components, read their parameters, and launch workflows.
-The same component and workflow documentation is available in the [reference](../reference/index.qmd) which links to the matching Viash Hub catalogue pages.
+[Viash Hub](https://www.viash-hub.com) is the platform used by OpenPipelines to build and host Viash components.
+When new versions of OpenPipelines packages are ready, Viash Hub builds the components and containers, runs the component and workflow tests, and publishes the package to a versioned catalog.
+From the catalog, you can browse components, read their parameters, and launch workflows.
+The same component and workflow documentation is available in the [reference](../reference/index.qmd), which links to the matching Viash Hub catalog pages.

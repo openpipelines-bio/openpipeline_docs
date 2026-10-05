@@ -7,15 +7,15 @@ order: 0
 Pick a task and get hands-on: the reasoning behind it, a runnable example, and the
 decisions you'll actually need to make. Guides are standalone, so read the one you
 need rather than the whole set in order. For the sequential map of the whole
-pipeline, see the [Overview](../workflows/index.qmd); for exhaustive parameter
+pipeline, see the [Workflows overview](../workflows/index.qmd); for exhaustive parameter
 listings, see the [reference](../reference/index.qmd).
 
 Filter by the package a guide applies to below; some guides are cross-cutting and
 apply to every package.
 
 ::: {.callout-note appearance="simple"}
-These guides assume you already have a working setup, local Nextflow + Docker, or
-a Seqera / Viash Hub account. If not, start with
+These guides assume you already have a working setup: local Nextflow + Docker, or
+a Seqera Platform or Viash Hub account. If not, start with
 [Quickstart](../get-started/index.qmd): it covers install and walks one run end
 to end.
 :::
@@ -80,7 +80,7 @@ to end.
   <a class="rcard link" href="annotate.html" data-pkgs="openpipeline">
     <div class="tag"><span class="swatch" style="background:var(--core)"></span>openpipeline</div>
     <h3>Annotate cell types</h3>
-    <p>CellTypist, scANVI, KNN label transfer.</p>
+    <p>CellTypist, scANVI, and KNN label transfer.</p>
   </a>
 
   <a class="rcard link" href="differential-expression.html" data-pkgs="openpipeline">
@@ -123,7 +123,7 @@ to end.
   <a class="rcard link" href="running-pipelines.html" data-pkgs="all">
     <div class="tag tag-all"><span class="swatch"></span>all packages</div>
     <h3>Running pipelines</h3>
-    <p>Launch locally, on Seqera, or via Viash Hub.</p>
+    <p>Launch locally, on Seqera Platform, or via Viash Hub.</p>
   </a>
 
   <a class="rcard link" href="process-many-samples.html" data-pkgs="all">
@@ -141,7 +141,7 @@ to end.
   <a class="rcard link" href="gpu.html" data-pkgs="all">
     <div class="tag tag-all"><span class="swatch"></span>all packages</div>
     <h3>Speed up with GPUs</h3>
-    <p>Enable GPU for GPU-capable components; rapids-singlecell coming soon.</p>
+    <p>Enable GPU acceleration for GPU-capable components; rapids-singlecell coming soon.</p>
   </a>
 
 </div>

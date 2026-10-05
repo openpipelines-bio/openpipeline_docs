@@ -1,5 +1,5 @@
 ---
-pagetitle: "Team — OpenPipelines"
+pagetitle: "Team"
 title: "Team"
 description: "The people building and maintaining OpenPipelines."
 toc: false
@@ -21,7 +21,7 @@ css: team.css
     <img loading="lazy" class="avatar avatar-circle" src="https://github.com/DriesSchaumont.png" alt="Dries Schaumont" />
     <div class="portrait-title">
       <h4>Dries Schaumont</h4>
-      <h6 class="team-role"><i>Package Manager &amp; Maintainer</i></h6>
+      <h6 class="team-role"><i>Package Manager and Maintainer</i></h6>
       <h6><i>Bioinformatics Engineer at <a href="https://www.data-intuitive.com">Data Intuitive</a></i></h6>
       <div class="network">
         <a class="network-icon" href="mailto:dries@data-intuitive.com" title="E-mail"><i class="bi bi-envelope"></i></a>
@@ -194,6 +194,15 @@ css: team.css
     </div>
   </div>
   <div class="people-person">
+    <img loading="lazy" class="avatar avatar-circle" src="https://github.com/mimi-DT.png" alt="Mirte De Temmerman" />
+    <div class="portrait-title">
+      <h4>Mirte De Temmerman</h4>
+      <div class="network">
+        <a class="network-icon" href="https://github.com/mimi-DT" title="GitHub"><i class="bi bi-github"></i></a>
+      </div>
+    </div>
+  </div>
+  <div class="people-person">
     <img loading="lazy" class="avatar avatar-circle" src="https://github.com/PoGibas.png" alt="Povilas Gibas" />
     <div class="portrait-title">
       <h4>Povilas Gibas</h4>
@@ -275,7 +284,7 @@ css: team.css
 </div>
 ```
 
-## Scientific & technical advisors
+## Scientific and technical advisors
 
 ```{=html}
 <div class="people-widget justify-content-evenly">

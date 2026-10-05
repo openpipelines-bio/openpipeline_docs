@@ -4,9 +4,9 @@ description: "Learn recurring spatial neighborhoods with NicheCompass."
 order: 65
 ---
 
-[`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial}<span class="swatch openpipeline_spatial"></span>
+[<span class="swatch openpipeline_spatial"></span>`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial}
 
-A **niche** is a recurring spatial neighborhood, a local mix of cell types that
+A **niche** is a recurring spatial neighborhood: a local mix of cell types that
 appears across a tissue. **`openpipeline_spatial`** uses
 [NicheCompass](https://nichecompass.readthedocs.io/) to learn niches from a
 processed spatial object, on top of curated gene programs (sets of genes that act
@@ -21,7 +21,7 @@ together).
 
 ## Example: NicheCompass
 
-For example, on a [spatially-processed](process-spatial.qmd) object (with
+On a [spatially processed](process-spatial.qmd) object (with
 coordinates in `.obsm["spatial"]`):
 
 ```bash
@@ -35,9 +35,9 @@ nextflow run https://packages.viash-hub.com/vsh/openpipeline_spatial.git \
 
 ## Key choices
 
-- **Prerequisite:** an ingested, [processed spatial](process-spatial.qmd) object
+- **Prerequisite**: an ingested, [processed spatial](process-spatial.qmd) object
   that carries `.obsm["spatial"]`.
-- **Gene programs:** `nichecompass/gene_program_mask` builds the mask of
+- **Gene programs**: `nichecompass/gene_program_mask` builds the mask of
   co-acting gene sets the model reasons over; the workflow embeds cells into a
   niche-aware latent space from it and clusters them.
 

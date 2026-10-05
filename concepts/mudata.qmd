@@ -9,10 +9,10 @@ All components read and write this format, providing interoperability and [modul
 
 MuData is the multimodal extension of [AnnData](https://anndata.readthedocs.io).
 Within a MuData object, each modality is stored as an AnnData object under the `.mod` slot.
-Inside a modality, expression matrices are stored in `.X` and `.layers`, cell metadata is stored in `.obs` and feature metadata in `.var`.
-Other fields store additional information. including cross-modality annotations.
+Inside a modality, expression matrices are stored in `.X` and `.layers`, cell metadata is stored in `.obs`, and feature metadata in `.var`.
+Other fields store additional information, including cross-modality annotations.
 
-```
+```text
 MuData
 ├─ .mod
 │  ├─ rna  (AnnData)
@@ -44,22 +44,22 @@ each AnnData under `.mod`) and at the top level (across modalities):
   key → matrix mappings aligned to features (`.varm`, e.g. PCA loadings) or cells
   (`.obsm`, e.g. embeddings like `X_pca`, `X_umap`).
 - **`.uns`**: unstructured annotation, with no dimensional constraints (run
-  parameters, colour maps, cluster metadata).
+  parameters, color maps, and cluster metadata).
 
 ## Working with other formats
 
 To enable interoperability with other ecosystems, OpenPipelines provides a series of conversion components.
-These allow you to transform your data to the format needed to run an OpenPipelines workflow or to take the output from a workflow and convert it the format needed for your downstream analysis.
+These allow you to transform your data to the format needed to run an OpenPipelines workflow or to take the output from a workflow and convert it to the format needed for your downstream analysis.
 
 Supported conversion formats include:
 
-- [`AnnData`](https://anndata.readthedocs.io/)
-- [`Seurat`](https://satijalab.org/seurat/)
-- [`TileDB`](https://tiledb.com/)
-- [10x CellRanger, SpaceRanger or XeniumRanger outputs](https://www.10xgenomics.com/)
-- [Bruker AtoMx output](https://brukerspatialbiology.com/)
-- [Element Aviti24 output](https://www.elementbiosciences.com/)
-- [`SpatialData`](https://spatialdata.scverse.org/en/stable/)
-- [`SpatialExperiment`](https://bioconductor.org/packages/SpatialExperiment/)
+- [AnnData](https://anndata.readthedocs.io/)
+- [Seurat](https://satijalab.org/seurat/)
+- [TileDB](https://tiledb.com/)
+- [10x Cell Ranger, Space Ranger, or Xenium Ranger outputs](https://www.10xgenomics.com/)
+- [CosMx output (exported from AtoMx)](https://brukerspatialbiology.com/)
+- [Element AVITI24 output](https://www.elementbiosciences.com/)
+- [SpatialData](https://spatialdata.scverse.org/en/stable/)
+- [SpatialExperiment](https://bioconductor.org/packages/SpatialExperiment/)
 
-See the [documentation](../reference/index.qmd) for more details of specific conversion components.
+See the [Reference](../reference/index.qmd) for more details on specific conversion components.

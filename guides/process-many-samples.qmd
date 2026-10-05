@@ -53,7 +53,7 @@ The `param_list` can be a YAML, JSON, or CSV file.
 
 ## CSV
 
-```
+```csv
 id,input,rna_min_counts
 foo,foo.h5mu,2
 bar,bar.h5mu,1
@@ -83,8 +83,8 @@ bar,bar.h5mu,1
 
 ## Run a cohort through process_samples
 
-`process_samples` is the recommended entry point for a full cohort, it reads the
-`param_list`, runs per-sample QC and multisample normalization, and emits one
+`process_samples` is the recommended entry point for a full cohort: it reads the
+`param_list`, runs per-sample QC and multi-sample normalization, and emits one
 processed object:
 
 ```bash
@@ -95,7 +95,7 @@ nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
   --publish_dir results/
 ```
 
-For very large cohorts, `process_batches` runs the multisample steps on groups
+For very large cohorts, `process_batches` runs the multi-sample steps on groups
 of samples in parallel before merging, reducing peak memory use.
 
 ## Passing the list through a params-file

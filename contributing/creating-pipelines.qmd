@@ -12,15 +12,15 @@ OpenPipelines conventions and walks through a real workflow.
 
 ## OpenPipelines conventions
 
-- **Layout.** A workflow lives in `src/workflows/<category>/<name>/`, with the
-  category following the analysis stage, such as `rna`, `integration`,
+- **Layout.** A workflow lives in `src/workflows/<namespace>/<workflow>/`, with the
+  namespace following the analysis stage, such as `rna`, `integration`,
   `annotation`, or `multiomics`. It holds a `config.vsh.yaml`, a `main.nf` (the
   `run_wf` workflow), a `nextflow.config`, a `test.nf`, and, by convention, an
   `integration_test.sh`.
 - **State-based channels.** Data flows as `[id, state]` tuples. Components read
   from the state with `fromState` and write back with `toState`. The
-  [data-state view](../concepts/data-state.qmd) explains the lens behind this.
-- **Declare dependencies.** List every component or sub-workflow used in `main.nf`
+  [Architecture: advanced](../concepts/data-state.qmd) page explains the lens behind this.
+- **Declared dependencies.** List every component or sub-workflow used in `main.nf`
   under `dependencies` in the config. Viash resolves and compiles the modules at
   build time, so imports are never written by hand.
 - **Dataflow utilities.** Reuse `dataflow/concatenate_h5mu`, `split_modalities`,
@@ -34,7 +34,7 @@ OpenPipelines conventions and walks through a real workflow.
 
 A workflow folder pairs the config with a Nextflow script and its tests:
 
-```
+```text
 src/workflows/rna/log_normalize/
 ├── config.vsh.yaml       # arguments + dependencies
 ├── main.nf               # the run_wf workflow
@@ -117,7 +117,8 @@ workflow run_wf {
 
 Data enters as `[id, state]` tuples, each step reads the fields it needs from the
 state and merges its output back, and `setState` selects the final fields to
-emit. This is the [data-state model](../concepts/data-state.qmd) in practice.
+emit. This is the data-state model from
+[Architecture: advanced](../concepts/data-state.qmd) in practice.
 
 ## Build and run
 
@@ -127,6 +128,6 @@ details.
 
 ## Publishing
 
-When your workflow is ready, open a pull request and follow
+When your workflow is ready, follow
 [Open a pull request](pull-requests.qmd). Once merged, Viash Hub builds it into
 the package and publishes it with the next release.
