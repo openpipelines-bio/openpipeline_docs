@@ -7,7 +7,7 @@ order: 0
 Pick a task and get hands-on: the reasoning behind it, a runnable example, and the
 decisions you'll actually need to make. Guides are standalone, so read the one you
 need rather than the whole set in order. For the sequential map of the whole
-pipeline, see the [Workflows overview](../workflows/index.qmd); for exhaustive parameter
+pipeline, see the [Workflows overview](../overview/index.qmd); for exhaustive parameter
 listings, see the [reference](../reference/index.qmd).
 
 Filter by the package a guide applies to below; some guides are cross-cutting and

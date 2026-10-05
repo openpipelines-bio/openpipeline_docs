@@ -19,14 +19,14 @@ imaging-based platforms are converted from the vendor's output:
 
 | Workflow / technology | Use when |
 |---|---|
-| [`ingestion/spaceranger_mapping`](../reference/openpipeline_spatial/v0.5.0/workflows/ingestion/spaceranger_mapping.qmd) | Visium: map FASTQs with Space Ranger |
-| [`convert/from_spaceranger_to_h5mu`](../reference/openpipeline_spatial/v0.5.0/convert/from_spaceranger_to_h5mu.qmd) | Visium: you already have Space Ranger output |
-| [`convert/from_xenium_to_h5mu`](../reference/openpipeline_spatial/v0.5.0/convert/from_xenium_to_h5mu.qmd) | 10x Xenium |
-| [`convert/from_cosmx_to_h5mu`](../reference/openpipeline_spatial/v0.5.0/convert/from_cosmx_to_h5mu.qmd) | CosMx |
-| [`convert/from_cells2stats_to_h5mu`](../reference/openpipeline_spatial/v0.5.0/convert/from_cells2stats_to_h5mu.qmd) | Element AVITI24 (cells2stats) |
-| [`convert/from_spatialdata_to_h5mu`](../reference/openpipeline_spatial/v0.5.0/convert/from_spatialdata_to_h5mu.qmd) | You already have a SpatialData object |
+| [`ingestion/spaceranger_mapping`](../reference/openpipeline_spatial/v0.7.0/workflows/ingestion/spaceranger_mapping.qmd) | Visium: map FASTQs with Space Ranger |
+| [`convert/from_spaceranger_to_h5mu`](../reference/openpipeline_spatial/v0.7.0/convert/from_spaceranger_to_h5mu.qmd) | Visium: you already have Space Ranger output |
+| [`convert/from_xenium_to_h5mu`](../reference/openpipeline_spatial/v0.7.0/convert/from_xenium_to_h5mu.qmd) | 10x Xenium |
+| [`convert/from_cosmx_to_h5mu`](../reference/openpipeline_spatial/v0.7.0/convert/from_cosmx_to_h5mu.qmd) | CosMx |
+| [`convert/from_cells2stats_to_h5mu`](../reference/openpipeline_spatial/v0.7.0/convert/from_cells2stats_to_h5mu.qmd) | Element AVITI24 (cells2stats) |
+| [`convert/from_spatialdata_to_h5mu`](../reference/openpipeline_spatial/v0.7.0/convert/from_spatialdata_to_h5mu.qmd) | You already have a SpatialData object |
 
-The [Workflows overview](../workflows/index.qmd) shows where these fit.
+The [Workflows overview](../overview/index.qmd) shows where these fit.
 
 ## Example: Visium with Space Ranger
 
@@ -49,7 +49,7 @@ publish_dir: results/ingestion
 
 ```bash
 nextflow run https://packages.viash-hub.com/vsh/openpipeline_spatial.git \
-  -r v0.5.0 -latest -profile docker \
+  -r v0.7.0 -latest -profile docker \
   -main-script target/nextflow/workflows/ingestion/spaceranger_mapping/main.nf \
   -params-file params.yaml
 ```

@@ -4,7 +4,7 @@ description: "A developer's view: how the data object is organized, changes shap
 order: 70
 ---
 
-There are two ways to read the pipeline. The [Workflows overview](../workflows/index.qmd)
+There are two ways to read the pipeline. The [Workflows overview](../overview/index.qmd)
 walks it by stage, the way an analyst
 thinks. This page reads it the way the workflows are actually built: the view
 you need if you are writing or wiring components. It covers how the data object is

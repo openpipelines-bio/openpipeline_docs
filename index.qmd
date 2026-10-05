@@ -18,7 +18,7 @@ anchor-sections: false
   <div class="wrap">
     <div id="op-flow" data-modalities="true"></div>
     <div class="cta-row flow-cta">
-      <a class="btn primary" href="workflows/index.html">▸ Explore all workflows</a>
+      <a class="btn primary" href="overview/index.html">▸ Explore all workflows</a>
     </div>
   </div>
 

@@ -17,7 +17,7 @@ Each package uses [Viash](viash.qmd) so components, data format and tooling are 
 
 ## How the packages relate
 
-Each package plays a role in the overall [process](../workflows/index.qmd):
+Each package plays a role in the overall [process](../overview/index.qmd):
 
 - **`openpipeline`** defines most stages for ingestion, QC, processing, integration, and downstream analysis for RNA, protein, ATAC, VDJ, and GDO modalities.
 - **`openpipeline_spatial`** contains functionality for spatial transcriptomics (Xenium, Visium, Visium HD, AVITI24, CosMx).

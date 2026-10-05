@@ -17,7 +17,7 @@ together).
 | Workflow / component | Use when |
 |---|---|
 | `niche/nichecompass_leiden` | Identify niches: embed cells niche-aware, then cluster |
-| [`nichecompass/gene_program_mask`](../reference/openpipeline_spatial/v0.5.0/nichecompass/gene_program_mask.qmd) | Prepare the gene-program mask the workflow consumes |
+| [`nichecompass/gene_program_mask`](../reference/openpipeline_spatial/v0.7.0/nichecompass/gene_program_mask.qmd) | Prepare the gene-program mask the workflow consumes |
 
 ## Example: NicheCompass
 
@@ -26,7 +26,7 @@ coordinates in `.obsm["spatial"]`):
 
 ```bash
 nextflow run https://packages.viash-hub.com/vsh/openpipeline_spatial.git \
-  -r v0.5.0 -latest -profile docker \
+  -r v0.7.0 -latest -profile docker \
   -main-script target/nextflow/workflows/niche/nichecompass_leiden/main.nf \
   --input processed_spatial.h5mu \
   --output niches.h5mu \

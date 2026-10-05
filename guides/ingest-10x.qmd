@@ -34,7 +34,7 @@ Ingestion is at most three steps; run only the ones you need:
 | [`ingestion/cellranger_multi`](../reference/openpipeline/v4.2.0/workflows/ingestion/cellranger_multi.qmd) | 10x, multiple libraries (GEX + VDJ + ADT/HTO) |
 | [`ingestion/bd_rhapsody`](../reference/openpipeline/v4.2.0/workflows/ingestion/bd_rhapsody.qmd) | BD Rhapsody data |
 
-Not sure which to use? The [Workflows overview](../workflows/index.qmd) shows where
+Not sure which to use? The [Workflows overview](../overview/index.qmd) shows where
 these fit.
 
 ## Example: 10x multi-library mapping

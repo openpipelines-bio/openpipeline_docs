@@ -317,5 +317,5 @@ Assigning biological identities to the clusters can be done using an annotation 
 
 - **Map your own raw data**: [Ingest data](../guides/ingest-10x.qmd) (FASTQ → counts with Cell Ranger or BD Rhapsody)
 - **Pick individual tasks**: [Task guides](../guides/index.qmd)
-- **See the whole pipeline**: [Workflows overview](../workflows/index.qmd)
+- **See the whole pipeline**: [Workflows overview](../overview/index.qmd)
 - **Understand the design**: [How it works](../concepts/index.qmd)

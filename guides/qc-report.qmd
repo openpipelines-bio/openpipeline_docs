@@ -15,7 +15,7 @@ mitochondrial and ribosomal fractions), so you can pick sensible cutoffs before
 
 | Workflow | Use when |
 |---|---|
-| [`generate_qc_report`](../reference/openpipeline_qc/v0.3.0/workflows/generate_qc_report.qmd) | Any ingested `.h5mu`; you name the ingestion method the data came from |
+| [`generate_qc_report`](../reference/openpipeline_qc/v0.4.0/workflows/generate_qc_report.qmd) | Any ingested `.h5mu`; you name the ingestion method the data came from |
 
 For spatial data, use the spatial ingestion methods; see
 [Generate a spatial QC report](qc-report-spatial.qmd).
@@ -38,7 +38,7 @@ publish_dir: results/
 
 ```bash
 nextflow run https://packages.viash-hub.com/vsh/openpipeline_qc.git \
-  -r v0.3.0 -latest -profile docker \
+  -r v0.4.0 -latest -profile docker \
   -main-script target/nextflow/workflows/generate_qc_report/main.nf \
   -params-file params.yaml
 ```

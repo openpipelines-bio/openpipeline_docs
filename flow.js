@@ -8,58 +8,74 @@
   //   kind:'workflow', one workflow whose steps run in sequence (steps, some
   //                     optional). "optional" is only used here, where a step
   //                     can genuinely be toggled.
+  // "overview" (+ optional "overviewNote" / "overviewPick") is the plain-language version the
+  // landing page shows instead of component and method names; the detailed
+  // workflows page uses the full stage definition.
   const FLOWS = {
     sc: {
-      hint: 'Single-cell multi-omics data.',
-      // pills shown next to the toggle — what this flow's data consists of
+      hint: 'Single-cell multi-omics data from 10x Genomics and BD Rhapsody.',
+      // tags shown next to the toggle — what this flow's data consists of
       modalities: { label: 'Data modalities',
         pills: ['<b>RNA</b>', '<b>Protein</b> (ADT)', '<b>ATAC</b>', '<b>VDJ</b>', '<b>GDO</b>'] },
       stages: [
+        // ingestion options are the real workflow/component ids, as in the
+        // workflows overview tables; the platforms are named in the hint
         { num: 'STEP 01', title: 'Ingestion', anchor: 'ingestion', kind: 'choice', pick: 'Convert raw data to a standard format',
-          options: ['cellranger_multi', 'cellranger_count', 'cellranger_count_atac', 'bd_rhapsody'],
-          note: 'Or bring your own count matrix' },
+          options: ['cellranger_multi', 'cellranger_mapping', 'cellranger_atac_count', 'bd_rhapsody'],
+          note: 'Or bring your own count matrix',
+          overview: ['10x Chromium', 'BD Rhapsody'], overviewNote: 'Or bring your own count matrix',
+          overviewPick: 'Convert raw data to a count matrix. Raw data types:' },
         { num: 'STEP 02', title: 'Process samples', anchor: 'process-samples', kind: 'workflow', pick: 'Normalize, filter, process',
+          overviewPick: 'Per sample, then across samples',
           steps: [{ name: 'filter cells' }, { name: 'doublet removal', opt: true }, { name: 'normalize + log1p' }, { name: 'highly variable genes' }, { name: 'PCA' }, { name: 'neighbors + leiden + umap' }],
-          note: 'Clusters on PCA, before batch correction' },
+          note: 'Clusters on PCA, before batch correction',
+          overview: ['quality filtering', 'normalization', 'dimensionality reduction'] },
         { num: 'STEP 03', title: 'Integration', anchor: 'integration', kind: 'workflow', pick: 'Remove batch effects',
           href: 'reference/index.html',
           steps: [
             { name: 'integrate', options: ['scVI', 'harmony', 'totalVI'], more: ['scanvi', 'scanorama', 'bbknn'], moreLabel: 'methods' },
             { name: 'neighbors + leiden + umap' },
           ],
-          note: 'Re-clusters on the integrated embedding' },
+          note: 'Re-clusters on the integrated embedding',
+          overview: ['batch correction', 'clustering'] },
         { num: 'STEP 04', title: 'Downstream', anchor: 'downstream', kind: 'choice', pick: 'Perform further analysis',
           options: [
             { name: 'cell-type annotation', options: ['scanvi', 'celltypist', 'singler'], more: ['onclass', 'popv'], moreLabel: 'methods', href: 'guides/index.html' },
             'differential expression', 'rna velocity', 'cell–cell communication',
-          ] },
+          ],
+          overview: ['cell-type annotation', 'differential expression', 'rna velocity', 'cell–cell communication'] },
       ],
     },
     sp: {
-      hint: 'Spatial transcriptomics data.',
-      // pills shown next to the toggle — spatial has one data type (transcriptomics)
-      // across several instrument platforms, so these tag platforms, not modalities
-      modalities: { label: 'Technology platforms',
-        pills: ['<b>Visium</b>', '<b>Visium HD</b>', '<b>Xenium</b>', '<b>CosMx</b>', '<b>AVITI</b>'] },
+      hint: 'Spatial transcriptomics data from Visium, Visium HD, Xenium, CosMx, and AVITI24.',
+      // same kind of tags as single-cell: spatial currently covers RNA only
+      modalities: { label: 'Data modalities',
+        pills: ['<b>RNA</b>'] },
       stages: [
         { num: 'STEP 01', title: 'Ingestion', anchor: 'ingestion', kind: 'choice', pick: 'Convert raw data to a standard format',
-          options: ['visium · spaceranger', 'visium HD · spaceranger', 'xenium', 'cosmx', 'aviti'],
-          note: 'Or bring your own count matrix' },
+          options: ['spaceranger_mapping', 'spaceranger_hd_mapping', 'from_xenium_to_h5mu', 'from_cosmx_to_h5mu', 'from_cells2stats_to_h5mu'],
+          note: 'Or bring your own count matrix',
+          overview: ['Visium', 'Visium HD', 'Xenium', 'CosMx', 'AVITI24'], overviewNote: 'Or bring your own count matrix',
+          overviewPick: 'Convert raw data to a count matrix. Raw data types:' },
         { num: 'STEP 02', title: 'Process samples', anchor: 'process-samples', kind: 'workflow', pick: 'Normalize, filter, process',
+          overviewPick: 'Per sample, then across samples',
           steps: [{ name: 'filter cells' }, { name: 'normalize + log1p' }, { name: 'highly variable genes' }, { name: 'PCA' }, { name: 'neighbors + leiden + umap' }],
-          note: 'Clusters on PCA, before batch correction' },
+          note: 'Clusters on PCA, before batch correction',
+          overview: ['quality filtering', 'normalization', 'dimensionality reduction'] },
         { num: 'STEP 03', title: 'Integration', anchor: 'integration', kind: 'workflow', pick: 'Remove batch effects',
           href: 'reference/index.html',
           steps: [
             { name: 'integrate', options: ['scVI', 'harmony', 'totalVI'], more: ['scanvi', 'scanorama', 'bbknn'], moreLabel: 'methods' },
             { name: 'neighbors + leiden + umap' },
           ],
-          note: 'Re-clusters on the integrated embedding' },
+          note: 'Re-clusters on the integrated embedding',
+          overview: ['batch correction', 'clustering'] },
         { num: 'STEP 04', title: 'Downstream', anchor: 'downstream', kind: 'choice', pick: 'Perform further analysis',
           options: [
             { name: 'cell-type annotation', options: ['scanvi', 'celltypist', 'singler'], more: ['onclass', 'popv'], moreLabel: 'methods', href: 'guides/index.html' },
-            'differential expression', 'cell–cell communication', 'spatial domains', 'niche domains',
-          ] },
+            'differential expression', 'cell–cell communication', 'spatial domain clustering', 'spatial niche detection',
+          ],
+          overview: ['cell-type annotation', 'differential expression', 'cell–cell communication', 'spatial domain clustering', 'spatial niche detection'] },
       ],
     },
   };
@@ -87,7 +103,7 @@
       (showModalities ? '<div class="modalities" id="flow-modalities"></div>' : '') +
       '</div>' +
       '<div class="flow-hint" id="flow-hint"></div>' +
-      '<div class="flow-scroll"><div class="flow' + (vertical ? ' vertical' : '') + '" id="flow"></div></div>' +
+      '<div class="flow-scroll"><div class="flow' + (vertical ? ' vertical' : '') + (detailed ? '' : ' overview') + '" id="flow"></div></div>' +
       '</div>';
   }
 
@@ -107,6 +123,22 @@
     FLOWS.sc.stages = [demux, FLOWS.sc.stages[0], qcReport].concat(FLOWS.sc.stages.slice(1));
     // spatial: QC report after ingestion (imaging-based platforms have no demux step)
     FLOWS.sp.stages = [FLOWS.sp.stages[0], qcReport].concat(FLOWS.sp.stages.slice(1));
+  } else {
+    // Overview variant (landing page): swap each stage's component and method
+    // chips for its plain-language overview list.
+    Object.keys(FLOWS).forEach(function (k) {
+      FLOWS[k].stages = FLOWS[k].stages.map(function (s) {
+        if (!s.overview) return s;
+        var o = Object.assign({}, s, { note: s.overviewNote, pick: s.overviewPick || s.pick, more: null });
+        if (s.kind === 'workflow') {
+          // same dot marker as choice items; the CSS line joins them in sequence
+          o.steps = s.overview.map(function (n) { return { name: n, alt: true }; });
+        } else {
+          o.options = s.overview;
+        }
+        return o;
+      });
+    });
   }
 
   const flowEl = document.getElementById('flow');
@@ -147,7 +179,8 @@
     if (s.kind === 'workflow') {
       var parts = [];
       s.steps.forEach(function (st, i) {
-        if (i) parts.push('<span class="seq-arrow">→</span>');
+        // the overview joins its steps with a connecting line (CSS) instead
+        if (i && detailed) parts.push('<span class="seq-arrow">→</span>');
         if (st.options) {
           // a choice step within the sequence (e.g. "integrate")
           parts.push(renderSubstep(st.name, st.options, st.more, s.href, st.moreLabel));
@@ -166,10 +199,14 @@
     var note = s.note ? '<div class="stage-note">' + s.note + '</div>' : '';
     return '<div class="' + stageCls + '">' + head + '<div class="chips">' + opts + more + '</div>' + note + '</div>';
   }
+  // the overview names the platforms in its ingestion stage, so its caption
+  // explains the diagram instead of repeating them
+  var OVERVIEW_HINT = 'The general steps of an analysis. Each step maps to one or more workflows: ' +
+    'run them in sequence, or on their own.';
   const flowModalities = document.getElementById('flow-modalities');
   function renderFlow(which) {
     const f = FLOWS[which];
-    flowHint.textContent = f.hint;
+    flowHint.textContent = detailed ? f.hint : OVERVIEW_HINT;
     flowEl.style.setProperty('--path', which === 'sp' ? 'var(--spatial)' : 'var(--accent-ink)');
     flowEl.innerHTML = f.stages.map(renderStage).join('');
     if (flowModalities && f.modalities) {

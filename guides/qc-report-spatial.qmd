@@ -15,7 +15,7 @@ for the platform.
 
 | Workflow | Use when |
 |---|---|
-| [`generate_qc_report`](../reference/openpipeline_qc/v0.3.0/workflows/generate_qc_report.qmd) | Spatial `.h5mu`; set `--ingestion_method` to the platform |
+| [`generate_qc_report`](../reference/openpipeline_qc/v0.4.0/workflows/generate_qc_report.qmd) | Spatial `.h5mu`; set `--ingestion_method` to the platform |
 
 ## Example: Xenium QC report
 
@@ -24,12 +24,12 @@ For a [spatially ingested](ingest-spatial.qmd) Xenium object, set
 
 ```bash
 nextflow run https://packages.viash-hub.com/vsh/openpipeline_qc.git \
-  -r v0.3.0 -latest -profile docker \
+  -r v0.4.0 -latest -profile docker \
   -main-script target/nextflow/workflows/generate_qc_report/main.nf \
   --id cohort_01 \
   --input cohort_01.h5mu \
   --ingestion_method xenium \
-  --output qc_report.html \
+  --output_qc_report qc_report.html \
   --publish_dir results/
 ```
 

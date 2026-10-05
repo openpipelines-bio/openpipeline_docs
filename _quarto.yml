@@ -11,7 +11,7 @@ project:
   resources:
     - robots.txt
     # Shared single-cell/spatial flow widget, loaded by index.qmd and
-    # workflows/index.qmd via <script src>.
+    # overview/index.qmd via <script src>.
     - flow.js
     # Version-switcher manifest (written by the pre-render step above), fetched
     # at runtime by reference-versions.html.
@@ -42,11 +42,10 @@ website:
     title: "OpenPipelines"
     # Flat, orientation-first: see the whole pipeline -> understand why -> try it
     # -> do tasks -> look up -> contribute. Fits the educational, mixed-audience
-    # mission. "Overview" is the curated stage-by-stage pipeline map (page lives
-    # under workflows/ to avoid breaking cross-links; its H1 stays "The analysis
-    # pipeline" so the short nav label isn't ambiguous).
+    # mission. "Overview" is the curated stage-by-stage pipeline map (the old
+    # workflows/ URL redirects here via an alias on the page).
     left:
-      - href: workflows/index.qmd
+      - href: overview/index.qmd
         text: Overview
       - href: get-started/index.qmd
         text: Quickstart

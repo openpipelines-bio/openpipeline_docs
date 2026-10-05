@@ -15,7 +15,7 @@ and keeping the per-spot coordinates in `.obsm["spatial"]` intact.
 
 | Workflow | Use when |
 |---|---|
-| [`multiomics/spatial_process_samples`](../reference/openpipeline_spatial/v0.5.0/workflows/multiomics/spatial_process_samples.qmd) | Processing a [spatially ingested](ingest-spatial.qmd) cohort |
+| [`multiomics/spatial_process_samples`](../reference/openpipeline_spatial/v0.7.0/workflows/multiomics/spatial_process_samples.qmd) | Processing a [spatially ingested](ingest-spatial.qmd) cohort |
 
 ## Example: process a spatial cohort
 
@@ -34,7 +34,7 @@ publish_dir: results/processed
 
 ```bash
 nextflow run https://packages.viash-hub.com/vsh/openpipeline_spatial.git \
-  -r v0.5.0 -latest -profile docker \
+  -r v0.7.0 -latest -profile docker \
   -main-script target/nextflow/workflows/multiomics/spatial_process_samples/main.nf \
   -params-file params.yaml
 ```

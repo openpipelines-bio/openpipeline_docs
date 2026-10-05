@@ -2,6 +2,8 @@
 title: "Workflows overview"
 description: "Workflows offered by OpenPipelines and where they fit in the analysis process."
 order: 60
+aliases:
+  - ../workflows/index.html
 ---
 
 OpenPipelines takes single-cell and spatial data from raw sequencing output, or from imaging-based spatial platforms, to a processed, standardized dataset.
@@ -9,7 +11,7 @@ This includes ingestion, per-sample processing (filtering, quality control, norm
 The workflows and tools used depend on the data modality and the technology platform.
 
 ::: {.callout-tip appearance="simple" title="New to OpenPipelines?"}
-This page maps the complete analysis pipeline end to end. If terms like *component*, *workflow*, or *Viash Hub* are unfamiliar, start with [How it works](../concepts/index.qmd) instead.
+This page maps all OpenPipelines workflows end to end. If terms like *component*, *workflow*, or *Viash Hub* are unfamiliar, start with [How it works](../concepts/index.qmd) instead.
 :::
 
 ```{=html}
@@ -72,12 +74,12 @@ Imaging-based platforms (Xenium, CosMx, AVITI24) are converted directly from the
 
 | Workflow / component | Package | Description |
 |---|---|---|
-| [`ingestion/spaceranger_mapping`](../reference/openpipeline_spatial/v0.5.0/workflows/ingestion/spaceranger_mapping.qmd) | [<span class="swatch openpipeline_spatial"></span>`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial} | Space Ranger mapping for Visium (sequencing-based) |
-| [`convert/from_spaceranger_to_h5mu`](../reference/openpipeline_spatial/v0.5.0/convert/from_spaceranger_to_h5mu.qmd) | [<span class="swatch openpipeline_spatial"></span>`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial} | Visium (Space Ranger) output → H5MU |
-| [`convert/from_xenium_to_h5mu`](../reference/openpipeline_spatial/v0.5.0/convert/from_xenium_to_h5mu.qmd) | [<span class="swatch openpipeline_spatial"></span>`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial} | 10x Xenium output → H5MU (imaging-based) |
-| [`convert/from_cosmx_to_h5mu`](../reference/openpipeline_spatial/v0.5.0/convert/from_cosmx_to_h5mu.qmd) | [<span class="swatch openpipeline_spatial"></span>`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial} | CosMx output → H5MU (imaging-based) |
-| [`convert/from_cells2stats_to_h5mu`](../reference/openpipeline_spatial/v0.5.0/convert/from_cells2stats_to_h5mu.qmd) | [<span class="swatch openpipeline_spatial"></span>`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial} | AVITI24 (cells2stats) output → H5MU |
-| [`convert/from_spatialdata_to_h5mu`](../reference/openpipeline_spatial/v0.5.0/convert/from_spatialdata_to_h5mu.qmd) | [<span class="swatch openpipeline_spatial"></span>`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial} | SpatialData object → H5MU |
+| [`ingestion/spaceranger_mapping`](../reference/openpipeline_spatial/v0.7.0/workflows/ingestion/spaceranger_mapping.qmd) | [<span class="swatch openpipeline_spatial"></span>`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial} | Space Ranger mapping for Visium (sequencing-based) |
+| [`convert/from_spaceranger_to_h5mu`](../reference/openpipeline_spatial/v0.7.0/convert/from_spaceranger_to_h5mu.qmd) | [<span class="swatch openpipeline_spatial"></span>`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial} | Visium (Space Ranger) output → H5MU |
+| [`convert/from_xenium_to_h5mu`](../reference/openpipeline_spatial/v0.7.0/convert/from_xenium_to_h5mu.qmd) | [<span class="swatch openpipeline_spatial"></span>`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial} | 10x Xenium output → H5MU (imaging-based) |
+| [`convert/from_cosmx_to_h5mu`](../reference/openpipeline_spatial/v0.7.0/convert/from_cosmx_to_h5mu.qmd) | [<span class="swatch openpipeline_spatial"></span>`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial} | CosMx output → H5MU (imaging-based) |
+| [`convert/from_cells2stats_to_h5mu`](../reference/openpipeline_spatial/v0.7.0/convert/from_cells2stats_to_h5mu.qmd) | [<span class="swatch openpipeline_spatial"></span>`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial} | AVITI24 (cells2stats) output → H5MU |
+| [`convert/from_spatialdata_to_h5mu`](../reference/openpipeline_spatial/v0.7.0/convert/from_spatialdata_to_h5mu.qmd) | [<span class="swatch openpipeline_spatial"></span>`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial} | SpatialData object → H5MU |
 
 :::
 
@@ -111,13 +113,13 @@ A QC report profiles these signals across your dataset so you can choose sensibl
 
 | Workflow | Package | Description |
 |---|---|---|
-| [`generate_qc_report`](../reference/openpipeline_qc/v0.3.0/workflows/generate_qc_report.qmd) | [<span class="swatch openpipeline_qc"></span>`openpipeline_qc`]{.pkg-tag .pkg-openpipeline_qc} | Key QC metrics rendered as a report |
+| [`generate_qc_report`](../reference/openpipeline_qc/v0.4.0/workflows/generate_qc_report.qmd) | [<span class="swatch openpipeline_qc"></span>`openpipeline_qc`]{.pkg-tag .pkg-openpipeline_qc} | Key QC metrics rendered as a report |
 
 ### Spatial
 
 | Workflow | Package | Description |
 |---|---|---|
-| [`qc/spatial_qc`](../reference/openpipeline_spatial/v0.5.0/workflows/qc/spatial_qc.qmd) | [<span class="swatch openpipeline_spatial"></span>`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial} | QC report for spatial data |
+| [`qc/spatial_qc`](../reference/openpipeline_spatial/v0.7.0/workflows/qc/spatial_qc.qmd) | [<span class="swatch openpipeline_spatial"></span>`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial} | QC report for spatial data |
 
 :::
 
@@ -149,7 +151,7 @@ For ATAC QC, use the standalone `calculate_atac_qc_metrics` component.
 
 | Workflow / component | Package | Description |
 |---|---|---|
-| [`multiomics/spatial_process_samples`](../reference/openpipeline_spatial/v0.5.0/workflows/multiomics/spatial_process_samples.qmd) | [<span class="swatch openpipeline_spatial"></span>`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial} | End-to-end processing for spatial data |
+| [`multiomics/spatial_process_samples`](../reference/openpipeline_spatial/v0.7.0/workflows/multiomics/spatial_process_samples.qmd) | [<span class="swatch openpipeline_spatial"></span>`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial} | End-to-end processing for spatial data |
 
 :::
 
@@ -220,7 +222,7 @@ See these guides for more details on specific tasks:
 
 | Workflow / component | Package | Description |
 |---|---|---|
-| [`niche/nichecompass_leiden`](../reference/openpipeline_spatial/v0.5.0/workflows/niche/nichecompass_leiden.qmd) | [<span class="swatch openpipeline_spatial"></span>`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial} | NicheCompass niche identification (spatial only) |
+| [`niche/nichecompass_leiden`](../reference/openpipeline_spatial/v0.7.0/workflows/niche/nichecompass_leiden.qmd) | [<span class="swatch openpipeline_spatial"></span>`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial} | NicheCompass niche identification (spatial only) |
 | [`velocity/scvelo`](../reference/openpipeline/v4.2.0/velocity/scvelo.qmd) | [<span class="swatch openpipeline"></span>`openpipeline`]{.pkg-tag .pkg-openpipeline} | RNA velocity (scVelo) |
 | [`interpret/lianapy`](../reference/openpipeline/v4.2.0/interpret/lianapy.qmd) | [<span class="swatch openpipeline"></span>`openpipeline`]{.pkg-tag .pkg-openpipeline} | Cell-cell communication (LIANA) |
 | [`differential_expression/pseudobulk_deseq2`](../reference/openpipeline/v4.2.0/workflows/differential_expression/pseudobulk_deseq2.qmd) | [<span class="swatch openpipeline"></span>`openpipeline`]{.pkg-tag .pkg-openpipeline} | Pseudobulk differential expression (DESeq2) |

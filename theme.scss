@@ -136,11 +136,13 @@ h1, h2, h3 { letter-spacing: -0.02em; }
   .hero h1 em { font-style: normal; color: var(--accent-ink); }
   .hero p.lede { font-size: clamp(16px, 2vw, 20px); color: var(--muted); margin: 20px 0 0; }
   .modalities { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 22px; }
-  .modalities .m { font-family: var(--mono); font-size: 12px; padding: 5px 10px; border-radius: 20px; background: var(--surface); border: 1px solid var(--border); color: var(--muted); }
+  // Static labels, not controls: plain text with a "·" separator, no pill
+  // border or surface, so they never read like the toggle buttons beside them.
+  .modalities .m { font-family: var(--mono); font-size: 12px; color: var(--muted); cursor: default; }
+  .modalities .m + .m::before { content: "\00b7"; margin-right: 8px; color: var(--muted); }
   .modalities .m b { color: var(--ink); font-weight: 600; }
-  // caption naming what kind of tag the pills are (data modalities vs. tech
-  // platforms) — the two flows tag different things and that distinction
-  // needs to be explicit, not implied by position.
+  // caption naming what the tags are, so their meaning is explicit rather
+  // than implied by position.
   .modalities-label { font-family: var(--mono); font-size: 10px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); margin-right: 2px; }
   // modality tags sitting beside the single-cell/spatial toggle, inside the flow card
   .seg-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
@@ -223,6 +225,16 @@ h1, h2, h3 { letter-spacing: -0.02em; }
   // vertical layout (architecture page) — stack stages top-to-bottom, arrows point down
   .flow.vertical { grid-auto-flow: row; grid-template-columns: 1fr; }
   .flow.vertical .stage::after { content: "\2193"; right: auto; left: 50%; transform: translateX(-50%); top: auto; bottom: -16px; }
+
+  // overview variant (landing page) — a plain stacked list per stage: no pill
+  // borders (nothing here is clickable), no dashed workflow box. Every item
+  // gets the same dot; in a workflow stage a thin line joins the dots so the
+  // steps read as a sequence (a mini version of the stage rail).
+  .flow.overview .chips, .flow.overview .seq { flex-direction: column; flex-wrap: nowrap; align-items: flex-start; gap: 4px; }
+  .flow.overview .seq { border: none; padding: 0; gap: 8px; position: relative; }
+  .flow.overview .seq::before { content: ""; position: absolute; left: 2px; top: 8px; bottom: 8px; width: 1px; background: var(--path, var(--accent-ink)); opacity: .45; }
+  .flow.overview .chip { border: none; background: none; padding: 0; border-radius: 0; font-size: 12px; color: var(--ink); white-space: normal; position: relative; }
+  .flow.overview .chip.alt::before { opacity: 1; }
 
   // generic sections
   section.block { padding: 46px 0; }
