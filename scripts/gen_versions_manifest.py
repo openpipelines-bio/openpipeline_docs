@@ -50,9 +50,18 @@ def main():
             continue
         latest = sorted(versions.keys(), key=version_key)[-1]
         manifest[pkg] = {"latest": latest, "versions": versions}
-    with open(os.path.join(REF, "versions.json"), "w", encoding="utf-8") as fh:
-        json.dump(manifest, fh)
-    print(f"wrote {REF}/versions.json for {len(manifest)} package(s)")
+    # Only write when the manifest changed: `quarto preview` watches this file,
+    # so rewriting identical content would trigger an endless re-render loop.
+    path = os.path.join(REF, "versions.json")
+    content = json.dumps(manifest)
+    if os.path.exists(path):
+        with open(path, encoding="utf-8") as fh:
+            if fh.read() == content:
+                print(f"{path} unchanged for {len(manifest)} package(s)")
+                return
+    with open(path, "w", encoding="utf-8") as fh:
+        fh.write(content)
+    print(f"wrote {path} for {len(manifest)} package(s)")
 
 
 if __name__ == "__main__":

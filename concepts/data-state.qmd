@@ -19,24 +19,51 @@ move the data along one axis or the other, and a given component only makes sens
 at one position. The overview below shows both axes in play; the sections after
 zoom in on each.
 
-```{mermaid}
-%%| label: fig-data-states
-%%| fig-cap: "The data moves through four shapes, one for each combination of the two axes (trapezoids). The axis-changing operations between them (blue) are the only steps that move data from one shape to the next; the processing done within each shape is noted inside it."
-flowchart TD
-  classDef state fill:#e8f5e9,stroke:#70d287,color:#123
-  classDef op fill:#dae8fc,stroke:#6c8ebf,color:#000
+Most of these shape changes happen inside the `multiomics/process_samples`
+workflow. Ingestion produces the starting shape (1). The split, concatenate and
+merge steps all run inside `process_samples`. Integration and downstream
+workflows start from its output (4).
 
-  ingestion["Ingestion"]:::op
-  ssmm[/"<b>single-sample · multimodal</b><br>one file per sample,<br>all modalities together"\]:::state
-  splitmod["split modalities"]:::op
-  ssum[/"<b>single-sample · unimodal</b><br>QC + filtering<br>per sample, per modality"\]:::state
-  concatsamples["concatenate samples<br>adds sample_id"]:::op
-  msum[/"<b>multi-sample · unimodal</b><br>normalize · select features · PCA"\]:::state
-  mergemod["merge modalities"]:::op
-  msmm[/"<b>multi-sample · multimodal</b><br>integration · clustering · UMAP"\]:::state
+::: {#fig-data-states}
 
-  ingestion --> ssmm --> splitmod --> ssum --> concatsamples --> msum --> mergemod --> msmm
+```{=html}
+<div class="axes-grid" role="img" aria-label="Two-by-two grid: samples (one sample, whole cohort) by modalities (all together, one modality). Data starts single-sample multimodal, is split into modalities, concatenated across samples, then merged back into one multi-sample multimodal object.">
+  <div class="ag-corner"></div>
+  <div class="ag-colhead" style="grid-column:2">all modalities<br><small>multimodal</small></div>
+  <div class="ag-colhead" style="grid-column:4">one modality<br><small>unimodal</small></div>
+
+  <div class="ag-rowhead" style="grid-row:2">one sample<br><small>single-sample</small></div>
+  <div class="ag-cell" style="grid-row:2;grid-column:2">
+    <span class="ag-num">1 · ingestion output</span>
+    <b>single-sample · multimodal</b>
+    <span>One file per sample, all modalities together.</span>
+  </div>
+  <div class="ag-op ag-op-h" style="grid-row:2;grid-column:3"><span>split modalities</span><span class="ag-arrow">→</span></div>
+  <div class="ag-cell" style="grid-row:2;grid-column:4">
+    <span class="ag-num">2 · inside process_samples</span>
+    <b>single-sample · unimodal</b>
+    <span>QC + filtering, per sample, per modality.</span>
+  </div>
+
+  <div class="ag-op ag-op-v" style="grid-row:3;grid-column:4"><span class="ag-arrow">↓</span><span>concatenate samples<br><small>adds sample_id</small></span></div>
+
+  <div class="ag-rowhead" style="grid-row:4">whole cohort<br><small>multi-sample</small></div>
+  <div class="ag-cell ag-end" style="grid-row:4;grid-column:2">
+    <span class="ag-num">4 · process_samples output</span>
+    <b>multi-sample · multimodal</b>
+    <span>Integration · clustering · UMAP.</span>
+  </div>
+  <div class="ag-op ag-op-h" style="grid-row:4;grid-column:3"><span class="ag-arrow">←</span><span>merge modalities</span></div>
+  <div class="ag-cell" style="grid-row:4;grid-column:4">
+    <span class="ag-num">3 · inside process_samples</span>
+    <b>multi-sample · unimodal</b>
+    <span>Normalize · select features · PCA.</span>
+  </div>
+</div>
 ```
+
+The data visits the four combinations of the two axes in order (1 → 4), from ingestion output to the input of integration and downstream analysis. Each blue step moves the data along one axis only: split and merge along the modality axis, concatenate along the sample axis. The processing done in each shape is noted inside it.
+:::
 
 ### Samples: single-sample vs multi-sample
 
@@ -154,7 +181,7 @@ flowchart TD
   classDef add fill:#e8f5e9,stroke:#70d287,color:#123
 
   ing["<b>Ingestion</b><br>.X raw counts<br>.obs barcodes<br>.var gene metadata<br>modalities under .mod"]:::add
-  ss["<b>Single-sample QC + filter</b><br>+ .obs QC metrics &amp; filter flags"]:::add
+  ss["<b>Single-sample QC + filter</b><br>+ .obs QC metrics &amp; filter flags<br>+ .var QC metrics &amp; filter flags"]:::add
   cat["<b>Concatenate</b><br>+ .obs sample_id"]:::add
   norm["<b>Log-normalize</b><br>+ .layers log_normalized"]:::add
   hvg["<b>Highly variable genes</b><br>+ .var highly_variable"]:::add
@@ -170,7 +197,7 @@ The exact slot keys (all configurable, shown here with their defaults):
 | Stage | Slots written |
 |---|---|
 | Ingestion | `.X` raw counts · `.obs` barcodes · `.var` gene metadata · modalities under `.mod` |
-| Single-sample QC & filter | `.obs` QC metrics (`total_counts`, `num_nonzero_vars`, mitochondrial / ribosomal fraction) and filter flags |
+| Single-sample QC & filter | `.obs` per-cell QC metrics (`total_counts`, `num_nonzero_vars`, mitochondrial / ribosomal fraction) and filter flags · `.var` per-gene QC metrics (`total_counts`, `num_nonzero_obs`, `obs_mean`, `pct_dropout`), mitochondrial / ribosomal gene flags and filter flags |
 | Concatenate | `.obs["sample_id"]` |
 | Log-normalize | `.layers["log_normalized"]` |
 | Highly variable genes | `.var["highly_variable"]` |
