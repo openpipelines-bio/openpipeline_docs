@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "cellranger_count_split"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Mapping"
 description: "Split 10x Cell Ranger output directory into separate output fields."
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

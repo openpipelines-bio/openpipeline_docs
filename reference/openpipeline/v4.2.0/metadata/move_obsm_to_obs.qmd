@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "move_obsm_to_obs"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Metadata"
 description: "Move a matrix from .obsm to .obs."
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

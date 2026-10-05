@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "knn"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Labels transfer"
 description: "This component performs label transfer from reference to query using a K-Neirest Neighbors classifier"
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

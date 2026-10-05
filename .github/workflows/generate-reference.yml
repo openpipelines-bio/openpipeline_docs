@@ -238,7 +238,8 @@ jobs:
               if not txt.startswith("---\n"): return
               cid = os.path.splitext(os.path.basename(f))[0]  # the actual component name
               end = txt.index("\n---", 4)
-              fm = re.sub(r'(?m)^(description: )""([^"])', r'\1"\2', txt[4:end])  # fix bad quotes
+              # fix bad quotes; [^"\n] so an empty `description: ""` is left intact
+              fm = re.sub(r'(?m)^(description: )""([^"\n])', r'\1"\2', txt[4:end])
               body = txt[end:]
               rest = f.split(f"reference/{pkg}/{tag}/", 1)[1][:-4]  # namespace/.../name
               vh_component = ("https://www.viash-hub.com/packages/" + pkg + "/" + tag +

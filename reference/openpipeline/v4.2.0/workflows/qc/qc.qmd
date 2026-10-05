@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "qc"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Workflows/qc"
 description: "A pipeline to add basic qc statistics to a MuData"
 type: "workflow"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}
@@ -26,6 +26,9 @@ Namespace: `workflows/qc`
 [![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/qc/qc)
 
 :::
+
+
+
 ## Visualisation
 
 ```{mermaid}
@@ -38,6 +41,7 @@ flowchart TB
 ```
 
 *Dashed nodes are optional steps.*
+
 
 
 ## Argument groups

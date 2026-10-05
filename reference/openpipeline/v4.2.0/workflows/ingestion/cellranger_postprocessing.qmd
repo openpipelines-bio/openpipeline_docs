@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "cellranger_postprocessing"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Workflows/ingestion"
 description: "Post-processing Cell Ranger datasets."
 type: "workflow"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}
@@ -26,6 +26,9 @@ Namespace: `workflows/ingestion`
 [![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/ingestion/cellranger_postprocessing)
 
 :::
+
+
+
 ## Visualisation
 
 ```{mermaid}
@@ -38,6 +41,7 @@ flowchart TB
 ```
 
 *Dashed nodes are optional steps.*
+
 
 
 ## Argument groups

@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "cellranger_mapping"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Workflows/ingestion"
 description: "A pipeline for running Cell Ranger mapping."
 type: "workflow"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}
@@ -26,6 +26,9 @@ Namespace: `workflows/ingestion`
 [![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/ingestion/cellranger_mapping)
 
 :::
+
+
+
 ## Visualisation
 
 ```{mermaid}
@@ -41,6 +44,7 @@ flowchart TB
 ```
 
 *Trapezoids split or combine data.*
+
 
 
 ## Argument groups

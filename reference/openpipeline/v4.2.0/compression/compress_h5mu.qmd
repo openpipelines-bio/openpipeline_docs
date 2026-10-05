@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "compress_h5mu"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Compression"
 description: "Compress a MuData file."
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

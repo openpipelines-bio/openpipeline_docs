@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "mermaid"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Report"
 description: "Generates a network from mermaid code"
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

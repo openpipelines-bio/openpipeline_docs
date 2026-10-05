@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "delimit_fraction"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Filter"
 description: "Turns a column containing values between 0 and 1 into a boolean column based on thresholds"
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

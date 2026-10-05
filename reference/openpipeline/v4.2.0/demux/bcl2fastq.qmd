@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "bcl2fastq"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Demux"
 description: "Convert bcl files to fastq files using bcl2fastq"
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "split_h5mu"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Dataflow"
 description: "Split the samples of a single modality from a .h5mu (multimodal) sample into seperate .h5mu files based on the values of an .obs column of this modality."
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

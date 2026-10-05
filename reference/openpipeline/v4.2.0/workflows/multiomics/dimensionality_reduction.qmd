@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "dimensionality_reduction"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Workflows/multiomics"
 description: "Run calculations that output information required for most integration methods: PCA, nearest neighbour and UMAP."
 type: "workflow"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}
@@ -26,6 +26,9 @@ Namespace: `workflows/multiomics`
 [![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/multiomics/dimensionality_reduction)
 
 :::
+
+
+
 ## Visualisation
 
 ```{mermaid}
@@ -36,6 +39,7 @@ flowchart TB
     style c_dimred_pca fill:#e2f4e7,stroke:#2b8f52,color:#13201a
     style c_workflows_multiomics_neighbors_leiden_umap fill:#e2f4e7,stroke:#2b8f52,color:#13201a
 ```
+
 
 
 ## Argument groups

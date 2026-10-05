@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "build_cellranger_arc_reference"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Reference"
 description: "Build a Cell Ranger-arc and -atac compatible reference folder from user-supplied genome FASTA and gene GTF files."
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "cellranger_mkgtf"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Reference"
 description: "Make a GTF file - filter by a specific attribute."
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

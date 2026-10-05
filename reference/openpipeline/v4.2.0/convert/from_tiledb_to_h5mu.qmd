@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "from_tiledb_to_h5mu"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Convert"
 description: ""
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "multiqc"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Qc"
 description: "MultiQC aggregates results from bioinformatics analyses across many samples into a single report."
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

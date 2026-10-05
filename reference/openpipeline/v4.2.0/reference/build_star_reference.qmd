@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "build_star_reference"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Reference"
 description: "Create a reference for STAR from a set of fasta files."
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "bbknn"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Neighbors"
 description: "BBKNN network generation"
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

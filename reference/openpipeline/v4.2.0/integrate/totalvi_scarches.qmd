@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "totalvi_scarches"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Integrate"
 description: "Performs totalVI integration by mapping the query dataset to a reference dataset or model."
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

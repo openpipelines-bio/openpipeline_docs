@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "tfidf"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Transform"
 description: "Perform TF-IDF normalization of the data (typically, ATAC)."
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}

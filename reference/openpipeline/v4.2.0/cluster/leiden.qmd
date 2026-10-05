@@ -2,12 +2,12 @@
 package: "openpipeline"
 version: "v4.2.0"
 title: "leiden"
+subtitle: "openpipeline v4.2.0"
+toc: true
 namespace: "Cluster"
 description: "Cluster cells using the [Leiden algorithm] [Traag18] implemented in the [Scanpy framework] [Wolf18]."
 type: "module"
-toc: true
 latest: "true"
-subtitle: "openpipeline v4.2.0"
 ---
 
 ::: {.column-margin}
