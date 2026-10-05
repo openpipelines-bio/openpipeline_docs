@@ -1,13 +1,13 @@
 ---
-title: "Create a pipeline"
+title: "Create a workflow"
 description: "Chain components into a VDSL3 Nextflow workflow"
 order: 50
 ---
 
-A pipeline chains components into a workflow. OpenPipelines workflows are **VDSL3
-pipelines**, built with [Viash](https://viash.io) from a `config.vsh.yaml` plus a
+A workflow chains components into a multi-step analysis. OpenPipelines workflows are **VDSL3
+workflows**, built with [Viash](https://viash.io) from a `config.vsh.yaml` plus a
 `main.nf`. The mechanics of VDSL3, channels, and the `.run()` operator are
-covered in the [Viash guide](https://viash.io/guide/); this page covers the
+covered in the [Viash VDSL3 guide](https://viash.io/guide/nextflow_vdsl3/); this page covers the
 OpenPipelines conventions and walks through a real workflow.
 
 ## OpenPipelines conventions
@@ -18,10 +18,10 @@ OpenPipelines conventions and walks through a real workflow.
   `run_wf` workflow), a `nextflow.config`, a `test.nf`, and, by convention, an
   `integration_test.sh`.
 - **State-based channels.** Data flows as `[id, state]` tuples. Components read
-  from the state with `fromState` and write back with `toState`. The
+  from the state with `fromState` and write back with `toState` (see the [Viash VDSL3 guide](https://viash.io/guide/nextflow_vdsl3/create-a-pipeline.html)). The
   [Architecture: advanced](../concepts/data-state.qmd) page explains the lens behind this.
 - **Declared dependencies.** List every component or sub-workflow used in `main.nf`
-  under `dependencies` in the config. Viash resolves and compiles the modules at
+  under [`dependencies`](https://viash.io/reference/config/dependencies/) in the config. Viash resolves and compiles the modules at
   build time, so imports are never written by hand.
 - **Dataflow utilities.** Reuse `dataflow/concatenate_h5mu`, `split_modalities`,
   `merge`, and `split_h5mu` for common channel manipulations instead of
@@ -45,7 +45,7 @@ src/workflows/rna/log_normalize/
 
 ### The config
 
-The config groups the pipeline's arguments and, crucially, lists its
+The config groups the workflow's arguments and, crucially, lists its
 `dependencies`. Trimmed from the real
 [`workflows/rna/log_normalize`](https://github.com/openpipelines-bio/openpipeline/blob/main/src/workflows/rna/log_normalize/config.vsh.yaml):
 
@@ -80,7 +80,7 @@ runners:
   - type: nextflow
 ```
 
-Each entry under `dependencies` is a component (or sub-workflow) the pipeline
+Each entry under `dependencies` is a component (or sub-workflow) the workflow
 calls. Because they are declared here, `viash ns build` compiles them into the
 `target/` modules that `main.nf` uses, so you never write `include` statements
 yourself.

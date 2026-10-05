@@ -228,5 +228,5 @@ workflow), and one modality (so it runs after a split) or all modalities
 together (so it runs after a merge). Those questions tell you where the
 component slots in and which assumptions hold (is `sample_id` present yet? is the
 data normalized? is this file unimodal?). See
-[Create a pipeline](../contributing/creating-pipelines.qmd) for the mechanics of
+[Create a workflow](../contributing/creating-workflows.qmd) for the mechanics of
 wiring one in.

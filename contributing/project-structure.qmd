@@ -11,12 +11,12 @@ target code produced from it. Each component is a `config.vsh.yaml` (its
 metadata: inputs, outputs, dependencies, and container) plus a script; each workflow
 is a config plus a `main.nf`.
 
-`src/` is organized into Viash [namespaces](https://viash.io/guide/): each
+`src/` is organized into Viash [namespaces](https://viash.io/guide/project/structure.html): each
 subfolder is a namespace grouping related components, and each subfolder within
 it is one component. For example, `src/convert/from_bdrhap_to_h5mu` is the
 `from_bdrhap_to_h5mu` component in the `convert` namespace. Workflows live under
 `src/workflows/` and are organized into namespaces the same way. Everything in
-`src/` is handled by the same `viash` and `viash ns` commands.
+`src/` is handled by the same `viash` and `viash ns` [commands](https://viash.io/reference/cli/).
 
 ## Target package
 

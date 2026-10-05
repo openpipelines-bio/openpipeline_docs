@@ -5,7 +5,7 @@ order: 60
 ---
 
 Components and workflows are tested with Viash, and CI runs the same tests on
-every pull request. The [Viash guide](https://viash.io/guide/) covers how to
+every pull request. The [Viash guide](https://viash.io/guide/component/unit-testing.html) covers how to
 *write* a test; this page covers *running* them and the two OpenPipelines test types:
 component tests and workflow tests.
 
@@ -19,7 +19,7 @@ the same bucket, so a green run locally means a green run in CI.
 
 ## Component tests
 
-`viash test` builds the component on the fly and runs its test resource
+[`viash test`](https://viash.io/reference/cli/test.html) builds the component on the fly and runs its test resource
 (usually `test.py`):
 
 ```bash
