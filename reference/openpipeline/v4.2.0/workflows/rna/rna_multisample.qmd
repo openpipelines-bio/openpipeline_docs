@@ -26,9 +26,6 @@ Namespace: `workflows/rna`
 [![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/rna/rna_multisample)
 
 :::
-
-
-
 ## Visualisation
 
 ```{mermaid}
@@ -53,7 +50,6 @@ flowchart TB
 ```
 
 *Dashed nodes are optional steps.*
-
 
 
 ## Argument groups

@@ -6,7 +6,7 @@ namespace: "Convert"
 description: "Creates a SpatialExperiment object from the downloaded unzipped CosMx directory for Nanostring CosMx spatial gene expression data, and saves it as a SpatialExperiment object."
 type: "module"
 toc: true
-latest: "true"
+latest: "false"
 subtitle: "openpipeline_spatial v0.5.0"
 ---
 

@@ -1,0 +1,95 @@
+---
+package: "openpipeline_spatial"
+version: "v0.7.0"
+title: "from_spaceranger_hd_to_spatialdata"
+subtitle: "openpipeline_spatial v0.7.0"
+toc: true
+namespace: "Convert"
+description: "Converts the output from 10X Genomics Space Ranger for Visium HD into a SpatialData object."
+type: "module"
+latest: "true"
+---
+
+::: {.column-margin}
+
+### Info
+
+ID: `from_spaceranger_hd_to_spatialdata`  
+Namespace: `convert`
+
+### Links
+
+[{{< fa brands github >}} View source code](https://github.com/openpipelines-bio/openpipeline_spatial/tree/v0.7.0/src/convert/from_spaceranger_hd_to_spatialdata)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Browse all versions](https://www.viash-hub.com/packages/openpipeline_spatial)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline_spatial/v0.7.0/components/convert/from_spaceranger_hd_to_spatialdata)
+
+:::
+
+By default it reads the segmented cells (per-cell count matrix and cell
+boundary polygons) that Space Ranger 4.x writes to `segmented_outputs/`. Set
+`--mode bins` to instead read a binned output (`binned_outputs/square_<N>um/`)
+at the bin size given by `--bin_size`. In both cases the loaded table is
+renamed to "table" so that downstream components stay technology-agnostic.
+
+
+
+## Argument group
+
+### Arguments
+
+|Name             |Description                                                                                                                                                                                                                   |Attributes                                         |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`        |Input folder containing the output from a Space Ranger run for Visium HD and a `*_feature_slice.h5` file. Must contain a `segmented_outputs/` directory for `--mode segmented_cells`, or `binned_outputs/` for `--mode bins`. |`file`, required, example: `"spaceranger_output"`  |
+|`--output`       |Zarr directory where the SpatialData object will be stored.                                                                                                                                                                   |`file`, required, example: `"visium_hd_data.zarr"` |
+|`--mode`         |Which output to load into the table: `segmented_cells` (per-cell counts and cell boundary polygons from `segmented_outputs/`) or `bins` (binned counts from `binned_outputs/square_<bin_size>um/`).                           |`string`, default: `"segmented_cells"`             |
+|`--bin_size`     |Bin size in microns to load when `--mode bins`. Visium HD captures data at 2 µm and aggregates it into 8 µm and 16 µm square bins.                                                                                            |`integer`, default: `8`                            |
+|`--output_type`  |Which count matrix to load: `filtered` (barcodes under tissue only) or `raw` (all barcodes). Applies to both the segmented-cell and binned matrices.                                                                          |`string`, default: `"filtered"`                    |
+|`--output_layer` |If provided, the count matrix is also stored as a named layer (`table.layers[output_layer]`) in addition to `.X`.                                                                                                             |`string`                                           |
+|`--dataset_id`   |Identifier used to name the spatial elements (shapes and images) in the SpatialData object. If not provided, it is inferred from the `*_feature_slice.h5` file name in the input directory.                                   |`string`                                           |
+
+## Authors
+
+
+  * Jakub Majercik [{{< fa brands github >}}](https://github.com/jakubmajercik) [{{< fa brands linkedin >}}](https://linkedin.com/in/jakubmajercik) (author)
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline_spatial \
+  -r v0.7.0 -latest \
+  -main-script target/nextflow/convert/from_spaceranger_hd_to_spatialdata/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+
+Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline_spatial/v0.7.0/components/convert/from_spaceranger_hd_to_spatialdata).
+
+</details>
+
+Run locally with:
+
+```bash
+nextflow run openpipelines-bio/openpipeline_spatial \
+  -r v0.7.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/convert/from_spaceranger_hd_to_spatialdata/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

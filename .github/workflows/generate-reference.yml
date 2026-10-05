@@ -339,7 +339,17 @@ jobs:
           BRANCH="reference/new-versions"
           git checkout -B "$BRANCH"
           git commit -m "Add reference for new package versions"
-          git push --force-with-lease --set-upstream origin "$BRANCH"
+          # The checkout only fetches main, and the freshly created branch has
+          # no upstream, so a bare --force-with-lease always rejects with
+          # "stale info" once the bot branch exists from an earlier run. Fetch
+          # it and lease against that ref explicitly; if it does not exist yet,
+          # lease on "must not exist" (empty expected value).
+          if git fetch origin "+refs/heads/$BRANCH:refs/remotes/origin/$BRANCH"; then
+            LEASE="$BRANCH:refs/remotes/origin/$BRANCH"
+          else
+            LEASE="$BRANCH:"
+          fi
+          git push --force-with-lease="$LEASE" --set-upstream origin "$BRANCH"
           gh pr create --title "Add reference for new package versions" \
             --base main --head "$BRANCH" \
             --body "New versioned reference pages generated from packages.viash-hub.com. Existing versions are untouched. Do not hand-edit \`reference/<package>/<version>/\`." \

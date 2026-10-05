@@ -30,8 +30,6 @@ Namespace: `workflows/annotation`
 
 The query and reference datasets are expected to be pre-processed in the same way, for example with the `process_samples` workflow of OpenPipeline. Note that this workflow will integrate the reference dataset from scratch and integrate the query dataset in the same embedding space. 
 The workflow does not currently output the trained SCVI reference model."
-
-
 ## Visualisation
 
 ```{mermaid}
@@ -67,7 +65,6 @@ flowchart TB
 ```
 
 *Trapezoids split or combine data.*
-
 
 
 ## Argument groups

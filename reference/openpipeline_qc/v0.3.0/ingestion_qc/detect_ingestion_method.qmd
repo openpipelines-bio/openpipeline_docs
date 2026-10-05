@@ -6,7 +6,7 @@ namespace: "Ingestion qc"
 description: "Detects the ingestion method of a dataset."
 type: "module"
 toc: true
-latest: "true"
+latest: "false"
 subtitle: "openpipeline_qc v0.3.0"
 ---
 
