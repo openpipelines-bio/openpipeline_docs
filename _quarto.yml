@@ -65,16 +65,19 @@ website:
         aria-label: GitHub
 
   sidebar:
+    # `header` is the heading shown above each list (the navbar label of its
+    # section); `title` is not displayed for floating sidebars under a navbar.
     - id: get-started
       title: "Get started"
+      header: "Quickstart"
       contents: get-started/*
     - id: guides
       title: "Task guides"
+      header: "Guides"
       # Hand-ordered (matches each page's `order:`) instead of guides/* so the
       # single-cell / spatial pairs can nest under one shared section label
       # rather than appear as separate, similarly-named top-level entries.
       contents:
-        - guides/index.qmd
         - section: "Ingestion"
           contents:
             - guides/ingest-10x.qmd
@@ -100,9 +103,19 @@ website:
         - guides/gpu.qmd
     - id: concepts
       title: "Concepts"
-      contents: concepts/*
+      header: "Concepts"
+      # Hand-ordered (matches each page's `order:`) instead of concepts/* so
+      # the landing page is included and gets the sidebar too.
+      contents:
+        - concepts/index.qmd
+        - concepts/ecosystem.qmd
+        - concepts/modularity.qmd
+        - concepts/mudata.qmd
+        - concepts/viash.qmd
+        - concepts/data-state.qmd
     - id: contributing
       title: "Contributing"
+      header: "Contributing"
       contents: contributing/*
     # Reference has no sidebar — it's a single full-width catalog
     # (reference/index.qmd) browsed via its own package filter + search.
