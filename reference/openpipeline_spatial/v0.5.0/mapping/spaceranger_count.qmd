@@ -6,7 +6,7 @@ namespace: "Mapping"
 description: "Count gene expression and protein expression reads from a single capture area."
 type: "module"
 toc: true
-latest: "true"
+latest: "false"
 subtitle: "openpipeline_spatial v0.5.0"
 ---
 
