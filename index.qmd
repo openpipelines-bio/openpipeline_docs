@@ -18,7 +18,7 @@ anchor-sections: false
   <div class="wrap">
     <div id="op-flow" data-modalities="true"></div>
     <div class="cta-row flow-cta">
-      <a class="btn primary" href="workflows/index.html">▸ Explore the full pipeline</a>
+      <a class="btn primary" href="workflows/index.html">▸ Explore all workflows</a>
     </div>
   </div>
 
@@ -127,10 +127,10 @@ anchor-sections: false
           <b>Viash</b>
           <p>Create reusable, containerised modules from a config and script.</p>
         </a>
-        <a class="infra-card" href="https://www.viash-hub.com" target="_blank" rel="noopener">
-          <img src="images/viash-hub-logo.svg" alt="Viash Hub logo">
-          <b>Viash Hub</b>
-          <p>Hosts published components and provides a no-code interface to run workflows.</p>
+        <a class="infra-card" href="https://mudata.readthedocs.io" target="_blank" rel="noopener">
+          <img src="images/mudata-logo.svg" alt="MuData logo">
+          <b>MuData</b>
+          <p>One file holds every modality of a dataset, so all components read and write the same format.</p>
         </a>
         <a class="infra-card" href="https://www.nextflow.io" target="_blank" rel="noopener">
           <img src="images/nextflow-logo.svg" alt="Nextflow logo">

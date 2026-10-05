@@ -32,7 +32,7 @@ The `ingestion/demux` workflow supports three demultiplexers selected via
 
 - **bcl2fastq**: legacy Illumina tool
 - **BCL Convert**: current Illumina general-purpose demultiplexer
-- **cellranger mkfastq**: 10x Genomics wrapper around BCL Convert with
+- **cellranger mkfastq** (deprecated): 10x Genomics wrapper with
   convenience features for 10x libraries
 
 If you already have FASTQ files or a pre-built count matrix, skip directly to
@@ -40,7 +40,7 @@ If you already have FASTQ files or a pre-built count matrix, skip directly to
 
 | Workflow | Package | Description |
 |---|---|---|
-| [`ingestion/demux`](../reference/openpipeline/v4.2.0/workflows/ingestion/demux.qmd) | [<span class="swatch openpipeline"></span>`openpipeline`]{.pkg-tag .pkg-openpipeline} | BCL → FASTQ demultiplexing (bcl2fastq, BCL Convert, mkfastq) |
+| [`ingestion/demux`](../reference/openpipeline/v4.2.0/workflows/ingestion/demux.qmd) | [<span class="swatch openpipeline"></span>`openpipeline`]{.pkg-tag .pkg-openpipeline} | BCL → FASTQ demultiplexing (bcl2fastq, BCL Convert, mkfastq (deprecated)) |
 
 ## Ingestion {#ingestion}
 
@@ -140,8 +140,9 @@ The result is one processed, normalized cohort object ready for integration.
 | [`correction/cellbender_remove_background`](../reference/openpipeline/v4.2.0/correction/cellbender_remove_background.qmd) | [<span class="swatch openpipeline"></span>`openpipeline`]{.pkg-tag .pkg-openpipeline} | Optional stand-alone step: remove ambient RNA from raw counts |
 
 :::{.callout-note}
-ATAC data is carried through `process_samples` without dedicated QC or normalization.
-ATAC ingestion (`ingestion/cellranger_atac_count`) and a standalone QC metrics module (`calculate_atac_qc_metrics`) are available.
+`process_samples` processes RNA, protein (ADT) and GDO.
+Other modalities, such as ATAC and VDJ, are kept in the output unchanged.
+For ATAC QC, use the standalone `calculate_atac_qc_metrics` module.
 :::
 
 ### Spatial
