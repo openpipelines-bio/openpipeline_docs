@@ -28,6 +28,14 @@ $link-color:     $op-accent-ink !default;
 $primary:        $op-accent-ink !default;
 $border-color:   $op-border !default;
 
+// Callout type colours, drawn from the site palette instead of Cosmo's bright
+// defaults. Quarto derives the left edge, icon and header tint from these.
+$callout-color-note:      #2b78c2 !default;
+$callout-color-tip:       #2b8f52 !default;
+$callout-color-warning:   #c9821f !default;
+$callout-color-caution:   #c9821f !default;
+$callout-color-important: #c8414b !default;
+
 $font-family-sans-serif: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 $font-family-monospace:  ui-monospace, "SF Mono", "Cascadia Code", "JetBrains Mono", Menlo, Consolas, monospace;
 
@@ -559,6 +567,7 @@ main.content table:not(.quarto-listing-table) {
   border-collapse: collapse;
   width: 100%;
   font-size: 14px;
+  background: var(--surface);
   border: 1px solid var(--op-border);
   border-radius: 12px;
   overflow: hidden;
@@ -583,13 +592,20 @@ main.content table:not(.quarto-listing-table) tbody tr:last-child td { border-bo
 main.content table:not(.quarto-listing-table) tbody tr:hover { background: var(--surface-2); }
 
 // ---- callouts: rounded cards with a mono header, brand-tinted ----
-.callout.callout-style-default {
+// One card shape for both appearances (default and simple), so a page that
+// mixes them still reads as one family. The border shorthand leaves the
+// per-type border-left-color to Quarto's more specific rule; only the width
+// is set here.
+.callout.callout-style-default,
+.callout.callout-style-simple {
+  background: var(--surface);
   border: 1px solid var(--op-border);
+  border-left-width: 4px;
   border-radius: 10px;
   box-shadow: var(--shadow);
   overflow: hidden;
 }
-.callout.callout-style-default .callout-title { font-family: var(--mono); font-weight: 700; }
+.callout .callout-title-container { font-family: var(--mono); font-weight: 700; }
 
 // ---- footer ----
 .nav-footer {

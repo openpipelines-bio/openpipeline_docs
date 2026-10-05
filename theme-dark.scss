@@ -22,6 +22,13 @@ $link-color:   $op-accent-ink;
 $primary:      $op-accent-ink;
 $border-color: $op-border;
 
+// Callout type colours, brighter for the dark background.
+$callout-color-note:      #5aa2e6;
+$callout-color-tip:       #7ed898;
+$callout-color-warning:   #e0a949;
+$callout-color-caution:   #e0a949;
+$callout-color-important: #ec6b74;
+
 /*-- scss:rules --*/
 // Re-point the CSS custom properties to the dark palette. Every component rule
 // in theme.scss reads these, so the whole site (landing, cards, navbar,
