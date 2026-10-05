@@ -6,7 +6,7 @@ namespace: "Neighbors"
 description: "Combine spatial and expression neighborhood graphs into a single graph for  use in downstream clustering or trajectory analysis."
 type: "module"
 toc: true
-latest: "true"
+latest: "false"
 subtitle: "openpipeline_spatial v0.5.0"
 ---
 

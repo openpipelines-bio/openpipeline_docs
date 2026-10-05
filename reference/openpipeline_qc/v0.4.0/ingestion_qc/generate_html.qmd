@@ -1,0 +1,98 @@
+---
+package: "openpipeline_qc"
+version: "v0.4.0"
+title: "generate_html"
+subtitle: "openpipeline_qc v0.4.0"
+toc: true
+namespace: "Ingestion qc"
+description: "Generate an HTML report from the QC metrics"
+type: "module"
+latest: "true"
+---
+
+::: {.column-margin}
+
+### Info
+
+ID: `generate_html`  
+Namespace: `ingestion_qc`
+
+### Links
+
+[{{< fa brands github >}} View source code](https://github.com/openpipelines-bio/openpipeline_qc/tree/v0.4.0/src/ingestion_qc/generate_html)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Browse all versions](https://www.viash-hub.com/packages/openpipeline_qc)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline_qc/v0.4.0/components/ingestion_qc/generate_html)
+
+:::
+
+
+
+
+## Argument groups
+
+### Inputs
+
+|Name                |Description                                              |Attributes                                       |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input_data`      |The input JSON file containing the QC metrics            |`file`, required, example: `"path/to/file.json"` |
+|`--input_structure` |The input JSON file containing the structure of the data |`file`, required, example: `"path/to/file.json"` |
+
+
+### Outputs
+
+|Name                 |Description            |Attributes                                       |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--output_qc_report` |The output HTML report |`file`, required, example: `"path/to/file.html"` |
+
+## Authors
+
+
+  * Jakub Majercik [{{< fa brands github >}}](https://github.com/jakubmajercik) [{{< fa brands linkedin >}}](https://linkedin.com/in/jakubmajercik) (author)
+
+  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author)
+
+  * Robrecht Cannoodt [{{< fa brands github >}}](https://github.com/rcannood) [{{< fa brands orcid >}}](https://orcid.org/0000-0003-3641-729X) [{{< fa brands linkedin >}}](https://linkedin.com/in/robrechtcannoodt) (author)
+
+  * Weiwei Schultz (contributor)
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline_qc \
+  -r v0.4.0 -latest \
+  -main-script target/nextflow/ingestion_qc/generate_html/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+
+Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline_qc/v0.4.0/components/ingestion_qc/generate_html).
+
+</details>
+
+Run locally with:
+
+```bash
+nextflow run openpipelines-bio/openpipeline_qc \
+  -r v0.4.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/ingestion_qc/generate_html/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

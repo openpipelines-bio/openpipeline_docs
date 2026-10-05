@@ -1,0 +1,92 @@
+---
+package: "openpipeline_spatial"
+version: "v0.7.0"
+title: "from_h5mu_to_spatialdata"
+subtitle: "openpipeline_spatial v0.7.0"
+toc: true
+namespace: "Convert"
+description: "Reads in an H5MU file and saves it as a SpatialData Zarr store."
+type: "module"
+latest: "true"
+---
+
+::: {.column-margin}
+
+### Info
+
+ID: `from_h5mu_to_spatialdata`  
+Namespace: `convert`
+
+### Links
+
+[{{< fa brands github >}} View source code](https://github.com/openpipelines-bio/openpipeline_spatial/tree/v0.7.0/src/convert/from_h5mu_to_spatialdata)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Browse all versions](https://www.viash-hub.com/packages/openpipeline_spatial)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline_spatial/v0.7.0/components/convert/from_h5mu_to_spatialdata)
+
+:::
+
+The selected
+modality in the MuData is stored as the main table in the SpatialData object. If a matching existing SpatialData is provided, it will be used to fill the
+remaining SpatialData slots.   
+
+
+
+## Argument group
+
+### Arguments
+
+|Name                  |Description                                                                        |Attributes                                 |
+|:----------|:--------------------------------------------------|:--------------------|
+|`--input`             |Input H5MU file.                                                                   |`file`, required, example: `"input.h5mu"`  |
+|`--input_spatialdata` |An optional existing SpatialData Zarr store to fill remaining slots from.          |`file`, example: `"existing.zarr"`         |
+|`--modality`          |The modality in the MuData to be used as the main table in the SpatialData object. |`string`, default: `"rna"`                 |
+|`--output`            |The path to the output SpatialData Zarr store.                                     |`file`, required, example: `"output.zarr"` |
+
+## Authors
+
+
+  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author)
+
+  * Luke Zappia [{{< fa brands github >}}](https://github.com/lazappi) [{{< fa brands orcid >}}](https://orcid.org/0000-0001-7744-8565) [{{< fa brands linkedin >}}](https://linkedin.com/in/lazappi) (author)
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline_spatial \
+  -r v0.7.0 -latest \
+  -main-script target/nextflow/convert/from_h5mu_to_spatialdata/main.nf \
+  --help
+```
+
+### Run command
+
+<details>
+<summary>Example of `params.yaml`</summary>
+
+Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline_spatial/v0.7.0/components/convert/from_h5mu_to_spatialdata).
+
+</details>
+
+Run locally with:
+
+```bash
+nextflow run openpipelines-bio/openpipeline_spatial \
+  -r v0.7.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/convert/from_h5mu_to_spatialdata/main.nf \
+  -params-file params.yaml
+```
+
+:::{.callout-note}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+:::
+
+Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
