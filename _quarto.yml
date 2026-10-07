@@ -27,7 +27,7 @@ website:
   image: images/logo.svg
   # Draft rebuild — deploys to its own GitHub Pages project URL, NOT the
   # production custom domain (openpipelines.bio, served from the `website` repo).
-  site-url: https://openpipelines-bio.github.io/openpipeline_docs/
+  site-url: https://openpipelines.bio
   repo-url: https://github.com/openpipelines-bio/openpipeline_docs
   repo-actions: none
 
