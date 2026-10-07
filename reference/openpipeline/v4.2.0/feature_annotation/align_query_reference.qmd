@@ -5,7 +5,7 @@ title: "align_query_reference"
 subtitle: "openpipeline v4.2.0"
 toc: true
 namespace: "Feature annotation"
-description: "Alignment of a query and reference dataset by: * Alignment of layers * Harmonization of .obs field names for batch and cell type labels * Harmonization of .var field name for gene names * Sanitation of gene names * Cross-checking of genes * Assignment of an id to the query and reference datasets"
+description: "Alignment of a query and reference dataset by:"
 type: "module"
 latest: "true"
 ---
@@ -27,8 +27,14 @@ Namespace: `feature_annotation`
 
 :::
 
-
-
+::: {.ref-description}
+* Alignment of layers
+* Harmonization of .obs field names for batch and cell type labels
+* Harmonization of .var field name for gene names
+* Sanitation of gene names
+* Cross-checking of genes
+* Assignment of an id to the query and reference datasets
+:::
 
 ## Argument groups
 
@@ -36,68 +42,477 @@ Namespace: `feature_annotation`
 
 Input dataset (query) arguments
 
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+The input (query) data to be labeled. Should be a .h5mu file.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
-|Name                          |Description                                                                                                                                                           |Attributes                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`                     |The input (query) data to be labeled. Should be a .h5mu file.                                                                                                         |`file`, required, example: `"input.h5mu"`  |
-|`--modality`                  |Which modality to process. Note that the query and reference modalities should be the same.                                                                           |`string`, default: `"rna"`                 |
-|`--input_layer`               |The layer in the input (query) data containing raw counts if .X is not to be used.                                                                                    |`string`                                   |
-|`--input_layer_lognormalized` |The layer in the input (query) data containing log normalized counts if .X is not to be used.                                                                         |`string`                                   |
-|`--input_var_gene_names`      |The name of the .var column in the input (query) data containing gene names; when no gene_name_layer is provided, the var index will be used.                         |`string`                                   |
-|`--input_obs_batch`           |The name of the .obs column in the input (query) data containing batch information.                                                                                   |`string`, required, example: `"sample_id"` |
-|`--input_obs_label`           |The name of the .obs column in the input (query) data containing cell type labels. If not provided, the --unkown_celltype_label will be assigned to all observations. |`string`, example: `"cell_type"`           |
-|`--input_id`                  |Meta id value to be assigned to the --output_obs_id .obs field of the aligned input (query) data.                                                                     |`string`, default: `"query"`               |
+[Example]{.arg-key} `"input.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--modality`
+:::
+::: {.arg-desc role="cell"}
+Which modality to process. Note that the query and reference modalities should be the same.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Default]{.arg-key} `"rna"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_layer`
+:::
+::: {.arg-desc role="cell"}
+The layer in the input (query) data containing raw counts if .X is not to be used.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_layer_lognormalized`
+:::
+::: {.arg-desc role="cell"}
+The layer in the input (query) data containing log normalized counts if .X is not to be used.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_var_gene_names`
+:::
+::: {.arg-desc role="cell"}
+The name of the .var column in the input (query) data containing gene names; when no gene_name_layer is provided, the var index will be used.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_obs_batch`
+:::
+::: {.arg-desc role="cell"}
+The name of the .obs column in the input (query) data containing batch information.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
+
+[Example]{.arg-key} `"sample_id"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_obs_label`
+:::
+::: {.arg-desc role="cell"}
+The name of the .obs column in the input (query) data containing cell type labels. If not provided, the --unkown_celltype_label will be assigned to all observations.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"cell_type"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_id`
+:::
+::: {.arg-desc role="cell"}
+Meta id value to be assigned to the --output_obs_id .obs field of the aligned input (query) data.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"query"`
+:::
+::::
+:::::
 
 ### Reference
 
 Arguments related to the reference dataset.
 
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference`
+:::
+::: {.arg-desc role="cell"}
+The reference data to train the CellTypist classifiers on. Only required if a pre-trained --model is not provided.
+:::
+::: {.arg-attrs role="cell"}
+`file`
 
-|Name                              |Description                                                                                                                                                               |Attributes                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--reference`                     |The reference data to train the CellTypist classifiers on. Only required if a pre-trained --model is not provided.                                                        |`file`, example: `"reference.h5mu"`        |
-|`--reference_layer`               |The layer in the reference data containing raw counts if .X is not to be used. Data are expected to be processed in the same way as the --input query dataset.            |`string`                                   |
-|`--reference_layer_lognormalized` |The layer in the reference data containing log normalized counts if .X is not to be used. Data are expected to be processed in the same way as the --input query dataset. |`string`                                   |
-|`--reference_var_gene_names`      |The name of the .var column in the reference data containing gene names; when no gene_name_layer is provided, the var index will be used.                                 |`string`                                   |
-|`--reference_obs_batch`           |The name of the .obs column in the reference data containing batch information.                                                                                           |`string`, required, example: `"sample_id"` |
-|`--reference_obs_label`           |The name of the .obs column in the reference data containing cell type labels. If not provided, the --unkown_celltype_label will be assigned to all observations.         |`string`, example: `"cell_type"`           |
-|`--reference_id`                  |Meta id value to be assigned to the --output_obs_id .obs field of the aligned reference data.                                                                             |`string`, default: `"reference"`           |
+[Example]{.arg-key} `"reference.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference_layer`
+:::
+::: {.arg-desc role="cell"}
+The layer in the reference data containing raw counts if .X is not to be used. Data are expected to be processed in the same way as the --input query dataset.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference_layer_lognormalized`
+:::
+::: {.arg-desc role="cell"}
+The layer in the reference data containing log normalized counts if .X is not to be used. Data are expected to be processed in the same way as the --input query dataset.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference_var_gene_names`
+:::
+::: {.arg-desc role="cell"}
+The name of the .var column in the reference data containing gene names; when no gene_name_layer is provided, the var index will be used.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference_obs_batch`
+:::
+::: {.arg-desc role="cell"}
+The name of the .obs column in the reference data containing batch information.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
 
+[Example]{.arg-key} `"sample_id"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference_obs_label`
+:::
+::: {.arg-desc role="cell"}
+The name of the .obs column in the reference data containing cell type labels. If not provided, the --unkown_celltype_label will be assigned to all observations.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"cell_type"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference_id`
+:::
+::: {.arg-desc role="cell"}
+Meta id value to be assigned to the --output_obs_id .obs field of the aligned reference data.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"reference"`
+:::
+::::
+:::::
 
 ### Outputs
 
 Output arguments.
 
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_query`
+:::
+::: {.arg-desc role="cell"}
+Aligned query data.
+:::
+::: {.arg-attrs role="cell"}
+`file`
 
-|Name                           |Description                                                                                                                                          |Attributes                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output_query`               |Aligned query data.                                                                                                                                  |`file`, example: `"output_query.h5mu"`     |
-|`--output_reference`           |Aligned reference data.                                                                                                                              |`file`, example: `"output_reference.h5mu"` |
-|`--output_layer`               |Name of the aligned layer containing raw counts in the output query and reference datasets.                                                          |`string`, default: `"_counts"`             |
-|`--output_layer_lognormalized` |Name of the aligned layer containing log normalized counts in the output query and reference datasets.                                               |`string`, default: `"_log_normalized"`     |
-|`--output_var_gene_names`      |Name of the .var column in the output query and reference datasets containing the gene names.                                                        |`string`, default: `"_gene_names"`         |
-|`--output_obs_batch`           |Name of the .obs column in the output query and reference datasets containing the batch information.                                                 |`string`, default: `"_sample_id"`          |
-|`--output_obs_label`           |Name of the .obs column in the output query and reference datasets containing the cell type labels.                                                  |`string`, default: `"_cell_type"`          |
-|`--output_obs_id`              |Name of the .obs column in the output query and reference datasets containing the dataset id.                                                        |`string`, default: `"_dataset"`            |
-|`--output_var_index`           |Name of the .var column to which the .var index of the --input and --reference datasets is stored. Only relevant if "--preserve_var_index" is False. |`string`, default: `"_ori_var_index"`      |
-|`--output_var_common_genes`    |Name of the .var column in the output query and reference datasets containing the boolean array indicating the common variables.                     |`string`, default: `"_common_vars"`        |
-|`--output_compression`         |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied.                                       |`string`, example: `"gzip"`                |
+[Example]{.arg-key} `"output_query.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_reference`
+:::
+::: {.arg-desc role="cell"}
+Aligned reference data.
+:::
+::: {.arg-attrs role="cell"}
+`file`
 
+[Example]{.arg-key} `"output_reference.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_layer`
+:::
+::: {.arg-desc role="cell"}
+Name of the aligned layer containing raw counts in the output query and reference datasets.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"_counts"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_layer_lognormalized`
+:::
+::: {.arg-desc role="cell"}
+Name of the aligned layer containing log normalized counts in the output query and reference datasets.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"_log_normalized"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_var_gene_names`
+:::
+::: {.arg-desc role="cell"}
+Name of the .var column in the output query and reference datasets containing the gene names.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"_gene_names"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_obs_batch`
+:::
+::: {.arg-desc role="cell"}
+Name of the .obs column in the output query and reference datasets containing the batch information.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"_sample_id"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_obs_label`
+:::
+::: {.arg-desc role="cell"}
+Name of the .obs column in the output query and reference datasets containing the cell type labels.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"_cell_type"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_obs_id`
+:::
+::: {.arg-desc role="cell"}
+Name of the .obs column in the output query and reference datasets containing the dataset id.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"_dataset"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_var_index`
+:::
+::: {.arg-desc role="cell"}
+Name of the .var column to which the .var index of the --input and --reference datasets is stored. Only relevant if "--preserve_var_index" is False.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"_ori_var_index"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_var_common_genes`
+:::
+::: {.arg-desc role="cell"}
+Name of the .var column in the output query and reference datasets containing the boolean array indicating the common variables.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"_common_vars"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_compression`
+:::
+::: {.arg-desc role="cell"}
+Compression format to use for the output AnnData and/or Mudata H5 files.
+By default no compression is applied.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"gzip"`
+
+[Choices]{.arg-key} `"gzip"`, `"lzf"`
+:::
+::::
+:::::
 
 ### Arguments
 
 Arguments related to the alignment of the input and reference datasets.
 
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_reference_gene_overlap`
+:::
+::: {.arg-desc role="cell"}
+The minimum number of genes present in both the reference and query datasets.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
 
-|Name                                  |Description                                                                                                                                                                                                                                                                             |Attributes                     |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input_reference_gene_overlap`      |The minimum number of genes present in both the reference and query datasets.                                                                                                                                                                                                           |`integer`, default: `100`      |
-|`--align_layers_raw_counts`           |Whether to align the query and reference layers containing raw counts.                                                                                                                                                                                                                  |`boolean`, default: `TRUE`     |
-|`--align_layers_lognormalized_counts` |Whether to align the query and reference layers containing log normalized counts.                                                                                                                                                                                                       |`boolean_true`                 |
-|`--unkown_celltype_label`             |The label to assign to cells with an unknown cell type.                                                                                                                                                                                                                                 |`string`, default: `"Unknown"` |
-|`--overwrite_existing_key`            |If set to true and the layer, obs or var key already exists in the query/reference file, the key will be overwritten.                                                                                                                                                                   |`boolean_true`                 |
-|`--preserve_var_index`                |If set to true, the .var index of the --input and --reference datasets will be preserved. If set to false (default behavior), the original .var index will be stored in the --output_var_index .var column and the .var index will be replaced with the sanitized & aligned gene names. |`boolean_true`                 |
+[Default]{.arg-key} `100`
+
+[Min]{.arg-key} `1`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--align_layers_raw_counts`
+:::
+::: {.arg-desc role="cell"}
+Whether to align the query and reference layers containing raw counts.
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
+
+[Default]{.arg-key} `true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--align_layers_lognormalized_counts`
+:::
+::: {.arg-desc role="cell"}
+Whether to align the query and reference layers containing log normalized counts.
+:::
+::: {.arg-attrs role="cell"}
+`boolean_true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--unkown_celltype_label`
+:::
+::: {.arg-desc role="cell"}
+The label to assign to cells with an unknown cell type.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"Unknown"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--overwrite_existing_key`
+:::
+::: {.arg-desc role="cell"}
+If set to true and the layer, obs or var key already exists in the query/reference file, the key will be overwritten.
+:::
+::: {.arg-attrs role="cell"}
+`boolean_true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--preserve_var_index`
+:::
+::: {.arg-desc role="cell"}
+If set to true, the .var index of the --input and --reference datasets will be preserved.
+If set to false (default behavior), the original .var index will be stored in the --output_var_index .var column and the .var index will be replaced with the sanitized & aligned gene names.
+:::
+::: {.arg-attrs role="cell"}
+`boolean_true`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -121,12 +536,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/feature_annotation/align_query_reference).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/feature_annotation/align_query_reference);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -138,8 +554,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

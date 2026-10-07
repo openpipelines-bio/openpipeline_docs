@@ -5,7 +5,7 @@ title: "grep_annotation_column"
 subtitle: "openpipeline v4.2.0"
 toc: true
 namespace: "Metadata"
-description: "Perform a regex lookup on a column from the annotation matrices .obs or .var."
+description: "Perform a regex lookup on a column from the annotation matrices .obs or .var. The annotation matrix can originate from either a modality, or all modalities (global .var or .obs)."
 type: "module"
 latest: "true"
 ---
@@ -27,46 +27,190 @@ Namespace: `metadata`
 
 :::
 
-The annotation matrix can originate from either a modality, or all modalities (global .var or .obs)
-
-
 ## Argument groups
 
 ### Inputs
 
 Arguments related to the input dataset.
 
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Path to the input .h5mu.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
-|Name             |Description                                                                                                                                                                |Attributes                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`        |Path to the input .h5mu.                                                                                                                                                   |`file`, required, example: `"input.h5mu"` |
-|`--input_column` |Column to query. If not specified, use .var_names or .obs_names, depending on the value of --matrix                                                                        |`string`                                  |
-|`--input_layer`  |Input data to use when calculating fraction of observations that match with the query.  Only used when --output_fraction_column is provided. If not specified, .X is used. |`string`                                  |
-|`--modality`     |Which modality to get the annotation matrix from.                                                                                                                          |`string`, required, example: `"rna"`      |
-|`--matrix`       |Matrix to fetch the column from that will be searched.                                                                                                                     |`string`, example: `"var"`                |
+[Example]{.arg-key} `"input.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_column`
+:::
+::: {.arg-desc role="cell"}
+Column to query. If not specified, use .var_names or .obs_names, depending on the value of --matrix
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_layer`
+:::
+::: {.arg-desc role="cell"}
+Input data to use when calculating fraction of observations that match with the query.
+Only used when --output_fraction_column is provided. If not specified, .X is used.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--modality`
+:::
+::: {.arg-desc role="cell"}
+Which modality to get the annotation matrix from.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
 
+[Example]{.arg-key} `"rna"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--matrix`
+:::
+::: {.arg-desc role="cell"}
+Matrix to fetch the column from that will be searched.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"var"`
+
+[Choices]{.arg-key} `"var"`, `"obs"`
+:::
+::::
+:::::
 
 ### Outputs
 
 Arguments related to how the output will be written.
 
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Location of the output MuData file.
+:::
+::: {.arg-attrs role="cell"}
+`file`
 
-|Name                       |Description                                                                                                    |Attributes                       |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output`                 |Location of the output MuData file.                                                                            |`file`, example: `"output.h5mu"` |
-|`--output_match_column`    |Name of the column to write the result to.                                                                     |`string`, required               |
-|`--output_fraction_column` |For the opposite axis, name of the column to write the fraction of  observations that matches to the pattern.  |`string`                         |
-|`--output_compression`     |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied. |`string`, example: `"gzip"`      |
+[Example]{.arg-key} `"output.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_match_column`
+:::
+::: {.arg-desc role="cell"}
+Name of the column to write the result to.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_fraction_column`
+:::
+::: {.arg-desc role="cell"}
+For the opposite axis, name of the column to write the fraction of
+observations that matches to the pattern.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_compression`
+:::
+::: {.arg-desc role="cell"}
+Compression format to use for the output AnnData and/or Mudata H5 files.
+By default no compression is applied.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Example]{.arg-key} `"gzip"`
+
+[Choices]{.arg-key} `"gzip"`, `"lzf"`
+:::
+::::
+:::::
 
 ### Query options
 
 Options related to the query
 
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--regex_pattern`
+:::
+::: {.arg-desc role="cell"}
+Regex to use to match with the input column.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
 
-|Name              |Description                                  |Attributes                                  |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--regex_pattern` |Regex to use to match with the input column. |`string`, required, example: `"^[mM][tT]-"` |
+[Example]{.arg-key} `"^[mM][tT]-"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -90,12 +234,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/metadata/grep_annotation_column).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/metadata/grep_annotation_column);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -107,8 +252,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

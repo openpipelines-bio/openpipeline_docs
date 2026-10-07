@@ -5,7 +5,7 @@ title: "scvi_knn"
 subtitle: "openpipeline v4.2.0"
 toc: true
 namespace: "Workflows/annotation"
-description: "Cell type annotation workflow that performs scVI integration of reference and query dataset followed by KNN label transfer."
+description: "\"Cell type annotation workflow that performs scVI integration of reference and query dataset followed by KNN label transfer. The query and reference datasets are expected to be pre-processed in the same way, for example with the `process_samples` workflow of OpenPipeline. Note that this workflow will integrate the reference dataset from scratch and integrate the query dataset in the same embedding space. The workflow does not currently output the trained SCVI reference model.\""
 type: "workflow"
 latest: "true"
 ---
@@ -26,11 +26,6 @@ Namespace: `workflows/annotation`
 [![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/annotation/scvi_knn)
 
 :::
-
-
-The query and reference datasets are expected to be pre-processed in the same way, for example with the `process_samples` workflow of OpenPipeline. Note that this workflow will integrate the reference dataset from scratch and integrate the query dataset in the same embedding space. 
-The workflow does not currently output the trained SCVI reference model."
-
 
 ## Visualisation
 
@@ -74,76 +69,548 @@ flowchart TB
 
 ### Query Input
 
-|Name                             |Description                                                                                                                   |Attributes                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--id`                           |ID of the sample.                                                                                                             |`string`, required, example: `"foo"`      |
-|`--input`                        |Input dataset consisting of the (unlabeled) query observations.                                                               |`file`, required, example: `"input.h5mu"` |
-|`--modality`                     |Which modality to process. Should match the modality of the --reference dataset.                                              |`string`, default: `"rna"`                |
-|`--input_layer`                  |The layer of the input dataset containing the raw counts if .X is not to be used.                                             |`string`, example: `"counts"`             |
-|`--input_layer_lognormalized`    |The layer of the input dataset containing the lognormalized counts if .X is not to be used.                                   |`string`, example: `"log_normalized"`     |
-|`--input_obs_batch_label`        |The .obs field in the input (query) dataset containing the batch labels.                                                      |`string`, required, example: `"sample"`   |
-|`--input_var_gene_names`         |The .var field in the input (query) dataset containing gene names; if not provided, the .var index will be used.              |`string`                                  |
-|`--input_reference_gene_overlap` |The minimum number of genes present in both the reference and query datasets.                                                 |`integer`, default: `100`                 |
-|`--overwrite_existing_key`       |If provided, will overwrite existing fields in the input dataset when data are copied during the reference alignment process. |`boolean_true`                            |
-|`--sanitize_ensembl_ids`         |Whether to sanitize ensembl ids by removing version numbers.                                                                  |`boolean`, default: `TRUE`                |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--id`
+:::
+::: {.arg-desc role="cell"}
+ID of the sample.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
 
+[Example]{.arg-key} `"foo"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Input dataset consisting of the (unlabeled) query observations.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"input.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--modality`
+:::
+::: {.arg-desc role="cell"}
+Which modality to process. Should match the modality of the --reference dataset.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"rna"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_layer`
+:::
+::: {.arg-desc role="cell"}
+The layer of the input dataset containing the raw counts if .X is not to be used.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"counts"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_layer_lognormalized`
+:::
+::: {.arg-desc role="cell"}
+The layer of the input dataset containing the lognormalized counts if .X is not to be used.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"log_normalized"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_obs_batch_label`
+:::
+::: {.arg-desc role="cell"}
+The .obs field in the input (query) dataset containing the batch labels.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
+
+[Example]{.arg-key} `"sample"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_var_gene_names`
+:::
+::: {.arg-desc role="cell"}
+The .var field in the input (query) dataset containing gene names; if not provided, the .var index will be used.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_reference_gene_overlap`
+:::
+::: {.arg-desc role="cell"}
+The minimum number of genes present in both the reference and query datasets.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `100`
+
+[Min]{.arg-key} `1`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--overwrite_existing_key`
+:::
+::: {.arg-desc role="cell"}
+If provided, will overwrite existing fields in the input dataset when data are copied during the reference alignment process.
+:::
+::: {.arg-attrs role="cell"}
+`boolean_true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--sanitize_ensembl_ids`
+:::
+::: {.arg-desc role="cell"}
+Whether to sanitize ensembl ids by removing version numbers.
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
+
+[Default]{.arg-key} `true`
+:::
+::::
+:::::
 
 ### Reference input
 
-|Name                              |Description                                                                                                  |Attributes                                    |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--reference`                     |Reference dataset consisting of the labeled observations.                                                    |`file`, required, example: `"reference.h5mu"` |
-|`--reference_layer`               |The layer of the reference dataset containing the raw counts if .X is not to be used.                        |`string`, example: `"counts"`                 |
-|`--reference_layer_lognormalized` |The layer of the reference dataset containing the lognormalized counts if .X is not to be used.              |`string`, example: `"log_normalized"`         |
-|`--reference_obs_target`          |The `.obs` key(s) of the target labels to transfer.                                                          |`string`, required, example: `"cell_type"`    |
-|`--reference_var_gene_names`      |The .var field in the reference dataset containing gene names; if not provided, the .var index will be used. |`string`                                      |
-|`--reference_obs_batch_label`     |The .obs field in the reference dataset containing the batch labels.                                         |`string`, required, example: `"sample"`       |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference`
+:::
+::: {.arg-desc role="cell"}
+Reference dataset consisting of the labeled observations.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
+[Example]{.arg-key} `"reference.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference_layer`
+:::
+::: {.arg-desc role="cell"}
+The layer of the reference dataset containing the raw counts if .X is not to be used.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"counts"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference_layer_lognormalized`
+:::
+::: {.arg-desc role="cell"}
+The layer of the reference dataset containing the lognormalized counts if .X is not to be used.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"log_normalized"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference_obs_target`
+:::
+::: {.arg-desc role="cell"}
+The `.obs` key(s) of the target labels to transfer.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
+
+[Example]{.arg-key} `"cell_type"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference_var_gene_names`
+:::
+::: {.arg-desc role="cell"}
+The .var field in the reference dataset containing gene names; if not provided, the .var index will be used.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference_obs_batch_label`
+:::
+::: {.arg-desc role="cell"}
+The .obs field in the reference dataset containing the batch labels.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
+
+[Example]{.arg-key} `"sample"`
+:::
+::::
+:::::
 
 ### HVG subset arguments
 
-|Name      |Description                                    |Attributes                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--n_hvg` |Number of highly variable genes to subset for. |`integer`, default: `2000` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--n_hvg`
+:::
+::: {.arg-desc role="cell"}
+Number of highly variable genes to subset for.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
 
+[Default]{.arg-key} `2000`
+:::
+::::
+:::::
 
 ### scVI integration options
 
-|Name                              |Description                                                                                                                                          |Attributes                             |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--scvi_early_stopping`           |Whether to perform early stopping with respect to the validation set.                                                                                |`boolean`                              |
-|`--scvi_early_stopping_monitor`   |Metric logged during validation set epoch.                                                                                                           |`string`, default: `"elbo_validation"` |
-|`--scvi_early_stopping_patience`  |Number of validation epochs with no improvement after which training will be stopped.                                                                |`integer`, default: `45`               |
-|`--scvi_early_stopping_min_delta` |Minimum change in the monitored quantity to qualify as an improvement, i.e. an absolute change of less than min_delta, will count as no improvement. |`double`, default: `0`                 |
-|`--scvi_max_epochs`               |Number of passes through the dataset, defaults to (20000 / number of cells) * 400 or 400; whichever is smallest.                                     |`integer`                              |
-|`--scvi_reduce_lr_on_plateau`     |Whether to monitor validation loss and reduce learning rate when validation set `lr_scheduler_metric` plateaus.                                      |`boolean`, default: `TRUE`             |
-|`--scvi_lr_factor`                |Factor to reduce learning rate.                                                                                                                      |`double`, default: `0.6`               |
-|`--scvi_lr_patience`              |Number of epochs with no improvement after which learning rate will be reduced.                                                                      |`double`, default: `30`                |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scvi_early_stopping`
+:::
+::: {.arg-desc role="cell"}
+Whether to perform early stopping with respect to the validation set.
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scvi_early_stopping_monitor`
+:::
+::: {.arg-desc role="cell"}
+Metric logged during validation set epoch.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Default]{.arg-key} `"elbo_validation"`
+
+[Choices]{.arg-key} `"elbo_validation"`, `"reconstruction_loss_validation"`, `"kl_local_validation"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scvi_early_stopping_patience`
+:::
+::: {.arg-desc role="cell"}
+Number of validation epochs with no improvement after which training will be stopped.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `45`
+
+[Min]{.arg-key} `1`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scvi_early_stopping_min_delta`
+:::
+::: {.arg-desc role="cell"}
+Minimum change in the monitored quantity to qualify as an improvement, i.e. an absolute change of less than min_delta, will count as no improvement.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `0.0`
+
+[Min]{.arg-key} `0.0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scvi_max_epochs`
+:::
+::: {.arg-desc role="cell"}
+Number of passes through the dataset, defaults to (20000 / number of cells) * 400 or 400; whichever is smallest.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scvi_reduce_lr_on_plateau`
+:::
+::: {.arg-desc role="cell"}
+Whether to monitor validation loss and reduce learning rate when validation set `lr_scheduler_metric` plateaus.
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
+
+[Default]{.arg-key} `true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scvi_lr_factor`
+:::
+::: {.arg-desc role="cell"}
+Factor to reduce learning rate.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `0.6`
+
+[Min]{.arg-key} `0.0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scvi_lr_patience`
+:::
+::: {.arg-desc role="cell"}
+Number of epochs with no improvement after which learning rate will be reduced.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `30.0`
+
+[Min]{.arg-key} `0.0`
+:::
+::::
+:::::
 
 ### Leiden clustering options
 
-|Name                  |Description                                                                    |Attributes                                          |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--leiden_resolution` |Control the coarseness of the clustering. Higher values lead to more clusters. |List of `double`, default: `1`, multiple_sep: `";"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--leiden_resolution`
+:::
+::: {.arg-desc role="cell"}
+Control the coarseness of the clustering. Higher values lead to more clusters.
+:::
+::: {.arg-attrs role="cell"}
+List of `double`
 
+[Default]{.arg-key} `1.0`
+
+[Min]{.arg-key} `0.0`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::::
 
 ### Neighbor classifier arguments
 
-|Name                |Description                                                                                                                                                                                                                  |Attributes                     |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--knn_weights`     |Weight function used in prediction. Possible values are: `uniform` (all points in each neighborhood are weighted equally) or  `distance` (weight points by the inverse of their distance)                                    |`string`, default: `"uniform"` |
-|`--knn_n_neighbors` |The number of neighbors to use in k-neighbor graph structure used for fast approximate nearest neighbor search with PyNNDescent.  Larger values will result in more accurate search results at the cost of computation time. |`integer`, default: `15`       |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--knn_weights`
+:::
+::: {.arg-desc role="cell"}
+Weight function used in prediction. Possible values are:
+`uniform` (all points in each neighborhood are weighted equally) or
+`distance` (weight points by the inverse of their distance)
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Default]{.arg-key} `"uniform"`
+
+[Choices]{.arg-key} `"uniform"`, `"distance"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--knn_n_neighbors`
+:::
+::: {.arg-desc role="cell"}
+The number of neighbors to use in k-neighbor graph structure used for fast approximate nearest neighbor search with PyNNDescent.
+Larger values will result in more accurate search results at the cost of computation time.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `15`
+
+[Min]{.arg-key} `5`
+:::
+::::
+:::::
 
 ### Outputs
 
-|Name                       |Description                                                                                                                                                                                                                              |Attributes                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output`                 |The annotated output .h5mu file.                                                                                                                                                                                                         |`file`, required, example: `"output.h5mu"` |
-|`--output_obs_predictions` |In which `.obs` slots to store the predicted cell labels. If provided, must have the same length as `--reference_obs_targets`. If empty, will default to the `reference_obs_targets` combined with the `"_pred"` suffix.                 |List of `string`, multiple_sep: `";"`      |
-|`--output_obs_probability` |In which `.obs` slots to store the probability of the predictions. If provided, must have the same length as `--reference_obs_targets`. If empty, will default to the `reference_obs_targets` combined with the `"_probability"` suffix. |List of `string`, multiple_sep: `";"`      |
-|`--output_obsm_integrated` |In which .obsm slot to store the integrated embedding.                                                                                                                                                                                   |`string`, default: `"X_integrated_scvi"`   |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+The annotated output .h5mu file.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"output.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_obs_predictions`
+:::
+::: {.arg-desc role="cell"}
+In which `.obs` slots to store the predicted cell labels.
+If provided, must have the same length as `--reference_obs_targets`.
+If empty, will default to the `reference_obs_targets` combined with the `"_pred"` suffix.
+:::
+::: {.arg-attrs role="cell"}
+List of `string`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_obs_probability`
+:::
+::: {.arg-desc role="cell"}
+In which `.obs` slots to store the probability of the predictions.
+If provided, must have the same length as `--reference_obs_targets`.
+If empty, will default to the `reference_obs_targets` combined with the `"_probability"` suffix.
+:::
+::: {.arg-attrs role="cell"}
+List of `string`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_obsm_integrated`
+:::
+::: {.arg-desc role="cell"}
+In which .obsm slot to store the integrated embedding.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"X_integrated_scvi"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -169,12 +636,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/annotation/scvi_knn).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/annotation/scvi_knn);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -186,8 +654,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

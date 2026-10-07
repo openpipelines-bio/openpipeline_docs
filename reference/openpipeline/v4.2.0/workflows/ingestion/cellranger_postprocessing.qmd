@@ -27,8 +27,6 @@ Namespace: `workflows/ingestion`
 
 :::
 
-
-
 ## Visualisation
 
 ```{mermaid}
@@ -48,33 +46,154 @@ flowchart TB
 
 ### Inputs
 
-|Name      |Description                                                                       |Attributes                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--id`    |ID of the sample.                                                                 |`string`, required, example: `"foo"`      |
-|`--input` |Input h5mu file created by running Cell Ranger and converting its output to h5mu. |`file`, required, example: `"input.h5mu"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--id`
+:::
+::: {.arg-desc role="cell"}
+ID of the sample.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
 
+[Example]{.arg-key} `"foo"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Input h5mu file created by running Cell Ranger and converting its output to h5mu.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"input.h5mu"`
+:::
+::::
+:::::
 
 ### Outputs
 
-|Name       |Description              |Attributes |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output` |The converted h5mu file. |`file`     |
-
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+The converted h5mu file.
+:::
+::: {.arg-attrs role="cell"}
+`file`
+:::
+::::
+:::::
 
 ### Correction arguments
 
-|Name                   |Description                                                   |Attributes                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--perform_correction` |Whether or not to run CellBender to perform count correction. |`boolean_true`            |
-|`--cellbender_epochs`  |Number of epochs to run CellBender for.                       |`integer`, default: `150` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--perform_correction`
+:::
+::: {.arg-desc role="cell"}
+Whether or not to run CellBender to perform count correction.
+:::
+::: {.arg-attrs role="cell"}
+`boolean_true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--cellbender_epochs`
+:::
+::: {.arg-desc role="cell"}
+Number of epochs to run CellBender for.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
 
+[Default]{.arg-key} `150`
+:::
+::::
+:::::
 
 ### Filtering arguments
 
-|Name           |Description                                                              |Attributes                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--min_genes`  |Minimum number of counts required for a cell to pass filtering.          |`integer`, example: `100`  |
-|`--min_counts` |Minimum number of genes expressed required for a cell to pass filtering. |`integer`, example: `1000` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--min_genes`
+:::
+::: {.arg-desc role="cell"}
+Minimum number of counts required for a cell to pass filtering.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Example]{.arg-key} `100`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--min_counts`
+:::
+::: {.arg-desc role="cell"}
+Minimum number of genes expressed required for a cell to pass filtering.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Example]{.arg-key} `1000`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -100,12 +219,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/ingestion/cellranger_postprocessing).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/ingestion/cellranger_postprocessing);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -117,8 +237,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

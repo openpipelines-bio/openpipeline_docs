@@ -5,7 +5,7 @@ title: "multiqc"
 subtitle: "openpipeline v4.2.0"
 toc: true
 namespace: "Qc"
-description: "MultiQC aggregates results from bioinformatics analyses across many samples into a single report."
+description: "MultiQC aggregates results from bioinformatics analyses across many samples into a single report. It searches a given directory for analysis logs and compiles a HTML report. It's a general use tool, perfect for summarising the output from numerous bioinformatics tools."
 type: "module"
 latest: "true"
 ---
@@ -27,17 +27,51 @@ Namespace: `qc`
 
 :::
 
-It searches a given directory for analysis logs and compiles a HTML report. It's a general use tool, perfect for summarising the output from numerous bioinformatics tools
-
-
 ## Argument group
 
 ### Arguments
 
-|Name       |Description                                      |Attributes                                                            |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`  |Inputs for MultiQC.                              |List of `file`, required, example: `"input.txt"`, multiple_sep: `";"` |
-|`--output` |Create report in the specified output directory. |`file`, required, example: `"path/to/report"`                         |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Inputs for MultiQC.
+:::
+::: {.arg-attrs role="cell"}
+List of `file` [required]{.arg-required}
+
+[Example]{.arg-key} `"input.txt"`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Create report in the specified output directory.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"path/to/report"`
+:::
+::::
+:::::
 
 ## Example commands
 
@@ -56,12 +90,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/qc/multiqc).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/qc/multiqc);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -73,8 +108,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

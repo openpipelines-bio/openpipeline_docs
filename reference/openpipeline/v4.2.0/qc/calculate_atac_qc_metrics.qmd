@@ -27,38 +27,190 @@ Namespace: `qc`
 
 :::
 
+::: {.ref-description}
 The metrics are comparable to what scanpy.pp.calculate_qc_metrics output,
 although they have slightly different names:
 
 Obs metrics (name in this component -> name in scanpy):
+
   - n_features_per_cell -> n_genes_by_counts
   - total_fragment_counts -> total_counts
-    
-
-
+:::
 
 ## Argument groups
 
 ### Inputs
 
-|Name                                  |Description                                                                                                                                                                                                                                                                           |Attributes                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`                             |Input h5mu file                                                                                                                                                                                                                                                                       |`file`, required, example: `"input.h5mu"` |
-|`--fragments_path`                    |Path to the fragments file. If not provided and not present in the input h5mu file, the nucleosome signal and TSS enrichment score will not be calculated.                                                                                                                            |`file`, example: `"fragments.tsv.gz"`     |
-|`--modality`                          |Which modality from the input MuData file to process.                                                                                                                                                                                                                                 |`string`, default: `"atac"`               |
-|`--layer`                             |Layer at `.layers` to use for the calculation. If not provided, `.X` is used.                                                                                                                                                                                                         |`string`, example: `"raw_counts"`         |
-|`--n_fragments_for_nucleosome_signal` |Number of fragments to use per cell for nucleosome signal calculation. Takes very long to calculate, for a test run lower value (e.g. 10e3) is recommended. See https://www.sc-best-practices.org/chromatin_accessibility/quality_control.html#nucleosome-signal for more information |`integer`, default: `100000`              |
-|`--nuc_signal_threshold`              |Threshold for nucleosome signal. Cells with nucleosome signal above this threshold will be marked as low quality ("NS_FAIL"), otherwise they will be marked "NS_PASS".                                                                                                                |`double`, default: `2`                    |
-|`--n_tss`                             |Number of the transcription start sites to calculate TSS enrichment score. See https://www.sc-best-practices.org/chromatin_accessibility/quality_control.html#tss-enrichment for more information                                                                                     |`integer`, default: `3000`                |
-|`--tss_threshold`                     |Threshold for TSS enrichment score. Cells with TSS enrichment score below this threshold will be marked as low quality ("TSS_FAIL") otherwise they will be marked as "TSS_PASS".                                                                                                      |`double`, default: `1.5`                  |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Input h5mu file
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
+[Example]{.arg-key} `"input.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--fragments_path`
+:::
+::: {.arg-desc role="cell"}
+Path to the fragments file. If not provided and not present in the input h5mu file,
+the nucleosome signal and TSS enrichment score will not be calculated.
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"fragments.tsv.gz"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--modality`
+:::
+::: {.arg-desc role="cell"}
+Which modality from the input MuData file to process.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"atac"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--layer`
+:::
+::: {.arg-desc role="cell"}
+Layer at `.layers` to use for the calculation. If not provided, `.X` is used.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"raw_counts"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--n_fragments_for_nucleosome_signal`
+:::
+::: {.arg-desc role="cell"}
+Number of fragments to use per cell for nucleosome signal calculation.
+Takes very long to calculate, for a test run lower value (e.g. 10e3) is recommended.
+See https://www.sc-best-practices.org/chromatin_accessibility/quality_control.html#nucleosome-signal
+for more information
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `100000`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--nuc_signal_threshold`
+:::
+::: {.arg-desc role="cell"}
+Threshold for nucleosome signal. Cells with nucleosome signal above this threshold
+will be marked as low quality ("NS_FAIL"), otherwise they will be marked "NS_PASS".
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `2.0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--n_tss`
+:::
+::: {.arg-desc role="cell"}
+Number of the transcription start sites to calculate TSS enrichment score.
+See https://www.sc-best-practices.org/chromatin_accessibility/quality_control.html#tss-enrichment
+for more information
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `3000`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--tss_threshold`
+:::
+::: {.arg-desc role="cell"}
+Threshold for TSS enrichment score. Cells with TSS enrichment score below this threshold
+will be marked as low quality ("TSS_FAIL") otherwise they will be marked as "TSS_PASS".
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `1.5`
+:::
+::::
+:::::
 
 ### Outputs
 
-|Name                   |Description                                                                                                    |Attributes                       |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output`             |Output h5mu file.                                                                                              |`file`, example: `"output.h5mu"` |
-|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied. |`string`, example: `"gzip"`      |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Output h5mu file.
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"output.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_compression`
+:::
+::: {.arg-desc role="cell"}
+Compression format to use for the output AnnData and/or Mudata H5 files.
+By default no compression is applied.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"gzip"`
+
+[Choices]{.arg-key} `"gzip"`, `"lzf"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -82,12 +234,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/qc/calculate_atac_qc_metrics).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/qc/calculate_atac_qc_metrics);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -99,8 +252,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

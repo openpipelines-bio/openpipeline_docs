@@ -5,7 +5,7 @@ title: "from_h5mu_or_h5ad_to_seurat"
 subtitle: "openpipeline v4.2.0"
 toc: true
 namespace: "Convert"
-description: "Converts an h5ad file or a single modality of an h5mu file into a Seurat file"
+description: "Converts an h5ad file or a single modality of an h5mu file into a Seurat file."
 type: "module"
 latest: "true"
 ---
@@ -27,20 +27,88 @@ Namespace: `convert`
 
 :::
 
-
-
-
 ## Argument group
 
 ### Arguments
 
-|Name          |Description                                                        |Attributes                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`     |Input h5ad or h5mu file                                            |`file`, required, example: `"input.h5ad"` |
-|`--modality`  |Modality to be converted if the input file is an h5mu file.        |`string`, default: `"rna"`                |
-|`--assay`     |Name of the assay to be created.                                   |`string`, default: `"RNA"`                |
-|`--x_mapping` |Name of the Seurat layer in which the AnnData .X matrix is stored. |`string`, default: `"counts"`             |
-|`--output`    |Output Seurat file                                                 |`file`, required, example: `"output.rds"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Input h5ad or h5mu file
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"input.h5ad"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--modality`
+:::
+::: {.arg-desc role="cell"}
+Modality to be converted if the input file is an h5mu file.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"rna"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--assay`
+:::
+::: {.arg-desc role="cell"}
+Name of the assay to be created.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"RNA"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--x_mapping`
+:::
+::: {.arg-desc role="cell"}
+Name of the Seurat layer in which the AnnData .X matrix is stored.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"counts"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Output Seurat file
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"output.rds"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -64,12 +132,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/convert/from_h5mu_or_h5ad_to_seurat).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/convert/from_h5mu_or_h5ad_to_seurat);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -81,8 +150,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

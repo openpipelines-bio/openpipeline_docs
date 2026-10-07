@@ -27,43 +27,193 @@ Namespace: `mapping`
 
 :::
 
+::: {.ref-description}
 Reads are sorted by leftmost coordinates, or by read name when `--sort_by_read_names` is used.
 
 An appropriate `@HD-SO` sort order header tag will be added or an existing one updated if necessary.
 
 Note that to generate an index file (by specifying `--output_bai`), the default coordinate sort must be used.
-Thus the `--sort_by_read_names` and `--sort_by <TAG>` options are incompatible with `--output_bai`. 
-
-
+Thus the `--sort_by_read_names` and `--sort_by <TAG>` options are incompatible with `--output_bai`.
+:::
 
 ## Argument groups
 
 ### Input
 
-|Name      |Description                                                 |Attributes                               |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input` |Path to the SAM/BAM/CRAM files containing the mapped reads. |`file`, required, example: `"input.bam"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Path to the SAM/BAM/CRAM files containing the mapped reads.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
+[Example]{.arg-key} `"input.bam"`
+:::
+::::
+:::::
 
 ### Output
 
-|Name              |Description                                                                                                                                                                        |Attributes                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output_bam`    |Filename to output the counts to.                                                                                                                                                  |`file`, required, example: `"output.bam"` |
-|`--output_bai`    |BAI-format index for BAM file.                                                                                                                                                     |`file`, example: `"output.bam.bai"`       |
-|`--output_format` |The output format. By default, samtools tries to select a format based on the -o filename extension; if output is to standard output or no format can be deduced, bam is selected. |`string`, example: `"bam"`                |
-|`--compression`   |Compression level, from 0 (uncompressed) to 9 (best                                                                                                                                |`integer`, example: `5`                   |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_bam`
+:::
+::: {.arg-desc role="cell"}
+Filename to output the counts to.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
+[Example]{.arg-key} `"output.bam"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_bai`
+:::
+::: {.arg-desc role="cell"}
+BAI-format index for BAM file.
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"output.bam.bai"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_format`
+:::
+::: {.arg-desc role="cell"}
+The output format. By default, samtools tries to select a format based on the -o filename extension; if output is to standard output or no format can be deduced, bam is selected.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"bam"`
+
+[Choices]{.arg-key} `"sam"`, `"bam"`, `"cram"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--compression`
+:::
+::: {.arg-desc role="cell"}
+Compression level, from 0 (uncompressed) to 9 (best
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Example]{.arg-key} `5`
+:::
+::::
+:::::
 
 ### Arguments
 
-|Name                   |Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |Attributes               |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--minimizer_cluster`  |Sort unmapped reads (those in chromosome "*") by their sequence minimiser (Schleimer et al., 2003; Roberts et al., 2004),  also reverse complementing as appropriate. This has the effect of collating some similar data together, improving the  compressibility of the unmapped sequence. The minimiser kmer size is adjusted using the -K option. Note data compressed  in this manner may need to be name collated prior to conversion back to fastq.  Mapped sequences are sorted by chromosome and position. |`boolean_true`           |
-|`--minimizer_kmer`     |Sets the kmer size to be used in the -M option.                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |`integer`, example: `20` |
-|`--sort_by_read_names` |Sort by read names (i.e., the QNAME field) rather than by chromosomal coordinates.                                                                                                                                                                                                                                                                                                                                                                                                                                 |`boolean_true`           |
-|`--sort_by`            |Sort first by this value in the alignment tag, then by position or name (if also using -n).                                                                                                                                                                                                                                                                                                                                                                                                                        |`string`                 |
-|`--no_pg`              |Do not add a @PG line to the header of the output file.                                                                                                                                                                                                                                                                                                                                                                                                                                                            |`boolean_true`           |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--minimizer_cluster`
+:::
+::: {.arg-desc role="cell"}
+Sort unmapped reads (those in chromosome "*") by their sequence minimiser (Schleimer et al., 2003; Roberts et al., 2004),
+also reverse complementing as appropriate. This has the effect of collating some similar data together, improving the
+compressibility of the unmapped sequence. The minimiser kmer size is adjusted using the -K option. Note data compressed
+in this manner may need to be name collated prior to conversion back to fastq.
+
+Mapped sequences are sorted by chromosome and position.
+:::
+::: {.arg-attrs role="cell"}
+`boolean_true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--minimizer_kmer`
+:::
+::: {.arg-desc role="cell"}
+Sets the kmer size to be used in the -M option.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Example]{.arg-key} `20`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--sort_by_read_names`
+:::
+::: {.arg-desc role="cell"}
+Sort by read names (i.e., the QNAME field) rather than by chromosomal coordinates.
+:::
+::: {.arg-attrs role="cell"}
+`boolean_true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--sort_by`
+:::
+::: {.arg-desc role="cell"}
+Sort first by this value in the alignment tag, then by position or name (if also using -n).
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--no_pg`
+:::
+::: {.arg-desc role="cell"}
+Do not add a @PG line to the header of the output file.
+:::
+::: {.arg-attrs role="cell"}
+`boolean_true`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -89,12 +239,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/mapping/samtools_sort).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/mapping/samtools_sort);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -106,8 +257,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

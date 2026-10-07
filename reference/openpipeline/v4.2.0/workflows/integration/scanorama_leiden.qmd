@@ -27,8 +27,6 @@ Namespace: `workflows/integration`
 
 :::
 
-
-
 ## Visualisation
 
 ```{mermaid}
@@ -46,57 +44,350 @@ flowchart TB
 
 ### Inputs
 
-|Name         |Description                                                                           |Attributes                                  |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--id`       |ID of the sample.                                                                     |`string`, required, example: `"foo"`        |
-|`--input`    |Path to the sample.                                                                   |`file`, required, example: `"dataset.h5mu"` |
-|`--layer`    |use specified layer for expression values instead of the .X object from the modality. |`string`, default: `"log_normalized"`       |
-|`--modality` |Which modality to process.                                                            |`string`, default: `"rna"`                  |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--id`
+:::
+::: {.arg-desc role="cell"}
+ID of the sample.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
 
+[Example]{.arg-key} `"foo"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Path to the sample.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"dataset.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--layer`
+:::
+::: {.arg-desc role="cell"}
+use specified layer for expression values instead of the .X object from the modality.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"log_normalized"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--modality`
+:::
+::: {.arg-desc role="cell"}
+Which modality to process.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"rna"`
+:::
+::::
+:::::
 
 ### Outputs
 
-|Name       |Description                     |Attributes                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output` |Destination path to the output. |`file`, required, example: `"output.h5mu"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Destination path to the output.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
+[Example]{.arg-key} `"output.h5mu"`
+:::
+::::
+:::::
 
 ### Neighbour calculation
 
-|Name                             |Description                                                                             |Attributes                                                  |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--uns_neighbors`                |In which .uns slot to store various neighbor output objects.                            |`string`, default: `"scanorama_integration_neighbors"`      |
-|`--obsp_neighbor_distances`      |In which .obsp slot to store the distance matrix between the resulting neighbors.       |`string`, default: `"scanorama_integration_distances"`      |
-|`--obsp_neighbor_connectivities` |In which .obsp slot to store the connectivities matrix between the resulting neighbors. |`string`, default: `"scanorama_integration_connectivities"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--uns_neighbors`
+:::
+::: {.arg-desc role="cell"}
+In which .uns slot to store various neighbor output objects.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Default]{.arg-key} `"scanorama_integration_neighbors"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obsp_neighbor_distances`
+:::
+::: {.arg-desc role="cell"}
+In which .obsp slot to store the distance matrix between the resulting neighbors.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"scanorama_integration_distances"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obsp_neighbor_connectivities`
+:::
+::: {.arg-desc role="cell"}
+In which .obsp slot to store the connectivities matrix between the resulting neighbors.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"scanorama_integration_connectivities"`
+:::
+::::
+:::::
 
 ### Scanorama integration options
 
-|Name            |Description                                                                                                                                                                 |Attributes                         |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--obs_batch`   |Column name discriminating between your batches.                                                                                                                            |`string`, default: `"sample_id"`   |
-|`--obsm_input`  |.obsm slot that points to embedding to run scanorama on.                                                                                                                    |`string`, default: `"X_pca"`       |
-|`--obsm_output` |The name of the field in adata.obsm where the integrated embeddings will be stored after running this function. Defaults to X_scanorama.                                    |`string`, default: `"X_scanorama"` |
-|`--knn`         |Number of nearest neighbors to use for matching.                                                                                                                            |`integer`, default: `20`           |
-|`--batch_size`  |The batch size used in the alignment vector computation. Useful when integrating very large (>100k samples) datasets. Set to large value that runs within available memory. |`integer`, default: `5000`         |
-|`--sigma`       |Correction smoothing parameter on Gaussian kernel.                                                                                                                          |`double`, default: `15`            |
-|`--approx`      |Use approximate nearest neighbors with Python annoy; greatly speeds up matching runtime.                                                                                    |`boolean`, default: `TRUE`         |
-|`--alpha`       |Alignment score minimum cutoff                                                                                                                                              |`double`, default: `0.1`           |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obs_batch`
+:::
+::: {.arg-desc role="cell"}
+Column name discriminating between your batches.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Default]{.arg-key} `"sample_id"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obsm_input`
+:::
+::: {.arg-desc role="cell"}
+.obsm slot that points to embedding to run scanorama on.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"X_pca"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obsm_output`
+:::
+::: {.arg-desc role="cell"}
+The name of the field in adata.obsm where the integrated embeddings will be stored after running this function. Defaults to X_scanorama.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"X_scanorama"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--knn`
+:::
+::: {.arg-desc role="cell"}
+Number of nearest neighbors to use for matching.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `20`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--batch_size`
+:::
+::: {.arg-desc role="cell"}
+The batch size used in the alignment vector computation. Useful when integrating very large (>100k samples) datasets. Set to large value that runs within available memory.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `5000`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--sigma`
+:::
+::: {.arg-desc role="cell"}
+Correction smoothing parameter on Gaussian kernel.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `15.0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--approx`
+:::
+::: {.arg-desc role="cell"}
+Use approximate nearest neighbors with Python annoy; greatly speeds up matching runtime.
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
+
+[Default]{.arg-key} `true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--alpha`
+:::
+::: {.arg-desc role="cell"}
+Alignment score minimum cutoff
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `0.1`
+:::
+::::
+:::::
 
 ### Clustering options
 
-|Name                  |Description                                                                                                                                                                                                                                            |Attributes                                          |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--obs_cluster`       |Prefix for the .obs keys under which to add the cluster labels. Newly created columns in .obs will  be created from the specified value for '--obs_cluster' suffixed with an underscore and one of the resolutions specified in '--leiden_resolution'. |`string`, default: `"scanorama_integration_leiden"` |
-|`--leiden_resolution` |Control the coarseness of the clustering. Higher values lead to more clusters.                                                                                                                                                                         |List of `double`, default: `1`, multiple_sep: `";"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obs_cluster`
+:::
+::: {.arg-desc role="cell"}
+Prefix for the .obs keys under which to add the cluster labels. Newly created columns in .obs will
+be created from the specified value for '--obs_cluster' suffixed with an underscore and one of the
+resolutions specified in '--leiden_resolution'.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Default]{.arg-key} `"scanorama_integration_leiden"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--leiden_resolution`
+:::
+::: {.arg-desc role="cell"}
+Control the coarseness of the clustering. Higher values lead to more clusters.
+:::
+::: {.arg-attrs role="cell"}
+List of `double`
+
+[Default]{.arg-key} `1.0`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::::
 
 ### Umap options
 
-|Name          |Description                                                |Attributes                                     |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--obsm_umap` |In which .obsm slot to store the resulting UMAP embedding. |`string`, default: `"X_leiden_scanorama_umap"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obsm_umap`
+:::
+::: {.arg-desc role="cell"}
+In which .obsm slot to store the resulting UMAP embedding.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"X_leiden_scanorama_umap"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -122,12 +413,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/integration/scanorama_leiden).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/integration/scanorama_leiden);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -139,8 +431,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

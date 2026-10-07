@@ -5,7 +5,7 @@ title: "from_h5mu_or_h5ad_to_tiledb"
 subtitle: "openpipeline v4.2.0"
 toc: true
 namespace: "Convert"
-description: "Convert a MuData or AnnData object to tiledb."
+description: "Convert a MuData or AnnData object to tiledb. Currently, transcriptome and protein modalities are supported."
 type: "module"
 latest: "true"
 ---
@@ -27,61 +27,344 @@ Namespace: `convert`
 
 :::
 
-Currently, transcriptome and protein modalities are supported.
-
-NOTE: The functionality provided by this component is experimental and may be subject to change. 
-
-
+::: {.ref-description}
+NOTE: The functionality provided by this component is experimental and may be subject to change.
+:::
 
 ## Argument groups
 
 ### Input
 
-|Name      |Description                                                                                                                   |Attributes                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input` |Input AnnData or MuData file. When an AnnData file is provided, it is automatically assumed to  contain transcriptome counts. |`file`, required, example: `"input.h5mu"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Input AnnData or MuData file. When an AnnData file is provided, it is automatically assumed to
+contain transcriptome counts.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
+[Example]{.arg-key} `"input.h5mu"`
+:::
+::::
+:::::
 
 ### RNA modality
 
-|Name                           |Description                                                                                                                                                 |Attributes                                      |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--rna_modality`               |The name used for the RNA modality. Used when input file is a MuData object.                                                                                |`string`, default: `"rna"`                      |
-|`--rna_raw_layer_input`        |Location of the layer containing the raw transcriptome counts. Layers are looked for in .layers, except when using the value 'X'; in which case .X is used. |`string`, required, example: `"X"`              |
-|`--rna_normalized_layer_input` |Location of the layer containing the normalized counts. Layers are looked for in .layers, except when using the value 'X'; in which case .X is used.        |`string`, required, example: `"log_normalized"` |
-|`--rna_var_gene_names_input`   |Column in .var that provides the gene names. If not specified, the index from the input is used.                                                            |`string`, example: `"gene_symbol"`              |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--rna_modality`
+:::
+::: {.arg-desc role="cell"}
+The name used for the RNA modality. Used when input file is a MuData object.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Default]{.arg-key} `"rna"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--rna_raw_layer_input`
+:::
+::: {.arg-desc role="cell"}
+Location of the layer containing the raw transcriptome counts. Layers are looked for in .layers,
+except when using the value 'X'; in which case .X is used.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
+
+[Example]{.arg-key} `"X"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--rna_normalized_layer_input`
+:::
+::: {.arg-desc role="cell"}
+Location of the layer containing the normalized counts. Layers are looked for in .layers,
+except when using the value 'X'; in which case .X is used.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
+
+[Example]{.arg-key} `"log_normalized"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--rna_var_gene_names_input`
+:::
+::: {.arg-desc role="cell"}
+Column in .var that provides the gene names. If not specified, the index from the input is used.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"gene_symbol"`
+:::
+::::
+:::::
 
 ### Protein modality
 
-|Name                            |Description                                                                                                                                           |Attributes                  |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--prot_modality`               |The name used for the protein modality. Used when input file is a MuData object. When not specified, the protein modality will not be processed.      |`string`, example: `"prot"` |
-|`--prot_raw_layer_input`        |Location of the layer containing the raw protein counts. Layers are looked for in .layers, except when using the value 'X'; in which case .X is used. |`string`, example: `"X"`    |
-|`--prot_normalized_layer_input` |Location of the layer containing the normalized counts. Layers are looked for in .layers, except when using the value 'X'; in which case .X is used.  |`string`, example: `"clr"`  |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--prot_modality`
+:::
+::: {.arg-desc role="cell"}
+The name used for the protein modality. Used when input file is a MuData object.
+When not specified, the protein modality will not be processed.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Example]{.arg-key} `"prot"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--prot_raw_layer_input`
+:::
+::: {.arg-desc role="cell"}
+Location of the layer containing the raw protein counts. Layers are looked for in .layers,
+except when using the value 'X'; in which case .X is used.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"X"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--prot_normalized_layer_input`
+:::
+::: {.arg-desc role="cell"}
+Location of the layer containing the normalized counts. Layers are looked for in .layers,
+except when using the value 'X'; in which case .X is used.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"clr"`
+:::
+::::
+:::::
 
 ### Output slots
 
-|Name                             |Description                                                               |Attributes                            |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--rna_modality_output`          |TileDB Measurement name where the RNA modality will be stored.            |`string`, default: `"rna"`            |
-|`--prot_modality_output`         |Name of the TileDB Measurement where the protein modality will be stored. |`string`, default: `"prot"`           |
-|`--obs_index_name_output`        |Name of the index that is used to describe the cells (observations).      |`string`, default: `"cell_id"`        |
-|`--rna_var_index_name_output`    |Output name of the index that is used to describe the genes.              |`string`, default: `"rna_index"`      |
-|`--rna_raw_layer_output`         |Output location for the raw transcriptomics counts.                       |`string`, default: `"X"`              |
-|`--rna_normalized_layer_output`  |Output location for the normalized RNA counts.                            |`string`, default: `"log_normalized"` |
-|`--rna_var_gene_names_output`    |Name of the .var column that specifies the gene games.                    |`string`, default: `"gene_symbol"`    |
-|`--prot_var_index_name_output`   |Output name of the index that is used to describe the proteins.           |`string`, default: `"prot_index"`     |
-|`--prot_raw_layer_output`        |Output location for the raw protein counts.                               |`string`, default: `"X"`              |
-|`--prot_normalized_layer_output` |Output location for the normalized protein counts.                        |`string`, default: `"log_normalized"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--rna_modality_output`
+:::
+::: {.arg-desc role="cell"}
+TileDB Measurement name where the RNA modality will be stored.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Default]{.arg-key} `"rna"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--prot_modality_output`
+:::
+::: {.arg-desc role="cell"}
+Name of the TileDB Measurement where the protein modality will be stored.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"prot"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obs_index_name_output`
+:::
+::: {.arg-desc role="cell"}
+Name of the index that is used to describe the cells (observations).
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"cell_id"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--rna_var_index_name_output`
+:::
+::: {.arg-desc role="cell"}
+Output name of the index that is used to describe the genes.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"rna_index"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--rna_raw_layer_output`
+:::
+::: {.arg-desc role="cell"}
+Output location for the raw transcriptomics counts.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"X"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--rna_normalized_layer_output`
+:::
+::: {.arg-desc role="cell"}
+Output location for the normalized RNA counts.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"log_normalized"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--rna_var_gene_names_output`
+:::
+::: {.arg-desc role="cell"}
+Name of the .var column that specifies the gene games.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"gene_symbol"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--prot_var_index_name_output`
+:::
+::: {.arg-desc role="cell"}
+Output name of the index that is used to describe the proteins.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"prot_index"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--prot_raw_layer_output`
+:::
+::: {.arg-desc role="cell"}
+Output location for the raw protein counts.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"X"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--prot_normalized_layer_output`
+:::
+::: {.arg-desc role="cell"}
+Output location for the normalized protein counts.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"log_normalized"`
+:::
+::::
+:::::
 
 ### Output arguments
 
-|Name           |Description                                           |Attributes                              |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--tiledb_dir` |Directory where the TileDB output will be written to. |`file`, example: `"path/to/tiledb_dir"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--tiledb_dir`
+:::
+::: {.arg-desc role="cell"}
+Directory where the TileDB output will be written to.
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"path/to/tiledb_dir"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -105,12 +388,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/convert/from_h5mu_or_h5ad_to_tiledb).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/convert/from_h5mu_or_h5ad_to_tiledb);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -122,8 +406,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
