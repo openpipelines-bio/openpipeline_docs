@@ -81,6 +81,10 @@ jobs:
             # Viash builds these into target/_private/, and they must not surface in
             # the public reference.
             rm -rf "$pkg/target/_private"
+            # Likewise drop test-scoped components (`scope: test`, built into
+            # target/_test/): test helpers such as sync_test_resources, not
+            # something users run.
+            rm -rf "$pkg/target/_test"
           done
 
       # One-time migration: drop any legacy flat (non-versioned) reference so
@@ -228,6 +232,7 @@ jobs:
           import os, glob, re, sys, json
           sys.path.insert(0, "scripts")
           from packages import PACKAGES
+          from run_command import replace_run_command
           outputs = json.loads(os.environ["PLAN_OUTPUTS"])
           plan = {p: (outputs.get(f"{p}_build", "false"), outputs.get(f"{p}_tag", "")) for p in PACKAGES}
           def rewrite(f, pkg, tag):
@@ -245,23 +250,8 @@ jobs:
               vh_component = ("https://www.viash-hub.com/packages/" + pkg + "/" + tag +
                               "/components/" + rest)
               # Keep the Run command, but the generator's params.yaml example is
-              # empty — point to Viash Hub to generate one; give the local launch
-              # command; link the guides for Seqera / Viash Hub instructions.
-              def run_cmd(m):
-                  bash = re.search(r'```bash\n.*?\n```', m.group(0), re.S)
-                  if not bash:
-                      return m.group(0)
-                  return ("### Run command\n\n"
-                          "<details>\n<summary>Example of `params.yaml`</summary>\n\n"
-                          "Generate a `params.yaml` for this component on "
-                          "[Viash Hub](" + vh_component + ").\n\n"
-                          "</details>\n\nRun locally with:\n\n"
-                          + bash.group(0) + "\n\n"
-                          ":::{.callout-note}\nReplace `-profile docker` with `-profile podman` or "
-                          "`-profile singularity` depending on the desired backend.\n:::\n\n"
-                          "Running on Seqera or through Viash Hub is explained in the "
-                          "[guides](/guides/index.qmd).\n")
-              body = re.sub(r'### Run command\n.*?(?=\n## )', run_cmd, body, flags=re.S)
+              # empty: point to Viash Hub and the guides instead (scripts/run_command.py).
+              body = replace_run_command(body, vh_component)
               # replace the generator's solid-button Links with clean icon links:
               # GitHub source, plus viash-hub "browse all versions" + "run instructions"
               def links(m):
@@ -303,6 +293,15 @@ jobs:
                           re.sub(r'(?m)^latest: "true"$', 'latest: "false"', t))
           print("post-processed generated pages")
           PY
+
+      # Rebuild "Argument groups" and the frontmatter description from each
+      # component's resolved config on viash-hub. The generator flattens
+      # descriptions to one line (losing markdown lists) and packs attributes
+      # into one comma string; this keeps the markdown and gives each
+      # attribute its own labelled line.
+      - name: Render argument tables
+        working-directory: openpipeline_docs
+        run: python3 scripts/render_arguments.py reference
 
       # First pass: simplify the generator's channel-level diagrams to a clean
       # component view. Acts as a fallback for any workflow the next step can't
