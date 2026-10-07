@@ -27,21 +27,102 @@ Namespace: `velocity`
 
 :::
 
-
-
-
 ## Argument group
 
 ### Arguments
 
-|Name              |Description                                                                                                                                                                                |Attributes                                       |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`         |Path to BAM file                                                                                                                                                                           |`file`, required, example: `"input.bam"`         |
-|`--transcriptome` |Path to GTF file                                                                                                                                                                           |`file`, required, example: `"transcriptome.gtf"` |
-|`--barcode`       |Valid barcodes file, to filter the bam. If --bcfile is not specified all the cell barcodes will be included. Cell barcodes should be specified in the bcfile as the 'CB' tag for each read |`file`, example: `"barcodes.txt"`                |
-|`--without_umi`   |foo                                                                                                                                                                                        |`boolean_true`                                   |
-|`--output`        |Velocyto loom file                                                                                                                                                                         |`file`, required, example: `"output.loom"`       |
-|`--logic`         |The logic to use for the filtering.                                                                                                                                                        |`string`, default: `"Default"`                   |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Path to BAM file
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"input.bam"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--transcriptome`
+:::
+::: {.arg-desc role="cell"}
+Path to GTF file
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"transcriptome.gtf"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--barcode`
+:::
+::: {.arg-desc role="cell"}
+Valid barcodes file, to filter the bam. If --bcfile is not specified all the cell barcodes will be included.
+Cell barcodes should be specified in the bcfile as the 'CB' tag for each read
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"barcodes.txt"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--without_umi`
+:::
+::: {.arg-desc role="cell"}
+foo
+:::
+::: {.arg-attrs role="cell"}
+`boolean_true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Velocyto loom file
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"output.loom"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--logic`
+:::
+::: {.arg-desc role="cell"}
+The logic to use for the filtering.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"Default"`
+
+[Choices]{.arg-key} `"Default"`, `"Permissive10X"`, `"Intermediate10X"`, `"ValidatedIntrons10X"`, `"Stricter10X"`, `"ObservedSpanning10X"`, `"Discordant10X"`, `"SmartSeq2"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -65,12 +146,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/velocity/velocyto).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/velocity/velocyto);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -82,8 +164,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

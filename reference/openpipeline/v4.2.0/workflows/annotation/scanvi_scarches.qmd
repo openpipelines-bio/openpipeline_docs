@@ -27,8 +27,6 @@ Namespace: `workflows/annotation`
 
 :::
 
-
-
 ## Visualisation
 
 ```{mermaid}
@@ -52,74 +50,598 @@ flowchart TB
 
 ### Query Input
 
-|Name                                |Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |Attributes                                                      |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--id`                              |ID of the sample.                                                                                                                                                                                                                                                                                                                                                                                                                                                              |`string`, required, example: `"foo"`                            |
-|`--input`                           |Input dataset consisting of the (unlabeled) query observations. The dataset is expected to be pre-processed in the same way as --reference.                                                                                                                                                                                                                                                                                                                                    |`file`, required, example: `"input.h5mu"`                       |
-|`--modality`                        |Which modality to process. Should match the modality of the --reference dataset.                                                                                                                                                                                                                                                                                                                                                                                               |`string`, default: `"rna"`                                      |
-|`--layer`                           |Which layer to use for integration if .X is not to be used. Should match the layer of the --reference dataset.                                                                                                                                                                                                                                                                                                                                                                 |`string`                                                        |
-|`--input_obs_batch_label`           |The .obs field in the input (query) dataset containing the batch labels.                                                                                                                                                                                                                                                                                                                                                                                                       |`string`, required, default: `"sample_id"`, example: `"sample"` |
-|`--input_obs_size_factor`           |Key in adata.obs for size factor information. Instead of using library size as a size factor, the provided size factor column will be used as offset in the mean of the likelihood. Assumed to be on linear scale.                                                                                                                                                                                                                                                             |`string`                                                        |
-|`--input_obs_categorical_covariate` |Keys in adata.obs that correspond to categorical data. These covariates can be added in addition to the batch covariate and are also treated as nuisance factors (i.e., the model tries to minimize their effects on the latent space). Thus, these should not be used for biologically-relevant factors that you do _not_ want to correct for. Important: the order of the categorical covariates matters and should match the order of the covariates in the reference data. |List of `string`, multiple_sep: `";"`                           |
-|`--input_obs_continuous_covariate`  |Keys in adata.obs that correspond to continuous data. These covariates can be added in addition to the batch covariate and are also treated as nuisance factors (i.e., the model tries to minimize their effects on the latent space). Thus, these should not be used for biologically-relevant factors that you do _not_ want to correct for. Important: the order of the continuous covariates matters and should match the order of the covariates in the reference data.   |List of `string`, multiple_sep: `";"`                           |
-|`--input_var_gene_names`            |.var column containing gene names. By default, use the index.                                                                                                                                                                                                                                                                                                                                                                                                                  |`string`                                                        |
-|`--sanitize_ensembl_ids`            |Whether to sanitize ensembl ids by removing version numbers.                                                                                                                                                                                                                                                                                                                                                                                                                   |`boolean`, default: `TRUE`                                      |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--id`
+:::
+::: {.arg-desc role="cell"}
+ID of the sample.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
 
+[Example]{.arg-key} `"foo"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Input dataset consisting of the (unlabeled) query observations. The dataset is expected to be pre-processed in the same way as --reference.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"input.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--modality`
+:::
+::: {.arg-desc role="cell"}
+Which modality to process. Should match the modality of the --reference dataset.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"rna"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--layer`
+:::
+::: {.arg-desc role="cell"}
+Which layer to use for integration if .X is not to be used. Should match the layer of the --reference dataset.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_obs_batch_label`
+:::
+::: {.arg-desc role="cell"}
+The .obs field in the input (query) dataset containing the batch labels.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
+
+[Default]{.arg-key} `"sample_id"`
+
+[Example]{.arg-key} `"sample"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_obs_size_factor`
+:::
+::: {.arg-desc role="cell"}
+Key in adata.obs for size factor information. Instead of using library size as a size factor,
+the provided size factor column will be used as offset in the mean of the likelihood.
+Assumed to be on linear scale.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_obs_categorical_covariate`
+:::
+::: {.arg-desc role="cell"}
+Keys in adata.obs that correspond to categorical data. These covariates can be added in
+addition to the batch covariate and are also treated as nuisance factors
+(i.e., the model tries to minimize their effects on the latent space).
+Thus, these should not be used for biologically-relevant factors that you do _not_ want to correct for.
+Important: the order of the categorical covariates matters and should match the order of the covariates in the reference data.
+:::
+::: {.arg-attrs role="cell"}
+List of `string`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_obs_continuous_covariate`
+:::
+::: {.arg-desc role="cell"}
+Keys in adata.obs that correspond to continuous data. These covariates can be added in
+addition to the batch covariate and are also treated as nuisance factors
+(i.e., the model tries to minimize their effects on the latent space). Thus, these should not be
+used for biologically-relevant factors that you do _not_ want to correct for.
+Important: the order of the continuous covariates matters and should match the order of the covariates in the reference data.
+:::
+::: {.arg-attrs role="cell"}
+List of `string`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_var_gene_names`
+:::
+::: {.arg-desc role="cell"}
+.var column containing gene names. By default, use the index.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--sanitize_ensembl_ids`
+:::
+::: {.arg-desc role="cell"}
+Whether to sanitize ensembl ids by removing version numbers.
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
+
+[Default]{.arg-key} `true`
+:::
+::::
+:::::
 
 ### Reference input
 
-|Name                                    |Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                |Attributes                                                      |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--reference`                           |Reference dataset consisting of the labeled observations to train the KNN classifier on. The dataset is expected to be pre-processed in the same way as the --input query dataset.                                                                                                                                                                                                                                                                                         |`file`, required, example: `"reference.h5mu"`                   |
-|`--reference_obs_target`                |The `.obs` key containing the target labels.                                                                                                                                                                                                                                                                                                                                                                                                                               |`string`, required, example: `"cell_type"`                      |
-|`--reference_obs_batch_label`           |The .obs field in the reference dataset containing the batch labels.                                                                                                                                                                                                                                                                                                                                                                                                       |`string`, required, default: `"sample_id"`, example: `"sample"` |
-|`--reference_obs_size_factor`           |Key in adata.obs for size factor information. Instead of using library size as a size factor, the provided size factor column will be used as offset in the mean of the likelihood. Assumed to be on linear scale.                                                                                                                                                                                                                                                         |`string`                                                        |
-|`--reference_obs_categorical_covariate` |Keys in adata.obs that correspond to categorical data. These covariates can be added in addition to the batch covariate and are also treated as nuisance factors (i.e., the model tries to minimize their effects on the latent space). Thus, these should not be used for biologically-relevant factors that you do _not_ want to correct for. Important: the order of the categorical covariates matters and should match the order of the covariates in the query data. |List of `string`, multiple_sep: `";"`                           |
-|`--reference_obs_continuous_covariate`  |Keys in adata.obs that correspond to continuous data. These covariates can be added in addition to the batch covariate and are also treated as nuisance factors (i.e., the model tries to minimize their effects on the latent space). Thus, these should not be used for biologically-relevant factors that you do _not_ want to correct for. Important: the order of the continuous covariates matters and should match the order of the covariates in the query data.   |List of `string`, multiple_sep: `";"`                           |
-|`--unlabeled_category`                  |Value in the --reference_obs_batch_label field that indicates unlabeled observations                                                                                                                                                                                                                                                                                                                                                                                       |`string`, default: `"Unknown"`                                  |
-|`--reference_var_hvg`                   |.var column containing highly variable genes. If not provided, genes will not be subset.                                                                                                                                                                                                                                                                                                                                                                                   |`string`, default: `"filter_with_hvg"`                          |
-|`--reference_var_gene_names`            |.var column containing gene names. By default, use the index.                                                                                                                                                                                                                                                                                                                                                                                                              |`string`                                                        |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference`
+:::
+::: {.arg-desc role="cell"}
+Reference dataset consisting of the labeled observations to train the KNN classifier on. The dataset is expected to be pre-processed in the same way as the --input query dataset.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
+[Example]{.arg-key} `"reference.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference_obs_target`
+:::
+::: {.arg-desc role="cell"}
+The `.obs` key containing the target labels.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
+
+[Example]{.arg-key} `"cell_type"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference_obs_batch_label`
+:::
+::: {.arg-desc role="cell"}
+The .obs field in the reference dataset containing the batch labels.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
+
+[Default]{.arg-key} `"sample_id"`
+
+[Example]{.arg-key} `"sample"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference_obs_size_factor`
+:::
+::: {.arg-desc role="cell"}
+Key in adata.obs for size factor information. Instead of using library size as a size factor,
+the provided size factor column will be used as offset in the mean of the likelihood.
+Assumed to be on linear scale.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference_obs_categorical_covariate`
+:::
+::: {.arg-desc role="cell"}
+Keys in adata.obs that correspond to categorical data. These covariates can be added in
+addition to the batch covariate and are also treated as nuisance factors
+(i.e., the model tries to minimize their effects on the latent space).
+Thus, these should not be used for biologically-relevant factors that you do _not_ want to correct for.
+Important: the order of the categorical covariates matters and should match the order of the covariates in the query data.
+:::
+::: {.arg-attrs role="cell"}
+List of `string`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference_obs_continuous_covariate`
+:::
+::: {.arg-desc role="cell"}
+Keys in adata.obs that correspond to continuous data. These covariates can be added in
+addition to the batch covariate and are also treated as nuisance factors
+(i.e., the model tries to minimize their effects on the latent space). Thus, these should not be
+used for biologically-relevant factors that you do _not_ want to correct for.
+Important: the order of the continuous covariates matters and should match the order of the covariates in the query data.
+:::
+::: {.arg-attrs role="cell"}
+List of `string`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--unlabeled_category`
+:::
+::: {.arg-desc role="cell"}
+Value in the --reference_obs_batch_label field that indicates unlabeled observations
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"Unknown"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference_var_hvg`
+:::
+::: {.arg-desc role="cell"}
+.var column containing highly variable genes. If not provided, genes will not be subset.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"filter_with_hvg"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference_var_gene_names`
+:::
+::: {.arg-desc role="cell"}
+.var column containing gene names. By default, use the index.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::::
 
 ### scVI, scANVI and scArches training options
 
-|Name                         |Description                                                                                                                                          |Attributes                             |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--early_stopping`           |Whether to perform early stopping with respect to the validation set.                                                                                |`boolean`                              |
-|`--early_stopping_monitor`   |Metric logged during validation set epoch.                                                                                                           |`string`, default: `"elbo_validation"` |
-|`--early_stopping_patience`  |Number of validation epochs with no improvement after which training will be stopped.                                                                |`integer`, default: `45`               |
-|`--early_stopping_min_delta` |Minimum change in the monitored quantity to qualify as an improvement, i.e. an absolute change of less than min_delta, will count as no improvement. |`double`, default: `0`                 |
-|`--max_epochs`               |Number of passes through the dataset, defaults to (20000 / number of cells) * 400 or 400; whichever is smallest.                                     |`integer`                              |
-|`--reduce_lr_on_plateau`     |Whether to monitor validation loss and reduce learning rate when validation set `lr_scheduler_metric` plateaus.                                      |`boolean`, default: `TRUE`             |
-|`--lr_factor`                |Factor to reduce learning rate.                                                                                                                      |`double`, default: `0.6`               |
-|`--lr_patience`              |Number of epochs with no improvement after which learning rate will be reduced.                                                                      |`double`, default: `30`                |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--early_stopping`
+:::
+::: {.arg-desc role="cell"}
+Whether to perform early stopping with respect to the validation set.
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--early_stopping_monitor`
+:::
+::: {.arg-desc role="cell"}
+Metric logged during validation set epoch.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Default]{.arg-key} `"elbo_validation"`
+
+[Choices]{.arg-key} `"elbo_validation"`, `"reconstruction_loss_validation"`, `"kl_local_validation"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--early_stopping_patience`
+:::
+::: {.arg-desc role="cell"}
+Number of validation epochs with no improvement after which training will be stopped.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `45`
+
+[Min]{.arg-key} `1`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--early_stopping_min_delta`
+:::
+::: {.arg-desc role="cell"}
+Minimum change in the monitored quantity to qualify as an improvement, i.e. an absolute change of less than min_delta, will count as no improvement.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `0.0`
+
+[Min]{.arg-key} `0.0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--max_epochs`
+:::
+::: {.arg-desc role="cell"}
+Number of passes through the dataset, defaults to (20000 / number of cells) * 400 or 400; whichever is smallest.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reduce_lr_on_plateau`
+:::
+::: {.arg-desc role="cell"}
+Whether to monitor validation loss and reduce learning rate when validation set `lr_scheduler_metric` plateaus.
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
+
+[Default]{.arg-key} `true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--lr_factor`
+:::
+::: {.arg-desc role="cell"}
+Factor to reduce learning rate.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `0.6`
+
+[Min]{.arg-key} `0.0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--lr_patience`
+:::
+::: {.arg-desc role="cell"}
+Number of epochs with no improvement after which learning rate will be reduced.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `30.0`
+
+[Min]{.arg-key} `0.0`
+:::
+::::
+:::::
 
 ### Leiden clustering options
 
-|Name                  |Description                                                                    |Attributes                                          |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--leiden_resolution` |Control the coarseness of the clustering. Higher values lead to more clusters. |List of `double`, default: `1`, multiple_sep: `";"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--leiden_resolution`
+:::
+::: {.arg-desc role="cell"}
+Control the coarseness of the clustering. Higher values lead to more clusters.
+:::
+::: {.arg-attrs role="cell"}
+List of `double`
 
+[Default]{.arg-key} `1.0`
+
+[Min]{.arg-key} `0.0`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::::
 
 ### Neighbor classifier arguments
 
-|Name                |Description                                                                                                                                                                                                                  |Attributes                     |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--knn_weights`     |Weight function used in prediction. Possible values are: `uniform` (all points in each neighborhood are weighted equally) or  `distance` (weight points by the inverse of their distance)                                    |`string`, default: `"uniform"` |
-|`--knn_n_neighbors` |The number of neighbors to use in k-neighbor graph structure used for fast approximate nearest neighbor search with PyNNDescent.  Larger values will result in more accurate search results at the cost of computation time. |`integer`, default: `15`       |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--knn_weights`
+:::
+::: {.arg-desc role="cell"}
+Weight function used in prediction. Possible values are:
+`uniform` (all points in each neighborhood are weighted equally) or
+`distance` (weight points by the inverse of their distance)
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Default]{.arg-key} `"uniform"`
+
+[Choices]{.arg-key} `"uniform"`, `"distance"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--knn_n_neighbors`
+:::
+::: {.arg-desc role="cell"}
+The number of neighbors to use in k-neighbor graph structure used for fast approximate nearest neighbor search with PyNNDescent.
+Larger values will result in more accurate search results at the cost of computation time.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `15`
+
+[Min]{.arg-key} `5`
+:::
+::::
+:::::
 
 ### Outputs
 
-|Name                       |Description                                                            |Attributes                                  |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output`                 |The annotated output .h5mu file.                                       |`file`, required, example: `"output.h5mu"`  |
-|`--output_obs_predictions` |In which .obs slot to store the predicted labels.                      |`string`, default: `"scanvi_pred"`          |
-|`--output_obs_probability` |In which. obs slot to store the probabilities of the predicted labels. |`string`, default: `"scanvi_probabilities"` |
-|`--output_obsm_integrated` |In which .obsm slot to store the integrated embedding.                 |`string`, default: `"X_integrated_scanvi"`  |
-|`--output_compression`     |The compression format to be used on the output h5mu object.           |`string`, example: `"gzip"`                 |
-|`--output_model`           |Path to the resulting scANVI model that was updated with query data.   |`file`                                      |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+The annotated output .h5mu file.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"output.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_obs_predictions`
+:::
+::: {.arg-desc role="cell"}
+In which .obs slot to store the predicted labels.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"scanvi_pred"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_obs_probability`
+:::
+::: {.arg-desc role="cell"}
+In which. obs slot to store the probabilities of the predicted labels.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"scanvi_probabilities"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_obsm_integrated`
+:::
+::: {.arg-desc role="cell"}
+In which .obsm slot to store the integrated embedding.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"X_integrated_scanvi"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_compression`
+:::
+::: {.arg-desc role="cell"}
+The compression format to be used on the output h5mu object.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"gzip"`
+
+[Choices]{.arg-key} `"gzip"`, `"lzf"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_model`
+:::
+::: {.arg-desc role="cell"}
+Path to the resulting scANVI model that was updated with query data.
+:::
+::: {.arg-attrs role="cell"}
+`file`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -145,12 +667,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/annotation/scanvi_scarches).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/annotation/scanvi_scarches);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -162,8 +685,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

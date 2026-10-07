@@ -27,25 +27,109 @@ Namespace: `reference`
 
 :::
 
+::: {.ref-description}
 Example input files are:
+
   - `genome_fasta`: https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_41/GRCh38.primary_assembly.genome.fa.gz
   - `transcriptome_gtf`: https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_41/gencode.v41.annotation.gtf.gz
   - `ercc`: https://assets.thermofisher.com/TFS-Assets/LSG/manuals/ERCC92.zip
-
-
+:::
 
 ## Argument group
 
 ### Arguments
 
-|Name                  |Description                                                  |Attributes                                                     |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--genome_fasta`      |Reference genome fasta. Example:                             |`file`, required, example: `"genome_fasta.fa.gz"`              |
-|`--transcriptome_gtf` |Reference transcriptome annotation.                          |`file`, required, example: `"transcriptome.gtf.gz"`            |
-|`--ercc`              |ERCC sequence and annotation file.                           |`file`, example: `"ercc.zip"`                                  |
-|`--subset_regex`      |Will subset the reference chromosomes using the given regex. |`string`, example: `"(ERCC-00002&#124;chr1)"`                  |
-|`--output_fasta`      |Output genome sequence fasta.                                |`file`, required, example: `"genome_sequence.fa.gz"`           |
-|`--output_gtf`        |Output transcriptome annotation gtf.                         |`file`, required, example: `"transcriptome_annotation.gtf.gz"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--genome_fasta`
+:::
+::: {.arg-desc role="cell"}
+Reference genome fasta. Example:
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"genome_fasta.fa.gz"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--transcriptome_gtf`
+:::
+::: {.arg-desc role="cell"}
+Reference transcriptome annotation.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"transcriptome.gtf.gz"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--ercc`
+:::
+::: {.arg-desc role="cell"}
+ERCC sequence and annotation file.
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"ercc.zip"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--subset_regex`
+:::
+::: {.arg-desc role="cell"}
+Will subset the reference chromosomes using the given regex.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"(ERCC-00002|chr1)"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_fasta`
+:::
+::: {.arg-desc role="cell"}
+Output genome sequence fasta.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"genome_sequence.fa.gz"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_gtf`
+:::
+::: {.arg-desc role="cell"}
+Output transcriptome annotation gtf.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"transcriptome_annotation.gtf.gz"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -71,12 +155,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/reference/make_reference).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/reference/make_reference);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -88,8 +173,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

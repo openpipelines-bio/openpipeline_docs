@@ -1,0 +1,8 @@
+# Reference pages have no left sidebar, and their generated Info/Links block
+# sits in the right margin. A right-hand TOC overlaps that block, so Quarto
+# collapses it into a small "On this page" dropdown. Put the TOC on the left,
+# where there is free space, so it stays visible and sticky.
+toc-location: left
+# Always show the argument-group names under "Argument groups", so readers can
+# jump straight to e.g. "Cell Ranger arguments" without scrolling there first.
+toc-expand: 2

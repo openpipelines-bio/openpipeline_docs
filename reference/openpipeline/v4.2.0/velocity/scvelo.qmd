@@ -34,51 +34,306 @@ Namespace: `velocity`
 
 ### Inputs
 
-|Name                |Description                                                                                                                                             |Attributes                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`           |Input MuData file                                                                                                                                       |`file`, required, example: `"input.h5mu"` |
-|`--counts_layer`    |Name of the counts layer, if not specified, X is used.                                                                                                  |`string`                                  |
-|`--modality`        |Input modality                                                                                                                                          |`string`, required                        |
-|`--layer_spliced`   |Name of the layer to store the spliced abundances in. Will be used as key in the .layer attribute of the output MuData object.                          |`string`, default: `"spliced"`            |
-|`--layer_unspliced` |Name of the layer to store the unspliced abundances in. Will be used as key in the .layer attribute of the output MuData object.                        |`string`, default: `"unspliced"`          |
-|`--layer_ambiguous` |Name of the layer to store the abundances in for which no fate was determined. Will be used as key in the .layer attribute of the output MuData object. |`string`, default: `"ambiguous"`          |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Input MuData file
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
+[Example]{.arg-key} `"input.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--counts_layer`
+:::
+::: {.arg-desc role="cell"}
+Name of the counts layer, if not specified, X is used.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--modality`
+:::
+::: {.arg-desc role="cell"}
+Input modality
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--layer_spliced`
+:::
+::: {.arg-desc role="cell"}
+Name of the layer to store the spliced abundances in. Will be used as key in the .layer attribute of the
+output MuData object.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"spliced"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--layer_unspliced`
+:::
+::: {.arg-desc role="cell"}
+Name of the layer to store the unspliced abundances in.
+Will be used as key in the .layer attribute of the output MuData object.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"unspliced"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--layer_ambiguous`
+:::
+::: {.arg-desc role="cell"}
+Name of the layer to store the abundances in for which no fate was determined.
+Will be used as key in the .layer attribute of the output MuData object.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"ambiguous"`
+:::
+::::
+:::::
 
 ### Outputs
 
-|Name                   |Description                                                                                                    |Attributes                                    |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output`             |Output directory. If it does not exist, will be created.                                                       |`file`, required, example: `"path/to/output"` |
-|`--output_h5mu`        |Output mudata file.                                                                                            |`file`, required, example: `"output.h5mu"`    |
-|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied. |`string`, example: `"gzip"`                   |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Output directory. If it does not exist, will be created.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
+[Example]{.arg-key} `"path/to/output"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_h5mu`
+:::
+::: {.arg-desc role="cell"}
+Output mudata file.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"output.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_compression`
+:::
+::: {.arg-desc role="cell"}
+Compression format to use for the output AnnData and/or Mudata H5 files.
+By default no compression is applied.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"gzip"`
+
+[Choices]{.arg-key} `"gzip"`, `"lzf"`
+:::
+::::
+:::::
 
 ### Filtering and normalization
 
 Arguments for filtering, normalization an log transform (see scvelo.pp.filter_and_normalize function)
 
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--min_counts`
+:::
+::: {.arg-desc role="cell"}
+Minimum number of counts required for a gene to pass filtering (spliced).
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--min_counts_u`
+:::
+::: {.arg-desc role="cell"}
+Minimum number of counts required for a gene to pass filtering (unspliced).
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--min_cells`
+:::
+::: {.arg-desc role="cell"}
+Minimum number of cells expressed required to pass filtering (spliced).
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--min_cells_u`
+:::
+::: {.arg-desc role="cell"}
+Minimum number of cells expressed required to pass filtering (unspliced).
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--min_shared_counts`
+:::
+::: {.arg-desc role="cell"}
+Minimum number of counts (both unspliced and spliced) required for a gene.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--min_shared_cells`
+:::
+::: {.arg-desc role="cell"}
+Minimum number of cells required to be expressed (both unspliced and spliced).
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--n_top_genes`
+:::
+::: {.arg-desc role="cell"}
+Number of genes to keep.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--log_transform`
+:::
+::: {.arg-desc role="cell"}
+Do not log transform counts.
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
 
-|Name                  |Description                                                                    |Attributes                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--min_counts`        |Minimum number of counts required for a gene to pass filtering (spliced).      |`integer`                  |
-|`--min_counts_u`      |Minimum number of counts required for a gene to pass filtering (unspliced).    |`integer`                  |
-|`--min_cells`         |Minimum number of cells expressed required to pass filtering (spliced).        |`integer`                  |
-|`--min_cells_u`       |Minimum number of cells expressed required to pass filtering (unspliced).      |`integer`                  |
-|`--min_shared_counts` |Minimum number of counts (both unspliced and spliced) required for a gene.     |`integer`                  |
-|`--min_shared_cells`  |Minimum number of cells required to be expressed (both unspliced and spliced). |`integer`                  |
-|`--n_top_genes`       |Number of genes to keep.                                                       |`integer`                  |
-|`--log_transform`     |Do not log transform counts.                                                   |`boolean`, default: `TRUE` |
-
+[Default]{.arg-key} `true`
+:::
+::::
+:::::
 
 ### Fitting parameters
 
 Arguments for fitting the data
 
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--n_principal_components`
+:::
+::: {.arg-desc role="cell"}
+Number of principal components to use for calculating moments.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--n_neighbors`
+:::
+::: {.arg-desc role="cell"}
+Number of neighbors to use. First/second-order moments are computed for each
+cell across its nearest neighbors, where the neighbor graph is obtained from
+euclidean distances in PCA space.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
 
-|Name                       |Description                                                                                                                                                                                 |Attributes               |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--n_principal_components` |Number of principal components to use for calculating moments.                                                                                                                              |`integer`                |
-|`--n_neighbors`            |Number of neighbors to use. First/second-order moments are computed for each cell across its nearest neighbors, where the neighbor graph is obtained from euclidean distances in PCA space. |`integer`, default: `30` |
+[Default]{.arg-key} `30`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -102,12 +357,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/velocity/scvelo).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/velocity/scvelo);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -119,8 +375,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

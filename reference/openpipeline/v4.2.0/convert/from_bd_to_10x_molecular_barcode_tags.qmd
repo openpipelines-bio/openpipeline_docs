@@ -5,7 +5,7 @@ title: "from_bd_to_10x_molecular_barcode_tags"
 subtitle: "openpipeline v4.2.0"
 toc: true
 namespace: "Convert"
-description: "Convert the molecular barcode sequence SAM tag from BD format (MA) to 10X format (UB)"
+description: "Convert the molecular barcode sequence SAM tag from BD format (MA) to 10X format (UB)."
 type: "module"
 latest: "true"
 ---
@@ -27,19 +27,71 @@ Namespace: `convert`
 
 :::
 
-
-
-
 ## Argument group
 
 ### Arguments
 
-|Name        |Description            |Attributes                               |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`   |Input SAM or BAM file. |`file`, required, example: `"input.bam"` |
-|`--output`  |Output alignment file. |`file`, example: `"output.bam"`          |
-|`--bam`     |Output a BAM file.     |`boolean_true`                           |
-|`--threads` |Number of threads      |`integer`                                |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Input SAM or BAM file.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"input.bam"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Output alignment file.
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"output.bam"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--bam`
+:::
+::: {.arg-desc role="cell"}
+Output a BAM file.
+:::
+::: {.arg-attrs role="cell"}
+`boolean_true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--threads`
+:::
+::: {.arg-desc role="cell"}
+Number of threads
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -63,12 +115,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/convert/from_bd_to_10x_molecular_barcode_tags).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/convert/from_bd_to_10x_molecular_barcode_tags);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -80,8 +133,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

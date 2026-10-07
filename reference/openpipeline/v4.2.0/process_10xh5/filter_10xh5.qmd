@@ -5,7 +5,7 @@ title: "filter_10xh5"
 subtitle: "openpipeline v4.2.0"
 toc: true
 namespace: "Process 10xh5"
-description: "Filter a 10x h5 dataset"
+description: "Filter a 10x h5 dataset."
 type: "module"
 latest: "true"
 ---
@@ -27,21 +27,101 @@ Namespace: `process_10xh5`
 
 :::
 
-
-
-
 ## Argument group
 
 ### Arguments
 
-|Name                   |Description                                            |Attributes                                                                          |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`              |An h5 file from the 10x genomics website.              |`file`, required, example: `"pbmc_1k_protein_v3_raw_feature_bc_matrix.h5"`          |
-|`--output`             |Output h5 file.                                        |`file`, required, example: `"pbmc_1k_protein_v3_raw_feature_bc_matrix_filtered.h5"` |
-|`--min_library_size`   |Minimum library size.                                  |`integer`, default: `0`                                                             |
-|`--min_cells_per_gene` |Minimum number of cells per gene.                      |`integer`, default: `0`                                                             |
-|`--keep_feature_types` |Specify which feature types will never be filtered out |List of `string`, example: `"Antibody Capture"`, multiple_sep: `";"`                |
-|`--verbose`            |Increase verbosity                                     |`boolean_true`                                                                      |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+An h5 file from the 10x genomics website.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"pbmc_1k_protein_v3_raw_feature_bc_matrix.h5"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Output h5 file.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"pbmc_1k_protein_v3_raw_feature_bc_matrix_filtered.h5"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--min_library_size`
+:::
+::: {.arg-desc role="cell"}
+Minimum library size.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--min_cells_per_gene`
+:::
+::: {.arg-desc role="cell"}
+Minimum number of cells per gene.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--keep_feature_types`
+:::
+::: {.arg-desc role="cell"}
+Specify which feature types will never be filtered out
+:::
+::: {.arg-attrs role="cell"}
+List of `string`
+
+[Example]{.arg-key} `"Antibody Capture"`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--verbose`
+:::
+::: {.arg-desc role="cell"}
+Increase verbosity
+:::
+::: {.arg-attrs role="cell"}
+`boolean_true`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -65,12 +145,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/process_10xh5/filter_10xh5).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/process_10xh5/filter_10xh5);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -82,8 +163,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
