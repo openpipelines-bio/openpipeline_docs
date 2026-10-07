@@ -5,7 +5,7 @@ title: "pseudobulk_deseq2"
 subtitle: "openpipeline v4.2.0"
 toc: true
 namespace: "Workflows/differential expression"
-description: "Performs pseudobulk generation and subsequent differential expression analysis using DESeq2"
+description: "Performs pseudobulk generation and subsequent differential expression analysis using DESeq2."
 type: "workflow"
 latest: "true"
 ---
@@ -57,50 +57,333 @@ flowchart TB
 
 ### Inputs
 
-|Name               |Description                                                                                                                                                                                    |Attributes                                                               |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`          |Input h5mu file.                                                                                                                                                                               |`file`, required, example: `"/path/to/input_file.h5mu"`                  |
-|`--modality`       |Which modality from the input MuData file to process.                                                                                                                                          |`string`, default: `"rna"`                                               |
-|`--input_layer`    |Input layer to use. If None, X is used. This layer must contain raw counts.                                                                                                                    |`string`                                                                 |
-|`--obs_cell_group` |.obs field containing the variable to group on. Typically this field contains cell groups such as annotated cell types or clusters. If provided, will generate DESeq2 analysis per cell group. |`string`, required, example: `"cell_type"`                               |
-|`--obs_groups`     |.obs fields containing the experimental condition(s) to create pseudobulk samples for.                                                                                                         |List of `string`, example: `"treatment", "disease"`, multiple_sep: `";"` |
-|`--var_gene_names` |Name of the .var field that contains gene symbols. If not provided, .var.index will be used.                                                                                                   |`string`, example: `"gene_symbol"`                                       |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Input h5mu file.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
+[Example]{.arg-key} `"/path/to/input_file.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--modality`
+:::
+::: {.arg-desc role="cell"}
+Which modality from the input MuData file to process.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"rna"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_layer`
+:::
+::: {.arg-desc role="cell"}
+Input layer to use. If None, X is used. This layer must contain raw counts.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obs_cell_group`
+:::
+::: {.arg-desc role="cell"}
+.obs field containing the variable to group on. Typically this field contains cell groups such as annotated cell types or clusters.
+If provided, will generate DESeq2 analysis per cell group.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
+
+[Example]{.arg-key} `"cell_type"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obs_groups`
+:::
+::: {.arg-desc role="cell"}
+.obs fields containing the experimental condition(s) to create pseudobulk samples for.
+:::
+::: {.arg-attrs role="cell"}
+List of `string`
+
+[Example]{.arg-key} `"treatment"`, `"disease"`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--var_gene_names`
+:::
+::: {.arg-desc role="cell"}
+Name of the .var field that contains gene symbols. If not provided, .var.index will be used.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"gene_symbol"`
+:::
+::::
+:::::
 
 ### Pseudobulk Options
 
-|Name                   |Description                                                                  |Attributes                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--aggregation_method` |Method to aggregate the raw counts for pseudoreplicates. Either sum or mean. |`string`, default: `"sum"` |
-|`--random_state`       |The random seed for sampling.                                                |`integer`, default: `0`    |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--aggregation_method`
+:::
+::: {.arg-desc role="cell"}
+Method to aggregate the raw counts for pseudoreplicates. Either sum or mean.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Default]{.arg-key} `"sum"`
+
+[Choices]{.arg-key} `"sum"`, `"mean"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--random_state`
+:::
+::: {.arg-desc role="cell"}
+The random seed for sampling.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `0`
+
+[Min]{.arg-key} `0`
+:::
+::::
+:::::
 
 ### Filtering options
 
-|Name                         |Description                                                                                                             |Attributes                                                                                       |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--min_obs_per_sample`       |Minimum number of observations per pseudobulk sample.                                                                   |`integer`, default: `30`                                                                         |
-|`--filter_genes_min_samples` |Minimum number of samples a gene must be expressed in to be included in the analysis. If None, no filtering is applied. |`integer`                                                                                        |
-|`--filter_gene_patterns`     |List of regex patterns to filter out genes. Genes matching any of these patterns will be excluded from the analysis.    |List of `string`, example: `"MIR\d+", "AL\d+", "LINC\d+", "AC\d+", "AP\d+"`, multiple_sep: `";"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--min_obs_per_sample`
+:::
+::: {.arg-desc role="cell"}
+Minimum number of observations per pseudobulk sample.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
 
+[Default]{.arg-key} `30`
+
+[Min]{.arg-key} `1`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--filter_genes_min_samples`
+:::
+::: {.arg-desc role="cell"}
+Minimum number of samples a gene must be expressed in to be included in the analysis.
+If None, no filtering is applied.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Min]{.arg-key} `1`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--filter_gene_patterns`
+:::
+::: {.arg-desc role="cell"}
+List of regex patterns to filter out genes.
+Genes matching any of these patterns will be excluded from the analysis.
+:::
+::: {.arg-attrs role="cell"}
+List of `string`
+
+[Example]{.arg-key} `"MIR\\d+"`, `"AL\\d+"`, `"LINC\\d+"`, `"AC\\d+"`, `"AP\\d+"`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::::
 
 ### DGEA options
 
-|Name                 |Description                                                                                                                            |Attributes                                                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--design_formula`   |Design formula for DESeq2 analysis in R-style format. Specifies the statistical model to account for various factors.                  |`string`, required, example: `"~ cell_type + disease + treatment"`         |
-|`--contrast_column`  |Column in the metadata to use for the contrast. This column should contain the conditions to compare.                                  |`string`, required, example: `"treatment"`                                 |
-|`--contrast_values`  |Values to compare in the contrast column. First value is baseline, following values are different treatments.                          |List of `string`, required, example: `"ctrl", "stim"`, multiple_sep: `";"` |
-|`--p_adj_threshold`  |Adjusted p-value threshold for significance. Genes with adjusted p-values below this threshold will be considered significant.         |`double`, default: `0.05`                                                  |
-|`--log2fc_threshold` |Log2 fold change threshold for significance. Genes with absolute log2 fold change above this threshold will be considered significant. |`double`, default: `0`                                                     |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--design_formula`
+:::
+::: {.arg-desc role="cell"}
+Design formula for DESeq2 analysis in R-style format.
+Specifies the statistical model to account for various factors.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
 
+[Example]{.arg-key} `"~ cell_type + disease + treatment"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--contrast_column`
+:::
+::: {.arg-desc role="cell"}
+Column in the metadata to use for the contrast.
+This column should contain the conditions to compare.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
+
+[Example]{.arg-key} `"treatment"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--contrast_values`
+:::
+::: {.arg-desc role="cell"}
+Values to compare in the contrast column.
+First value is baseline, following values are different treatments.
+:::
+::: {.arg-attrs role="cell"}
+List of `string` [required]{.arg-required}
+
+[Example]{.arg-key} `"ctrl"`, `"stim"`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--p_adj_threshold`
+:::
+::: {.arg-desc role="cell"}
+Adjusted p-value threshold for significance.
+Genes with adjusted p-values below this threshold will be considered significant.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `0.05`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--log2fc_threshold`
+:::
+::: {.arg-desc role="cell"}
+Log2 fold change threshold for significance.
+Genes with absolute log2 fold change above this threshold will be considered significant.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `0.0`
+:::
+::::
+:::::
 
 ### Outputs
 
-|Name              |Description                                                                                                    |Attributes                             |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output`        |Output directory for DESeq2 results, containing one CSV file per cell group (as defined by `--obs_cell_group`) |`file`, required                       |
-|`--output_prefix` |Prefix for output CSV files: files will be named "{prefix}_{cell_group}.csv"                                   |`string`, default: `"deseq2_analysis"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Output directory for DESeq2 results, containing one CSV file per cell group (as defined by `--obs_cell_group`)
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_prefix`
+:::
+::: {.arg-desc role="cell"}
+Prefix for output CSV files: files will be named "{prefix}_{cell_group}.csv"
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"deseq2_analysis"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -126,12 +409,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/differential_expression/pseudobulk_deseq2).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/differential_expression/pseudobulk_deseq2);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -143,8 +427,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

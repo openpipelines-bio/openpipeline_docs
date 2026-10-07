@@ -65,125 +65,791 @@ flowchart TB
 
 ### Inputs
 
-|Name           |Description                                                                                 |Attributes                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--id`         |ID of the sample.                                                                           |`string`, required, example: `"foo"`      |
-|`--input`      |Path to the sample.                                                                         |`file`, required, example: `"input.h5mu"` |
-|`--rna_layer`  |Input layer for the gene expression modality. If not specified, .X is used.                 |`string`                                  |
-|`--prot_layer` |Input layer for the antibody capture modality. If not specified, .X is used.                |`string`                                  |
-|`--gdo_layer`  |Input layer for the guide-derived oligonucleotide (GDO) data. If not specified, .X is used. |`string`                                  |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--id`
+:::
+::: {.arg-desc role="cell"}
+ID of the sample.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
 
+[Example]{.arg-key} `"foo"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Path to the sample.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"input.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--rna_layer`
+:::
+::: {.arg-desc role="cell"}
+Input layer for the gene expression modality. If not specified, .X is used.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--prot_layer`
+:::
+::: {.arg-desc role="cell"}
+Input layer for the antibody capture modality. If not specified, .X is used.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--gdo_layer`
+:::
+::: {.arg-desc role="cell"}
+Input layer for the guide-derived oligonucleotide (GDO) data. If not specified, .X is used.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::::
 
 ### Outputs
 
-|Name       |Description                     |Attributes                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output` |Destination path to the output. |`file`, required, example: `"output.h5mu"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Destination path to the output.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
+[Example]{.arg-key} `"output.h5mu"`
+:::
+::::
+:::::
 
 ### Sample ID options
 
-Options for adding the id to .obs on the MuData object. Having a sample 
+Options for adding the id to .obs on the MuData object. Having a sample
 id present in a requirement of several components for this pipeline.
 
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--add_id_to_obs`
+:::
+::: {.arg-desc role="cell"}
+Add the value passed with --id to .obs.
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
 
+[Default]{.arg-key} `true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--add_id_obs_output`
+:::
+::: {.arg-desc role="cell"}
+.Obs column to add the sample IDs to. Required and only used when
+--add_id_to_obs is set to 'true'
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
-|Name                                    |Description                                                                                         |Attributes                       |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--add_id_to_obs`                       |Add the value passed with --id to .obs.                                                             |`boolean`, default: `TRUE`       |
-|`--add_id_obs_output`                   |.Obs column to add the sample IDs to. Required and only used when  --add_id_to_obs is set to 'true' |`string`, default: `"sample_id"` |
-|`--add_id_make_observation_keys_unique` |Join the id to the .obs index (.obs_names).  Only used when --add_id_to_obs is set to 'true'.       |`boolean`, default: `TRUE`       |
+[Default]{.arg-key} `"sample_id"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--add_id_make_observation_keys_unique`
+:::
+::: {.arg-desc role="cell"}
+Join the id to the .obs index (.obs_names).
+Only used when --add_id_to_obs is set to 'true'.
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
 
+[Default]{.arg-key} `true`
+:::
+::::
+:::::
 
 ### RNA filtering options
 
-|Name                                |Description                                                                                                                                                                                                    |Attributes                    |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--rna_min_counts`                  |Minimum number of counts captured per cell.                                                                                                                                                                    |`integer`, example: `200`     |
-|`--rna_max_counts`                  |Maximum number of counts captured per cell.                                                                                                                                                                    |`integer`, example: `5000000` |
-|`--rna_min_genes_per_cell`          |Minimum of non-zero values per cell.                                                                                                                                                                           |`integer`, example: `200`     |
-|`--rna_max_genes_per_cell`          |Maximum of non-zero values per cell.                                                                                                                                                                           |`integer`, example: `1500000` |
-|`--rna_min_cells_per_gene`          |Minimum of non-zero values per gene.                                                                                                                                                                           |`integer`, example: `3`       |
-|`--rna_min_fraction_mito`           |Minimum fraction of UMIs that are mitochondrial.                                                                                                                                                               |`double`, example: `0`        |
-|`--rna_max_fraction_mito`           |Maximum fraction of UMIs that are mitochondrial.                                                                                                                                                               |`double`, example: `0.2`      |
-|`--rna_min_fraction_ribo`           |Minimum fraction of UMIs that are mitochondrial.                                                                                                                                                               |`double`, example: `0`        |
-|`--rna_max_fraction_ribo`           |Maximum fraction of UMIs that are mitochondrial.                                                                                                                                                               |`double`, example: `0.2`      |
-|`--skip_scrublet_doublet_detection` |Skip the scrublet doublet detection step.                                                                                                                                                                      |`boolean_true`                |
-|`--scrublet_score_threshold`        |Manual doublet score threshold passed to filter_with_scrublet. Cells with a doublet score above this value are classified as doublets. If not provided, the threshold is determined automatically by Scrublet. |`double`                      |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--rna_min_counts`
+:::
+::: {.arg-desc role="cell"}
+Minimum number of counts captured per cell.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
 
+[Example]{.arg-key} `200`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--rna_max_counts`
+:::
+::: {.arg-desc role="cell"}
+Maximum number of counts captured per cell.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Example]{.arg-key} `5000000`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--rna_min_genes_per_cell`
+:::
+::: {.arg-desc role="cell"}
+Minimum of non-zero values per cell.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Example]{.arg-key} `200`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--rna_max_genes_per_cell`
+:::
+::: {.arg-desc role="cell"}
+Maximum of non-zero values per cell.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Example]{.arg-key} `1500000`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--rna_min_cells_per_gene`
+:::
+::: {.arg-desc role="cell"}
+Minimum of non-zero values per gene.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Example]{.arg-key} `3`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--rna_min_fraction_mito`
+:::
+::: {.arg-desc role="cell"}
+Minimum fraction of UMIs that are mitochondrial.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Example]{.arg-key} `0.0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--rna_max_fraction_mito`
+:::
+::: {.arg-desc role="cell"}
+Maximum fraction of UMIs that are mitochondrial.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Example]{.arg-key} `0.2`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--rna_min_fraction_ribo`
+:::
+::: {.arg-desc role="cell"}
+Minimum fraction of UMIs that are mitochondrial.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Example]{.arg-key} `0.0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--rna_max_fraction_ribo`
+:::
+::: {.arg-desc role="cell"}
+Maximum fraction of UMIs that are mitochondrial.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Example]{.arg-key} `0.2`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--skip_scrublet_doublet_detection`
+:::
+::: {.arg-desc role="cell"}
+Skip the scrublet doublet detection step.
+:::
+::: {.arg-attrs role="cell"}
+`boolean_true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scrublet_score_threshold`
+:::
+::: {.arg-desc role="cell"}
+Manual doublet score threshold passed to filter_with_scrublet. Cells with a
+doublet score above this value are classified as doublets. If not provided,
+the threshold is determined automatically by Scrublet.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Min]{.arg-key} `0.0`
+
+[Max]{.arg-key} `1.0`
+:::
+::::
+:::::
 
 ### CITE-seq filtering options
 
-|Name                           |Description                             |Attributes                      |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--prot_min_counts`            |Minimum number of counts per cell.      |`integer`, example: `3`         |
-|`--prot_max_counts`            |Minimum number of counts per cell.      |`integer`, example: `5000000`   |
-|`--prot_min_proteins_per_cell` |Minimum of non-zero values per cell.    |`integer`, example: `200`       |
-|`--prot_max_proteins_per_cell` |Maximum of non-zero values per cell.    |`integer`, example: `100000000` |
-|`--prot_min_cells_per_protein` |Minimum of non-zero values per protein. |`integer`, example: `3`         |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--prot_min_counts`
+:::
+::: {.arg-desc role="cell"}
+Minimum number of counts per cell.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
 
+[Example]{.arg-key} `3`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--prot_max_counts`
+:::
+::: {.arg-desc role="cell"}
+Minimum number of counts per cell.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Example]{.arg-key} `5000000`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--prot_min_proteins_per_cell`
+:::
+::: {.arg-desc role="cell"}
+Minimum of non-zero values per cell.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Example]{.arg-key} `200`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--prot_max_proteins_per_cell`
+:::
+::: {.arg-desc role="cell"}
+Maximum of non-zero values per cell.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Example]{.arg-key} `100000000`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--prot_min_cells_per_protein`
+:::
+::: {.arg-desc role="cell"}
+Minimum of non-zero values per protein.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Example]{.arg-key} `3`
+:::
+::::
+:::::
 
 ### GDO filtering options
 
-|Name                        |Description                           |Attributes                      |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--gdo_min_counts`          |Minimum number of counts per cell.    |`integer`, example: `3`         |
-|`--gdo_max_counts`          |Minimum number of counts per cell.    |`integer`, example: `5000000`   |
-|`--gdo_min_guides_per_cell` |Minimum of non-zero values per cell.  |`integer`, example: `200`       |
-|`--gdo_max_guides_per_cell` |Maximum of non-zero values per cell.  |`integer`, example: `100000000` |
-|`--gdo_min_cells_per_guide` |Minimum of non-zero values per guide. |`integer`, example: `3`         |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--gdo_min_counts`
+:::
+::: {.arg-desc role="cell"}
+Minimum number of counts per cell.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
 
+[Example]{.arg-key} `3`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--gdo_max_counts`
+:::
+::: {.arg-desc role="cell"}
+Minimum number of counts per cell.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Example]{.arg-key} `5000000`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--gdo_min_guides_per_cell`
+:::
+::: {.arg-desc role="cell"}
+Minimum of non-zero values per cell.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Example]{.arg-key} `200`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--gdo_max_guides_per_cell`
+:::
+::: {.arg-desc role="cell"}
+Maximum of non-zero values per cell.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Example]{.arg-key} `100000000`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--gdo_min_cells_per_guide`
+:::
+::: {.arg-desc role="cell"}
+Minimum of non-zero values per guide.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Example]{.arg-key} `3`
+:::
+::::
+:::::
 
 ### Cross-modality filtering
 
-|Name              |Description                                                                                                                                                                       |Attributes     |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--intersect_obs` |After per-modality filtering and multisample processing, remove observations that are not present in all processed modalities so that each modality shares the same set of cells. |`boolean_true` |
-
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--intersect_obs`
+:::
+::: {.arg-desc role="cell"}
+After per-modality filtering and multisample processing, remove observations
+that are not present in all processed modalities so that each modality shares
+the same set of cells.
+:::
+::: {.arg-attrs role="cell"}
+`boolean_true`
+:::
+::::
+:::::
 
 ### Highly variable features detection
 
-|Name                                       |Description                                                                                                                                                                                                    |Attributes                             |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--highly_variable_features_var_output`    |In which .var slot to store a boolean array corresponding to the highly variable genes.                                                                                                                        |`string`, default: `"filter_with_hvg"` |
-|`--highly_variable_features_obs_batch_key` |If specified, highly-variable genes are selected within each batch separately and merged. This simple  process avoids the selection of batch-specific genes and acts as a lightweight batch correction method. |`string`, default: `"sample_id"`       |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--highly_variable_features_var_output`
+:::
+::: {.arg-desc role="cell"}
+In which .var slot to store a boolean array corresponding to the highly variable genes.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Default]{.arg-key} `"filter_with_hvg"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--highly_variable_features_obs_batch_key`
+:::
+::: {.arg-desc role="cell"}
+If specified, highly-variable genes are selected within each batch separately and merged. This simple
+process avoids the selection of batch-specific genes and acts as a lightweight batch correction method.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"sample_id"`
+:::
+::::
+:::::
 
 ### Mitochondrial & Ribosomal Gene Detection
 
-|Name                                |Description                                                                                                                                                                                                                                                                               |Attributes                                  |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--var_gene_names`                  |.var column name to be used to detect mitochondrial/ribosomal genes instead of .var_names (default if not set). Gene names matching with the regex value from --mitochondrial_gene_regex or --ribosomal_gene_regex will be  identified as mitochondrial or ribosomal genes, respectively. |`string`, example: `"gene_symbol"`          |
-|`--var_name_mitochondrial_genes`    |In which .var slot to store a boolean array corresponding the mitochondrial genes.                                                                                                                                                                                                        |`string`                                    |
-|`--obs_name_mitochondrial_fraction` |When specified, write the fraction of counts originating from mitochondrial genes  (based on --mitochondrial_gene_regex) to an .obs column with the specified name. Requires --var_name_mitochondrial_genes.                                                                              |`string`                                    |
-|`--mitochondrial_gene_regex`        |Regex string that identifies mitochondrial genes from --var_gene_names. By default will detect human and mouse mitochondrial genes from a gene symbol.                                                                                                                                    |`string`, default: `"^[mM][tT]-"`           |
-|`--var_name_ribosomal_genes`        |In which .var slot to store a boolean array corresponding the ribosomal genes.                                                                                                                                                                                                            |`string`                                    |
-|`--obs_name_ribosomal_fraction`     |When specified, write the fraction of counts originating from ribosomal genes  (based on --ribosomal_gene_regex) to an .obs column with the specified name. Requires --var_name_ribosomal_genes.                                                                                          |`string`                                    |
-|`--ribosomal_gene_regex`            |Regex string that identifies ribosomal genes from --var_gene_names. By default will detect human and mouse ribosomal genes from a gene symbol.                                                                                                                                            |`string`, default: `"^[Mm]?[Rr][Pp][LlSs]"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--var_gene_names`
+:::
+::: {.arg-desc role="cell"}
+.var column name to be used to detect mitochondrial/ribosomal genes instead of .var_names (default if not set).
+Gene names matching with the regex value from --mitochondrial_gene_regex or --ribosomal_gene_regex will be
+identified as mitochondrial or ribosomal genes, respectively.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Example]{.arg-key} `"gene_symbol"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--var_name_mitochondrial_genes`
+:::
+::: {.arg-desc role="cell"}
+In which .var slot to store a boolean array corresponding the mitochondrial genes.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obs_name_mitochondrial_fraction`
+:::
+::: {.arg-desc role="cell"}
+When specified, write the fraction of counts originating from mitochondrial genes
+(based on --mitochondrial_gene_regex) to an .obs column with the specified name.
+Requires --var_name_mitochondrial_genes.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--mitochondrial_gene_regex`
+:::
+::: {.arg-desc role="cell"}
+Regex string that identifies mitochondrial genes from --var_gene_names.
+By default will detect human and mouse mitochondrial genes from a gene symbol.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"^[mM][tT]-"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--var_name_ribosomal_genes`
+:::
+::: {.arg-desc role="cell"}
+In which .var slot to store a boolean array corresponding the ribosomal genes.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obs_name_ribosomal_fraction`
+:::
+::: {.arg-desc role="cell"}
+When specified, write the fraction of counts originating from ribosomal genes
+(based on --ribosomal_gene_regex) to an .obs column with the specified name.
+Requires --var_name_ribosomal_genes.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--ribosomal_gene_regex`
+:::
+::: {.arg-desc role="cell"}
+Regex string that identifies ribosomal genes from --var_gene_names.
+By default will detect human and mouse ribosomal genes from a gene symbol.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"^[Mm]?[Rr][Pp][LlSs]"`
+:::
+::::
+:::::
 
 ### QC metrics calculation options
 
-|Name                |Description                                                                                                                                                                                                                                                                                                                                            |Attributes                                                               |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--var_qc_metrics`  |Keys to select a boolean (containing only True or False) column from .var. For each cell, calculate the proportion of total values for genes which are labeled 'True',  compared to the total sum of the values for all genes. Defaults to the combined values specified for --var_name_mitochondrial_genes and --highly_variable_features_var_output. |List of `string`, example: `"ercc,highly_variable"`, multiple_sep: `","` |
-|`--top_n_vars`      |Number of top vars to be used to calculate cumulative proportions. If not specified, proportions are not calculated. `--top_n_vars 20,50` finds cumulative proportion to the 20th and 50th most expressed vars.                                                                                                                                        |List of `integer`, default: `50, 100, 200, 500`, multiple_sep: `","`     |
-|`--log1p_transform` |Compute log1p-transformed versions of the calculated QC metrics. For each emitted metric column `<col>`, an additional column `log1p_<col>` is added containing `log1p(<col>)`. Mirrors scanpy's `log1p` flag.                                                                                                                                         |`boolean`, default: `TRUE`                                               |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--var_qc_metrics`
+:::
+::: {.arg-desc role="cell"}
+Keys to select a boolean (containing only True or False) column from .var.
+For each cell, calculate the proportion of total values for genes which are labeled 'True',
+compared to the total sum of the values for all genes. Defaults to the combined values specified for
+--var_name_mitochondrial_genes and --highly_variable_features_var_output.
+:::
+::: {.arg-attrs role="cell"}
+List of `string`
 
+[Example]{.arg-key} `"ercc,highly_variable"`
+
+[Separator]{.arg-key} `","`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--top_n_vars`
+:::
+::: {.arg-desc role="cell"}
+Number of top vars to be used to calculate cumulative proportions.
+If not specified, proportions are not calculated. `--top_n_vars 20,50` finds
+cumulative proportion to the 20th and 50th most expressed vars.
+:::
+::: {.arg-attrs role="cell"}
+List of `integer`
+
+[Default]{.arg-key} `50`, `100`, `200`, `500`
+
+[Separator]{.arg-key} `","`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--log1p_transform`
+:::
+::: {.arg-desc role="cell"}
+Compute log1p-transformed versions of the calculated QC metrics. For each emitted
+metric column `<col>`, an additional column `log1p_<col>` is added containing
+`log1p(<col>)`. Mirrors scanpy's `log1p` flag.
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
+
+[Default]{.arg-key} `true`
+:::
+::::
+:::::
 
 ### PCA options
 
-|Name              |Description                             |Attributes     |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--pca_overwrite` |Allow overwriting slots for PCA output. |`boolean_true` |
-
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--pca_overwrite`
+:::
+::: {.arg-desc role="cell"}
+Allow overwriting slots for PCA output.
+:::
+::: {.arg-attrs role="cell"}
+`boolean_true`
+:::
+::::
+:::::
 
 ### CLR options
 
-|Name         |Description                                |Attributes              |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--clr_axis` |Axis to perform the CLR transformation on. |`integer`, default: `0` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--clr_axis`
+:::
+::: {.arg-desc role="cell"}
+Axis to perform the CLR transformation on.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
 
+[Default]{.arg-key} `0`
+:::
+::::
+:::::
 
 ### RNA Scaling options
 
@@ -191,18 +857,120 @@ Options for enabling scaling of the log-normalized data to unit variance and zer
 The scaled data will be output a different layer and representation with reduced dimensions
 will be created and stored in addition to the non-scaled data.
 
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--rna_enable_scaling`
+:::
+::: {.arg-desc role="cell"}
+Enable scaling for the RNA modality.
+:::
+::: {.arg-attrs role="cell"}
+`boolean_true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--rna_scaling_output_layer`
+:::
+::: {.arg-desc role="cell"}
+Output layer where the scaled log-normalized data will be stored.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Default]{.arg-key} `"scaled"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--rna_scaling_pca_obsm_output`
+:::
+::: {.arg-desc role="cell"}
+Name of the .obsm key where the PCA representation of the log-normalized
+and scaled data is stored.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
-|Name                                     |Description                                                                                                                                                  |Attributes                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--rna_enable_scaling`                   |Enable scaling for the RNA modality.                                                                                                                         |`boolean_true`                             |
-|`--rna_scaling_output_layer`             |Output layer where the scaled log-normalized data will be stored.                                                                                            |`string`, default: `"scaled"`              |
-|`--rna_scaling_pca_obsm_output`          |Name of the .obsm key where the PCA representation of the log-normalized and scaled data is stored.                                                          |`string`, default: `"scaled_pca"`          |
-|`--rna_scaling_pca_loadings_varm_output` |Name of the .varm key where the PCA loadings of the log-normalized and scaled data is stored.                                                                |`string`, default: `"scaled_pca_loadings"` |
-|`--rna_scaling_pca_variance_uns_output`  |Name of the .uns key where the variance and variance ratio will be stored as a map. The map will contain two keys: variance and variance_ratio respectively. |`string`, default: `"scaled_pca_variance"` |
-|`--rna_scaling_umap_obsm_output`         |Name of the .obsm key where the UMAP representation of the log-normalized and scaled data is stored.                                                         |`string`, default: `"scaled_umap"`         |
-|`--rna_scaling_max_value`                |Clip (truncate) data to this value after scaling. If not specified, do not clip.                                                                             |`double`                                   |
-|`--rna_scaling_zero_center`              |If set, omit zero-centering variables, which allows to handle sparse input efficiently."                                                                     |`boolean_false`                            |
+[Default]{.arg-key} `"scaled_pca"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--rna_scaling_pca_loadings_varm_output`
+:::
+::: {.arg-desc role="cell"}
+Name of the .varm key where the PCA loadings of the log-normalized and scaled
+data is stored.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"scaled_pca_loadings"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--rna_scaling_pca_variance_uns_output`
+:::
+::: {.arg-desc role="cell"}
+Name of the .uns key where the variance and variance ratio will be stored as a map.
+The map will contain two keys: variance and variance_ratio respectively.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"scaled_pca_variance"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--rna_scaling_umap_obsm_output`
+:::
+::: {.arg-desc role="cell"}
+Name of the .obsm key where the UMAP representation of the log-normalized and scaled data is stored.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"scaled_umap"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--rna_scaling_max_value`
+:::
+::: {.arg-desc role="cell"}
+Clip (truncate) data to this value after scaling. If not specified, do not clip.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--rna_scaling_zero_center`
+:::
+::: {.arg-desc role="cell"}
+If set, omit zero-centering variables, which allows to handle sparse input efficiently."
+:::
+::: {.arg-attrs role="cell"}
+`boolean_false`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -226,12 +994,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/multiomics/process_samples).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/multiomics/process_samples);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -243,8 +1012,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

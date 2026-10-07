@@ -5,7 +5,7 @@ title: "filter_with_counts"
 subtitle: "openpipeline v4.2.0"
 toc: true
 namespace: "Filter"
-description: "Filter scRNA-seq data based on the primary QC metrics."
+description: "Filter scRNA-seq data based on the primary QC metrics. This is based on both the UMI counts, the gene counts and the mitochondrial genes (genes starting with mt/MT)."
 type: "module"
 latest: "true"
 ---
@@ -36,33 +36,222 @@ and the mitochondrial genes (genes starting with mt/MT)
 
 ### Inputs
 
-|Name         |Description                                                                                                  |Attributes                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`    |Input h5mu file                                                                                              |`file`, required, example: `"input.h5mu"` |
-|`--modality` |Which modality from the input MuData file to process.                                                        |`string`, default: `"rna"`                |
-|`--layer`    |Location of the count matrix. If specified, will be used to select a key from .layers, otherwise .X is used. |`string`, example: `"raw_counts"`         |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Input h5mu file
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
+[Example]{.arg-key} `"input.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--modality`
+:::
+::: {.arg-desc role="cell"}
+Which modality from the input MuData file to process.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"rna"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--layer`
+:::
+::: {.arg-desc role="cell"}
+Location of the count matrix. If specified, will be used to select a key from .layers,
+otherwise .X is used.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"raw_counts"`
+:::
+::::
+:::::
 
 ### Outputs
 
-|Name                   |Description                                                                                                    |Attributes                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output`             |Output h5mu file.                                                                                              |`file`, example: `"output.h5mu"`          |
-|`--do_subset`          |Whether to subset before storing the output.                                                                   |`boolean_true`                            |
-|`--obs_name_filter`    |In which .obs slot to store a boolean array corresponding to which observations should be removed.             |`string`, default: `"filter_with_counts"` |
-|`--var_name_filter`    |In which .var slot to store a boolean array corresponding to which variables should be removed.                |`string`, default: `"filter_with_counts"` |
-|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied. |`string`, example: `"gzip"`               |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Output h5mu file.
+:::
+::: {.arg-attrs role="cell"}
+`file`
 
+[Example]{.arg-key} `"output.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--do_subset`
+:::
+::: {.arg-desc role="cell"}
+Whether to subset before storing the output.
+:::
+::: {.arg-attrs role="cell"}
+`boolean_true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obs_name_filter`
+:::
+::: {.arg-desc role="cell"}
+In which .obs slot to store a boolean array corresponding to which observations should be removed.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"filter_with_counts"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--var_name_filter`
+:::
+::: {.arg-desc role="cell"}
+In which .var slot to store a boolean array corresponding to which variables should be removed.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"filter_with_counts"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_compression`
+:::
+::: {.arg-desc role="cell"}
+Compression format to use for the output AnnData and/or Mudata H5 files.
+By default no compression is applied.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"gzip"`
+
+[Choices]{.arg-key} `"gzip"`, `"lzf"`
+:::
+::::
+:::::
 
 ### Arguments
 
-|Name                   |Description                                 |Attributes                    |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--min_counts`         |Minimum number of counts captured per cell. |`integer`, example: `200`     |
-|`--max_counts`         |Maximum number of counts captured per cell. |`integer`, example: `5000000` |
-|`--min_genes_per_cell` |Minimum of non-zero values per cell.        |`integer`, example: `200`     |
-|`--max_genes_per_cell` |Maximum of non-zero values per cell.        |`integer`, example: `1500000` |
-|`--min_cells_per_gene` |Minimum of non-zero values per gene.        |`integer`, example: `3`       |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--min_counts`
+:::
+::: {.arg-desc role="cell"}
+Minimum number of counts captured per cell.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Example]{.arg-key} `200`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--max_counts`
+:::
+::: {.arg-desc role="cell"}
+Maximum number of counts captured per cell.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Example]{.arg-key} `5000000`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--min_genes_per_cell`
+:::
+::: {.arg-desc role="cell"}
+Minimum of non-zero values per cell.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Example]{.arg-key} `200`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--max_genes_per_cell`
+:::
+::: {.arg-desc role="cell"}
+Maximum of non-zero values per cell.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Example]{.arg-key} `1500000`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--min_cells_per_gene`
+:::
+::: {.arg-desc role="cell"}
+Minimum of non-zero values per gene.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Example]{.arg-key} `3`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -88,12 +277,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/filter/filter_with_counts).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/filter/filter_with_counts);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -105,8 +295,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

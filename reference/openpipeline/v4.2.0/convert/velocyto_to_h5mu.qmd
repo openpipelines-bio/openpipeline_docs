@@ -31,27 +31,152 @@ If an input h5mu file is also provided, the velocity
 h5ad object will get added to that h5mu instead.
 
 
+::: {.ref-description}
+If an input h5mu file is also provided, the velocity
+h5ad object will get added to that h5mu instead.
+:::
+
 
 ## Argument groups
 
 ### Inputs
 
-|Name           |Description                                                                        |Attributes                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input_loom` |Path to the input loom file.                                                       |`file`, required, example: `"input.loom"` |
-|`--input_h5mu` |If a MuData file is provided, the velocity h5ad object will be added to this file. |`file`, example: `"input.h5mu"`           |
-|`--modality`   |The name of the modality to operate on.                                            |`string`, default: `"rna_velocity"`       |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_loom`
+:::
+::: {.arg-desc role="cell"}
+Path to the input loom file.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
+[Example]{.arg-key} `"input.loom"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_h5mu`
+:::
+::: {.arg-desc role="cell"}
+If a MuData file is provided, the velocity h5ad object will be added to this file.
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"input.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--modality`
+:::
+::: {.arg-desc role="cell"}
+The name of the modality to operate on.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"rna_velocity"`
+:::
+::::
+:::::
 
 ### Outputs
 
-|Name                   |Description                                                                                                    |Attributes                            |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output`             |Path to the output MuData file.                                                                                |`file`, example: `"output.h5mu"`      |
-|`--layer_spliced`      |Output layer for the spliced reads.                                                                            |`string`, default: `"velo_spliced"`   |
-|`--layer_unspliced`    |Output layer for the unspliced reads.                                                                          |`string`, default: `"velo_unspliced"` |
-|`--layer_ambiguous`    |Output layer for the ambiguous reads.                                                                          |`string`, default: `"velo_ambiguous"` |
-|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied. |`string`, example: `"gzip"`           |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Path to the output MuData file.
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"output.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--layer_spliced`
+:::
+::: {.arg-desc role="cell"}
+Output layer for the spliced reads.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"velo_spliced"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--layer_unspliced`
+:::
+::: {.arg-desc role="cell"}
+Output layer for the unspliced reads.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"velo_unspliced"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--layer_ambiguous`
+:::
+::: {.arg-desc role="cell"}
+Output layer for the ambiguous reads.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"velo_ambiguous"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_compression`
+:::
+::: {.arg-desc role="cell"}
+Compression format to use for the output AnnData and/or Mudata H5 files.
+By default no compression is applied.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"gzip"`
+
+[Choices]{.arg-key} `"gzip"`, `"lzf"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -79,12 +204,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/convert/velocyto_to_h5mu).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/convert/velocyto_to_h5mu);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -96,8 +222,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

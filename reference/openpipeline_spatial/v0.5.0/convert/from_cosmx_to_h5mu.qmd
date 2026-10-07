@@ -31,16 +31,86 @@ Namespace: `convert`
 containing the images
 
 
+::: {.ref-description}
+- `<dataset_id>_exprMat_file.csv`: File containing the counts.
+  - `<dataset_id>`_metadata_file: File containing the spatial coordinates and additional cell-level metadata.
+  - `<dataset_id>_fov_file.csv`: File containing the coordinates of all the fields of view.
+
+In addition to reading the regular Nanostring output, it loads CellComposite and CellLabels directories, if present,
+containing the images.
+:::
+
 ## Argument group
 
 ### Arguments
 
-|Name                   |Description                                                        |Attributes                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`              |Input folder. Must contain the output from a NanoString CosMx run. |`file`, required, example: `"cosmx_data"` |
-|`--modality`           |                                                                   |`string`, default: `"rna"`                |
-|`--output`             |The output h5mu file.                                              |`file`, example: `"output.h5mu"`          |
-|`--output_compression` |                                                                   |`string`, example: `"gzip"`               |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Input folder. Must contain the output from a NanoString CosMx run.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"cosmx_data"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--modality`
+:::
+::: {.arg-desc role="cell"}
+
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"rna"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+The output h5mu file.
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"output.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_compression`
+:::
+::: {.arg-desc role="cell"}
+
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"gzip"`
+
+[Choices]{.arg-key} `"gzip"`, `"lzf"`
+:::
+::::
+:::::
 
 ## Authors
 

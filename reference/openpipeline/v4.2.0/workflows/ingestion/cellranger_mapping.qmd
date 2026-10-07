@@ -51,32 +51,227 @@ flowchart TB
 
 ### Inputs
 
-|Name          |Description                                                                            |Attributes                                                                                                                   |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--id`        |ID of the sample.                                                                      |`string`, required, example: `"foo"`                                                                                         |
-|`--input`     |The fastq.gz files to align. Can also be a single directory containing fastq.gz files. |List of `file`, required, example: `"sample_S1_L001_R1_001.fastq.gz", "sample_S1_L001_R2_001.fastq.gz"`, multiple_sep: `";"` |
-|`--reference` |The path to Cell Ranger reference tar.gz file.                                         |`file`, required, example: `"reference.tar.gz"`                                                                              |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--id`
+:::
+::: {.arg-desc role="cell"}
+ID of the sample.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
 
+[Example]{.arg-key} `"foo"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+The fastq.gz files to align. Can also be a single directory containing fastq.gz files.
+:::
+::: {.arg-attrs role="cell"}
+List of `file` [required]{.arg-required}
+
+[Example]{.arg-key} `"sample_S1_L001_R1_001.fastq.gz"`, `"sample_S1_L001_R2_001.fastq.gz"`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference`
+:::
+::: {.arg-desc role="cell"}
+The path to Cell Ranger reference tar.gz file.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"reference.tar.gz"`
+:::
+::::
+:::::
 
 ### Outputs
 
-|Name            |Description                                                       |Attributes                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output_raw`  |Location where the output folder from Cell Ranger will be stored. |`file`, required, example: `"output_dir"`  |
-|`--output_h5mu` |The output from Cell Ranger, converted to h5mu.                   |`file`, required, example: `"output.h5mu"` |
-|`--uns_metrics` |Name of the .uns slot under which to QC metrics (if any).         |`string`, default: `"metrics_summary"`     |
-|`--output_type` |Which Cell Ranger output to use for converting to h5mu.           |`string`, default: `"raw"`                 |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_raw`
+:::
+::: {.arg-desc role="cell"}
+Location where the output folder from Cell Ranger will be stored.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
+[Example]{.arg-key} `"output_dir"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_h5mu`
+:::
+::: {.arg-desc role="cell"}
+The output from Cell Ranger, converted to h5mu.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"output.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--uns_metrics`
+:::
+::: {.arg-desc role="cell"}
+Name of the .uns slot under which to QC metrics (if any).
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"metrics_summary"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_type`
+:::
+::: {.arg-desc role="cell"}
+Which Cell Ranger output to use for converting to h5mu.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"raw"`
+
+[Choices]{.arg-key} `"raw"`, `"filtered"`
+:::
+::::
+:::::
 
 ### Cell Ranger arguments
 
-|Name                   |Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |Attributes                  |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--expect_cells`       |Expected number of recovered cells, used as input to cell calling algorithm.                                                                                                                                                                                                                                                                                                                                                                                                                                      |`integer`, example: `3000`  |
-|`--chemistry`          |Assay configuration. - auto: autodetect mode - threeprime: Single Cell 3' - fiveprime: Single Cell 5' - SC3Pv1: Single Cell 3' v1 - SC3Pv2: Single Cell 3' v2 - SC3Pv3: Single Cell 3' v3 - SC3Pv3LT: Single Cell 3' v3 LT - SC3Pv3HT: Single Cell 3' v3 HT - SC5P-PE: Single Cell 5' paired-end - SC5P-R2: Single Cell 5' R2-only - SC-FB: Single Cell Antibody-only 3' v2 or 5' See https://kb.10xgenomics.com/hc/en-us/articles/115003764132-How-does-Cell-Ranger-auto-detect-chemistry- for more information. |`string`, default: `"auto"` |
-|`--secondary_analysis` |Whether or not to run the secondary analysis e.g. clustering.                                                                                                                                                                                                                                                                                                                                                                                                                                                     |`boolean`, default: `FALSE` |
-|`--generate_bam`       |Whether to generate a BAM file.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |`boolean`, default: `TRUE`  |
-|`--include_introns`    |Include intronic reads in count (default=true unless --target-panel is specified in which case default=false)                                                                                                                                                                                                                                                                                                                                                                                                     |`boolean`, default: `TRUE`  |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--expect_cells`
+:::
+::: {.arg-desc role="cell"}
+Expected number of recovered cells, used as input to cell calling algorithm.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Example]{.arg-key} `3000`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--chemistry`
+:::
+::: {.arg-desc role="cell"}
+Assay configuration.
+
+- auto: autodetect mode
+- threeprime: Single Cell 3'
+- fiveprime: Single Cell 5'
+- SC3Pv1: Single Cell 3' v1
+- SC3Pv2: Single Cell 3' v2
+- SC3Pv3: Single Cell 3' v3
+- SC3Pv3LT: Single Cell 3' v3 LT
+- SC3Pv3HT: Single Cell 3' v3 HT
+- SC5P-PE: Single Cell 5' paired-end
+- SC5P-R2: Single Cell 5' R2-only
+- SC-FB: Single Cell Antibody-only 3' v2 or 5'
+
+See https://kb.10xgenomics.com/hc/en-us/articles/115003764132-How-does-Cell-Ranger-auto-detect-chemistry- for more information.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"auto"`
+
+[Choices]{.arg-key} `"auto"`, `"threeprime"`, `"fiveprime"`, `"SC3Pv1"`, `"SC3Pv2"`, `"SC3Pv3"`, `"SC3Pv3LT"`, `"SC3Pv3HT"`, `"SC5P-PE"`, `"SC5P-R2"`, `"SC-FB"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--secondary_analysis`
+:::
+::: {.arg-desc role="cell"}
+Whether or not to run the secondary analysis e.g. clustering.
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
+
+[Default]{.arg-key} `false`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--generate_bam`
+:::
+::: {.arg-desc role="cell"}
+Whether to generate a BAM file.
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
+
+[Default]{.arg-key} `true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--include_introns`
+:::
+::: {.arg-desc role="cell"}
+Include intronic reads in count (default=true unless --target-panel is specified in which case default=false)
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
+
+[Default]{.arg-key} `true`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -104,12 +299,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/ingestion/cellranger_mapping).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/ingestion/cellranger_mapping);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -121,8 +317,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

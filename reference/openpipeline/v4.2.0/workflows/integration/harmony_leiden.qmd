@@ -57,63 +57,367 @@ flowchart TB
 
 ### Inputs
 
-|Name                          |Description                                                                             |Attributes                              |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`                     |Path to the sample. Mutually exclusive with the 'input_uri' argument.                   |`file`, example: `"dataset.h5mu"`       |
-|`--tiledb_input_uri`          |A URI containing the TileDB-SOMA objects. Mutually exclusive with the 'input' argument. |`string`, example: `"s3://bucket/path"` |
-|`--tiledb_s3_region`          |Region where the TileDB-SOMA database is hosted.                                        |`string`, example: `"us-west-2"`        |
-|`--tiledb_endpoint`           |Custom endpoint to use to connect to S3                                                 |`string`                                |
-|`--tiledb_s3_no_sign_request` |Do not sign S3 requests. Credentials will not be loaded if this argument is provided.   |`boolean`, default: `FALSE`             |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Path to the sample. Mutually exclusive with the 'input_uri' argument.
+:::
+::: {.arg-attrs role="cell"}
+`file`
 
+[Example]{.arg-key} `"dataset.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--tiledb_input_uri`
+:::
+::: {.arg-desc role="cell"}
+A URI containing the TileDB-SOMA objects. Mutually exclusive with the 'input' argument.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"s3://bucket/path"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--tiledb_s3_region`
+:::
+::: {.arg-desc role="cell"}
+Region where the TileDB-SOMA database is hosted.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"us-west-2"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--tiledb_endpoint`
+:::
+::: {.arg-desc role="cell"}
+Custom endpoint to use to connect to S3
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--tiledb_s3_no_sign_request`
+:::
+::: {.arg-desc role="cell"}
+Do not sign S3 requests. Credentials will not be loaded if this argument is provided.
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
+
+[Default]{.arg-key} `false`
+:::
+::::
+:::::
 
 ### Input slots
 
-|Name         |Description                                                                           |Attributes                            |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--layer`    |use specified layer for expression values instead of the .X object from the modality. |`string`, default: `"log_normalized"` |
-|`--modality` |Which modality to process.                                                            |`string`, default: `"rna"`            |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--layer`
+:::
+::: {.arg-desc role="cell"}
+use specified layer for expression values instead of the .X object from the modality.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Default]{.arg-key} `"log_normalized"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--modality`
+:::
+::: {.arg-desc role="cell"}
+Which modality to process.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"rna"`
+:::
+::::
+:::::
 
 ### Outputs
 
-|Name              |Description                                                                                          |Attributes                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output`        |Destination path to the output.                                                                      |`file`, required, example: `"output.h5mu"` |
-|`--output_tiledb` |Output the TileDB database to the specified directory instead of adding it to the existing database. |`file`                                     |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Destination path to the output.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
+[Example]{.arg-key} `"output.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_tiledb`
+:::
+::: {.arg-desc role="cell"}
+Output the TileDB database to the specified directory instead of adding it to the existing database.
+:::
+::: {.arg-attrs role="cell"}
+`file`
+:::
+::::
+:::::
 
 ### Neighbour calculation
 
-|Name                             |Description                                                                             |Attributes                                                  |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--uns_neighbors`                |In which .uns slot to store various neighbor output objects.                            |`string`, default: `"harmonypy_integration_neighbors"`      |
-|`--obsp_neighbor_distances`      |In which .obsp slot to store the distance matrix between the resulting neighbors.       |`string`, default: `"harmonypy_integration_distances"`      |
-|`--obsp_neighbor_connectivities` |In which .obsp slot to store the connectivities matrix between the resulting neighbors. |`string`, default: `"harmonypy_integration_connectivities"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--uns_neighbors`
+:::
+::: {.arg-desc role="cell"}
+In which .uns slot to store various neighbor output objects.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Default]{.arg-key} `"harmonypy_integration_neighbors"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obsp_neighbor_distances`
+:::
+::: {.arg-desc role="cell"}
+In which .obsp slot to store the distance matrix between the resulting neighbors.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"harmonypy_integration_distances"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obsp_neighbor_connectivities`
+:::
+::: {.arg-desc role="cell"}
+In which .obsp slot to store the connectivities matrix between the resulting neighbors.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"harmonypy_integration_connectivities"`
+:::
+::::
+:::::
 
 ### Harmony integration options
 
-|Name                |Description                                                                                                                                                                                                                                                                                    |Attributes                                                                    |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--embedding`       |Embedding to use as input                                                                                                                                                                                                                                                                      |`string`, default: `"X_pca"`                                                  |
-|`--obsm_integrated` |In which .obsm slot to store the resulting integrated embedding.                                                                                                                                                                                                                               |`string`, default: `"X_pca_integrated"`                                       |
-|`--obs_covariates`  |The .obs field(s) that define the covariate(s) to regress out.                                                                                                                                                                                                                                 |List of `string`, required, example: `"batch", "sample"`, multiple_sep: `";"` |
-|`--theta`           |Diversity clustering penalty parameter. Can be set as a single value for all batch observations or as multiple values, one for each observation in the batches defined by --obs_covariates. theta=0 does not encourage any diversity. Larger values of theta result in more diverse clusters." |List of `double`, default: `2`, multiple_sep: `";"`                           |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--embedding`
+:::
+::: {.arg-desc role="cell"}
+Embedding to use as input
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Default]{.arg-key} `"X_pca"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obsm_integrated`
+:::
+::: {.arg-desc role="cell"}
+In which .obsm slot to store the resulting integrated embedding.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"X_pca_integrated"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obs_covariates`
+:::
+::: {.arg-desc role="cell"}
+The .obs field(s) that define the covariate(s) to regress out.
+:::
+::: {.arg-attrs role="cell"}
+List of `string` [required]{.arg-required}
+
+[Example]{.arg-key} `"batch"`, `"sample"`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--theta`
+:::
+::: {.arg-desc role="cell"}
+Diversity clustering penalty parameter. Can be set as a single value for all batch observations or as multiple values, one for each observation in the batches defined by --obs_covariates. theta=0 does not encourage any diversity. Larger values of theta
+result in more diverse clusters."
+:::
+::: {.arg-attrs role="cell"}
+List of `double`
+
+[Default]{.arg-key} `2.0`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::::
 
 ### Clustering options
 
-|Name                  |Description                                                                                                                                                                                                                                                        |Attributes                                          |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--obs_cluster`       |Prefix for the .obs keys under which to add the cluster labels. Newly created columns in .obs will  be created from the specified value for '--obs_cluster' suffixed with an underscore and one of the resolutions resolutions specified in '--leiden_resolution'. |`string`, default: `"harmony_integration_leiden"`   |
-|`--leiden_resolution` |Control the coarseness of the clustering. Higher values lead to more clusters.                                                                                                                                                                                     |List of `double`, default: `1`, multiple_sep: `";"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obs_cluster`
+:::
+::: {.arg-desc role="cell"}
+Prefix for the .obs keys under which to add the cluster labels. Newly created columns in .obs will
+be created from the specified value for '--obs_cluster' suffixed with an underscore and one of the resolutions
+resolutions specified in '--leiden_resolution'.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Default]{.arg-key} `"harmony_integration_leiden"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--leiden_resolution`
+:::
+::: {.arg-desc role="cell"}
+Control the coarseness of the clustering. Higher values lead to more clusters.
+:::
+::: {.arg-attrs role="cell"}
+List of `double`
+
+[Default]{.arg-key} `1.0`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::::
 
 ### Umap options
 
-|Name          |Description                                                |Attributes                                   |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--obsm_umap` |In which .obsm slot to store the resulting UMAP embedding. |`string`, default: `"X_leiden_harmony_umap"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obsm_umap`
+:::
+::: {.arg-desc role="cell"}
+In which .obsm slot to store the resulting UMAP embedding.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"X_leiden_harmony_umap"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -137,12 +441,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/integration/harmony_leiden).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/integration/harmony_leiden);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -154,8 +459,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

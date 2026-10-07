@@ -33,43 +33,329 @@ For example, you can filter out observations with total UMI counts in the bottom
 top 5% (quantile > 0.95), or retain an intermediate range (0.1 < quantile < 0.9).
 
 
+::: {.ref-description}
+This component removes observations or features that fall outside specified quantile ranges in .obs or .var. columns.
+
+For example, you can filter out observations with total UMI counts in the bottom 5% (quantile < 0.05) or
+top 5% (quantile > 0.95), or retain an intermediate range (0.1 < quantile < 0.9).
+:::
+
 
 ## Argument groups
 
 ### Inputs
 
-|Name           |Description                                                                                                            |Attributes                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`      |Input h5mu file                                                                                                        |`file`, required, example: `"input.h5mu"` |
-|`--modality`   |Which modality from the input MuData file to process.                                                                  |`string`, default: `"rna"`                |
-|`--obs_column` |Name of the column in .obs to use for quantile-based filtering. If not specified, no .obs filtering will be performed. |`string`, example: `"total_counts"`       |
-|`--var_column` |Name of the column in .var to use for quantile-based filtering. If not specified, no .var filtering will be performed. |`string`, example: `"mean_counts"`        |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Input h5mu file
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
+[Example]{.arg-key} `"input.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--modality`
+:::
+::: {.arg-desc role="cell"}
+Which modality from the input MuData file to process.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"rna"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obs_column`
+:::
+::: {.arg-desc role="cell"}
+Name of the column in .obs to use for quantile-based filtering.
+If not specified, no .obs filtering will be performed.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"total_counts"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--var_column`
+:::
+::: {.arg-desc role="cell"}
+Name of the column in .var to use for quantile-based filtering.
+If not specified, no .var filtering will be performed.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"mean_counts"`
+:::
+::::
+:::::
 
 ### Filters
 
-|Name                        |Description                                                                                                                                                                                                                                                   |Attributes                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--do_subset`               |Whether to subset before storing the output.                                                                                                                                                                                                                  |`boolean_true`             |
-|`--obs_log1p_transform`     |Apply log1p transformation to the obs_column values before calculating quantiles. The transformed values will be stored as 'log1p_{obs_column}' in .obs. This is useful for highly skewed data where log transformation can improve quantile-based filtering. |`boolean`, default: `TRUE` |
-|`--obs_min_quantile`        |Minimum quantile threshold for .obs filtering. Observations with values below this quantile will be removed. Value should be between 0.0 and 1.0.                                                                                                             |`double`, example: `0.05`  |
-|`--obs_max_quantile`        |Maximum quantile threshold for .obs filtering. Observations with values above this quantile will be removed. Value should be between 0.0 and 1.0.                                                                                                             |`double`, example: `0.95`  |
-|`--var_log1p_transform`     |Apply log1p transformation to the var_column values before calculating quantiles. The transformed values will be stored as 'log1p_{var_column}' in .var. This is useful for highly skewed data where log transformation can improve quantile-based filtering. |`boolean`, default: `TRUE` |
-|`--var_min_quantile`        |Minimum quantile threshold for .var filtering. Features with values below this quantile will be removed. Value should be between 0.0 and 1.0.                                                                                                                 |`double`, example: `0.01`  |
-|`--var_max_quantile`        |Maximum quantile threshold for .var filtering. Features with values above this quantile will be removed. Value should be between 0.0 and 1.0.                                                                                                                 |`double`, example: `0.99`  |
-|`--min_values_for_quantile` |Minimum number of values required to apply quantile filtering. If fewer values are present, quantile filtering will be skipped to prevent data loss.                                                                                                          |`integer`, default: `10`   |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--do_subset`
+:::
+::: {.arg-desc role="cell"}
+Whether to subset before storing the output.
+:::
+::: {.arg-attrs role="cell"}
+`boolean_true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obs_log1p_transform`
+:::
+::: {.arg-desc role="cell"}
+Apply log1p transformation to the obs_column values before calculating quantiles.
+The transformed values will be stored as 'log1p_{obs_column}' in .obs.
+This is useful for highly skewed data where log transformation can improve quantile-based filtering.
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
 
+[Default]{.arg-key} `true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obs_min_quantile`
+:::
+::: {.arg-desc role="cell"}
+Minimum quantile threshold for .obs filtering. Observations with values below this quantile will be removed.
+Value should be between 0.0 and 1.0.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Example]{.arg-key} `0.05`
+
+[Min]{.arg-key} `0.0`
+
+[Max]{.arg-key} `1.0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obs_max_quantile`
+:::
+::: {.arg-desc role="cell"}
+Maximum quantile threshold for .obs filtering. Observations with values above this quantile will be removed.
+Value should be between 0.0 and 1.0.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Example]{.arg-key} `0.95`
+
+[Min]{.arg-key} `0.0`
+
+[Max]{.arg-key} `1.0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--var_log1p_transform`
+:::
+::: {.arg-desc role="cell"}
+Apply log1p transformation to the var_column values before calculating quantiles.
+The transformed values will be stored as 'log1p_{var_column}' in .var.
+This is useful for highly skewed data where log transformation can improve quantile-based filtering.
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
+
+[Default]{.arg-key} `true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--var_min_quantile`
+:::
+::: {.arg-desc role="cell"}
+Minimum quantile threshold for .var filtering. Features with values below this quantile will be removed.
+Value should be between 0.0 and 1.0.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Example]{.arg-key} `0.01`
+
+[Min]{.arg-key} `0.0`
+
+[Max]{.arg-key} `1.0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--var_max_quantile`
+:::
+::: {.arg-desc role="cell"}
+Maximum quantile threshold for .var filtering. Features with values above this quantile will be removed.
+Value should be between 0.0 and 1.0.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Example]{.arg-key} `0.99`
+
+[Min]{.arg-key} `0.0`
+
+[Max]{.arg-key} `1.0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--min_values_for_quantile`
+:::
+::: {.arg-desc role="cell"}
+Minimum number of values required to apply quantile filtering. If fewer values are present,
+quantile filtering will be skipped to prevent data loss.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `10`
+
+[Min]{.arg-key} `2`
+:::
+::::
+:::::
 
 ### Outputs
 
-|Name                   |Description                                                                                                               |Attributes                                  |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output`             |Output h5mu file.                                                                                                         |`file`, example: `"output.h5mu"`            |
-|`--obs_name_filter`    |In which .obs slot to store a boolean array corresponding to which observations should be removed.                        |`string`, default: `"filter_with_quantile"` |
-|`--obs_log1p_column`   |Name for the column where log1p transformed obs values will be stored. If not provided, defaults to 'log1p_{obs_column}'. |`string`, example: `"log1p_total_counts"`   |
-|`--var_log1p_column`   |Name for the column where log1p transformed var values will be stored. If not provided, defaults to 'log1p_{var_column}'. |`string`, example: `"log1p_total_counts"`   |
-|`--var_name_filter`    |In which .var slot to store a boolean array corresponding to which variables should be removed.                           |`string`, default: `"filter_with_quantile"` |
-|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied.            |`string`, example: `"gzip"`                 |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Output h5mu file.
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"output.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obs_name_filter`
+:::
+::: {.arg-desc role="cell"}
+In which .obs slot to store a boolean array corresponding to which observations should be removed.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"filter_with_quantile"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obs_log1p_column`
+:::
+::: {.arg-desc role="cell"}
+Name for the column where log1p transformed obs values will be stored.
+If not provided, defaults to 'log1p_{obs_column}'.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"log1p_total_counts"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--var_log1p_column`
+:::
+::: {.arg-desc role="cell"}
+Name for the column where log1p transformed var values will be stored.
+If not provided, defaults to 'log1p_{var_column}'.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"log1p_total_counts"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--var_name_filter`
+:::
+::: {.arg-desc role="cell"}
+In which .var slot to store a boolean array corresponding to which variables should be removed.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"filter_with_quantile"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_compression`
+:::
+::: {.arg-desc role="cell"}
+Compression format to use for the output AnnData and/or Mudata H5 files.
+By default no compression is applied.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"gzip"`
+
+[Choices]{.arg-key} `"gzip"`, `"lzf"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -93,12 +379,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/filter/filter_with_quantile).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/filter/filter_with_quantile);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -110,8 +397,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

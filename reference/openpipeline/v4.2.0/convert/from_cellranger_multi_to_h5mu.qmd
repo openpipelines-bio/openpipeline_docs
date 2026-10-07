@@ -5,7 +5,7 @@ title: "from_cellranger_multi_to_h5mu"
 subtitle: "openpipeline v4.2.0"
 toc: true
 namespace: "Convert"
-description: "Converts the output from cellranger multi to a single .h5mu file."
+description: "Converts the output from cellranger multi to a single .h5mu file. By default, will map the following library type names to modality names:"
 type: "module"
 latest: "true"
 ---
@@ -43,18 +43,111 @@ underscores to generate the modality name.
 Currently does not allow parsing the output from cell barcode demultiplexing.
 
 
+::: {.ref-description}
+- Gene Expression: rna
+  - Peaks: atac
+  - Antibody Capture: prot
+  - VDJ: vdj
+  - VDJ-T: vdj_t
+  - VDJ-B: vdj_b
+  - CRISPR Guide Capture: crispr
+  - Multiplexing Capture: hashing
+
+Other library types have their whitepace removed and dashes replaced by
+underscores to generate the modality name.
+
+Currently does not allow parsing the output from cell barcode demultiplexing.
+:::
+
 
 ## Argument group
 
 ### Arguments
 
-|Name                   |Description                                                                                                         |Attributes                                                     |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`              |Input folder. Must contain the output from a cellranger multi run.                                                  |`file`, required, example: `"input_dir_containing_modalities"` |
-|`--output`             |Locations for the output files. Must contain a wildcard (*) character, which will be replaced with the sample name. |List of `file`, example: `"*.h5mu"`, multiple_sep: `";"`       |
-|`--sample_csv`         |CSV file describing the sample name per output file                                                                 |`file`, example: `"samples.csv"`                               |
-|`--uns_metrics`        |Name of the .uns slot under which to QC metrics (if any).                                                           |`string`, default: `"metrics_cellranger"`                      |
-|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied.      |`string`, example: `"gzip"`                                    |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Input folder. Must contain the output from a cellranger multi run.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"input_dir_containing_modalities"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Locations for the output files. Must contain a wildcard (*) character,
+which will be replaced with the sample name.
+:::
+::: {.arg-attrs role="cell"}
+List of `file`
+
+[Example]{.arg-key} `"*.h5mu"`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--sample_csv`
+:::
+::: {.arg-desc role="cell"}
+CSV file describing the sample name per output file
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"samples.csv"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--uns_metrics`
+:::
+::: {.arg-desc role="cell"}
+Name of the .uns slot under which to QC metrics (if any).
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"metrics_cellranger"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_compression`
+:::
+::: {.arg-desc role="cell"}
+Compression format to use for the output AnnData and/or Mudata H5 files.
+By default no compression is applied.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"gzip"`
+
+[Choices]{.arg-key} `"gzip"`, `"lzf"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -78,12 +171,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/convert/from_cellranger_multi_to_h5mu).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/convert/from_cellranger_multi_to_h5mu);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -95,8 +189,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

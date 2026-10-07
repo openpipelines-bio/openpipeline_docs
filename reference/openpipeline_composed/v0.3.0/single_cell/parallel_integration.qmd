@@ -30,6 +30,10 @@ Namespace: `single_cell`
 Available integration methods: Harmony, scVI, Scanorama, BBKNN.
 
 
+::: {.ref-description}
+Available integration methods: Harmony, scVI, Scanorama, BBKNN.
+:::
+
 ## Visualisation
 
 ```{mermaid}
@@ -58,75 +62,529 @@ flowchart TB
 
 ### Inputs
 
-|Name                            |Description                                                                                                                                                                                                        |Attributes                                                    |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--id`                          |ID of the sample.                                                                                                                                                                                                  |`string`, required, example: `"foo"`                          |
-|`--input`                       |Input preprocessed h5mu file. Must contain a log-normalized layer and a PCA embedding (or the embedding specified via --obsm_embedding).                                                                           |`file`, required, example: `"input.h5mu"`                     |
-|`--modality`                    |Which modality to process.                                                                                                                                                                                         |`string`, default: `"rna"`                                    |
-|`--layer_log_normalized_counts` |Layer with the log-normalized counts. Read by the methods that operate on normalized expression: harmony, scanorama and bbknn.                                                                                     |`string`, default: `"log_normalized"`                         |
-|`--layer_raw_counts`            |Layer with the raw (integer) counts. Read by scVI, which requires raw counts rather than log-normalized data. If left unset, scVI reads the counts from the modality's .X.                                         |`string`                                                      |
-|`--obsm_embedding`              |.obsm slot containing the embedding to use as input for methods that require a pre-computed dimensionality reduction (harmony, scanorama, bbknn).                                                                  |`string`, default: `"X_pca"`                                  |
-|`--obs_batch`                   |.obs column discriminating between batches. Read by scVI, scanorama and bbknn.                                                                                                                                     |`string`, default: `"sample_id"`                              |
-|`--obs_covariates`              |.obs column(s) defining the covariates to regress out. Read by harmony.                                                                                                                                            |List of `string`, default: `"sample_id"`, multiple_sep: `";"` |
-|`--obs_categorical_covariates`  |.obs column(s) with categorical covariates for scVI to correct for in addition to --obs_batch. Treated as nuisance factors, so do not use them for biological signal you want to keep. None by default.            |List of `string`, multiple_sep: `";"`                         |
-|`--obs_numerical_covariates`    |.obs column(s) with continuous (numerical) covariates for scVI to correct for in addition to --obs_batch. Treated as nuisance factors, so do not use them for biological signal you want to keep. None by default. |List of `string`, multiple_sep: `";"`                         |
-|`--var_input`                   |.var column containing highly variable genes to subset to. Read by scVI. By default, scVI uses all genes.                                                                                                          |`string`                                                      |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--id`
+:::
+::: {.arg-desc role="cell"}
+ID of the sample.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
 
+[Example]{.arg-key} `"foo"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Input preprocessed h5mu file. Must contain a log-normalized layer and
+a PCA embedding (or the embedding specified via --obsm_embedding).
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"input.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--modality`
+:::
+::: {.arg-desc role="cell"}
+Which modality to process.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"rna"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--layer_log_normalized_counts`
+:::
+::: {.arg-desc role="cell"}
+Layer with the log-normalized counts. Read by the methods that operate
+on normalized expression: harmony, scanorama and bbknn.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"log_normalized"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--layer_raw_counts`
+:::
+::: {.arg-desc role="cell"}
+Layer with the raw (integer) counts. Read by scVI, which requires raw
+counts rather than log-normalized data. If left unset, scVI reads the
+counts from the modality's .X.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obsm_embedding`
+:::
+::: {.arg-desc role="cell"}
+.obsm slot containing the embedding to use as input for methods that
+require a pre-computed dimensionality reduction (harmony, scanorama, bbknn).
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"X_pca"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obs_batch`
+:::
+::: {.arg-desc role="cell"}
+.obs column discriminating between batches. Read by scVI, scanorama and bbknn.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"sample_id"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obs_covariates`
+:::
+::: {.arg-desc role="cell"}
+.obs column(s) defining the covariates to regress out. Read by harmony.
+:::
+::: {.arg-attrs role="cell"}
+List of `string`
+
+[Default]{.arg-key} `"sample_id"`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obs_categorical_covariates`
+:::
+::: {.arg-desc role="cell"}
+.obs column(s) with categorical covariates for scVI to correct for in
+addition to --obs_batch. Treated as nuisance factors, so do not use them
+for biological signal you want to keep. None by default.
+:::
+::: {.arg-attrs role="cell"}
+List of `string`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obs_numerical_covariates`
+:::
+::: {.arg-desc role="cell"}
+.obs column(s) with continuous (numerical) covariates for scVI to correct
+for in addition to --obs_batch. Treated as nuisance factors, so do not use
+them for biological signal you want to keep. None by default.
+:::
+::: {.arg-attrs role="cell"}
+List of `string`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--var_input`
+:::
+::: {.arg-desc role="cell"}
+.var column containing highly variable genes to subset to. Read by scVI.
+By default, scVI uses all genes.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::::
 
 ### Methods
 
-|Name                    |Description                             |Attributes                                                                    |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--integration_methods` |Integration methods to run in parallel. |List of `string`, required, example: `"harmony", "scvi"`, multiple_sep: `";"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--integration_methods`
+:::
+::: {.arg-desc role="cell"}
+Integration methods to run in parallel.
+:::
+::: {.arg-attrs role="cell"}
+List of `string` [required]{.arg-required}
 
+[Example]{.arg-key} `"harmony"`, `"scvi"`
+
+[Choices]{.arg-key} `"harmony"`, `"scvi"`, `"scanorama"`, `"bbknn"`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::::
 
 ### Clustering options
 
-|Name                  |Description                                                                                                                                         |Attributes                                          |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--leiden_resolution` |Leiden clustering resolution(s). Each method will produce one .obs cluster column per resolution, named "{method}_integration_leiden_{resolution}". |List of `double`, default: `1`, multiple_sep: `";"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--leiden_resolution`
+:::
+::: {.arg-desc role="cell"}
+Leiden clustering resolution(s). Each method will produce one .obs
+cluster column per resolution, named "{method}_integration_leiden_{resolution}".
+:::
+::: {.arg-attrs role="cell"}
+List of `double`
 
+[Default]{.arg-key} `1.0`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::::
 
 ### Harmony options
 
-|Name              |Description                                                                |Attributes                                          |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--harmony_theta` |Diversity clustering penalty. Higher values produce more diverse clusters. |List of `double`, default: `2`, multiple_sep: `";"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--harmony_theta`
+:::
+::: {.arg-desc role="cell"}
+Diversity clustering penalty. Higher values produce more diverse clusters.
+:::
+::: {.arg-attrs role="cell"}
+List of `double`
 
+[Default]{.arg-key} `2.0`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::::
 
 ### scVI options
 
-|Name                              |Description                                                                 |Attributes                             |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--scvi_early_stopping`           |Whether scVI should perform early stopping on the validation set.           |`boolean`                              |
-|`--scvi_early_stopping_monitor`   |Metric logged during validation set epoch.                                  |`string`, default: `"elbo_validation"` |
-|`--scvi_early_stopping_patience`  |Number of validation epochs with no improvement after which training stops. |`integer`, default: `45`               |
-|`--scvi_early_stopping_min_delta` |Minimum change in the monitored metric to qualify as improvement.           |`double`, default: `0`                 |
-|`--scvi_max_epochs`               |Number of training passes through the dataset.                              |`integer`                              |
-|`--scvi_reduce_lr_on_plateau`     |Reduce learning rate when validation metric plateaus.                       |`boolean`, default: `TRUE`             |
-|`--scvi_lr_factor`                |Factor by which to reduce learning rate.                                    |`double`, default: `0.6`               |
-|`--scvi_lr_patience`              |Number of epochs with no improvement after which lr is reduced.             |`double`, default: `30`                |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scvi_early_stopping`
+:::
+::: {.arg-desc role="cell"}
+Whether scVI should perform early stopping on the validation set.
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scvi_early_stopping_monitor`
+:::
+::: {.arg-desc role="cell"}
+Metric logged during validation set epoch.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Default]{.arg-key} `"elbo_validation"`
+
+[Choices]{.arg-key} `"elbo_validation"`, `"reconstruction_loss_validation"`, `"kl_local_validation"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scvi_early_stopping_patience`
+:::
+::: {.arg-desc role="cell"}
+Number of validation epochs with no improvement after which training stops.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `45`
+
+[Min]{.arg-key} `1`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scvi_early_stopping_min_delta`
+:::
+::: {.arg-desc role="cell"}
+Minimum change in the monitored metric to qualify as improvement.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `0.0`
+
+[Min]{.arg-key} `0.0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scvi_max_epochs`
+:::
+::: {.arg-desc role="cell"}
+Number of training passes through the dataset.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scvi_reduce_lr_on_plateau`
+:::
+::: {.arg-desc role="cell"}
+Reduce learning rate when validation metric plateaus.
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
+
+[Default]{.arg-key} `true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scvi_lr_factor`
+:::
+::: {.arg-desc role="cell"}
+Factor by which to reduce learning rate.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `0.6`
+
+[Min]{.arg-key} `0.0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scvi_lr_patience`
+:::
+::: {.arg-desc role="cell"}
+Number of epochs with no improvement after which lr is reduced.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `30.0`
+
+[Min]{.arg-key} `0.0`
+:::
+::::
+:::::
 
 ### Scanorama options
 
-|Name                     |Description                                            |Attributes                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--scanorama_knn`        |Number of nearest neighbors used for matching.         |`integer`, default: `20`   |
-|`--scanorama_batch_size` |Batch size used in the alignment vector computation.   |`integer`, default: `5000` |
-|`--scanorama_sigma`      |Correction smoothing parameter on the Gaussian kernel. |`double`, default: `15`    |
-|`--scanorama_approx`     |Use approximate nearest neighbors (annoy).             |`boolean`, default: `TRUE` |
-|`--scanorama_alpha`      |Alignment score minimum cutoff.                        |`double`, default: `0.1`   |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scanorama_knn`
+:::
+::: {.arg-desc role="cell"}
+Number of nearest neighbors used for matching.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
 
+[Default]{.arg-key} `20`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scanorama_batch_size`
+:::
+::: {.arg-desc role="cell"}
+Batch size used in the alignment vector computation.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `5000`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scanorama_sigma`
+:::
+::: {.arg-desc role="cell"}
+Correction smoothing parameter on the Gaussian kernel.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `15.0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scanorama_approx`
+:::
+::: {.arg-desc role="cell"}
+Use approximate nearest neighbors (annoy).
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
+
+[Default]{.arg-key} `true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scanorama_alpha`
+:::
+::: {.arg-desc role="cell"}
+Alignment score minimum cutoff.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `0.1`
+:::
+::::
+:::::
 
 ### BBKNN options
 
-|Name                               |Description                                                                                                                                                       |Attributes               |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--bbknn_n_neighbors_within_batch` |Top neighbours to report for each batch.                                                                                                                          |`integer`, default: `3`  |
-|`--bbknn_n_pcs`                    |Number of dimensions to use from the input embedding.                                                                                                             |`integer`, default: `50` |
-|`--bbknn_n_trim`                   |Trim each cell's neighbours to these many top connectivities. Set to 0 to skip; leave unset to use the BBKNN default (10 * n_neighbors_within_batch * n_batches). |`integer`                |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--bbknn_n_neighbors_within_batch`
+:::
+::: {.arg-desc role="cell"}
+Top neighbours to report for each batch.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
 
+[Default]{.arg-key} `3`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--bbknn_n_pcs`
+:::
+::: {.arg-desc role="cell"}
+Number of dimensions to use from the input embedding.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `50`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--bbknn_n_trim`
+:::
+::: {.arg-desc role="cell"}
+Trim each cell's neighbours to these many top connectivities. Set to 0
+to skip; leave unset to use the BBKNN default (10 * n_neighbors_within_batch
+
+* n_batches).
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+:::
+::::
+:::::
 
 ### Output slot naming
 
@@ -135,42 +593,377 @@ that are subsequently moved into the merged output. The per-resolution
 leiden columns are named "{obs_cluster}_{resolution}" (e.g.
 "harmony_integration_leiden_1.0").
 
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--harmony_obsm_integrated`
+:::
+::: {.arg-desc role="cell"}
+.obsm slot for the harmony-integrated embedding.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Default]{.arg-key} `"X_harmony_integrated"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--harmony_obsm_umap`
+:::
+::: {.arg-desc role="cell"}
+.obsm slot for the harmony UMAP embedding.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
-|Name                                       |Description                                           |Attributes                                                           |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--harmony_obsm_integrated`                |.obsm slot for the harmony-integrated embedding.      |`string`, default: `"X_harmony_integrated"`                          |
-|`--harmony_obsm_umap`                      |.obsm slot for the harmony UMAP embedding.            |`string`, default: `"X_harmony_umap"`                                |
-|`--harmony_obs_cluster`                    |.obs prefix for the harmony leiden cluster columns.   |`string`, default: `"harmony_integration_leiden"`                    |
-|`--harmony_uns_neighbors`                  |.uns slot for harmony neighbor graph metadata.        |`string`, default: `"harmony_integration_neighbors"`                 |
-|`--harmony_obsp_neighbor_distances`        |.obsp slot for harmony neighbor distances.            |`string`, default: `"harmony_integration_neighbor_distances"`        |
-|`--harmony_obsp_neighbor_connectivities`   |.obsp slot for harmony neighbor connectivities.       |`string`, default: `"harmony_integration_neighbor_connectivities"`   |
-|`--scvi_obsm_integrated`                   |.obsm slot for the scVI-integrated latent embedding.  |`string`, default: `"X_scvi_integrated"`                             |
-|`--scvi_obsm_umap`                         |.obsm slot for the scVI UMAP embedding.               |`string`, default: `"X_scvi_umap"`                                   |
-|`--scvi_obs_cluster`                       |.obs prefix for the scVI leiden cluster columns.      |`string`, default: `"scvi_integration_leiden"`                       |
-|`--scvi_uns_neighbors`                     |.uns slot for scVI neighbor graph metadata.           |`string`, default: `"scvi_integration_neighbors"`                    |
-|`--scvi_obsp_neighbor_distances`           |.obsp slot for scVI neighbor distances.               |`string`, default: `"scvi_integration_neighbor_distances"`           |
-|`--scvi_obsp_neighbor_connectivities`      |.obsp slot for scVI neighbor connectivities.          |`string`, default: `"scvi_integration_neighbor_connectivities"`      |
-|`--scanorama_obsm_integrated`              |.obsm slot for the scanorama-integrated embedding.    |`string`, default: `"X_scanorama_integrated"`                        |
-|`--scanorama_obsm_umap`                    |.obsm slot for the scanorama UMAP embedding.          |`string`, default: `"X_scanorama_umap"`                              |
-|`--scanorama_obs_cluster`                  |.obs prefix for the scanorama leiden cluster columns. |`string`, default: `"scanorama_integration_leiden"`                  |
-|`--scanorama_uns_neighbors`                |.uns slot for scanorama neighbor graph metadata.      |`string`, default: `"scanorama_integration_neighbors"`               |
-|`--scanorama_obsp_neighbor_distances`      |.obsp slot for scanorama neighbor distances.          |`string`, default: `"scanorama_integration_neighbor_distances"`      |
-|`--scanorama_obsp_neighbor_connectivities` |.obsp slot for scanorama neighbor connectivities.     |`string`, default: `"scanorama_integration_neighbor_connectivities"` |
-|`--bbknn_obsm_umap`                        |.obsm slot for the BBKNN UMAP embedding.              |`string`, default: `"X_bbknn_umap"`                                  |
-|`--bbknn_obs_cluster`                      |.obs prefix for the BBKNN leiden cluster columns.     |`string`, default: `"bbknn_integration_leiden"`                      |
-|`--bbknn_uns_neighbors`                    |.uns slot for BBKNN neighbor graph metadata.          |`string`, default: `"bbknn_integration_neighbors"`                   |
-|`--bbknn_obsp_neighbor_distances`          |.obsp slot for BBKNN neighbor distances.              |`string`, default: `"bbknn_integration_neighbor_distances"`          |
-|`--bbknn_obsp_neighbor_connectivities`     |.obsp slot for BBKNN neighbor connectivities.         |`string`, default: `"bbknn_integration_neighbor_connectivities"`     |
+[Default]{.arg-key} `"X_harmony_umap"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--harmony_obs_cluster`
+:::
+::: {.arg-desc role="cell"}
+.obs prefix for the harmony leiden cluster columns.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Default]{.arg-key} `"harmony_integration_leiden"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--harmony_uns_neighbors`
+:::
+::: {.arg-desc role="cell"}
+.uns slot for harmony neighbor graph metadata.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"harmony_integration_neighbors"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--harmony_obsp_neighbor_distances`
+:::
+::: {.arg-desc role="cell"}
+.obsp slot for harmony neighbor distances.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"harmony_integration_neighbor_distances"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--harmony_obsp_neighbor_connectivities`
+:::
+::: {.arg-desc role="cell"}
+.obsp slot for harmony neighbor connectivities.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"harmony_integration_neighbor_connectivities"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scvi_obsm_integrated`
+:::
+::: {.arg-desc role="cell"}
+.obsm slot for the scVI-integrated latent embedding.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"X_scvi_integrated"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scvi_obsm_umap`
+:::
+::: {.arg-desc role="cell"}
+.obsm slot for the scVI UMAP embedding.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"X_scvi_umap"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scvi_obs_cluster`
+:::
+::: {.arg-desc role="cell"}
+.obs prefix for the scVI leiden cluster columns.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"scvi_integration_leiden"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scvi_uns_neighbors`
+:::
+::: {.arg-desc role="cell"}
+.uns slot for scVI neighbor graph metadata.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"scvi_integration_neighbors"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scvi_obsp_neighbor_distances`
+:::
+::: {.arg-desc role="cell"}
+.obsp slot for scVI neighbor distances.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"scvi_integration_neighbor_distances"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scvi_obsp_neighbor_connectivities`
+:::
+::: {.arg-desc role="cell"}
+.obsp slot for scVI neighbor connectivities.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"scvi_integration_neighbor_connectivities"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scanorama_obsm_integrated`
+:::
+::: {.arg-desc role="cell"}
+.obsm slot for the scanorama-integrated embedding.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"X_scanorama_integrated"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scanorama_obsm_umap`
+:::
+::: {.arg-desc role="cell"}
+.obsm slot for the scanorama UMAP embedding.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"X_scanorama_umap"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scanorama_obs_cluster`
+:::
+::: {.arg-desc role="cell"}
+.obs prefix for the scanorama leiden cluster columns.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"scanorama_integration_leiden"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scanorama_uns_neighbors`
+:::
+::: {.arg-desc role="cell"}
+.uns slot for scanorama neighbor graph metadata.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"scanorama_integration_neighbors"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scanorama_obsp_neighbor_distances`
+:::
+::: {.arg-desc role="cell"}
+.obsp slot for scanorama neighbor distances.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"scanorama_integration_neighbor_distances"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scanorama_obsp_neighbor_connectivities`
+:::
+::: {.arg-desc role="cell"}
+.obsp slot for scanorama neighbor connectivities.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"scanorama_integration_neighbor_connectivities"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--bbknn_obsm_umap`
+:::
+::: {.arg-desc role="cell"}
+.obsm slot for the BBKNN UMAP embedding.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"X_bbknn_umap"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--bbknn_obs_cluster`
+:::
+::: {.arg-desc role="cell"}
+.obs prefix for the BBKNN leiden cluster columns.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"bbknn_integration_leiden"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--bbknn_uns_neighbors`
+:::
+::: {.arg-desc role="cell"}
+.uns slot for BBKNN neighbor graph metadata.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"bbknn_integration_neighbors"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--bbknn_obsp_neighbor_distances`
+:::
+::: {.arg-desc role="cell"}
+.obsp slot for BBKNN neighbor distances.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"bbknn_integration_neighbor_distances"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--bbknn_obsp_neighbor_connectivities`
+:::
+::: {.arg-desc role="cell"}
+.obsp slot for BBKNN neighbor connectivities.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"bbknn_integration_neighbor_connectivities"`
+:::
+::::
+:::::
 
 ### Output
 
-|Name                   |Description                                                                                                             |Attributes                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output`             |Output h5mu file — the input preprocessed file with each selected method's annotations merged into the target modality. |`file`, required, example: `"output.h5mu"` |
-|`--output_compression` |Compression format for the output h5mu file.                                                                            |`string`, example: `"gzip"`                |
-|`--output_scvi_model`  |Output folder with the trained scVI model. Only produced when scVI is among the selected --integration_methods.         |`file`, example: `"scvi_model"`            |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Output h5mu file — the input preprocessed file with each selected
+method's annotations merged into the target modality.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"output.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_compression`
+:::
+::: {.arg-desc role="cell"}
+Compression format for the output h5mu file.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"gzip"`
+
+[Choices]{.arg-key} `"gzip"`, `"lzf"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_scvi_model`
+:::
+::: {.arg-desc role="cell"}
+Output folder with the trained scVI model. Only produced when scVI is
+among the selected --integration_methods.
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"scvi_model"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -194,12 +987,13 @@ nextflow run openpipelines-bio/openpipeline_composed \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline_composed/v0.3.0/components/single_cell/parallel_integration).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline_composed/v0.3.0/components/single_cell/parallel_integration);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -211,8 +1005,6 @@ nextflow run openpipelines-bio/openpipeline_composed \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

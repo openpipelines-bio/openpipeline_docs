@@ -5,7 +5,7 @@ title: "scanorama"
 subtitle: "openpipeline v4.2.0"
 toc: true
 namespace: "Integrate"
-description: "Use Scanorama to integrate different experiments"
+description: "Use Scanorama to integrate different experiments."
 type: "module"
 latest: "true"
 ---
@@ -34,20 +34,178 @@ Namespace: `integrate`
 
 ### Arguments
 
-|Name                   |Description                                                                                                                                                                 |Attributes                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`              |Input h5mu file                                                                                                                                                             |`file`, required, example: `"input.h5mu"`  |
-|`--modality`           |Which modality from the input MuData file to process.                                                                                                                       |`string`, default: `"rna"`                 |
-|`--output`             |Output .h5mu file                                                                                                                                                           |`file`, required, example: `"output.h5mu"` |
-|`--obs_batch`          |Column name discriminating between your batches.                                                                                                                            |`string`, default: `"batch"`               |
-|`--obsm_input`         |Basis obsm slot to run scanorama on.                                                                                                                                        |`string`, default: `"X_pca"`               |
-|`--obsm_output`        |The name of the field in adata.obsm where the integrated embeddings will be stored after running this function. Defaults to X_scanorama.                                    |`string`, default: `"X_scanorama"`         |
-|`--knn`                |Number of nearest neighbors to use for matching.                                                                                                                            |`integer`, default: `20`                   |
-|`--batch_size`         |The batch size used in the alignment vector computation. Useful when integrating very large (>100k samples) datasets. Set to large value that runs within available memory. |`integer`, default: `5000`                 |
-|`--sigma`              |Correction smoothing parameter on Gaussian kernel.                                                                                                                          |`double`, default: `15`                    |
-|`--approx`             |Use approximate nearest neighbors with Python annoy; greatly speeds up matching runtime.                                                                                    |`boolean`, default: `TRUE`                 |
-|`--alpha`              |Alignment score minimum cutoff                                                                                                                                              |`double`, default: `0.1`                   |
-|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied.                                                              |`string`, example: `"gzip"`                |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Input h5mu file
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"input.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--modality`
+:::
+::: {.arg-desc role="cell"}
+Which modality from the input MuData file to process.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"rna"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Output .h5mu file
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"output.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obs_batch`
+:::
+::: {.arg-desc role="cell"}
+Column name discriminating between your batches.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"batch"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obsm_input`
+:::
+::: {.arg-desc role="cell"}
+Basis obsm slot to run scanorama on.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"X_pca"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obsm_output`
+:::
+::: {.arg-desc role="cell"}
+The name of the field in adata.obsm where the integrated embeddings will be stored after running this function. Defaults to X_scanorama.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"X_scanorama"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--knn`
+:::
+::: {.arg-desc role="cell"}
+Number of nearest neighbors to use for matching.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `20`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--batch_size`
+:::
+::: {.arg-desc role="cell"}
+The batch size used in the alignment vector computation. Useful when integrating very large (>100k samples) datasets. Set to large value that runs within available memory.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `5000`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--sigma`
+:::
+::: {.arg-desc role="cell"}
+Correction smoothing parameter on Gaussian kernel.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `15.0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--approx`
+:::
+::: {.arg-desc role="cell"}
+Use approximate nearest neighbors with Python annoy; greatly speeds up matching runtime.
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
+
+[Default]{.arg-key} `true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--alpha`
+:::
+::: {.arg-desc role="cell"}
+Alignment score minimum cutoff
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `0.1`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_compression`
+:::
+::: {.arg-desc role="cell"}
+Compression format to use for the output AnnData and/or Mudata H5 files.
+By default no compression is applied.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"gzip"`
+
+[Choices]{.arg-key} `"gzip"`, `"lzf"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -73,12 +231,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/integrate/scanorama).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/integrate/scanorama);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -90,8 +249,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

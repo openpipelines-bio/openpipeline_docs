@@ -5,7 +5,7 @@ title: "deseq2"
 subtitle: "openpipeline v4.2.0"
 toc: true
 namespace: "Differential expression"
-description: "Performs differential expression analysis using DESeq2 on bulk samples or pseudobulk samples aggregated from single-cell data."
+description: "Performs differential expression analysis using DESeq2 on bulk samples or pseudobulk samples aggregated from single-cell data. Note that this component only considers factors as explanatory variables, and excludes covariates from the analysis."
 type: "module"
 latest: "true"
 ---
@@ -34,32 +34,217 @@ Note that this component only considers factors as explanatory variables, and ex
 
 ### Inputs
 
-|Name               |Description                                                                                                                                                                  |Attributes                         |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`          |Input h5mu file containing (pseudo-)bulk transcriptomic samples.                                                                                                             |`file`, required                   |
-|`--modality`       |Which modality from the input MuData file to process.                                                                                                                        |`string`, default: `"rna"`         |
-|`--input_layer`    |Input layer to use. If None, X is used. This layer must contain raw counts.                                                                                                  |`string`                           |
-|`--var_gene_names` |Name of the .var field that contains gene symbols. If not provided, .var.index will be used.                                                                                 |`string`, example: `"gene_symbol"` |
-|`--obs_cell_group` |.obs field containing the cell group information, for example per cell type or per cell cluster. If true, performs per-cell-group analysis with cell-group-specific results. |`string`                           |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Input h5mu file containing (pseudo-)bulk transcriptomic samples.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--modality`
+:::
+::: {.arg-desc role="cell"}
+Which modality from the input MuData file to process.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Default]{.arg-key} `"rna"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_layer`
+:::
+::: {.arg-desc role="cell"}
+Input layer to use. If None, X is used. This layer must contain raw counts.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--var_gene_names`
+:::
+::: {.arg-desc role="cell"}
+Name of the .var field that contains gene symbols. If not provided, .var.index will be used.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"gene_symbol"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obs_cell_group`
+:::
+::: {.arg-desc role="cell"}
+.obs field containing the cell group information, for example per cell type or per cell cluster.
+If true, performs per-cell-group analysis with cell-group-specific results.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::::
 
 ### Arguments
 
-|Name                 |Description                                                                                                                                                                                           |Attributes                                                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--design_formula`   |The formula should be a tilde (~) followed by the variables with plus signs between them.  The design formula is used to estimate the dispersions and to estimate the log2 fold changes of the model. |`string`, required, example: `"~ disease + treatment"`                     |
-|`--contrast_column`  |Column in the metadata to use for the contrast. This column should contain the conditions to compare.                                                                                                 |`string`, required, example: `"treatment"`                                 |
-|`--contrast_values`  |Values to compare in the contrast column. First value is the control group, following values are comparison groups.  Values must be present in the fields specified for the design formula.           |List of `string`, required, example: `"ctrl", "stim"`, multiple_sep: `";"` |
-|`--p_adj_threshold`  |Adjusted p-value threshold for significance, corrected with the Benjamini and Hochberg method. Genes with adjusted p-values below this threshold will be considered significant.                      |`double`, default: `0.05`                                                  |
-|`--log2fc_threshold` |Log2 fold change threshold for significance. Genes with absolute log2 fold change above this threshold will be considered significant.                                                                |`double`, default: `0`                                                     |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--design_formula`
+:::
+::: {.arg-desc role="cell"}
+The formula should be a tilde (~) followed by the variables with plus signs between them.
+The design formula is used to estimate the dispersions and to estimate the log2 fold changes of the model.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
 
+[Example]{.arg-key} `"~ disease + treatment"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--contrast_column`
+:::
+::: {.arg-desc role="cell"}
+Column in the metadata to use for the contrast.
+This column should contain the conditions to compare.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
+
+[Example]{.arg-key} `"treatment"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--contrast_values`
+:::
+::: {.arg-desc role="cell"}
+Values to compare in the contrast column.
+First value is the control group, following values are comparison groups.
+Values must be present in the fields specified for the design formula.
+:::
+::: {.arg-attrs role="cell"}
+List of `string` [required]{.arg-required}
+
+[Example]{.arg-key} `"ctrl"`, `"stim"`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--p_adj_threshold`
+:::
+::: {.arg-desc role="cell"}
+Adjusted p-value threshold for significance, corrected with the Benjamini and Hochberg method.
+Genes with adjusted p-values below this threshold will be considered significant.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `0.05`
+
+[Min]{.arg-key} `0.0`
+
+[Max]{.arg-key} `1.0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--log2fc_threshold`
+:::
+::: {.arg-desc role="cell"}
+Log2 fold change threshold for significance.
+Genes with absolute log2 fold change above this threshold will be considered significant.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `0.0`
+
+[Min]{.arg-key} `0.0`
+:::
+::::
+:::::
 
 ### Outputs
 
-|Name              |Description                                                                                                                                                                                         |Attributes                             |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output_dir`    |Output directory for DESeq2 results.  If cell groups are defined (using `--obs_cell_group`), the output folder will contain one CSV per cell group, otherwise it will contain a single output file. |`file`, required                       |
-|`--output_prefix` |Prefix for output CSV files.  If no cell groups are specified, the output file will be named "{prefix}.csv". If cell groups are specified, files will be named "{prefix}_{cell_group}.csv".         |`string`, default: `"deseq2_analysis"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_dir`
+:::
+::: {.arg-desc role="cell"}
+Output directory for DESeq2 results.
+If cell groups are defined (using `--obs_cell_group`), the output folder will contain one CSV per cell group, otherwise it will contain a single output file.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_prefix`
+:::
+::: {.arg-desc role="cell"}
+Prefix for output CSV files.
+If no cell groups are specified, the output file will be named "{prefix}.csv".
+If cell groups are specified, files will be named "{prefix}_{cell_group}.csv".
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"deseq2_analysis"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -89,12 +274,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/differential_expression/deseq2).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/differential_expression/deseq2);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -106,8 +292,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

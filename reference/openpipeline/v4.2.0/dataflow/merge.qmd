@@ -5,7 +5,7 @@ title: "merge"
 subtitle: "openpipeline v4.2.0"
 toc: true
 namespace: "Dataflow"
-description: "Combine one or more single-modality .h5mu files together into one .h5mu file"
+description: "Combine one or more single-modality .h5mu files together into one .h5mu file."
 type: "module"
 latest: "true"
 ---
@@ -34,11 +34,64 @@ Namespace: `dataflow`
 
 ### Arguments
 
-|Name                   |Description                                                       |Attributes                                                                                                                                  |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`              |Paths to the single-modality .h5mu files that need to be combined |List of `file`, required, default: `"sample_paths"`, example: `"/path/to/modality_1.h5mu", "/path/to/modality_2.h5mu"`, multiple_sep: `";"` |
-|`--output`             |Path to the output file.                                          |`file`, default: `"output.h5mu"`                                                                                                            |
-|`--output_compression` |The compression format to be used on the output h5mu object.      |`string`, example: `"gzip"`                                                                                                                 |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Paths to the single-modality .h5mu files that need to be combined
+:::
+::: {.arg-attrs role="cell"}
+List of `file` [required]{.arg-required}
+
+[Default]{.arg-key} `"sample_paths"`
+
+[Example]{.arg-key} `"/path/to/modality_1.h5mu"`, `"/path/to/modality_2.h5mu"`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Path to the output file.
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Default]{.arg-key} `"output.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_compression`
+:::
+::: {.arg-desc role="cell"}
+The compression format to be used on the output h5mu object.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"gzip"`
+
+[Choices]{.arg-key} `"gzip"`, `"lzf"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -62,12 +115,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/dataflow/merge).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/dataflow/merge);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -79,8 +133,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

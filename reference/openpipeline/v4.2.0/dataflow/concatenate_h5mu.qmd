@@ -5,7 +5,7 @@ title: "concatenate_h5mu"
 subtitle: "openpipeline v4.2.0"
 toc: true
 namespace: "Dataflow"
-description: "Concatenate observations from samples in several (uni- and/or multi-modal) MuData files into a single file"
+description: "Concatenate observations from samples in several (uni- and/or multi-modal) MuData files into a single file."
 type: "module"
 latest: "true"
 ---
@@ -34,16 +34,150 @@ Namespace: `dataflow`
 
 ### Arguments
 
-|Name                   |Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |Attributes                                                               |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`              |Paths to the different samples to be concatenated.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |List of `file`, required, example: `"sample_paths"`, multiple_sep: `";"` |
-|`--modality`           |Only output concatenated objects for the provided modalities. Outputs all modalities by default.                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |List of `string`, multiple_sep: `";"`                                    |
-|`--input_id`           |Names of the different samples that have to be concatenated.  Must be specified when using '--mode move'. In this case, the ids will be used for the columns names of the dataframes registring the conflicts. If specified, must be of same length as `--input`.                                                                                                                                                                                                                                                                                                           |List of `string`, multiple_sep: `";"`                                    |
-|`--output`             |Output location for the concatenated MuData object file.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |`file`, example: `"output.h5mu"`                                         |
-|`--other_axis_mode`    |How to handle the merging of other axis (var, obs, ...).    - None: keep no data   - same: only keep elements of the matrices which are the same in each of the samples   - unique: only keep elements for which there is only 1 possible value (1 value that can occur in multiple samples)   - first: keep the annotation from the first sample   - only: keep elements that show up in only one of the objects (1 unique element in only 1 sample)   - move: identical to 'same', but moving the conflicting values to .varm or .obsm                                    |`string`, default: `"move"`                                              |
-|`--uns_merge_mode`     |How to handle the merging of .uns across modalities   - None: keep no data   - same: only keep elements of the matrices which are the same in each of the samples   - unique: only keep elements for which there is only 1 possible value (1 value that can occur in multiple samples)   - first: keep the annotation from the first sample   - only: keep elements that show up in only one of the objects (1 unique element in only 1 sample)   - make_unique: identical to 'unique', but keys which are not unique are made unique by prefixing them with the sample id. |`string`, default: `"make_unique"`                                       |
-|`--obsp_keys`          |List of `.obsp` keys for which block-diagonal concatenation should be performed. If not provided, no `.obsp` keys will be concatenated. Provided keys must be present in all samples for block concatenation to be performed.                                                                                                                                                                                                                                                                                                                                               |List of `string`, multiple_sep: `";"`                                    |
-|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied.                                                                                                                                                                                                                                                                                                                                                                                                                                                              |`string`, example: `"gzip"`                                              |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Paths to the different samples to be concatenated.
+:::
+::: {.arg-attrs role="cell"}
+List of `file` [required]{.arg-required}
+
+[Example]{.arg-key} `"sample_paths"`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--modality`
+:::
+::: {.arg-desc role="cell"}
+Only output concatenated objects for the provided modalities. Outputs all modalities by default.
+:::
+::: {.arg-attrs role="cell"}
+List of `string`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_id`
+:::
+::: {.arg-desc role="cell"}
+Names of the different samples that have to be concatenated.  Must be specified when using '--mode move'.
+In this case, the ids will be used for the columns names of the dataframes registring the conflicts.
+If specified, must be of same length as `--input`.
+:::
+::: {.arg-attrs role="cell"}
+List of `string`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Output location for the concatenated MuData object file.
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"output.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--other_axis_mode`
+:::
+::: {.arg-desc role="cell"}
+How to handle the merging of other axis (var, obs, ...).
+
+  - None: keep no data
+  - same: only keep elements of the matrices which are the same in each of the samples
+  - unique: only keep elements for which there is only 1 possible value (1 value that can occur in multiple samples)
+  - first: keep the annotation from the first sample
+  - only: keep elements that show up in only one of the objects (1 unique element in only 1 sample)
+  - move: identical to 'same', but moving the conflicting values to .varm or .obsm
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"move"`
+
+[Choices]{.arg-key} `"same"`, `"unique"`, `"first"`, `"only"`, `"concat"`, `"move"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--uns_merge_mode`
+:::
+::: {.arg-desc role="cell"}
+How to handle the merging of .uns across modalities
+
+  - None: keep no data
+  - same: only keep elements of the matrices which are the same in each of the samples
+  - unique: only keep elements for which there is only 1 possible value (1 value that can occur in multiple samples)
+  - first: keep the annotation from the first sample
+  - only: keep elements that show up in only one of the objects (1 unique element in only 1 sample)
+  - make_unique: identical to 'unique', but keys which are not unique are made unique by prefixing them with the sample id.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"make_unique"`
+
+[Choices]{.arg-key} `"same"`, `"unique"`, `"first"`, `"only"`, `"make_unique"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obsp_keys`
+:::
+::: {.arg-desc role="cell"}
+List of `.obsp` keys for which block-diagonal concatenation should be performed.
+If not provided, no `.obsp` keys will be concatenated.
+Provided keys must be present in all samples for block concatenation to be performed.
+:::
+::: {.arg-attrs role="cell"}
+List of `string`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_compression`
+:::
+::: {.arg-desc role="cell"}
+Compression format to use for the output AnnData and/or Mudata H5 files.
+By default no compression is applied.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"gzip"`
+
+[Choices]{.arg-key} `"gzip"`, `"lzf"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -67,12 +201,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/dataflow/concatenate_h5mu).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/dataflow/concatenate_h5mu);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -84,8 +219,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

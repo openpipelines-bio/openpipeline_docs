@@ -34,30 +34,233 @@ Namespace: `genetic_demux`
 
 ### Input
 
-|Name                             |Description                                                                                                       |Attributes                               |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--fasta`                        |reference fasta file                                                                                              |`file`, example: `"reference.fasta"`     |
-|`--bam`                          |cellranger bam                                                                                                    |`file`, example: `"input.bam"`           |
-|`--bam_index`                    |cellranger bam index                                                                                              |`file`, example: `"input.bam.bai"`       |
-|`--barcodes`                     |barcodes.tsv from cellranger                                                                                      |`file`, example: `"barcodes.tsv"`        |
-|`--clusters`                     |number cluster, tbd add easy way to run on a range of k                                                           |`integer`                                |
-|`--ploidy`                       |ploidy, must be 1 or 2                                                                                            |`integer`, default: `2`                  |
-|`--min_alt`                      |min alt to use locus                                                                                              |`integer`, default: `10`                 |
-|`--min_ref`                      |min ref to use locus                                                                                              |`integer`, default: `10`                 |
-|`--max_loci`                     |max loci per cell, affects speed                                                                                  |`integer`, default: `2048`               |
-|`--restarts`                     |number of restarts in clustering, when there are > 12 clusters we recommend increasing this to avoid local minima |`integer`                                |
-|`--common_variants`              |common variant loci or known variant loci vcf, must be vs same reference fasta                                    |`file`, example: `"common_variants.vcf"` |
-|`--known_genotypes`              |known variants per clone in population vcf mode                                                                   |`file`, example: `"known_variants.vcf"`  |
-|`--known_genotypes_sample_names` |which samples in population vcf from known genotypes option represent the donors in your sample                   |`string`                                 |
-|`--skip_remap`                   |dont remap with minimap2 (not recommended unless in conjunction with --common_variants                            |`boolean_true`                           |
-|`--ignore`                       |set to True to ignore data error assertions                                                                       |`boolean_true`                           |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--fasta`
+:::
+::: {.arg-desc role="cell"}
+reference fasta file
+:::
+::: {.arg-attrs role="cell"}
+`file`
 
+[Example]{.arg-key} `"reference.fasta"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--bam`
+:::
+::: {.arg-desc role="cell"}
+cellranger bam
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"input.bam"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--bam_index`
+:::
+::: {.arg-desc role="cell"}
+cellranger bam index
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"input.bam.bai"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--barcodes`
+:::
+::: {.arg-desc role="cell"}
+barcodes.tsv from cellranger
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"barcodes.tsv"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--clusters`
+:::
+::: {.arg-desc role="cell"}
+number cluster, tbd add easy way to run on a range of k
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--ploidy`
+:::
+::: {.arg-desc role="cell"}
+ploidy, must be 1 or 2
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `2`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--min_alt`
+:::
+::: {.arg-desc role="cell"}
+min alt to use locus
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `10`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--min_ref`
+:::
+::: {.arg-desc role="cell"}
+min ref to use locus
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `10`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--max_loci`
+:::
+::: {.arg-desc role="cell"}
+max loci per cell, affects speed
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `2048`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--restarts`
+:::
+::: {.arg-desc role="cell"}
+number of restarts in clustering, when there are > 12 clusters we recommend increasing this to avoid local minima
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--common_variants`
+:::
+::: {.arg-desc role="cell"}
+common variant loci or known variant loci vcf, must be vs same reference fasta
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"common_variants.vcf"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--known_genotypes`
+:::
+::: {.arg-desc role="cell"}
+known variants per clone in population vcf mode
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"known_variants.vcf"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--known_genotypes_sample_names`
+:::
+::: {.arg-desc role="cell"}
+which samples in population vcf from known genotypes option represent the donors in your sample
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--skip_remap`
+:::
+::: {.arg-desc role="cell"}
+dont remap with minimap2 (not recommended unless in conjunction with --common_variants
+:::
+::: {.arg-attrs role="cell"}
+`boolean_true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--ignore`
+:::
+::: {.arg-desc role="cell"}
+set to True to ignore data error assertions
+:::
+::: {.arg-attrs role="cell"}
+`boolean_true`
+:::
+::::
+:::::
 
 ### Output
 
-|Name       |Description                                 |Attributes                          |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output` |name of directory to place souporcell files |`file`, example: `"souporcell_out"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+name of directory to place souporcell files
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"souporcell_out"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -81,12 +284,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/genetic_demux/souporcell).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/genetic_demux/souporcell);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -98,8 +302,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

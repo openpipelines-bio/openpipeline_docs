@@ -5,7 +5,7 @@ title: "make_reference"
 subtitle: "openpipeline v4.2.0"
 toc: true
 namespace: "Workflows/ingestion"
-description: "Build a transcriptomics reference into one of many formats"
+description: "Build a transcriptomics reference into one of many formats."
 type: "workflow"
 latest: "true"
 ---
@@ -57,57 +57,375 @@ flowchart TB
 
 ### Inputs
 
-|Name                  |Description                         |Attributes                                                                                                                              |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--id`                |ID of the reference.                |`string`, required, example: `"foo"`                                                                                                    |
-|`--genome_fasta`      |Reference genome fasta.             |`file`, required, example: `"https:/ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_41/GRCh38.primary_assembly.genome.fa.gz"` |
-|`--transcriptome_gtf` |Reference transcriptome annotation. |`file`, required, example: `"https:/ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_41/gencode.v41.annotation.gtf.gz"`        |
-|`--ercc`              |ERCC sequence and annotation file.  |`file`, example: `"https:/assets.thermofisher.com/TFS-Assets/LSG/manuals/ERCC92.zip"`                                                   |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--id`
+:::
+::: {.arg-desc role="cell"}
+ID of the reference.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
 
+[Example]{.arg-key} `"foo"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--genome_fasta`
+:::
+::: {.arg-desc role="cell"}
+Reference genome fasta.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"https:/ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_41/GRCh38.primary_assembly.genome.fa.gz"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--transcriptome_gtf`
+:::
+::: {.arg-desc role="cell"}
+Reference transcriptome annotation.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"https:/ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_41/gencode.v41.annotation.gtf.gz"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--ercc`
+:::
+::: {.arg-desc role="cell"}
+ERCC sequence and annotation file.
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"https:/assets.thermofisher.com/TFS-Assets/LSG/manuals/ERCC92.zip"`
+:::
+::::
+:::::
 
 ### STAR Settings
 
-|Name                            |Description                                                                                                                                                                                                                                                     |Attributes               |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--star_genome_sa_index_nbases` |Length (bases) of the SA pre-indexing string. Typically between 10 and 15. Longer strings will use much more memory, but allow faster searches. For small genomes, the parameter {genomeSAindexNbases must be scaled down to min(14, log2(GenomeLength)/2 - 1). |`integer`, default: `14` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--star_genome_sa_index_nbases`
+:::
+::: {.arg-desc role="cell"}
+Length (bases) of the SA pre-indexing string. Typically between 10 and 15.
+Longer strings will use much more memory, but allow faster searches. For small
+genomes, the parameter {genomeSAindexNbases must be scaled down to
+min(14, log2(GenomeLength)/2 - 1).
+:::
+::: {.arg-attrs role="cell"}
+`integer`
 
+[Default]{.arg-key} `14`
+:::
+::::
+:::::
 
 ### BD Rhapsody Settings
 
-|Name                             |Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |Attributes                                                                     |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--bdrhap_mitochondrial_contigs` |Names of the Mitochondrial contigs in the provided Reference Genome. Fragments originating from contigs other than these are identified as 'nuclear fragments' in the ATACseq analysis pipeline.                                                                                                                                                                                                                                                                                                                                                                                     |List of `string`, default: `"chrM", "chrMT", "M", "MT"`, multiple_sep: `";"`   |
-|`--bdrhap_filtering_off`         |By default the input Transcript Annotation files are filtered based on the gene_type/gene_biotype attribute. Only features  having the following attribute values are kept:    - protein_coding   - lncRNA    - IG_LV_gene   - IG_V_gene   - IG_V_pseudogene   - IG_D_gene   - IG_J_gene   - IG_J_pseudogene   - IG_C_gene   - IG_C_pseudogene   - TR_V_gene   - TR_V_pseudogene   - TR_D_gene   - TR_J_gene   - TR_J_pseudogene   - TR_C_gene    If you have already pre-filtered the input Annotation files and/or wish to turn-off the filtering, please set this option to True. |`boolean_true`                                                                 |
-|`--bdrhap_wta_only_index`        |Build a WTA only index, otherwise builds a WTA + ATAC index.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |`boolean_true`                                                                 |
-|`--bdrhap_extra_star_params`     |Additional parameters to pass to STAR when building the genome index. Specify exactly like how you would on the command line.                                                                                                                                                                                                                                                                                                                                                                                                                                                        |`string`, example: `"--limitGenomeGenerateRAM 48000 --genomeSAindexNbases 11"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--bdrhap_mitochondrial_contigs`
+:::
+::: {.arg-desc role="cell"}
+Names of the Mitochondrial contigs in the provided Reference Genome. Fragments originating from contigs other than these are
+identified as 'nuclear fragments' in the ATACseq analysis pipeline.
+:::
+::: {.arg-attrs role="cell"}
+List of `string`
 
+[Default]{.arg-key} `"chrM"`, `"chrMT"`, `"M"`, `"MT"`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--bdrhap_filtering_off`
+:::
+::: {.arg-desc role="cell"}
+By default the input Transcript Annotation files are filtered based on the gene_type/gene_biotype attribute. Only features
+having the following attribute values are kept:
+
+  - protein_coding
+  - lncRNA
+  - IG_LV_gene
+  - IG_V_gene
+  - IG_V_pseudogene
+  - IG_D_gene
+  - IG_J_gene
+  - IG_J_pseudogene
+  - IG_C_gene
+  - IG_C_pseudogene
+  - TR_V_gene
+  - TR_V_pseudogene
+  - TR_D_gene
+  - TR_J_gene
+  - TR_J_pseudogene
+  - TR_C_gene
+
+  If you have already pre-filtered the input Annotation files and/or wish to turn-off the filtering, please set this option to True.
+:::
+::: {.arg-attrs role="cell"}
+`boolean_true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--bdrhap_wta_only_index`
+:::
+::: {.arg-desc role="cell"}
+Build a WTA only index, otherwise builds a WTA + ATAC index.
+:::
+::: {.arg-attrs role="cell"}
+`boolean_true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--bdrhap_extra_star_params`
+:::
+::: {.arg-desc role="cell"}
+Additional parameters to pass to STAR when building the genome index. Specify exactly like how you would on the command line.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"--limitGenomeGenerateRAM 48000 --genomeSAindexNbases 11"`
+:::
+::::
+:::::
 
 ### Cellranger ARC options
 
-|Name                    |Description                                                                                                                                                                                                                                                                |Attributes                            |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--motifs_file`         |Path to file containing transcription factor motifs in JASPAR format.                                                                                                                                                                                                      |`file`, example: `"motifs.txt"`       |
-|`--non_nuclear_contigs` |Name(s) of contig(s) that do not have any chromatin structure, for example,  mitochondria or plastids. These contigs are excluded from peak calling since the entire contig will be "open" due to a lack of chromatin structure. Leave empty if there are no such contigs. |List of `string`, multiple_sep: `";"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--motifs_file`
+:::
+::: {.arg-desc role="cell"}
+Path to file containing transcription factor motifs in JASPAR format.
+:::
+::: {.arg-attrs role="cell"}
+`file`
 
+[Example]{.arg-key} `"motifs.txt"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--non_nuclear_contigs`
+:::
+::: {.arg-desc role="cell"}
+Name(s) of contig(s) that do not have any chromatin structure, for example,
+mitochondria or plastids. These contigs are excluded from peak calling since
+the entire contig will be "open" due to a lack of chromatin structure.
+Leave empty if there are no such contigs.
+:::
+::: {.arg-attrs role="cell"}
+List of `string`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::::
 
 ### Outputs
 
-|Name                      |Description                          |Attributes                                               |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--target`                |Which reference indices to generate. |List of `string`, default: `"star"`, multiple_sep: `";"` |
-|`--output_fasta`          |Output genome sequence fasta.        |`file`, example: `"genome_sequence.fa.gz"`               |
-|`--output_gtf`            |Output transcriptome annotation gtf. |`file`, example: `"transcriptome_annotation.gtf.gz"`     |
-|`--output_cellranger`     |Output index                         |`file`, example: `"cellranger_index.tar.gz"`             |
-|`--output_cellranger_arc` |Output index                         |`file`, example: `"cellranger_index_arc.tar.gz"`         |
-|`--output_bd_rhapsody`    |Output index                         |`file`, example: `"bdrhap_index.tar.gz"`                 |
-|`--output_star`           |Output index                         |`file`, example: `"star_index.tar.gz"`                   |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--target`
+:::
+::: {.arg-desc role="cell"}
+Which reference indices to generate.
+:::
+::: {.arg-attrs role="cell"}
+List of `string`
 
+[Default]{.arg-key} `"star"`
+
+[Choices]{.arg-key} `"cellranger"`, `"cellranger_arc"`, `"bd_rhapsody"`, `"star"`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_fasta`
+:::
+::: {.arg-desc role="cell"}
+Output genome sequence fasta.
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"genome_sequence.fa.gz"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_gtf`
+:::
+::: {.arg-desc role="cell"}
+Output transcriptome annotation gtf.
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"transcriptome_annotation.gtf.gz"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_cellranger`
+:::
+::: {.arg-desc role="cell"}
+Output index
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"cellranger_index.tar.gz"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_cellranger_arc`
+:::
+::: {.arg-desc role="cell"}
+Output index
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"cellranger_index_arc.tar.gz"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_bd_rhapsody`
+:::
+::: {.arg-desc role="cell"}
+Output index
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"bdrhap_index.tar.gz"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_star`
+:::
+::: {.arg-desc role="cell"}
+Output index
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"star_index.tar.gz"`
+:::
+::::
+:::::
 
 ### Arguments
 
-|Name             |Description                                                  |Attributes                                    |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--subset_regex` |Will subset the reference chromosomes using the given regex. |`string`, example: `"(ERCC-00002&#124;chr1)"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--subset_regex`
+:::
+::: {.arg-desc role="cell"}
+Will subset the reference chromosomes using the given regex.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"(ERCC-00002|chr1)"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -135,12 +453,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/ingestion/make_reference).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/ingestion/make_reference);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -152,8 +471,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

@@ -43,46 +43,342 @@ flowchart TB
 
 ### Inputs
 
-|Name         |Description                                                                           |Attributes                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--id`       |ID of the sample.                                                                     |`string`, required, example: `"foo"`      |
-|`--input`    |Path to the sample.                                                                   |`file`, required, example: `"input.h5mu"` |
-|`--modality` |Which modality to process.                                                            |`string`, default: `"rna"`                |
-|`--layer`    |Use specified layer for calculation of qc metrics. If not specified, adata.X is used. |`string`, example: `"raw_counts"`         |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--id`
+:::
+::: {.arg-desc role="cell"}
+ID of the sample.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
 
+[Example]{.arg-key} `"foo"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Path to the sample.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"input.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--modality`
+:::
+::: {.arg-desc role="cell"}
+Which modality to process.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"rna"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--layer`
+:::
+::: {.arg-desc role="cell"}
+Use specified layer for calculation of qc metrics. If not specified, adata.X is used.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"raw_counts"`
+:::
+::::
+:::::
 
 ### Mitochondrial & Ribosomal Gene Detection
 
-|Name                                |Description                                                                                                                                                                                                                                                                               |Attributes                                  |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--var_gene_names`                  |.var column name to be used to detect mitochondrial/ribosomal genes instead of .var_names (default if not set). Gene names matching with the regex value from --mitochondrial_gene_regex or --ribosomal_gene_regex will be  identified as mitochondrial or ribosomal genes, respectively. |`string`, example: `"gene_symbol"`          |
-|`--var_name_mitochondrial_genes`    |In which .var slot to store a boolean array corresponding the mitochondrial genes.                                                                                                                                                                                                        |`string`                                    |
-|`--obs_name_mitochondrial_fraction` |.Obs slot to store the fraction of reads found to be mitochondrial. Defaults to 'fraction_' suffixed by the value of --var_name_mitochondrial_genes                                                                                                                                       |`string`                                    |
-|`--mitochondrial_gene_regex`        |Regex string that identifies mitochondrial genes from --var_gene_names. By default will detect human and mouse mitochondrial genes from a gene symbol.                                                                                                                                    |`string`, default: `"^[mM][tT]-"`           |
-|`--var_name_ribosomal_genes`        |In which .var slot to store a boolean array corresponding the ribosomal genes.                                                                                                                                                                                                            |`string`                                    |
-|`--obs_name_ribosomal_fraction`     |When specified, write the fraction of counts originating from ribosomal genes  (based on --ribosomal_gene_regex) to an .obs column with the specified name. Requires --var_name_ribosomal_genes.                                                                                          |`string`                                    |
-|`--ribosomal_gene_regex`            |Regex string that identifies ribosomal genes from --var_gene_names. By default will detect human and mouse ribosomal genes from a gene symbol.                                                                                                                                            |`string`, default: `"^[Mm]?[Rr][Pp][LlSs]"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--var_gene_names`
+:::
+::: {.arg-desc role="cell"}
+.var column name to be used to detect mitochondrial/ribosomal genes instead of .var_names (default if not set).
+Gene names matching with the regex value from --mitochondrial_gene_regex or --ribosomal_gene_regex will be
+identified as mitochondrial or ribosomal genes, respectively.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Example]{.arg-key} `"gene_symbol"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--var_name_mitochondrial_genes`
+:::
+::: {.arg-desc role="cell"}
+In which .var slot to store a boolean array corresponding the mitochondrial genes.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obs_name_mitochondrial_fraction`
+:::
+::: {.arg-desc role="cell"}
+.Obs slot to store the fraction of reads found to be mitochondrial. Defaults to 'fraction_' suffixed by the value of --var_name_mitochondrial_genes
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--mitochondrial_gene_regex`
+:::
+::: {.arg-desc role="cell"}
+Regex string that identifies mitochondrial genes from --var_gene_names.
+By default will detect human and mouse mitochondrial genes from a gene symbol.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"^[mM][tT]-"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--var_name_ribosomal_genes`
+:::
+::: {.arg-desc role="cell"}
+In which .var slot to store a boolean array corresponding the ribosomal genes.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obs_name_ribosomal_fraction`
+:::
+::: {.arg-desc role="cell"}
+When specified, write the fraction of counts originating from ribosomal genes
+(based on --ribosomal_gene_regex) to an .obs column with the specified name.
+Requires --var_name_ribosomal_genes.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--ribosomal_gene_regex`
+:::
+::: {.arg-desc role="cell"}
+Regex string that identifies ribosomal genes from --var_gene_names.
+By default will detect human and mouse ribosomal genes from a gene symbol.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"^[Mm]?[Rr][Pp][LlSs]"`
+:::
+::::
+:::::
 
 ### QC metrics calculation options
 
-|Name                             |Description                                                                                                                                                                                                                                                                               |Attributes                                                               |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--var_qc_metrics`               |Keys to select a boolean (containing only True or False) column from .var. For each cell, calculate the proportion of total values for genes which are labeled 'True',  compared to the total sum of the values for all genes. Defaults to the value from --var_name_mitochondrial_genes. |List of `string`, example: `"ercc,highly_variable"`, multiple_sep: `","` |
-|`--top_n_vars`                   |Number of top vars to be used to calculate cumulative proportions. If not specified, proportions are not calculated. `--top_n_vars 20,50` finds cumulative proportion to the 20th and 50th most expressed vars.                                                                           |List of `integer`, default: `50, 100, 200, 500`, multiple_sep: `","`     |
-|`--output_obs_num_nonzero_vars`  |Name of column in .obs describing, for each observation, the number of stored values (including explicit zeroes). In other words, the name of the column that counts for each row the number of columns that contain data.                                                                |`string`, default: `"num_nonzero_vars"`                                  |
-|`--output_obs_total_counts_vars` |Name of the column for .obs describing, for each observation (row), the sum of the stored values in the columns.                                                                                                                                                                          |`string`, default: `"total_counts"`                                      |
-|`--output_var_num_nonzero_obs`   |Name of column describing, for each feature, the number of stored values (including explicit zeroes). In other words, the name of the column that counts for each column the number of rows that contain data.                                                                            |`string`, default: `"num_nonzero_obs"`                                   |
-|`--output_var_total_counts_obs`  |Name of the column in .var describing, for each feature (column), the sum of the stored values in the rows.                                                                                                                                                                               |`string`, default: `"total_counts"`                                      |
-|`--output_var_obs_mean`          |Name of the column in .obs providing the mean of the values in each row.                                                                                                                                                                                                                  |`string`, default: `"obs_mean"`                                          |
-|`--output_var_pct_dropout`       |Name of the column in .obs providing for each feature the percentage of observations the feature does not appear on (i.e. is missing). Same as `--output_var_num_nonzero_obs` but percentage based.                                                                                       |`string`, default: `"pct_dropout"`                                       |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--var_qc_metrics`
+:::
+::: {.arg-desc role="cell"}
+Keys to select a boolean (containing only True or False) column from .var.
+For each cell, calculate the proportion of total values for genes which are labeled 'True',
+compared to the total sum of the values for all genes. Defaults to the value from
+--var_name_mitochondrial_genes.
+:::
+::: {.arg-attrs role="cell"}
+List of `string`
 
+[Example]{.arg-key} `"ercc,highly_variable"`
+
+[Separator]{.arg-key} `","`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--top_n_vars`
+:::
+::: {.arg-desc role="cell"}
+Number of top vars to be used to calculate cumulative proportions.
+If not specified, proportions are not calculated. `--top_n_vars 20,50` finds
+cumulative proportion to the 20th and 50th most expressed vars.
+:::
+::: {.arg-attrs role="cell"}
+List of `integer`
+
+[Default]{.arg-key} `50`, `100`, `200`, `500`
+
+[Separator]{.arg-key} `","`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_obs_num_nonzero_vars`
+:::
+::: {.arg-desc role="cell"}
+Name of column in .obs describing, for each observation, the number of stored values
+(including explicit zeroes). In other words, the name of the column that counts
+for each row the number of columns that contain data.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"num_nonzero_vars"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_obs_total_counts_vars`
+:::
+::: {.arg-desc role="cell"}
+Name of the column for .obs describing, for each observation (row),
+the sum of the stored values in the columns.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"total_counts"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_var_num_nonzero_obs`
+:::
+::: {.arg-desc role="cell"}
+Name of column describing, for each feature, the number of stored values
+(including explicit zeroes). In other words, the name of the column that counts
+for each column the number of rows that contain data.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"num_nonzero_obs"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_var_total_counts_obs`
+:::
+::: {.arg-desc role="cell"}
+Name of the column in .var describing, for each feature (column),
+the sum of the stored values in the rows.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"total_counts"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_var_obs_mean`
+:::
+::: {.arg-desc role="cell"}
+Name of the column in .obs providing the mean of the values in each row.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"obs_mean"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_var_pct_dropout`
+:::
+::: {.arg-desc role="cell"}
+Name of the column in .obs providing for each feature the percentage of
+observations the feature does not appear on (i.e. is missing). Same as `--output_var_num_nonzero_obs`
+but percentage based.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"pct_dropout"`
+:::
+::::
+:::::
 
 ### Outputs
 
-|Name       |Description                     |Attributes                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output` |Destination path to the output. |`file`, required, example: `"output.h5mu"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Destination path to the output.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"output.h5mu"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -108,12 +404,13 @@ nextflow run openpipelines-bio/openpipeline_spatial \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline_spatial/v0.7.0/components/workflows/qc/spatial_qc).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline_spatial/v0.7.0/components/workflows/qc/spatial_qc);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -125,8 +422,6 @@ nextflow run openpipelines-bio/openpipeline_spatial \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

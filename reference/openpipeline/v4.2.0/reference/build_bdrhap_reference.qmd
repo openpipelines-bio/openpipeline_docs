@@ -5,7 +5,7 @@ title: "build_bdrhap_reference"
 subtitle: "openpipeline v4.2.0"
 toc: true
 namespace: "Reference"
-description: "The Reference Files Generator creates an archive containing Genome Index and Transcriptome annotation files needed for the BD Rhapsody Sequencing Analysis Pipeline."
+description: "The Reference Files Generator creates an archive containing Genome Index and Transcriptome annotation files needed for the BD Rhapsody Sequencing Analysis Pipeline. The app takes as input one or more FASTA and GTF files and produces a compressed archive in the form of a tar.gz file. The archive contains:"
 type: "module"
 latest: "true"
 ---
@@ -35,33 +35,195 @@ archive contains:
 - Filtered GTF file
 
 
+::: {.ref-description}
+- STAR index
+- Filtered GTF file
+:::
+
 
 ## Argument groups
 
 ### Inputs
 
-|Name                |Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |Attributes                                                                                         |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--genome_fasta`    |Reference genome file in FASTA or FASTA.GZ format. The BD Rhapsody Sequencing Analysis Pipeline uses GRCh38 for Human and GRCm39 for Mouse.                                                                                                                                                                                                                                                                                                                                                    |List of `file`, required, example: `"genome_sequence.fa.gz"`, multiple_sep: `";"`                  |
-|`--gtf`             |File path to the transcript annotation files in GTF or GTF.GZ format. The Sequence Analysis Pipeline requires the 'gene_name' or  'gene_id' attribute to be set on each gene and exon feature. Gene and exon feature lines must have the same attribute, and exons must have a corresponding gene with the same value. For TCR/BCR assays, the TCR or BCR gene segments must have the 'gene_type' or 'gene_biotype' attribute set, and the value should begin with 'TR' or 'IG', respectively. |List of `file`, required, example: `"transcriptome_annotation.gtf.gz"`, multiple_sep: `";"`        |
-|`--extra_sequences` |File path to additional sequences in FASTA format to use when building the STAR index. (e.g. transgenes or CRISPR guide barcodes). GTF lines for these sequences will be automatically generated and combined with the main GTF.                                                                                                                                                                                                                                                               |List of `file`, example: `"extra_sequence_1.fa.gz", "extra_sequence_2.fa.gz"`, multiple_sep: `";"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--genome_fasta`
+:::
+::: {.arg-desc role="cell"}
+Reference genome file in FASTA or FASTA.GZ format. The BD Rhapsody Sequencing Analysis Pipeline uses GRCh38 for Human and GRCm39 for Mouse.
+:::
+::: {.arg-attrs role="cell"}
+List of `file` [required]{.arg-required}
 
+[Example]{.arg-key} `"genome_sequence.fa.gz"`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--gtf`
+:::
+::: {.arg-desc role="cell"}
+File path to the transcript annotation files in GTF or GTF.GZ format. The Sequence Analysis Pipeline requires the 'gene_name' or
+'gene_id' attribute to be set on each gene and exon feature. Gene and exon feature lines must have the same attribute, and exons
+must have a corresponding gene with the same value. For TCR/BCR assays, the TCR or BCR gene segments must have the 'gene_type' or
+'gene_biotype' attribute set, and the value should begin with 'TR' or 'IG', respectively.
+:::
+::: {.arg-attrs role="cell"}
+List of `file` [required]{.arg-required}
+
+[Example]{.arg-key} `"transcriptome_annotation.gtf.gz"`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--extra_sequences`
+:::
+::: {.arg-desc role="cell"}
+File path to additional sequences in FASTA format to use when building the STAR index. (e.g. transgenes or CRISPR guide barcodes).
+GTF lines for these sequences will be automatically generated and combined with the main GTF.
+:::
+::: {.arg-attrs role="cell"}
+List of `file`
+
+[Example]{.arg-key} `"extra_sequence_1.fa.gz"`, `"extra_sequence_2.fa.gz"`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::::
 
 ### Outputs
 
-|Name                  |Description                                                                                                                                                                        |Attributes                                      |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--reference_archive` |A Compressed archive containing the Reference Genome Index and annotation GTF files. This archive is meant to be used as an input in the BD Rhapsody Sequencing Analysis Pipeline. |`file`, required, example: `"reference.tar.gz"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference_archive`
+:::
+::: {.arg-desc role="cell"}
+A Compressed archive containing the Reference Genome Index and annotation GTF files. This archive is meant to be used as an
+input in the BD Rhapsody Sequencing Analysis Pipeline.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
+[Example]{.arg-key} `"reference.tar.gz"`
+:::
+::::
+:::::
 
 ### Arguments
 
-|Name                      |Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |Attributes                                                                     |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--mitochondrial_contigs` |Names of the Mitochondrial contigs in the provided Reference Genome. Fragments originating from contigs other than these are identified as 'nuclear fragments' in the ATACseq analysis pipeline.                                                                                                                                                                                                                                                                                                                                                                                     |List of `string`, default: `"chrM", "chrMT", "M", "MT"`, multiple_sep: `";"`   |
-|`--filtering_off`         |By default the input Transcript Annotation files are filtered based on the gene_type/gene_biotype attribute. Only features  having the following attribute values are kept:    - protein_coding   - lncRNA    - IG_LV_gene   - IG_V_gene   - IG_V_pseudogene   - IG_D_gene   - IG_J_gene   - IG_J_pseudogene   - IG_C_gene   - IG_C_pseudogene   - TR_V_gene   - TR_V_pseudogene   - TR_D_gene   - TR_J_gene   - TR_J_pseudogene   - TR_C_gene    If you have already pre-filtered the input Annotation files and/or wish to turn-off the filtering, please set this option to True. |`boolean_true`                                                                 |
-|`--wta_only_index`        |Build a WTA only index, otherwise builds a WTA + ATAC index.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |`boolean_true`                                                                 |
-|`--extra_star_params`     |Additional parameters to pass to STAR when building the genome index. Specify exactly like how you would on the command line.                                                                                                                                                                                                                                                                                                                                                                                                                                                        |`string`, example: `"--limitGenomeGenerateRAM 48000 --genomeSAindexNbases 11"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--mitochondrial_contigs`
+:::
+::: {.arg-desc role="cell"}
+Names of the Mitochondrial contigs in the provided Reference Genome. Fragments originating from contigs other than these are
+identified as 'nuclear fragments' in the ATACseq analysis pipeline.
+:::
+::: {.arg-attrs role="cell"}
+List of `string`
+
+[Default]{.arg-key} `"chrM"`, `"chrMT"`, `"M"`, `"MT"`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--filtering_off`
+:::
+::: {.arg-desc role="cell"}
+By default the input Transcript Annotation files are filtered based on the gene_type/gene_biotype attribute. Only features
+having the following attribute values are kept:
+
+  - protein_coding
+  - lncRNA
+  - IG_LV_gene
+  - IG_V_gene
+  - IG_V_pseudogene
+  - IG_D_gene
+  - IG_J_gene
+  - IG_J_pseudogene
+  - IG_C_gene
+  - IG_C_pseudogene
+  - TR_V_gene
+  - TR_V_pseudogene
+  - TR_D_gene
+  - TR_J_gene
+  - TR_J_pseudogene
+  - TR_C_gene
+
+  If you have already pre-filtered the input Annotation files and/or wish to turn-off the filtering, please set this option to True.
+:::
+::: {.arg-attrs role="cell"}
+`boolean_true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--wta_only_index`
+:::
+::: {.arg-desc role="cell"}
+Build a WTA only index, otherwise builds a WTA + ATAC index.
+:::
+::: {.arg-attrs role="cell"}
+`boolean_true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--extra_star_params`
+:::
+::: {.arg-desc role="cell"}
+Additional parameters to pass to STAR when building the genome index. Specify exactly like how you would on the command line.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"--limitGenomeGenerateRAM 48000 --genomeSAindexNbases 11"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -87,12 +249,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/reference/build_bdrhap_reference).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/reference/build_bdrhap_reference);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -104,8 +267,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

@@ -5,7 +5,7 @@ title: "filter_with_scrublet"
 subtitle: "openpipeline v4.2.0"
 toc: true
 namespace: "Filter"
-description: "Doublet detection using the Scrublet method (Wolock, Lopez and Klein, 2019)."
+description: "Doublet detection using the Scrublet method (Wolock, Lopez and Klein, 2019). The method tests for potential doublets by using the expression profiles of cells to generate synthetic potential doubles which are tested against cells. The method returns a \"doublet score\" on which it calls for potential doublets."
 type: "module"
 latest: "true"
 ---
@@ -48,32 +48,295 @@ For 10x we expect the doublet rates to be:
   ~7.6% ~16,000 ~10,000
 
 
+::: {.ref-description}
+For the source code please visit https://github.com/AllonKleinLab/scrublet.
+
+For 10x we expect the doublet rates to be:
+  Multiplet Rate (%) - # of Cells Loaded - # of Cells Recovered
+  ~0.4% ~800 ~500
+  ~0.8% ~1,600 ~1,000
+  ~1.6% ~3,200 ~2,000
+  ~2.3% ~4,800 ~3,000
+  ~3.1% ~6,400 ~4,000
+  ~3.9% ~8,000 ~5,000
+  ~4.6% ~9,600 ~6,000
+  ~5.4% ~11,200 ~7,000
+  ~6.1% ~12,800 ~8,000
+  ~6.9% ~14,400 ~9,000
+  ~7.6% ~16,000 ~10,000
+:::
+
 
 ## Argument group
 
 ### Arguments
 
-|Name                                         |Description                                                                                                                                                                            |Attributes                                    |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`                                    |Input h5mu file                                                                                                                                                                        |`file`, required, example: `"input.h5mu"`     |
-|`--modality`                                 |Which modality from the input MuData file to process.                                                                                                                                  |`string`, default: `"rna"`                    |
-|`--layer`                                    |Input layer to use as data for calculating doublets. .X is used not specified.                                                                                                         |`string`                                      |
-|`--output`                                   |Output h5mu file.                                                                                                                                                                      |`file`, example: `"output.h5mu"`              |
-|`--obs_name_filter`                          |In which .obs slot to store a boolean array corresponding to which observations should be filtered out.                                                                                |`string`, default: `"filter_with_scrublet"`   |
-|`--do_subset`                                |Whether to subset before storing the output.                                                                                                                                           |`boolean_true`                                |
-|`--obs_name_doublet_score`                   |Name of the doublet scores column in the obs slot of the returned object.                                                                                                              |`string`, default: `"scrublet_doublet_score"` |
-|`--expected_doublet_rate`                    |The estimated fraction of doublets as from the experimental setup.                                                                                                                     |`double`                                      |
-|`--stdev_doublet_rate`                       |Uncertainty in the expected doublet rate.                                                                                                                                              |`double`                                      |
-|`--n_neighbors`                              |Number of neighbors used to construct the KNN classifier of observed transcriptomes and simulated doublets.                                                                            |`integer`                                     |
-|`--sim_doublet_ratio`                        |Number of doublets to simulate relative to the number of observed transcriptomes.                                                                                                      |`double`                                      |
-|`--min_counts`                               |The number of minimal UMI counts per cell that have to be present for initial cell detection.                                                                                          |`integer`, default: `2`                       |
-|`--min_cells`                                |The number of cells in which UMIs for a gene were detected.                                                                                                                            |`integer`, default: `3`                       |
-|`--min_gene_variablity_percent`              |Used for gene filtering prior to PCA. Keep the most highly variable genes (in the top min_gene_variability_pctl percentile), as measured by the v-statistic [Klein et al., Cell 2015]. |`double`, default: `85`                       |
-|`--num_pca_components`                       |Number of principal components to use during PCA dimensionality reduction.                                                                                                             |`integer`, default: `30`                      |
-|`--distance_metric`                          |The distance metric used for computing similarities.                                                                                                                                   |`string`, default: `"euclidean"`              |
-|`--scrublet_score_threshold`                 |Manual doublet score threshold. Cells with a doublet score above this value are classified as doublets. If not provided, the threshold is determined automatically by Scrublet.        |`double`                                      |
-|`--allow_automatic_threshold_detection_fail` |When scrublet fails to automatically determine the double score threshold,  allow the component to continue and set the output columns to NA.                                          |`boolean_true`                                |
-|`--output_compression`                       |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied.                                                                         |`string`, example: `"gzip"`                   |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Input h5mu file
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"input.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--modality`
+:::
+::: {.arg-desc role="cell"}
+Which modality from the input MuData file to process.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"rna"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--layer`
+:::
+::: {.arg-desc role="cell"}
+Input layer to use as data for calculating doublets. .X is used not specified.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Output h5mu file.
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"output.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obs_name_filter`
+:::
+::: {.arg-desc role="cell"}
+In which .obs slot to store a boolean array corresponding to which observations should be filtered out.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"filter_with_scrublet"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--do_subset`
+:::
+::: {.arg-desc role="cell"}
+Whether to subset before storing the output.
+:::
+::: {.arg-attrs role="cell"}
+`boolean_true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obs_name_doublet_score`
+:::
+::: {.arg-desc role="cell"}
+Name of the doublet scores column in the obs slot of the returned object.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"scrublet_doublet_score"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--expected_doublet_rate`
+:::
+::: {.arg-desc role="cell"}
+The estimated fraction of doublets as from the experimental setup.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Min]{.arg-key} `0.0`
+
+[Max]{.arg-key} `1.0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--stdev_doublet_rate`
+:::
+::: {.arg-desc role="cell"}
+Uncertainty in the expected doublet rate.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Min]{.arg-key} `0.0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--n_neighbors`
+:::
+::: {.arg-desc role="cell"}
+Number of neighbors used to construct the KNN classifier of observed transcriptomes
+and simulated doublets.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Min]{.arg-key} `0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--sim_doublet_ratio`
+:::
+::: {.arg-desc role="cell"}
+Number of doublets to simulate relative to the number of observed
+transcriptomes.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Min]{.arg-key} `0.0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--min_counts`
+:::
+::: {.arg-desc role="cell"}
+The number of minimal UMI counts per cell that have to be present for initial cell detection.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `2`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--min_cells`
+:::
+::: {.arg-desc role="cell"}
+The number of cells in which UMIs for a gene were detected.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `3`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--min_gene_variablity_percent`
+:::
+::: {.arg-desc role="cell"}
+Used for gene filtering prior to PCA. Keep the most highly variable genes (in the top min_gene_variability_pctl percentile), as measured by the v-statistic [Klein et al., Cell 2015].
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `85.0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--num_pca_components`
+:::
+::: {.arg-desc role="cell"}
+Number of principal components to use during PCA dimensionality reduction.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `30`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--distance_metric`
+:::
+::: {.arg-desc role="cell"}
+The distance metric used for computing similarities.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"euclidean"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scrublet_score_threshold`
+:::
+::: {.arg-desc role="cell"}
+Manual doublet score threshold. Cells with a doublet score above this value
+are classified as doublets. If not provided, the threshold is determined
+automatically by Scrublet.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Min]{.arg-key} `0.0`
+
+[Max]{.arg-key} `1.0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--allow_automatic_threshold_detection_fail`
+:::
+::: {.arg-desc role="cell"}
+When scrublet fails to automatically determine the double score threshold,
+allow the component to continue and set the output columns to NA.
+:::
+::: {.arg-attrs role="cell"}
+`boolean_true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_compression`
+:::
+::: {.arg-desc role="cell"}
+Compression format to use for the output AnnData and/or Mudata H5 files.
+By default no compression is applied.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"gzip"`
+
+[Choices]{.arg-key} `"gzip"`, `"lzf"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -99,12 +362,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/filter/filter_with_scrublet).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/filter/filter_with_scrublet);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -116,8 +380,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

@@ -5,7 +5,7 @@ title: "cellsnp"
 subtitle: "openpipeline v4.2.0"
 toc: true
 namespace: "Genetic demux"
-description: "cellSNP aims to pileup the expressed alleles in single-cell or bulk RNA-seq data."
+description: "cellSNP aims to pileup the expressed alleles in single-cell or bulk RNA-seq data. It can be directly used for donor deconvolution in multiplexed single-cell RNA-seq data, particularly with vireo."
 type: "module"
 latest: "true"
 ---
@@ -34,37 +34,316 @@ It can be directly used for donor deconvolution in multiplexed single-cell RNA-s
 
 ### Input
 
-|Name                |Description                                                                                                                                                                                                      |Attributes                         |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--sam_file`        |Indexed sam/bam file(s), comma separated multiple samples. Mode 1a & 2a: one sam/bam file with single cell. Mode 1b & 2b: one or multiple bulk sam/bam files, no barcodes needed, but sample ids and regionsVCF. |`file`, example: `"input.bam"`     |
-|`--sam_index_file`  |Input SAM/BAM Index file, problem with samFileList.                                                                                                                                                              |`file`, example: `"input.bai"`     |
-|`--sam_fileList`    |A list file containing bam files, each per line, for Mode 1b & 2b.                                                                                                                                               |`file`, example: `"file_list.txt"` |
-|`--regions_vcf`     |A vcf file listing all candidate SNPs, for fetch each variants. If None, pileup the genome. Needed for bulk samples.                                                                                             |`file`, example: `"regions.vcf"`   |
-|`--targets_vcf`     |Similar as --regions_vcf, but the next position is accessed by streaming rather than indexing/jumping (like -T in samtools/bcftools mpileup).                                                                    |`file`, example: `"targets.vcf"`   |
-|`--barcode_file`    |A plain file listing all effective cell barcode.                                                                                                                                                                 |`file`, example: `"barcodes.tsv"`  |
-|`--sample_list`     |A list file containing sample IDs, each per line.                                                                                                                                                                |`file`, example: `"samples.txt"`   |
-|`--sample_ids`      |Comma separated sample ids.                                                                                                                                                                                      |`string`                           |
-|`--genotype`        |If use, do genotyping in addition to counting.                                                                                                                                                                   |`boolean_true`                     |
-|`--gzip`            |If use, the output files will be zipped into BGZF format.                                                                                                                                                        |`boolean_true`                     |
-|`--print_skip_snps` |If use, the SNPs skipped when loading VCF will be printed.                                                                                                                                                       |`boolean_true`                     |
-|`--chrom`           |The chromosomes to use in integer format 1-22, comma separated                                                                                                                                                   |`string`                           |
-|`--cell_tag`        |Tag for cell barcodes, turn off with None.                                                                                                                                                                       |`string`, default: `"CB"`          |
-|`--umi_tag`         |Tag for UMI: UR, Auto, None. For Auto mode, use UR if barcodes is inputted, otherwise use None. None mode means no UMI but read counts.                                                                          |`string`, default: `"Auto"`        |
-|`--min_count`       |Minimum aggragated count.                                                                                                                                                                                        |`integer`, default: `20`           |
-|`--min_maf`         |Minimum minor allele frequency.                                                                                                                                                                                  |`double`, default: `0`             |
-|`--doublet_gl`      |If use, keep doublet GT likelihood, i.e., GT=0.5 and GT=1.5.                                                                                                                                                     |`boolean_true`                     |
-|`--incl_flag`       |Required flags: skip reads with all mask bits unset.                                                                                                                                                             |`string`                           |
-|`--excl_flag`       |Filter flags: skip reads with any mask bits set [UNMAP,SECONDARY,QCFAIL (when use UMI) or UNMAP,SECONDARY,QCFAIL,DUP (otherwise)]                                                                                |`string`                           |
-|`--count_orphan`    |If use, do not skip anomalous read pairs.                                                                                                                                                                        |`boolean_true`                     |
-|`--min_mapq`        |Minimum MAPQ for read filtering.                                                                                                                                                                                 |`integer`, default: `20`           |
-|`--min_len`         |Minimum mapped length for read filtering.                                                                                                                                                                        |`integer`, default: `30`           |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--sam_file`
+:::
+::: {.arg-desc role="cell"}
+Indexed sam/bam file(s), comma separated multiple samples. Mode 1a & 2a: one sam/bam file with single cell. Mode 1b & 2b: one or multiple bulk sam/bam files, no barcodes needed, but sample ids and regionsVCF.
+:::
+::: {.arg-attrs role="cell"}
+`file`
 
+[Example]{.arg-key} `"input.bam"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--sam_index_file`
+:::
+::: {.arg-desc role="cell"}
+Input SAM/BAM Index file, problem with samFileList.
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"input.bai"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--sam_fileList`
+:::
+::: {.arg-desc role="cell"}
+A list file containing bam files, each per line, for Mode 1b & 2b.
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"file_list.txt"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--regions_vcf`
+:::
+::: {.arg-desc role="cell"}
+A vcf file listing all candidate SNPs, for fetch each variants. If None, pileup the genome. Needed for bulk samples.
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"regions.vcf"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--targets_vcf`
+:::
+::: {.arg-desc role="cell"}
+Similar as --regions_vcf, but the next position is accessed by streaming rather than indexing/jumping (like -T in samtools/bcftools mpileup).
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"targets.vcf"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--barcode_file`
+:::
+::: {.arg-desc role="cell"}
+A plain file listing all effective cell barcode.
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"barcodes.tsv"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--sample_list`
+:::
+::: {.arg-desc role="cell"}
+A list file containing sample IDs, each per line.
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"samples.txt"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--sample_ids`
+:::
+::: {.arg-desc role="cell"}
+Comma separated sample ids.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--genotype`
+:::
+::: {.arg-desc role="cell"}
+If use, do genotyping in addition to counting.
+:::
+::: {.arg-attrs role="cell"}
+`boolean_true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--gzip`
+:::
+::: {.arg-desc role="cell"}
+If use, the output files will be zipped into BGZF format.
+:::
+::: {.arg-attrs role="cell"}
+`boolean_true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--print_skip_snps`
+:::
+::: {.arg-desc role="cell"}
+If use, the SNPs skipped when loading VCF will be printed.
+:::
+::: {.arg-attrs role="cell"}
+`boolean_true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--chrom`
+:::
+::: {.arg-desc role="cell"}
+The chromosomes to use in integer format 1-22, comma separated
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--cell_tag`
+:::
+::: {.arg-desc role="cell"}
+Tag for cell barcodes, turn off with None.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"CB"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--umi_tag`
+:::
+::: {.arg-desc role="cell"}
+Tag for UMI: UR, Auto, None. For Auto mode, use UR if barcodes is inputted, otherwise use None. None mode means no UMI but read counts.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"Auto"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--min_count`
+:::
+::: {.arg-desc role="cell"}
+Minimum aggragated count.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `20`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--min_maf`
+:::
+::: {.arg-desc role="cell"}
+Minimum minor allele frequency.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `0.0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--doublet_gl`
+:::
+::: {.arg-desc role="cell"}
+If use, keep doublet GT likelihood, i.e., GT=0.5 and GT=1.5.
+:::
+::: {.arg-attrs role="cell"}
+`boolean_true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--incl_flag`
+:::
+::: {.arg-desc role="cell"}
+Required flags: skip reads with all mask bits unset.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--excl_flag`
+:::
+::: {.arg-desc role="cell"}
+Filter flags: skip reads with any mask bits set [UNMAP,SECONDARY,QCFAIL (when use UMI) or UNMAP,SECONDARY,QCFAIL,DUP (otherwise)]
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--count_orphan`
+:::
+::: {.arg-desc role="cell"}
+If use, do not skip anomalous read pairs.
+:::
+::: {.arg-attrs role="cell"}
+`boolean_true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--min_mapq`
+:::
+::: {.arg-desc role="cell"}
+Minimum MAPQ for read filtering.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `20`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--min_len`
+:::
+::: {.arg-desc role="cell"}
+Minimum mapped length for read filtering.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `30`
+:::
+::::
+:::::
 
 ### Output
 
-|Name       |Description                                   |Attributes                       |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output` |Output directory for VCF and sparse matrices. |`file`, example: `"cellsnp_out"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Output directory for VCF and sparse matrices.
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"cellsnp_out"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -88,12 +367,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/genetic_demux/cellsnp).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/genetic_demux/cellsnp);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -105,8 +385,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

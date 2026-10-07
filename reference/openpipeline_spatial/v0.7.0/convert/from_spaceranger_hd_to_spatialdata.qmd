@@ -34,20 +34,135 @@ at the bin size given by `--bin_size`. In both cases the loaded table is
 renamed to "table" so that downstream components stay technology-agnostic.
 
 
+::: {.ref-description}
+By default it reads the segmented cells (per-cell count matrix and cell
+boundary polygons) that Space Ranger 4.x writes to `segmented_outputs/`. Set
+`--mode bins` to instead read a binned output (`binned_outputs/square_<N>um/`)
+at the bin size given by `--bin_size`. In both cases the loaded table is
+renamed to "table" so that downstream components stay technology-agnostic.
+:::
+
 
 ## Argument group
 
 ### Arguments
 
-|Name             |Description                                                                                                                                                                                                                   |Attributes                                         |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`        |Input folder containing the output from a Space Ranger run for Visium HD and a `*_feature_slice.h5` file. Must contain a `segmented_outputs/` directory for `--mode segmented_cells`, or `binned_outputs/` for `--mode bins`. |`file`, required, example: `"spaceranger_output"`  |
-|`--output`       |Zarr directory where the SpatialData object will be stored.                                                                                                                                                                   |`file`, required, example: `"visium_hd_data.zarr"` |
-|`--mode`         |Which output to load into the table: `segmented_cells` (per-cell counts and cell boundary polygons from `segmented_outputs/`) or `bins` (binned counts from `binned_outputs/square_<bin_size>um/`).                           |`string`, default: `"segmented_cells"`             |
-|`--bin_size`     |Bin size in microns to load when `--mode bins`. Visium HD captures data at 2 µm and aggregates it into 8 µm and 16 µm square bins.                                                                                            |`integer`, default: `8`                            |
-|`--output_type`  |Which count matrix to load: `filtered` (barcodes under tissue only) or `raw` (all barcodes). Applies to both the segmented-cell and binned matrices.                                                                          |`string`, default: `"filtered"`                    |
-|`--output_layer` |If provided, the count matrix is also stored as a named layer (`table.layers[output_layer]`) in addition to `.X`.                                                                                                             |`string`                                           |
-|`--dataset_id`   |Identifier used to name the spatial elements (shapes and images) in the SpatialData object. If not provided, it is inferred from the `*_feature_slice.h5` file name in the input directory.                                   |`string`                                           |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Input folder containing the output from a Space Ranger run for Visium HD
+and a `*_feature_slice.h5` file. Must contain a `segmented_outputs/`
+directory for `--mode segmented_cells`, or `binned_outputs/` for
+`--mode bins`.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"spaceranger_output"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Zarr directory where the SpatialData object will be stored.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"visium_hd_data.zarr"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--mode`
+:::
+::: {.arg-desc role="cell"}
+Which output to load into the table: `segmented_cells` (per-cell counts
+and cell boundary polygons from `segmented_outputs/`) or `bins` (binned
+counts from `binned_outputs/square_<bin_size>um/`).
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"segmented_cells"`
+
+[Choices]{.arg-key} `"segmented_cells"`, `"bins"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--bin_size`
+:::
+::: {.arg-desc role="cell"}
+Bin size in microns to load when `--mode bins`. Visium HD captures data at
+2 µm and aggregates it into 8 µm and 16 µm square bins.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `8`
+
+[Choices]{.arg-key} `2`, `8`, `16`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_type`
+:::
+::: {.arg-desc role="cell"}
+Which count matrix to load: `filtered` (barcodes under tissue only) or
+`raw` (all barcodes). Applies to both the segmented-cell and binned matrices.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"filtered"`
+
+[Choices]{.arg-key} `"filtered"`, `"raw"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_layer`
+:::
+::: {.arg-desc role="cell"}
+If provided, the count matrix is also stored as a named layer
+(`table.layers[output_layer]`) in addition to `.X`.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--dataset_id`
+:::
+::: {.arg-desc role="cell"}
+Identifier used to name the spatial elements (shapes and images) in the
+SpatialData object. If not provided, it is inferred from the
+`*_feature_slice.h5` file name in the input directory.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -71,12 +186,13 @@ nextflow run openpipelines-bio/openpipeline_spatial \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline_spatial/v0.7.0/components/convert/from_spaceranger_hd_to_spatialdata).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline_spatial/v0.7.0/components/convert/from_spaceranger_hd_to_spatialdata);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -88,8 +204,6 @@ nextflow run openpipelines-bio/openpipeline_spatial \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

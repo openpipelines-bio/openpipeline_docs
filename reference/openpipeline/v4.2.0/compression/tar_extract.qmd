@@ -34,12 +34,71 @@ Namespace: `compression`
 
 ### Arguments
 
-|Name                 |Description                                                                                                                                                                                                              |Attributes                                   |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`            |Input file                                                                                                                                                                                                               |`file`, required, example: `"input.tar.gz"`  |
-|`--output`           |Folder to restore file(s) to.                                                                                                                                                                                            |`file`, required, example: `"output_folder"` |
-|`--strip_components` |Strip this amount of leading components from file names on extraction. For example, to extract only 'myfile.txt' from an archive containing the structure `this/goes/deep/myfile.txt', use 3 to strip 'this/goes/deep/'. |`integer`, example: `1`                      |
-|`--exclude`          |Prevents any file or member whose name matches the shell wildcard (pattern) from being extracted.                                                                                                                        |`string`, example: `"docs/figures"`          |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Input file
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"input.tar.gz"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Folder to restore file(s) to.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"output_folder"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--strip_components`
+:::
+::: {.arg-desc role="cell"}
+Strip this amount of leading components from file names on extraction. For example, to extract only 'myfile.txt' from an archive containing the structure `this/goes/deep/myfile.txt', use 3 to strip 'this/goes/deep/'.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Example]{.arg-key} `1`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--exclude`
+:::
+::: {.arg-desc role="cell"}
+Prevents any file or member whose name matches the shell wildcard (pattern) from being extracted.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"docs/figures"`
+:::
+::::
+:::::
 
 ## Example commands
 
@@ -58,12 +117,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/compression/tar_extract).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/compression/tar_extract);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -75,8 +135,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

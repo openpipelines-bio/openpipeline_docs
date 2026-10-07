@@ -34,23 +34,219 @@ Namespace: `interpret`
 
 ### Arguments
 
-|Name                   |Description                                                                                                                                                                                                                        |Attributes                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`              |Input h5mu file                                                                                                                                                                                                                    |`file`, required, example: `"input.h5mu"`  |
-|`--output`             |Output h5mu file.                                                                                                                                                                                                                  |`file`, required, example: `"output.h5mu"` |
-|`--modality`           |Which modality from the input MuData file to process.                                                                                                                                                                              |`string`, default: `"rna"`                 |
-|`--layer`              |Layer in anndata.AnnData.layers to use. If None, use mudata.mod[modality].X.                                                                                                                                                       |`string`                                   |
-|`--de_method`          |Differential expression method. `scanpy.tl.rank_genes_groups` is used to rank genes according to 1vsRest.                                                                                                                          |`string`, default: `"t-test"`              |
-|`--groupby`            |The key of the observations grouping to consider.                                                                                                                                                                                  |`string`, required                         |
-|`--resource_name`      |Name of the resource to be loaded and use for ligand-receptor inference.                                                                                                                                                           |`string`, default: `"consensus"`           |
-|`--gene_symbol`        |Column name in var DataFrame in which gene symbol are stored.                                                                                                                                                                      |`string`, default: `"gene_symbol"`         |
-|`--expr_prop`          |Minimum expression proportion for the ligands/receptors (and their subunits) in the corresponding cell identities. Set to '0', to return unfiltered results.                                                                       |`double`, default: `0.1`                   |
-|`--min_cells`          |Minimum cells per cell identity ('groupby') to be considered for downstream analysis.                                                                                                                                              |`integer`, default: `5`                    |
-|`--aggregate_method`   |Method aggregation approach, one of ['mean', 'rra'], where 'mean' represents the mean rank, while 'rra' is the RobustRankAggregate (Kolde et al., 2014) of the interactions.                                                       |`string`, default: `"rra"`                 |
-|`--consensus_opts`     |Strategies to aggregate interactions across methods. Default is None - i.e. ['Specificity', 'Magnitude'] and both specificity and magnitude are aggregated.                                                                        |List of `string`, multiple_sep: `";"`      |
-|`--return_all_lrs`     |Bool whether to return all LRs, or only those that surpass the 'expr_prop' threshold. Those interactions that do not pass the 'expr_prop' threshold will be assigned to the *worst* score of the ones that do. 'False' by default. |`boolean`, default: `FALSE`                |
-|`--n_perms`            |Number of permutations for the permutation test. Note that this is relevant only for permutation-based methods - e.g. 'CellPhoneDB                                                                                                 |`integer`, default: `100`                  |
-|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied.                                                                                                                     |`string`, example: `"gzip"`                |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Input h5mu file
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"input.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Output h5mu file.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"output.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--modality`
+:::
+::: {.arg-desc role="cell"}
+Which modality from the input MuData file to process.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"rna"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--layer`
+:::
+::: {.arg-desc role="cell"}
+Layer in anndata.AnnData.layers to use. If None, use mudata.mod[modality].X.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--de_method`
+:::
+::: {.arg-desc role="cell"}
+Differential expression method. `scanpy.tl.rank_genes_groups` is used to rank genes according to 1vsRest.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"t-test"`
+
+[Choices]{.arg-key} `"logreg"`, `"t-test"`, `"wilcoxon"`, `"t-test_overestim_var"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--groupby`
+:::
+::: {.arg-desc role="cell"}
+The key of the observations grouping to consider.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--resource_name`
+:::
+::: {.arg-desc role="cell"}
+Name of the resource to be loaded and use for ligand-receptor inference.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"consensus"`
+
+[Choices]{.arg-key} `"baccin2019"`, `"cellcall"`, `"cellchatdb"`, `"cellinker"`, `"cellphonedb"`, `"celltalkdb"`, `"connectomedb2020"`, `"consensus"`, `"embrace"`, `"guide2pharma"`, `"hpmr"`, `"icellnet"`, `"italk"`, `"kirouac2010"`, `"lrdb"`, `"mouseconsensus"`, `"ramilowski2015"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--gene_symbol`
+:::
+::: {.arg-desc role="cell"}
+Column name in var DataFrame in which gene symbol are stored.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"gene_symbol"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--expr_prop`
+:::
+::: {.arg-desc role="cell"}
+Minimum expression proportion for the ligands/receptors (and their subunits) in the corresponding cell identities. Set to '0', to return unfiltered results.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `0.1`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--min_cells`
+:::
+::: {.arg-desc role="cell"}
+Minimum cells per cell identity ('groupby') to be considered for downstream analysis.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `5`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--aggregate_method`
+:::
+::: {.arg-desc role="cell"}
+Method aggregation approach, one of ['mean', 'rra'], where 'mean' represents the mean rank, while 'rra' is the RobustRankAggregate (Kolde et al., 2014) of the interactions.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"rra"`
+
+[Choices]{.arg-key} `"mean"`, `"rra"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--consensus_opts`
+:::
+::: {.arg-desc role="cell"}
+Strategies to aggregate interactions across methods. Default is None - i.e. ['Specificity', 'Magnitude'] and both specificity and magnitude are aggregated.
+:::
+::: {.arg-attrs role="cell"}
+List of `string`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--return_all_lrs`
+:::
+::: {.arg-desc role="cell"}
+Bool whether to return all LRs, or only those that surpass the 'expr_prop' threshold. Those interactions that do not pass the 'expr_prop' threshold will be assigned to the *worst* score of the ones that do. 'False' by default.
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
+
+[Default]{.arg-key} `false`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--n_perms`
+:::
+::: {.arg-desc role="cell"}
+Number of permutations for the permutation test. Note that this is relevant only for permutation-based methods - e.g. 'CellPhoneDB
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `100`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_compression`
+:::
+::: {.arg-desc role="cell"}
+Compression format to use for the output AnnData and/or Mudata H5 files.
+By default no compression is applied.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"gzip"`
+
+[Choices]{.arg-key} `"gzip"`, `"lzf"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -76,12 +272,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/interpret/lianapy).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/interpret/lianapy);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -93,8 +290,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

@@ -46,46 +46,258 @@ flowchart TB
 
 ### Inputs
 
-|Name         |Description                                                                           |Attributes                                  |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--id`       |ID of the sample.                                                                     |`string`, required, example: `"foo"`        |
-|`--input`    |Path to the sample.                                                                   |`file`, required, example: `"dataset.h5mu"` |
-|`--layer`    |use specified layer for expression values instead of the .X object from the modality. |`string`, default: `"log_normalized"`       |
-|`--modality` |Which modality to process.                                                            |`string`, default: `"rna"`                  |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--id`
+:::
+::: {.arg-desc role="cell"}
+ID of the sample.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
 
+[Example]{.arg-key} `"foo"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Path to the sample.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"dataset.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--layer`
+:::
+::: {.arg-desc role="cell"}
+use specified layer for expression values instead of the .X object from the modality.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"log_normalized"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--modality`
+:::
+::: {.arg-desc role="cell"}
+Which modality to process.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"rna"`
+:::
+::::
+:::::
 
 ### Outputs
 
-|Name       |Description                     |Attributes                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output` |Destination path to the output. |`file`, required, example: `"output.h5mu"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Destination path to the output.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
+[Example]{.arg-key} `"output.h5mu"`
+:::
+::::
+:::::
 
 ### PCA options
 
-|Name                          |Description                                                                                                                                                  |Attributes                   |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--obsm_pca`                  |In which .obsm slot to store the resulting PCA embedding.                                                                                                    |`string`, default: `"X_pca"` |
-|`--var_pca_feature_selection` |Column name in .var matrix that will be used to select which genes to run the PCA on.                                                                        |`string`                     |
-|`--pca_loadings_varm_output`  |Name of the .varm key where the PCA loadings are stored.                                                                                                     |`string`                     |
-|`--pca_variance_uns_output`   |Name of the .uns key where the variance and variance ratio will be stored as a map. The map will contain two keys: variance and variance_ratio respectively. |`string`                     |
-|`--pca_overwrite`             |Allow overwriting slots for PCA output.                                                                                                                      |`boolean_true`               |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obsm_pca`
+:::
+::: {.arg-desc role="cell"}
+In which .obsm slot to store the resulting PCA embedding.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Default]{.arg-key} `"X_pca"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--var_pca_feature_selection`
+:::
+::: {.arg-desc role="cell"}
+Column name in .var matrix that will be used to select which genes to run the PCA on.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--pca_loadings_varm_output`
+:::
+::: {.arg-desc role="cell"}
+Name of the .varm key where the PCA loadings are stored.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--pca_variance_uns_output`
+:::
+::: {.arg-desc role="cell"}
+Name of the .uns key where the variance and variance ratio will be stored as a map.
+The map will contain two keys: variance and variance_ratio respectively.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--pca_overwrite`
+:::
+::: {.arg-desc role="cell"}
+Allow overwriting slots for PCA output.
+:::
+::: {.arg-attrs role="cell"}
+`boolean_true`
+:::
+::::
+:::::
 
 ### Neighbour calculation
 
-|Name                             |Description                                                                             |Attributes                            |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--uns_neighbors`                |In which .uns slot to store various neighbor output objects.                            |`string`, default: `"neighbors"`      |
-|`--obsp_neighbor_distances`      |In which .obsp slot to store the distance matrix between the resulting neighbors.       |`string`, default: `"distances"`      |
-|`--obsp_neighbor_connectivities` |In which .obsp slot to store the connectivities matrix between the resulting neighbors. |`string`, default: `"connectivities"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--uns_neighbors`
+:::
+::: {.arg-desc role="cell"}
+In which .uns slot to store various neighbor output objects.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Default]{.arg-key} `"neighbors"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obsp_neighbor_distances`
+:::
+::: {.arg-desc role="cell"}
+In which .obsp slot to store the distance matrix between the resulting neighbors.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"distances"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obsp_neighbor_connectivities`
+:::
+::: {.arg-desc role="cell"}
+In which .obsp slot to store the connectivities matrix between the resulting neighbors.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"connectivities"`
+:::
+::::
+:::::
 
 ### Umap options
 
-|Name          |Description                                                |Attributes                    |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--obsm_umap` |In which .obsm slot to store the resulting UMAP embedding. |`string`, default: `"X_umap"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obsm_umap`
+:::
+::: {.arg-desc role="cell"}
+In which .obsm slot to store the resulting UMAP embedding.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"X_umap"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -109,12 +321,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/multiomics/dimensionality_reduction).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/multiomics/dimensionality_reduction);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -126,8 +339,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

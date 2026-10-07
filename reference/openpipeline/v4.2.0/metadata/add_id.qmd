@@ -5,7 +5,7 @@ title: "add_id"
 subtitle: "openpipeline v4.2.0"
 toc: true
 namespace: "Metadata"
-description: "Add id of .obs."
+description: "Add id of .obs. Also allows to make .obs_names (the .obs index) unique by prefixing the values with an unique id per .h5mu file."
 type: "module"
 latest: "true"
 ---
@@ -35,14 +35,96 @@ by prefixing the values with an unique id per .h5mu file
 
 ### Arguments
 
-|Name                             |Description                                                                                                    |Attributes                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`                        |Path to the input .h5mu.                                                                                       |`file`, required, example: `"input.h5mu"` |
-|`--input_id`                     |The input id.                                                                                                  |`string`, required                        |
-|`--obs_output`                   |Name of the .obs column where to store the id.                                                                 |`string`, default: `"sample_id"`          |
-|`--output`                       |Name of output MuData file.                                                                                    |`file`, example: `"output.h5mu"`          |
-|`--make_observation_keys_unique` |Join the id to the .obs index (.obs_names).                                                                    |`boolean_true`                            |
-|`--output_compression`           |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied. |`string`, example: `"gzip"`               |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Path to the input .h5mu.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"input.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_id`
+:::
+::: {.arg-desc role="cell"}
+The input id.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obs_output`
+:::
+::: {.arg-desc role="cell"}
+Name of the .obs column where to store the id.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"sample_id"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Name of output MuData file.
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"output.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--make_observation_keys_unique`
+:::
+::: {.arg-desc role="cell"}
+Join the id to the .obs index (.obs_names).
+:::
+::: {.arg-attrs role="cell"}
+`boolean_true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_compression`
+:::
+::: {.arg-desc role="cell"}
+Compression format to use for the output AnnData and/or Mudata H5 files.
+By default no compression is applied.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"gzip"`
+
+[Choices]{.arg-key} `"gzip"`, `"lzf"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -66,12 +148,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/metadata/add_id).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/metadata/add_id);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -83,8 +166,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

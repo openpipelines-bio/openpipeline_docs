@@ -5,7 +5,7 @@ title: "demuxlet"
 subtitle: "openpipeline v4.2.0"
 toc: true
 namespace: "Genetic demux"
-description: "Demuxlet is a software tool to deconvolute sample identity and identify multiplets when multiple samples are pooled by barcoded single cell sequencing."
+description: "Demuxlet is a software tool to deconvolute sample identity and identify multiplets when multiple samples are pooled by barcoded single cell sequencing. If external genotyping data for each sample is available (e.g. from SNP arrays), demuxlet would be recommended. Be careful that the parameters on the github is not in line with the newest help version."
 type: "module"
 latest: "true"
 ---
@@ -36,42 +36,391 @@ that the parameters on the github is not in line with the newest help version
 
 ### Input
 
-|Name                  |Description                                                                                                                                                |Attributes                     |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--sam`               |Input SAM/BAM/CRAM file. Must be sorted by coordinates and indexed.                                                                                        |`file`, example: `"input.bam"` |
-|`--tag_group`         |Tag representing readgroup or cell barcodes, in the case to partition the BAM file into multiple groups. For 10x genomics, use CB.                         |`string`, default: `"CB"`      |
-|`--tag_umi`           |Tag representing UMIs. For 10x genomiucs, use UB.                                                                                                          |`string`, default: `"UB"`      |
-|`--plp`               |Input pileup format. If the value is a string, it will be considered as the path of the plp file. If the value is boolean true, it will perform dscpileup. |`string`                       |
-|`--vcf`               |Input VCF/BCF file, containing the individual genotypes (GT), posterior probability (GP), or genotype likelihood (PL).                                     |`file`, example: `"input.vcf"` |
-|`--field`             |FORMAT field to extract the genotype, likelihood, or posterior from                                                                                        |`string`, default: `"GT"`      |
-|`--geno_error_offset` |Offset of genotype error rate. [error] = [offset] + [1-offset]*[coeff]*[1-r2]                                                                              |`double`, default: `0.1`       |
-|`--geno_error_coeff`  |Slope of genotype error rate. [error] = [offset] + [1-offset]*[coeff]*[1-r2]                                                                               |`double`, default: `0`         |
-|`--r2_info`           |INFO field name representing R2 value. Used for representing imputation quality.                                                                           |`string`, default: `"R2"`      |
-|`--min_mac`           |Minimum minor allele frequency.                                                                                                                            |`integer`, default: `1`        |
-|`--min_call_rate`     |Minimum call rate.                                                                                                                                         |`double`, default: `0.5`       |
-|`--alpha`             |Grid of alpha to search for (default is 0.1, 0.2, 0.3, 0.4, 0.5)                                                                                           |`string`, default: `"0.5"`     |
-|`--doublet_prior`     |Prior of doublet                                                                                                                                           |`double`, default: `0.5`       |
-|`--sm`                |List of sample IDs to compare to (default: use all).                                                                                                       |`string`                       |
-|`--sm_list`           |File containing the list of sample IDs to compare.                                                                                                         |`string`                       |
-|`--sam_verbose`       |Verbose message frequency for SAM/BAM/CRAM.                                                                                                                |`integer`, default: `1000000`  |
-|`--vcf_verbose`       |Verbose message frequency for VCF/BCF.                                                                                                                     |`integer`, default: `1000`     |
-|`--cap_bq`            |Maximum base quality (higher BQ will be capped).                                                                                                           |`integer`, default: `20`       |
-|`--min_bq`            |Minimum base quality to consider (lower BQ will be skipped).                                                                                               |`integer`, default: `13`       |
-|`--min_mq`            |Minimum mapping quality to consider (lower MQ will be ignored).                                                                                            |`integer`, default: `20`       |
-|`--min_td`            |Minimum distance to the tail (lower will be ignored).                                                                                                      |`integer`, default: `0`        |
-|`--excl_flag`         |SAM/BAM FLAGs to be excluded.                                                                                                                              |`integer`, default: `3844`     |
-|`--group_list`        |List of tag readgroup/cell barcode to consider in this run. All other barcodes will be ignored. This is useful for parallelized run.                       |`string`                       |
-|`--min_total`         |Minimum number of total reads for a droplet/cell to be considered.                                                                                         |`integer`, default: `0`        |
-|`--min_snp`           |Minimum number of SNPs with coverage for a droplet/cell to be considered.                                                                                  |`integer`, default: `0`        |
-|`--min_umi`           |Minimum number of UMIs for a droplet/cell to be considered.                                                                                                |`integer`, default: `0`        |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--sam`
+:::
+::: {.arg-desc role="cell"}
+Input SAM/BAM/CRAM file. Must be sorted by coordinates and indexed.
+:::
+::: {.arg-attrs role="cell"}
+`file`
 
+[Example]{.arg-key} `"input.bam"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--tag_group`
+:::
+::: {.arg-desc role="cell"}
+Tag representing readgroup or cell barcodes, in the case to partition the BAM file into multiple groups. For 10x genomics, use CB.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"CB"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--tag_umi`
+:::
+::: {.arg-desc role="cell"}
+Tag representing UMIs. For 10x genomiucs, use UB.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"UB"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--plp`
+:::
+::: {.arg-desc role="cell"}
+Input pileup format. If the value is a string, it will be considered as the path of the plp file. If the value is boolean true, it will perform dscpileup.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--vcf`
+:::
+::: {.arg-desc role="cell"}
+Input VCF/BCF file, containing the individual genotypes (GT), posterior probability (GP), or genotype likelihood (PL).
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"input.vcf"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--field`
+:::
+::: {.arg-desc role="cell"}
+FORMAT field to extract the genotype, likelihood, or posterior from
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"GT"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--geno_error_offset`
+:::
+::: {.arg-desc role="cell"}
+Offset of genotype error rate. [error] = [offset] + [1-offset]*[coeff]*[1-r2]
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `0.1`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--geno_error_coeff`
+:::
+::: {.arg-desc role="cell"}
+Slope of genotype error rate. [error] = [offset] + [1-offset]*[coeff]*[1-r2]
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `0.0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--r2_info`
+:::
+::: {.arg-desc role="cell"}
+INFO field name representing R2 value. Used for representing imputation quality.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"R2"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--min_mac`
+:::
+::: {.arg-desc role="cell"}
+Minimum minor allele frequency.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `1`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--min_call_rate`
+:::
+::: {.arg-desc role="cell"}
+Minimum call rate.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `0.5`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--alpha`
+:::
+::: {.arg-desc role="cell"}
+Grid of alpha to search for (default is 0.1, 0.2, 0.3, 0.4, 0.5)
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"0.5"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--doublet_prior`
+:::
+::: {.arg-desc role="cell"}
+Prior of doublet
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `0.5`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--sm`
+:::
+::: {.arg-desc role="cell"}
+List of sample IDs to compare to (default: use all).
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--sm_list`
+:::
+::: {.arg-desc role="cell"}
+File containing the list of sample IDs to compare.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--sam_verbose`
+:::
+::: {.arg-desc role="cell"}
+Verbose message frequency for SAM/BAM/CRAM.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `1000000`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--vcf_verbose`
+:::
+::: {.arg-desc role="cell"}
+Verbose message frequency for VCF/BCF.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `1000`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--cap_bq`
+:::
+::: {.arg-desc role="cell"}
+Maximum base quality (higher BQ will be capped).
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `20`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--min_bq`
+:::
+::: {.arg-desc role="cell"}
+Minimum base quality to consider (lower BQ will be skipped).
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `13`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--min_mq`
+:::
+::: {.arg-desc role="cell"}
+Minimum mapping quality to consider (lower MQ will be ignored).
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `20`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--min_td`
+:::
+::: {.arg-desc role="cell"}
+Minimum distance to the tail (lower will be ignored).
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--excl_flag`
+:::
+::: {.arg-desc role="cell"}
+SAM/BAM FLAGs to be excluded.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `3844`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--group_list`
+:::
+::: {.arg-desc role="cell"}
+List of tag readgroup/cell barcode to consider in this run. All other barcodes will be ignored. This is useful for parallelized run.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--min_total`
+:::
+::: {.arg-desc role="cell"}
+Minimum number of total reads for a droplet/cell to be considered.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--min_snp`
+:::
+::: {.arg-desc role="cell"}
+Minimum number of SNPs with coverage for a droplet/cell to be considered.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--min_umi`
+:::
+::: {.arg-desc role="cell"}
+Minimum number of UMIs for a droplet/cell to be considered.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `0`
+:::
+::::
+:::::
 
 ### Output
 
-|Name       |Description                 |Attributes                      |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output` |Output directory            |`file`, example: `"demux"`      |
-|`--out`    |demuxlet output file prefix |`string`, example: `"demuxlet"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Output directory
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"demux"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--out`
+:::
+::: {.arg-desc role="cell"}
+demuxlet output file prefix
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"demuxlet"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -95,12 +444,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/genetic_demux/demuxlet).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/genetic_demux/demuxlet);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -112,8 +462,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

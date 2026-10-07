@@ -5,7 +5,7 @@ title: "fastqc"
 subtitle: "openpipeline v4.2.0"
 toc: true
 namespace: "Qc"
-description: "Fastqc component, please see https://www.bioinformatics.babraham.ac.uk/projects/fastqc/."
+description: "Fastqc component, please see https://www.bioinformatics.babraham.ac.uk/projects/fastqc/. This component can take one or more files (by means of shell globbing) or a complete directory."
 type: "module"
 latest: "true"
 ---
@@ -34,12 +34,72 @@ This component can take one or more files (by means of shell globbing) or a comp
 
 ### Arguments
 
-|Name        |Description                                                                                                         |Attributes                               |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--mode`    |The mode in which the component works. Can be either files or dir.                                                  |`string`, default: `"files"`             |
-|`--input`   |Directory containing input fastq files.                                                                             |`file`, required, example: `"fastq_dir"` |
-|`--output`  |Output directory to write reports to.                                                                               |`file`, required, example: `"qc"`        |
-|`--threads` |Specifies the number of files which can be processed simultaneously. Each thread will be allocated 250MB of memory. |`integer`                                |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--mode`
+:::
+::: {.arg-desc role="cell"}
+The mode in which the component works. Can be either files or dir.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"files"`
+
+[Choices]{.arg-key} `"files"`, `"dir"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Directory containing input fastq files.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"fastq_dir"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Output directory to write reports to.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"qc"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--threads`
+:::
+::: {.arg-desc role="cell"}
+Specifies the number of files which can be processed simultaneously. Each thread will be allocated 250MB of
+memory.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+:::
+::::
+:::::
 
 ## Example commands
 
@@ -58,12 +118,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/qc/fastqc).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/qc/fastqc);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -75,8 +136,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

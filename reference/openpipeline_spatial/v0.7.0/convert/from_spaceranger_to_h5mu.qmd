@@ -5,7 +5,7 @@ title: "from_spaceranger_to_h5mu"
 subtitle: "openpipeline_spatial v0.7.0"
 toc: true
 namespace: "Convert"
-description: "Converts the output bundle from spaceranger into an h5mu file"
+description: "Converts the output bundle from spaceranger into an h5mu file."
 type: "module"
 latest: "true"
 ---
@@ -34,22 +34,157 @@ Namespace: `convert`
 
 ### Inputs
 
-|Name      |Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |Attributes                                        |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input` |Convert spatial data resulting from Aviti Teton sequencers that have been processed by the Element Biosciences cells2stats workflow to H5MU format.  This component processes cells2stats count matrices to create a standardized H5MU file for downstream analysis.  The component reads: - Parquet file containing the count matrix and metadata - Panel.json with target and batch information  And outputs an H5MU file with: - Count data as the main .X matrix - Spatial coordinates in obsm - Cell Paint intensities in obsm (optional) - Nuclear count data as a layer (optional) - CellProfiler morphology metrics in obsm (optional) - Unassigned targets in obsm (optional) |`file`, required, example: `"spaceranger_output"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Convert spatial data resulting from Aviti Teton sequencers that have been processed by the Element Biosciences cells2stats workflow to H5MU format.
 
+This component processes cells2stats count matrices to create a standardized H5MU file for downstream analysis.
+
+The component reads:
+
+- Parquet file containing the count matrix and metadata
+- Panel.json with target and batch information
+
+And outputs an H5MU file with:
+
+- Count data as the main .X matrix
+- Spatial coordinates in obsm
+- Cell Paint intensities in obsm (optional)
+- Nuclear count data as a layer (optional)
+- CellProfiler morphology metrics in obsm (optional)
+- Unassigned targets in obsm (optional)
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"spaceranger_output"`
+:::
+::::
+:::::
 
 ### Outputs
 
-|Name                   |Description                                                                |Attributes                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output`             |Output h5mu file.                                                          |`file`, example: `"output.h5mu"`           |
-|`--modality`           |Name of the modality under which to store the data.                        |`string`, default: `"rna"`                 |
-|`--uns_metrics`        |Name of the .uns slot under which to QC metrics (if any).                  |`string`, default: `"metrics_spaceranger"` |
-|`--uns_probe_set`      |Name of the .uns slot under which to store probe set information (if any). |`string`, default: `"probe_set"`           |
-|`--obsm_coordinates`   |Name of the .obsm slot under which to store the cell centroid coordinates. |`string`, default: `"spatial"`             |
-|`--output_type`        |Which Spaceranger output to use for converting to h5mu.                    |`string`, default: `"filtered"`            |
-|`--output_compression` |Compression to use when writing the h5mu file.                             |`string`                                   |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Output h5mu file.
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"output.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--modality`
+:::
+::: {.arg-desc role="cell"}
+Name of the modality under which to store the data.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"rna"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--uns_metrics`
+:::
+::: {.arg-desc role="cell"}
+Name of the .uns slot under which to QC metrics (if any).
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"metrics_spaceranger"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--uns_probe_set`
+:::
+::: {.arg-desc role="cell"}
+Name of the .uns slot under which to store probe set information (if any).
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"probe_set"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obsm_coordinates`
+:::
+::: {.arg-desc role="cell"}
+Name of the .obsm slot under which to store the cell centroid coordinates.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"spatial"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_type`
+:::
+::: {.arg-desc role="cell"}
+Which Spaceranger output to use for converting to h5mu.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"filtered"`
+
+[Choices]{.arg-key} `"raw"`, `"filtered"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_compression`
+:::
+::: {.arg-desc role="cell"}
+Compression to use when writing the h5mu file.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Choices]{.arg-key} `"gzip"`, `"lzf"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -73,12 +208,13 @@ nextflow run openpipelines-bio/openpipeline_spatial \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline_spatial/v0.7.0/components/convert/from_spaceranger_to_h5mu).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline_spatial/v0.7.0/components/convert/from_spaceranger_to_h5mu);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -90,8 +226,6 @@ nextflow run openpipelines-bio/openpipeline_spatial \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

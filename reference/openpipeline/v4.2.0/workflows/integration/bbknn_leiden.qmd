@@ -53,48 +53,293 @@ flowchart TB
 
 ### Inputs
 
-|Name         |Description                                                                           |Attributes                                  |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--id`       |ID of the sample.                                                                     |`string`, required, example: `"foo"`        |
-|`--input`    |Path to the sample.                                                                   |`file`, required, example: `"dataset.h5mu"` |
-|`--layer`    |use specified layer for expression values instead of the .X object from the modality. |`string`, default: `"log_normalized"`       |
-|`--modality` |Which modality to process.                                                            |`string`, default: `"rna"`                  |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--id`
+:::
+::: {.arg-desc role="cell"}
+ID of the sample.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
 
+[Example]{.arg-key} `"foo"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Path to the sample.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"dataset.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--layer`
+:::
+::: {.arg-desc role="cell"}
+use specified layer for expression values instead of the .X object from the modality.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"log_normalized"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--modality`
+:::
+::: {.arg-desc role="cell"}
+Which modality to process.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"rna"`
+:::
+::::
+:::::
 
 ### Outputs
 
-|Name       |Description                     |Attributes                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output` |Destination path to the output. |`file`, required, example: `"output.h5mu"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Destination path to the output.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
+[Example]{.arg-key} `"output.h5mu"`
+:::
+::::
+:::::
 
 ### Bbknn
 
-|Name                         |Description                                                                                                                                                                                                                                                                                                                                                                                                       |Attributes                                              |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--obsm_input`               |The dimensionality reduction in `.obsm` to use for neighbour detection. Defaults to X_pca.                                                                                                                                                                                                                                                                                                                        |`string`, default: `"X_pca"`                            |
-|`--obs_batch`                |.obs column name discriminating between your batches.                                                                                                                                                                                                                                                                                                                                                             |`string`, default: `"sample_id"`                        |
-|`--uns_output`               |Mandatory .uns slot to store various neighbor output objects.                                                                                                                                                                                                                                                                                                                                                     |`string`, default: `"bbknn_integration_neighbors"`      |
-|`--obsp_distances`           |In which .obsp slot to store the distance matrix between the resulting neighbors.                                                                                                                                                                                                                                                                                                                                 |`string`, default: `"bbknn_integration_distances"`      |
-|`--obsp_connectivities`      |In which .obsp slot to store the connectivities matrix between the resulting neighbors.                                                                                                                                                                                                                                                                                                                           |`string`, default: `"bbknn_integration_connectivities"` |
-|`--n_neighbors_within_batch` |How many top neighbours to report for each batch; total number of neighbours in the initial k-nearest-neighbours computation will be this number times the number of batches.                                                                                                                                                                                                                                     |`integer`, default: `3`                                 |
-|`--n_pcs`                    |How many dimensions (in case of PCA, principal components) to use in the analysis.                                                                                                                                                                                                                                                                                                                                |`integer`, default: `50`                                |
-|`--n_trim`                   |Trim the neighbours of each cell to these many top connectivities. May help with population independence and improve the tidiness of clustering. The lower the value the more independent the individual populations, at the cost of more conserved batch effect. If `None` (default), sets the parameter value automatically to 10 times `neighbors_within_batch` times the number of batches. Set to 0 to skip. |`integer`                                               |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obsm_input`
+:::
+::: {.arg-desc role="cell"}
+The dimensionality reduction in `.obsm` to use for neighbour detection. Defaults to X_pca.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Default]{.arg-key} `"X_pca"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obs_batch`
+:::
+::: {.arg-desc role="cell"}
+.obs column name discriminating between your batches.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"sample_id"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--uns_output`
+:::
+::: {.arg-desc role="cell"}
+Mandatory .uns slot to store various neighbor output objects.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"bbknn_integration_neighbors"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obsp_distances`
+:::
+::: {.arg-desc role="cell"}
+In which .obsp slot to store the distance matrix between the resulting neighbors.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"bbknn_integration_distances"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obsp_connectivities`
+:::
+::: {.arg-desc role="cell"}
+In which .obsp slot to store the connectivities matrix between the resulting neighbors.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"bbknn_integration_connectivities"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--n_neighbors_within_batch`
+:::
+::: {.arg-desc role="cell"}
+How many top neighbours to report for each batch; total number of neighbours in the initial k-nearest-neighbours computation will be this number times the number of batches.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `3`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--n_pcs`
+:::
+::: {.arg-desc role="cell"}
+How many dimensions (in case of PCA, principal components) to use in the analysis.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `50`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--n_trim`
+:::
+::: {.arg-desc role="cell"}
+Trim the neighbours of each cell to these many top connectivities. May help with population independence and improve the tidiness of clustering. The lower the value the more independent the individual populations, at the cost of more conserved batch effect. If `None` (default), sets the parameter value automatically to 10 times `neighbors_within_batch` times the number of batches. Set to 0 to skip.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+:::
+::::
+:::::
 
 ### Clustering options
 
-|Name                  |Description                                                                                                                                                                                                                                                        |Attributes                                          |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--obs_cluster`       |Prefix for the .obs keys under which to add the cluster labels. Newly created columns in .obs will  be created from the specified value for '--obs_cluster' suffixed with an underscore and one of the resolutions resolutions specified in '--leiden_resolution'. |`string`, default: `"bbknn_integration_leiden"`     |
-|`--leiden_resolution` |Control the coarseness of the clustering. Higher values lead to more clusters.                                                                                                                                                                                     |List of `double`, default: `1`, multiple_sep: `";"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obs_cluster`
+:::
+::: {.arg-desc role="cell"}
+Prefix for the .obs keys under which to add the cluster labels. Newly created columns in .obs will
+be created from the specified value for '--obs_cluster' suffixed with an underscore and one of the resolutions
+resolutions specified in '--leiden_resolution'.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Default]{.arg-key} `"bbknn_integration_leiden"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--leiden_resolution`
+:::
+::: {.arg-desc role="cell"}
+Control the coarseness of the clustering. Higher values lead to more clusters.
+:::
+::: {.arg-attrs role="cell"}
+List of `double`
+
+[Default]{.arg-key} `1.0`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::::
 
 ### UMAP options
 
-|Name          |Description                                                |Attributes                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--obsm_umap` |In which .obsm slot to store the resulting UMAP embedding. |`string`, default: `"X_leiden_bbknn_umap"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obsm_umap`
+:::
+::: {.arg-desc role="cell"}
+In which .obsm slot to store the resulting UMAP embedding.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"X_leiden_bbknn_umap"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -120,12 +365,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/integration/bbknn_leiden).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/integration/bbknn_leiden);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -137,8 +383,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

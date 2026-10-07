@@ -5,7 +5,7 @@ title: "onclass"
 subtitle: "openpipeline v4.2.0"
 toc: true
 namespace: "Annotate"
-description: "OnClass is a python package for single-cell cell type annotation."
+description: "OnClass is a python package for single-cell cell type annotation. It uses the Cell Ontology to capture the cell type similarity. These similarities enable OnClass to annotate cell types that are never seen in the training data."
 type: "module"
 latest: "true"
 ---
@@ -37,66 +37,365 @@ These similarities enable OnClass to annotate cell types that are never seen in 
 
 Input dataset (query) arguments
 
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+The input (query) data to be labeled. Should be a .h5mu file.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
-|Name                             |Description                                                                                                                                |Attributes                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`                        |The input (query) data to be labeled. Should be a .h5mu file.                                                                              |`file`, required, example: `"input.h5mu"` |
-|`--modality`                     |Which modality to process.                                                                                                                 |`string`, default: `"rna"`                |
-|`--input_layer`                  |The layer in the input data to be used for cell type annotation if .X is not to be used.                                                   |`string`                                  |
-|`--input_var_gene_names`         |The name of the adata var column in the input data containing gene names; when no gene_name_layer is provided, the var index will be used. |`string`                                  |
-|`--input_reference_gene_overlap` |The minimum number of genes present in both the reference and query datasets.                                                              |`integer`, default: `100`                 |
-|`--sanitize_ensembl_ids`         |Whether to sanitize ensembl ids by removing version numbers.                                                                               |`boolean`, default: `TRUE`                |
+[Example]{.arg-key} `"input.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--modality`
+:::
+::: {.arg-desc role="cell"}
+Which modality to process.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Default]{.arg-key} `"rna"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_layer`
+:::
+::: {.arg-desc role="cell"}
+The layer in the input data to be used for cell type annotation if .X is not to be used.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_var_gene_names`
+:::
+::: {.arg-desc role="cell"}
+The name of the adata var column in the input data containing gene names; when no gene_name_layer is provided, the var index will be used.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_reference_gene_overlap`
+:::
+::: {.arg-desc role="cell"}
+The minimum number of genes present in both the reference and query datasets.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `100`
+
+[Min]{.arg-key} `1`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--sanitize_ensembl_ids`
+:::
+::: {.arg-desc role="cell"}
+Whether to sanitize ensembl ids by removing version numbers.
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
+
+[Default]{.arg-key} `true`
+:::
+::::
+:::::
 
 ### Ontology
 
 Ontology input files
 
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--cl_nlp_emb_file`
+:::
+::: {.arg-desc role="cell"}
+The .nlp.emb file with the cell type embeddings.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
-|Name                 |Description                                      |Attributes                                         |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--cl_nlp_emb_file`  |The .nlp.emb file with the cell type embeddings. |`file`, required, example: `"cl.ontology.nlp.emb"` |
-|`--cl_ontology_file` |The .ontology file with the cell type ontology.  |`file`, required, example: `"cl.ontology"`         |
-|`--cl_obo_file`      |The .obo file with the cell type ontology.       |`file`, required, example: `"cl.obo"`              |
+[Example]{.arg-key} `"cl.ontology.nlp.emb"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--cl_ontology_file`
+:::
+::: {.arg-desc role="cell"}
+The .ontology file with the cell type ontology.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
+[Example]{.arg-key} `"cl.ontology"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--cl_obo_file`
+:::
+::: {.arg-desc role="cell"}
+The .obo file with the cell type ontology.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"cl.obo"`
+:::
+::::
+:::::
 
 ### Reference
 
 Arguments related to the reference dataset.
 
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference`
+:::
+::: {.arg-desc role="cell"}
+The reference data to train the CellTypist classifiers on. Only required if a pre-trained --model is not provided.
+:::
+::: {.arg-attrs role="cell"}
+`file`
 
-|Name                         |Description                                                                                                                                    |Attributes                                           |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--reference`                |The reference data to train the CellTypist classifiers on. Only required if a pre-trained --model is not provided.                             |`file`, example: `"reference.h5mu"`                  |
-|`--reference_layer`          |The layer in the reference data to be used for cell type annotation if .X is not to be used.                                                   |`string`                                             |
-|`--reference_obs_target`     |The name of the adata obs column in the reference data containing cell type annotations.                                                       |`string`, required, example: `"cell_ontology_class"` |
-|`--reference_var_gene_names` |The name of the adata var column in the reference data containing gene names; when no gene_name_layer is provided, the var index will be used. |`string`                                             |
-|`--reference_var_input`      |.var column containing highly variable genes. By default, do not subset genes.                                                                 |`string`                                             |
-|`--unknown_celltype`         |Label for unknown cell types.                                                                                                                  |`string`, default: `"Unknown"`                       |
+[Example]{.arg-key} `"reference.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference_layer`
+:::
+::: {.arg-desc role="cell"}
+The layer in the reference data to be used for cell type annotation if .X is not to be used.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference_obs_target`
+:::
+::: {.arg-desc role="cell"}
+The name of the adata obs column in the reference data containing cell type annotations.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
 
+[Example]{.arg-key} `"cell_ontology_class"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference_var_gene_names`
+:::
+::: {.arg-desc role="cell"}
+The name of the adata var column in the reference data containing gene names; when no gene_name_layer is provided, the var index will be used.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference_var_input`
+:::
+::: {.arg-desc role="cell"}
+.var column containing highly variable genes. By default, do not subset genes.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--unknown_celltype`
+:::
+::: {.arg-desc role="cell"}
+Label for unknown cell types.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"Unknown"`
+:::
+::::
+:::::
 
 ### Outputs
 
 Output arguments.
 
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Output h5mu file.
+:::
+::: {.arg-attrs role="cell"}
+`file`
 
-|Name                       |Description                                                                                                    |Attributes                          |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output`                 |Output h5mu file.                                                                                              |`file`, example: `"output.h5mu"`    |
-|`--output_obs_predictions` |In which `.obs` slots to store the predicted information.                                                      |`string`, default: `"onclass_pred"` |
-|`--output_obs_probability` |In which `.obs` slots to store the probability of the predictions.                                             |`string`, default: `"onclass_prob"` |
-|`--output_compression`     |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied. |`string`, example: `"gzip"`         |
+[Example]{.arg-key} `"output.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_obs_predictions`
+:::
+::: {.arg-desc role="cell"}
+In which `.obs` slots to store the predicted information.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Default]{.arg-key} `"onclass_pred"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_obs_probability`
+:::
+::: {.arg-desc role="cell"}
+In which `.obs` slots to store the probability of the predictions.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"onclass_prob"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_compression`
+:::
+::: {.arg-desc role="cell"}
+Compression format to use for the output AnnData and/or Mudata H5 files.
+By default no compression is applied.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"gzip"`
+
+[Choices]{.arg-key} `"gzip"`, `"lzf"`
+:::
+::::
+:::::
 
 ### Model arguments
 
 Model arguments
 
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--model`
+:::
+::: {.arg-desc role="cell"}
+"Pretrained model path without a file extension. If not provided, the model will be trained
+on the reference data and --reference should be provided. The path namespace should contain:
 
-|Name         |Description                                                                                                                                                                                                                                                                                                                              |Attributes               |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--model`    |"Pretrained model path without a file extension. If not provided, the model will be trained  on the reference data and --reference should be provided. The path namespace should contain:   - a .npz or .pkl file   - a .data file   - a .meta file   - a .index file e.g. /path/to/model/pretrained_model_target1 as saved by OnClass." |`string`                 |
-|`--max_iter` |Maximum number of iterations for training the model.                                                                                                                                                                                                                                                                                     |`integer`, default: `30` |
+  - a .npz or .pkl file
+  - a .data file
+  - a .meta file
+  - a .index file
+
+e.g. /path/to/model/pretrained_model_target1 as saved by OnClass."
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--max_iter`
+:::
+::: {.arg-desc role="cell"}
+Maximum number of iterations for training the model.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `30`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -120,12 +419,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/annotate/onclass).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/annotate/onclass);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -137,8 +437,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

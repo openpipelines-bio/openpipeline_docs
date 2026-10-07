@@ -34,12 +34,73 @@ Namespace: `demux`
 
 ### Arguments
 
-|Name             |Description                                                            |Attributes                                                          |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`        |Path to the (untarred) BCL files. Expects 'RunParameters.xml' at './'. |`file`, required, example: `"/path/to/bcl"`                         |
-|`--sample_sheet` |The path to the sample sheet.                                          |`file`, required, example: `"SampleSheet.csv"`                      |
-|`--output`       |The folder to store the demux results                                  |`file`, required, default: `"fastqs"`, example: `"/path/to/output"` |
-|`--reports`      |Reports directory                                                      |`file`, example: `"reports_dir"`                                    |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Path to the (untarred) BCL files. Expects 'RunParameters.xml' at './'.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"/path/to/bcl"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--sample_sheet`
+:::
+::: {.arg-desc role="cell"}
+The path to the sample sheet.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"SampleSheet.csv"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+The folder to store the demux results
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Default]{.arg-key} `"fastqs"`
+
+[Example]{.arg-key} `"/path/to/output"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reports`
+:::
+::: {.arg-desc role="cell"}
+Reports directory
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"reports_dir"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -67,12 +128,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/demux/cellranger_mkfastq).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/demux/cellranger_mkfastq);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -84,8 +146,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

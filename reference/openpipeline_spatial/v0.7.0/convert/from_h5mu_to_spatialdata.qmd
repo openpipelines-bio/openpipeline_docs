@@ -5,7 +5,7 @@ title: "from_h5mu_to_spatialdata"
 subtitle: "openpipeline_spatial v0.7.0"
 toc: true
 namespace: "Convert"
-description: "Reads in an H5MU file and saves it as a SpatialData Zarr store."
+description: "Reads in an H5MU file and saves it as a SpatialData Zarr store. The selected modality in the MuData is stored as the main table in the SpatialData object. If a matching existing SpatialData is provided, it will be used to fill the remaining SpatialData slots."
 type: "module"
 latest: "true"
 ---
@@ -37,12 +37,71 @@ remaining SpatialData slots.
 
 ### Arguments
 
-|Name                  |Description                                                                        |Attributes                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`             |Input H5MU file.                                                                   |`file`, required, example: `"input.h5mu"`  |
-|`--input_spatialdata` |An optional existing SpatialData Zarr store to fill remaining slots from.          |`file`, example: `"existing.zarr"`         |
-|`--modality`          |The modality in the MuData to be used as the main table in the SpatialData object. |`string`, default: `"rna"`                 |
-|`--output`            |The path to the output SpatialData Zarr store.                                     |`file`, required, example: `"output.zarr"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Input H5MU file.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"input.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_spatialdata`
+:::
+::: {.arg-desc role="cell"}
+An optional existing SpatialData Zarr store to fill remaining slots from.
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"existing.zarr"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--modality`
+:::
+::: {.arg-desc role="cell"}
+The modality in the MuData to be used as the main table in the SpatialData object.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"rna"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+The path to the output SpatialData Zarr store.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"output.zarr"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -68,12 +127,13 @@ nextflow run openpipelines-bio/openpipeline_spatial \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline_spatial/v0.7.0/components/convert/from_h5mu_to_spatialdata).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline_spatial/v0.7.0/components/convert/from_h5mu_to_spatialdata);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -85,8 +145,6 @@ nextflow run openpipelines-bio/openpipeline_spatial \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

@@ -3,7 +3,7 @@ package: "openpipeline_qc"
 version: "v0.3.0"
 title: "detect_ingestion_method"
 namespace: "Ingestion qc"
-description: "Detects the ingestion method of a dataset."
+description: "Detects the ingestion method of a dataset. Currently detects either 10X CellRanger Multi, 10X Xenium or Nanostring CosMx, but can be extended to other technologies upon request."
 type: "module"
 toc: true
 latest: "false"
@@ -34,18 +34,87 @@ Currently detects either 10X CellRanger Multi, 10X Xenium or Nanostring CosMx, b
 
 ### Inputs
 
-|Name         |Description            |Attributes                                       |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`    |The input h5mu file(s) |`file`, required, example: `"path/to/file.h5mu"` |
-|`--modality` |The modality to use    |`string`, default: `"rna"`                       |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+The input h5mu file(s)
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
+[Example]{.arg-key} `"path/to/file.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--modality`
+:::
+::: {.arg-desc role="cell"}
+The modality to use
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"rna"`
+:::
+::::
+:::::
 
 ### Outputs
 
-|Name                            |Description                                                                                                        |Attributes                                       |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output_uns_ingestion_method` |The .uns field in which to store the exprimental setup. Values stored are `cellranger_multi`, `xenium` or `cosmx`. |`string`, default: `"ingestion_method"`          |
-|`--output`                      |The output h5mu file, containing an .uns field with experiment description.                                        |`file`, required, example: `"path/to/file.h5mu"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_uns_ingestion_method`
+:::
+::: {.arg-desc role="cell"}
+The .uns field in which to store the exprimental setup. Values stored are `cellranger_multi`, `xenium` or `cosmx`.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"ingestion_method"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+The output h5mu file, containing an .uns field with experiment description.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"path/to/file.h5mu"`
+:::
+::::
+:::::
 
 ## Authors
 

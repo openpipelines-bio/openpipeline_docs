@@ -34,28 +34,165 @@ Namespace: `neighbors`
 
 ### Inputs
 
-|Name                          |Description                                            |Attributes                     |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`                     |Input H5MU file                                        |`file`, required               |
-|`--modality`                  |Which modality from the input MuData file to process.  |`string`, default: `"rna"`     |
-|`--input_obsm_spatial_coords` |Key in adata.obsm where spatial coordinates are stored |`string`, default: `"spatial"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Input H5MU file
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--modality`
+:::
+::: {.arg-desc role="cell"}
+Which modality from the input MuData file to process.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Default]{.arg-key} `"rna"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_obsm_spatial_coords`
+:::
+::: {.arg-desc role="cell"}
+Key in adata.obsm where spatial coordinates are stored
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"spatial"`
+:::
+::::
+:::::
 
 ### Spatial Neighbors Calculation
 
-|Name                    |Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |Attributes                     |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--coord_type`          |Type of coordinate system. Valid options are: `grid` - grid coordinates. Only relevant for lattice-based layouts (e.g. Visium). Builds a graph assuming a regular grid topology, where neighbors aredefined by grid adjacency rather than distance. `generic` - Generic coordinates. Recommended for imaging-based data. This option is appropriate for irregularly spaced points, such as cell centroids or spot coordinates from imaging-based assays (e.g. Xenium, CosMx). Setting this option avoids grid-assumption artifacts and ensures each node has spatial neighbors as defined by distance. |`string`, default: `"generic"` |
-|`--n_spatial_neighbors` |Depending on `--coord_type`: `grid` - number of neighboring tiles. `generic` - number of neighborhoods for non-grid data. Only used when `--delaunay False`.                                                                                                                                                                                                                                                                                                                                                                                                                                           |`integer`, default: `6`        |
-|`--delaunay`            |Whether to use Delaunay triangulation to determine spatial neighborhood graph. Only used when `--coord_type generic`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |`boolean`, default: `FALSE`    |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--coord_type`
+:::
+::: {.arg-desc role="cell"}
+Type of coordinate system. Valid options are:
+`grid` - grid coordinates. Only relevant for lattice-based layouts (e.g. Visium). Builds a graph assuming a regular grid topology, where neighbors aredefined by grid adjacency rather than distance.
+`generic` - Generic coordinates. Recommended for imaging-based data. This option is appropriate for irregularly spaced points, such as cell centroids or spot coordinates from imaging-based assays (e.g. Xenium, CosMx). Setting this option avoids grid-assumption artifacts and ensures each node has spatial neighbors as defined by distance.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Default]{.arg-key} `"generic"`
+
+[Choices]{.arg-key} `"generic"`, `"grid"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--n_spatial_neighbors`
+:::
+::: {.arg-desc role="cell"}
+Depending on `--coord_type`:
+`grid` - number of neighboring tiles.
+`generic` - number of neighborhoods for non-grid data. Only used when `--delaunay False`.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `6`
+
+[Min]{.arg-key} `1`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--delaunay`
+:::
+::: {.arg-desc role="cell"}
+Whether to use Delaunay triangulation to determine spatial neighborhood graph.
+Only used when `--coord_type generic`.
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
+
+[Default]{.arg-key} `false`
+:::
+::::
+:::::
 
 ### Outputs
 
-|Name                   |Description                                                                                                   |Attributes                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output`             |Output H5MU file path.                                                                                        |`file`, required, example: `"output.h5mu"` |
-|`--output_compression` |Compression format to use for the output AnnData and/or Mudata objects. By default no compression is applied. |`string`, example: `"gzip"`                |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Output H5MU file path.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"output.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_compression`
+:::
+::: {.arg-desc role="cell"}
+Compression format to use for the output AnnData and/or Mudata objects.
+By default no compression is applied.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"gzip"`
+
+[Choices]{.arg-key} `"gzip"`, `"lzf"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -79,12 +216,13 @@ nextflow run openpipelines-bio/openpipeline_spatial \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline_spatial/v0.7.0/components/neighbors/spatial_neighborhood_graph).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline_spatial/v0.7.0/components/neighbors/spatial_neighborhood_graph);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -96,8 +234,6 @@ nextflow run openpipelines-bio/openpipeline_spatial \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

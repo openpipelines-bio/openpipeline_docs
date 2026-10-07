@@ -5,7 +5,7 @@ title: "lsi"
 subtitle: "openpipeline v4.2.0"
 toc: true
 namespace: "Dimred"
-description: "Runs Latent Semantic Indexing."
+description: "Runs Latent Semantic Indexing. Computes cell embeddings, feature loadings and singular values. Uses the implementation of scipy."
 type: "module"
 latest: "true"
 ---
@@ -34,32 +34,206 @@ Computes cell embeddings, feature loadings and singular values. Uses the impleme
 
 ### Inputs
 
-|Name          |Description                                                                                                                |Attributes                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`     |Path to input h5mu file                                                                                                    |`file`, required, example: `"input.h5mu"` |
-|`--modality`  |On which modality to run LSI on.                                                                                           |`string`, default: `"atac"`               |
-|`--layer`     |Use specified layer for expression values. If not specified, uses adata.X.                                                 |`string`                                  |
-|`--var_input` |Column name in .var matrix that will be used to select which genes to run the LSI on. If not specified, uses all features. |`string`                                  |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Path to input h5mu file
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
+[Example]{.arg-key} `"input.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--modality`
+:::
+::: {.arg-desc role="cell"}
+On which modality to run LSI on.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"atac"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--layer`
+:::
+::: {.arg-desc role="cell"}
+Use specified layer for expression values. If not specified, uses adata.X.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--var_input`
+:::
+::: {.arg-desc role="cell"}
+Column name in .var matrix that will be used to select which genes to run the LSI on. If not specified, uses all features.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::::
 
 ### LSI options
 
-|Name                 |Description                                      |Attributes                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--num_components`   |Number of components to compute.                 |`integer`, default: `50`   |
-|`--scale_embeddings` |Scale embeddings to zero mean and unit variance. |`boolean`, default: `TRUE` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--num_components`
+:::
+::: {.arg-desc role="cell"}
+Number of components to compute.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
 
+[Default]{.arg-key} `50`
+
+[Min]{.arg-key} `2`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scale_embeddings`
+:::
+::: {.arg-desc role="cell"}
+Scale embeddings to zero mean and unit variance.
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
+
+[Default]{.arg-key} `true`
+:::
+::::
+:::::
 
 ### Outputs
 
-|Name                   |Description                                                                                                    |Attributes                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output`             |Output h5mu file.                                                                                              |`file`, required, example: `"output.h5mu"` |
-|`--obsm_output`        |In which .obsm slot to store the resulting embedding.                                                          |`string`, default: `"X_lsi"`               |
-|`--varm_output`        |In which .varm slot to store the resulting loadings matrix.                                                    |`string`, default: `"lsi"`                 |
-|`--uns_output`         |In which .uns slot to store the stdev.                                                                         |`string`, default: `"lsi"`                 |
-|`--overwrite`          |Allow overwriting .obsm, .varm and .uns slots.                                                                 |`boolean_true`                             |
-|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied. |`string`, example: `"gzip"`                |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Output h5mu file.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"output.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obsm_output`
+:::
+::: {.arg-desc role="cell"}
+In which .obsm slot to store the resulting embedding.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"X_lsi"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--varm_output`
+:::
+::: {.arg-desc role="cell"}
+In which .varm slot to store the resulting loadings matrix.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"lsi"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--uns_output`
+:::
+::: {.arg-desc role="cell"}
+In which .uns slot to store the stdev.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"lsi"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--overwrite`
+:::
+::: {.arg-desc role="cell"}
+Allow overwriting .obsm, .varm and .uns slots.
+:::
+::: {.arg-attrs role="cell"}
+`boolean_true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_compression`
+:::
+::: {.arg-desc role="cell"}
+Compression format to use for the output AnnData and/or Mudata H5 files.
+By default no compression is applied.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"gzip"`
+
+[Choices]{.arg-key} `"gzip"`, `"lzf"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -85,12 +259,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/dimred/lsi).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/dimred/lsi);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -102,8 +277,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

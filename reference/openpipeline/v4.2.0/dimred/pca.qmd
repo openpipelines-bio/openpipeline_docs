@@ -5,7 +5,7 @@ title: "pca"
 subtitle: "openpipeline v4.2.0"
 toc: true
 namespace: "Dimred"
-description: "Computes PCA coordinates, loadings and variance decomposition"
+description: "Computes PCA coordinates, loadings and variance decomposition."
 type: "module"
 latest: "true"
 ---
@@ -34,40 +34,247 @@ Namespace: `dimred`
 
 ### Arguments
 
-|Name                   |Description                                                                                                    |Attributes                  |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied. |`string`, example: `"gzip"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_compression`
+:::
+::: {.arg-desc role="cell"}
+Compression format to use for the output AnnData and/or Mudata H5 files.
+By default no compression is applied.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Example]{.arg-key} `"gzip"`
+
+[Choices]{.arg-key} `"gzip"`, `"lzf"`
+:::
+::::
+:::::
 
 ### inputs
 
-|Name          |Description                                                                           |Attributes                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`     |Input h5mu file                                                                       |`file`, required, example: `"input.h5mu"` |
-|`--modality`  |Which modality from the input MuData file to process.                                 |`string`, default: `"rna"`                |
-|`--layer`     |Use specified layer for expression values instead of the .X object from the modality. |`string`                                  |
-|`--var_input` |Column name in .var matrix that will be used to select which genes to run the PCA on. |`string`, example: `"filter_with_hvg"`    |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Input h5mu file
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
+[Example]{.arg-key} `"input.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--modality`
+:::
+::: {.arg-desc role="cell"}
+Which modality from the input MuData file to process.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"rna"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--layer`
+:::
+::: {.arg-desc role="cell"}
+Use specified layer for expression values instead of the .X object from the modality.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--var_input`
+:::
+::: {.arg-desc role="cell"}
+Column name in .var matrix that will be used to select which genes to run the PCA on.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"filter_with_hvg"`
+:::
+::::
+:::::
 
 ### Options
 
-|Name               |Description                                                                                                                                                                 |Attributes               |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--num_components` |Number of principal components to compute. Defaults to 50, or 1 - minimum dimension size of selected representation.                                                        |`integer`, example: `25` |
-|`--chunked`        |If True, perform an incremental PCA on segments of a predefined size. Setting this flag automatically implies zero centering. Must be specified together with --chunk_size. |`boolean_true`           |
-|`--chunk_size`     |Number of observations to include in each chunk. Required if chunked=True was passed.                                                                                       |`integer`                |
-|`--seed`           |Used to set the initial states for the optimization.                                                                                                                        |`integer`                |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--num_components`
+:::
+::: {.arg-desc role="cell"}
+Number of principal components to compute. Defaults to 50, or 1 - minimum dimension size of selected representation.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
 
+[Example]{.arg-key} `25`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--chunked`
+:::
+::: {.arg-desc role="cell"}
+If True, perform an incremental PCA on segments of a predefined size. Setting this flag automatically implies zero centering.
+Must be specified together with --chunk_size.
+:::
+::: {.arg-attrs role="cell"}
+`boolean_true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--chunk_size`
+:::
+::: {.arg-desc role="cell"}
+Number of observations to include in each chunk. Required if chunked=True was passed.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Min]{.arg-key} `2`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--seed`
+:::
+::: {.arg-desc role="cell"}
+Used to set the initial states for the optimization.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Min]{.arg-key} `0`
+:::
+::::
+:::::
 
 ### Outputs
 
-|Name            |Description                                                 |Attributes                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output`      |Output h5mu file.                                           |`file`, required, example: `"output.h5mu"` |
-|`--obsm_output` |In which .obsm slot to store the resulting embedding.       |`string`, default: `"X_pca"`               |
-|`--varm_output` |In which .varm slot to store the resulting loadings matrix. |`string`, default: `"pca_loadings"`        |
-|`--uns_output`  |In which .uns slot to store the resulting variance objects. |`string`, default: `"pca_variance"`        |
-|`--overwrite`   |Allow overwriting .obsm, .varm and .uns slots.              |`boolean_true`                             |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Output h5mu file.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"output.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obsm_output`
+:::
+::: {.arg-desc role="cell"}
+In which .obsm slot to store the resulting embedding.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"X_pca"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--varm_output`
+:::
+::: {.arg-desc role="cell"}
+In which .varm slot to store the resulting loadings matrix.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"pca_loadings"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--uns_output`
+:::
+::: {.arg-desc role="cell"}
+In which .uns slot to store the resulting variance objects.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"pca_variance"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--overwrite`
+:::
+::: {.arg-desc role="cell"}
+Allow overwriting .obsm, .varm and .uns slots.
+:::
+::: {.arg-attrs role="cell"}
+`boolean_true`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -91,12 +298,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/dimred/pca).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/dimred/pca);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -108,8 +316,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

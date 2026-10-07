@@ -34,17 +34,74 @@ Namespace: `ingestion_qc`
 
 ### Inputs
 
-|Name                |Description                                              |Attributes                                       |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input_data`      |The input JSON file containing the QC metrics            |`file`, required, example: `"path/to/file.json"` |
-|`--input_structure` |The input JSON file containing the structure of the data |`file`, required, example: `"path/to/file.json"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_data`
+:::
+::: {.arg-desc role="cell"}
+The input JSON file containing the QC metrics
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
+[Example]{.arg-key} `"path/to/file.json"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_structure`
+:::
+::: {.arg-desc role="cell"}
+The input JSON file containing the structure of the data
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"path/to/file.json"`
+:::
+::::
+:::::
 
 ### Outputs
 
-|Name                 |Description            |Attributes                                       |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output_qc_report` |The output HTML report |`file`, required, example: `"path/to/file.html"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_qc_report`
+:::
+::: {.arg-desc role="cell"}
+The output HTML report
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"path/to/file.html"`
+:::
+::::
+:::::
 
 ## Authors
 

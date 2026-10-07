@@ -5,7 +5,7 @@ title: "create_pseudobulk"
 subtitle: "openpipeline v4.2.0"
 toc: true
 namespace: "Differential expression"
-description: "Generation of pseudobulk samples from single-cell transcriptomics data, by aggregating raw gene expression counts from individual cells to create  bulk-like expression profiles suitable for differential expression analysis with methods designed for bulk differential expression analysis."
+description: "Generation of pseudobulk samples from single-cell transcriptomics data, by aggregating raw gene expression counts from individual cells to create bulk-like expression profiles suitable for differential expression analysis with methods designed for bulk differential expression analysis. Note that this componentonly considers factors as explanatory variables, and excludes covariates from the analysis."
 type: "module"
 latest: "true"
 ---
@@ -35,30 +35,183 @@ and excludes covariates from the analysis
 
 ### Inputs
 
-|Name            |Description                                                                                                                         |Attributes                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`       |Input h5mu file.                                                                                                                    |`file`, required, example: `"input.h5mu"` |
-|`--modality`    |Which modality from the input MuData file to process.                                                                               |`string`, default: `"rna"`                |
-|`--input_layer` |Input layer to use. If None, X is used. This layer must contain raw counts.                                                         |`string`                                  |
-|`--obs_label`   |.obs field containing the variable to group on. Typically this field contains cell groups such as annotated cell types or clusters. |`string`, required                        |
-|`--obs_groups`  |.obs fields containing the experimental condition(s) to create pseudobulk samples for.                                              |List of `string`, multiple_sep: `";"`     |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Input h5mu file.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
+[Example]{.arg-key} `"input.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--modality`
+:::
+::: {.arg-desc role="cell"}
+Which modality from the input MuData file to process.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"rna"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_layer`
+:::
+::: {.arg-desc role="cell"}
+Input layer to use. If None, X is used. This layer must contain raw counts.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obs_label`
+:::
+::: {.arg-desc role="cell"}
+.obs field containing the variable to group on. Typically this field contains cell groups such as annotated cell types or clusters.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obs_groups`
+:::
+::: {.arg-desc role="cell"}
+.obs fields containing the experimental condition(s) to create pseudobulk samples for.
+:::
+::: {.arg-attrs role="cell"}
+List of `string`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::::
 
 ### Arguments
 
-|Name                   |Description                                                                  |Attributes                     |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--aggregation_method` |Method to aggregate the raw counts for pseudoreplicates. Either sum or mean. |`string`, default: `"sum"`     |
-|`--random_state`       |The random seed for sampling.                                                |`integer`, default: `0`        |
-|`--obs_cell_count`     |The .obs field to store the number of observations per pseudobulk sample.    |`string`, default: `"n_cells"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--aggregation_method`
+:::
+::: {.arg-desc role="cell"}
+Method to aggregate the raw counts for pseudoreplicates. Either sum or mean.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Default]{.arg-key} `"sum"`
+
+[Choices]{.arg-key} `"sum"`, `"mean"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--random_state`
+:::
+::: {.arg-desc role="cell"}
+The random seed for sampling.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `0`
+
+[Min]{.arg-key} `0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obs_cell_count`
+:::
+::: {.arg-desc role="cell"}
+The .obs field to store the number of observations per pseudobulk sample.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"n_cells"`
+:::
+::::
+:::::
 
 ### Outputs
 
-|Name                   |Description                                                    |Attributes                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output`             |Output h5mu file containing the aggregated pseudobulk samples. |`file`, required, example: `"output.h5mu"` |
-|`--output_compression` |The compression format to be used on the output h5mu object.   |`string`, example: `"gzip"`                |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Output h5mu file containing the aggregated pseudobulk samples.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"output.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_compression`
+:::
+::: {.arg-desc role="cell"}
+The compression format to be used on the output h5mu object.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"gzip"`
+
+[Choices]{.arg-key} `"gzip"`, `"lzf"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -88,12 +241,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/differential_expression/create_pseudobulk).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/differential_expression/create_pseudobulk);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -105,8 +259,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

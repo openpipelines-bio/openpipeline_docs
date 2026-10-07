@@ -36,31 +36,271 @@ For the dispersion-based methods ([Satija15] and [Zheng17]), the normalized disp
 For [Stuart19], a normalized variance for each feature is computed. First, the data are standardized (i.e., z-score normalization per feature) with a regularized standard deviation. Next, the normalized variance is computed as the variance of each feature after the transformation. Features are ranked by the normalized variance.
 
 
+::: {.ref-description}
+Expects logarithmized data, except when flavor='seurat_v3' in which count data is expected.
+
+Depending on flavor, this reproduces the R-implementations of Seurat [Satija15], Cell Ranger [Zheng17], and Seurat v3 [Stuart19].
+
+For the dispersion-based methods ([Satija15] and [Zheng17]), the normalized dispersion is obtained by scaling with the mean and standard deviation of the dispersions for features falling into a given bin for mean expression of features. This means that for each bin of mean expression, highly variable features are selected.
+
+For [Stuart19], a normalized variance for each feature is computed. First, the data are standardized (i.e., z-score normalization per feature) with a regularized standard deviation. Next, the normalized variance is computed as the variance of each feature after the transformation. Features are ranked by the normalized variance.
+:::
+
 
 ## Argument group
 
 ### Arguments
 
-|Name                    |Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |Attributes                                                                     |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`               |Input h5mu file                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |`file`, required, example: `"input.h5mu"`                                      |
-|`--modality`            |Which modality from the input MuData file to process.                                                                                                                                                                                                                                                                                                                                                                                                                                                |`string`, default: `"rna"`                                                     |
-|`--layer`               |use adata.layers[layer] for expression values instead of adata.X.                                                                                                                                                                                                                                                                                                                                                                                                                                    |`string`                                                                       |
-|`--var_input`           |If specified, use boolean array in adata.var[var_input] to calculate hvg on subset of vars.                                                                                                                                                                                                                                                                                                                                                                                                          |`string`                                                                       |
-|`--features_to_exclude` |User-defined list of feature names to exclude before HVG calculation.  These features will be excluded from HVG selection but will remain in the output data.                                                                                                                                                                                                                                                                                                                                        |List of `string`, example: `"MT-CO1", "MT-CO2", "MT-ND1"`, multiple_sep: `";"` |
-|`--output`              |Output h5mu file.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |`file`, example: `"output.h5mu"`                                               |
-|`--var_name_filter`     |In which .var slot to store a boolean array corresponding to which observations should be filtered out.                                                                                                                                                                                                                                                                                                                                                                                              |`string`, default: `"filter_with_hvg"`                                         |
-|`--varm_name`           |In which .varm slot to store additional metadata.                                                                                                                                                                                                                                                                                                                                                                                                                                                    |`string`, default: `"hvg"`                                                     |
-|`--flavor`              |Choose the flavor for identifying highly variable features. For the dispersion based methods in their default workflows, Seurat passes the cutoffs whereas Cell Ranger passes n_top_features.                                                                                                                                                                                                                                                                                                        |`string`, default: `"seurat"`                                                  |
-|`--n_top_features`      |Number of highly-variable features to keep. Mandatory if flavor='seurat_v3'.                                                                                                                                                                                                                                                                                                                                                                                                                         |`integer`                                                                      |
-|`--min_mean`            |If n_top_features is defined, this and all other cutoffs for the means and the normalized dispersions are ignored. Ignored if flavor='seurat_v3'.                                                                                                                                                                                                                                                                                                                                                    |`double`, default: `0.0125`                                                    |
-|`--max_mean`            |If n_top_features is defined, this and all other cutoffs for the means and the normalized dispersions are ignored. Ignored if flavor='seurat_v3'.                                                                                                                                                                                                                                                                                                                                                    |`double`, default: `3`                                                         |
-|`--min_disp`            |If n_top_features is defined, this and all other cutoffs for the means and the normalized dispersions are ignored. Ignored if flavor='seurat_v3'.                                                                                                                                                                                                                                                                                                                                                    |`double`, default: `0.5`                                                       |
-|`--max_disp`            |If n_top_features is defined, this and all other cutoffs for the means and the normalized dispersions are ignored. Ignored if flavor='seurat_v3'. Default is +inf.                                                                                                                                                                                                                                                                                                                                   |`double`                                                                       |
-|`--span`                |The fraction of the data (cells) used when estimating the variance in the loess model fit if flavor='seurat_v3'.                                                                                                                                                                                                                                                                                                                                                                                     |`double`, default: `0.3`                                                       |
-|`--n_bins`              |Number of bins for binning the mean feature expression. Normalization is done with respect to each bin. If just a single feature falls into a bin, the normalized dispersion is artificially set to 1.                                                                                                                                                                                                                                                                                               |`integer`, default: `20`                                                       |
-|`--obs_batch_key`       |If specified, highly-variable features are selected within each batch separately and merged. This simple  process avoids the selection of batch-specific features and acts as a lightweight batch correction method.  For all flavors, features are first sorted by how many batches they are a HVG. For dispersion-based flavors  ties are broken by normalized dispersion. If flavor = 'seurat_v3', ties are broken by the median (across batches) rank based on within-batch normalized variance. |`string`                                                                       |
-|`--output_compression`  |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied.                                                                                                                                                                                                                                                                                                                                                                                       |`string`, example: `"gzip"`                                                    |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Input h5mu file
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"input.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--modality`
+:::
+::: {.arg-desc role="cell"}
+Which modality from the input MuData file to process.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"rna"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--layer`
+:::
+::: {.arg-desc role="cell"}
+use adata.layers[layer] for expression values instead of adata.X.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--var_input`
+:::
+::: {.arg-desc role="cell"}
+If specified, use boolean array in adata.var[var_input] to calculate hvg on subset of vars.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--features_to_exclude`
+:::
+::: {.arg-desc role="cell"}
+User-defined list of feature names to exclude before HVG calculation.
+These features will be excluded from HVG selection but will remain in the output data.
+:::
+::: {.arg-attrs role="cell"}
+List of `string`
+
+[Example]{.arg-key} `"MT-CO1"`, `"MT-CO2"`, `"MT-ND1"`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Output h5mu file.
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"output.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--var_name_filter`
+:::
+::: {.arg-desc role="cell"}
+In which .var slot to store a boolean array corresponding to which observations should be filtered out.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"filter_with_hvg"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--varm_name`
+:::
+::: {.arg-desc role="cell"}
+In which .varm slot to store additional metadata.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"hvg"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--flavor`
+:::
+::: {.arg-desc role="cell"}
+Choose the flavor for identifying highly variable features. For the dispersion based methods
+in their default workflows, Seurat passes the cutoffs whereas Cell Ranger passes n_top_features.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"seurat"`
+
+[Choices]{.arg-key} `"seurat"`, `"cell_ranger"`, `"seurat_v3"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--n_top_features`
+:::
+::: {.arg-desc role="cell"}
+Number of highly-variable features to keep. Mandatory if flavor='seurat_v3'.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--min_mean`
+:::
+::: {.arg-desc role="cell"}
+If n_top_features is defined, this and all other cutoffs for the means and the normalized dispersions are ignored. Ignored if flavor='seurat_v3'.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `0.0125`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--max_mean`
+:::
+::: {.arg-desc role="cell"}
+If n_top_features is defined, this and all other cutoffs for the means and the normalized dispersions are ignored. Ignored if flavor='seurat_v3'.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `3.0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--min_disp`
+:::
+::: {.arg-desc role="cell"}
+If n_top_features is defined, this and all other cutoffs for the means and the normalized dispersions are ignored. Ignored if flavor='seurat_v3'.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `0.5`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--max_disp`
+:::
+::: {.arg-desc role="cell"}
+If n_top_features is defined, this and all other cutoffs for the means and the normalized dispersions are ignored. Ignored if flavor='seurat_v3'. Default is +inf.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--span`
+:::
+::: {.arg-desc role="cell"}
+The fraction of the data (cells) used when estimating the variance in the loess model fit if flavor='seurat_v3'.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `0.3`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--n_bins`
+:::
+::: {.arg-desc role="cell"}
+Number of bins for binning the mean feature expression. Normalization is done with respect to each bin. If just a single feature falls into a bin, the normalized dispersion is artificially set to 1.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `20`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obs_batch_key`
+:::
+::: {.arg-desc role="cell"}
+If specified, highly-variable features are selected within each batch separately and merged. This simple
+process avoids the selection of batch-specific features and acts as a lightweight batch correction method.
+For all flavors, features are first sorted by how many batches they are a HVG. For dispersion-based flavors
+ties are broken by normalized dispersion. If flavor = 'seurat_v3', ties are broken by the median (across
+batches) rank based on within-batch normalized variance.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_compression`
+:::
+::: {.arg-desc role="cell"}
+Compression format to use for the output AnnData and/or Mudata H5 files.
+By default no compression is applied.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"gzip"`
+
+[Choices]{.arg-key} `"gzip"`, `"lzf"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -86,12 +326,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/feature_annotation/highly_variable_features_scanpy).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/feature_annotation/highly_variable_features_scanpy);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -103,8 +344,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

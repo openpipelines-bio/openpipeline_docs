@@ -45,47 +45,319 @@ Var metrics (name in this component -> name in scanpy):
     
 
 
+::: {.ref-description}
+The metrics are comparable to what scanpy.pp.calculate_qc_metrics output,
+although they have slightly different names:
+
+Var metrics (name in this component -> name in scanpy):
+
+  - pct_dropout -> pct_dropout_by_{expr_type}
+  - num_nonzero_obs -> n_cells_by_{expr_type}
+  - obs_mean -> mean_{expr_type}
+  - total_counts -> total_{expr_type}
+
+  Obs metrics:
+    - num_nonzero_vars -> n_genes_by_{expr_type}
+    - pct_{var_qc_metrics} -> pct_{expr_type}_{qc_var}
+    - total_counts_{var_qc_metrics} -> total_{expr_type}_{qc_var}
+    - pct_of_counts_in_top_{top_n_vars}_vars -> pct_{expr_type}_in_top_{n}_{var_type}
+    - total_counts -> total_{expr_type}
+:::
+
 
 ## Argument groups
 
 ### Inputs
 
-|Name                |Description                                                                                                                                                                                                                 |Attributes                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`           |Input data. Can be encoded in H5 or Zarr (v3) format.                                                                                                                                                                       |`file`, required, example: `"input.h5mu"` |
-|`--modality`        |Which modality from the input MuData file to process.                                                                                                                                                                       |`string`, default: `"rna"`                |
-|`--layer`           |Layer from modality to use as input data. If not provided the .X attribute is used.                                                                                                                                         |`string`, example: `"raw_counts"`         |
-|`--log1p_transform` |Compute log1p-transformed versions of the metrics added to `.var` and `.obs`. For each emitted metric column `<col>`, an additional column `log1p_<col>` is added containing `log1p(<col>)`. Mirrors scanpy's `log1p` flag. |`boolean`, default: `TRUE`                |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Input data. Can be encoded in H5 or Zarr (v3) format.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
+[Example]{.arg-key} `"input.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--modality`
+:::
+::: {.arg-desc role="cell"}
+Which modality from the input MuData file to process.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"rna"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--layer`
+:::
+::: {.arg-desc role="cell"}
+Layer from modality to use as input data. If not provided the .X attribute is used.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"raw_counts"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--log1p_transform`
+:::
+::: {.arg-desc role="cell"}
+Compute log1p-transformed versions of the metrics added to `.var` and `.obs`.
+For each emitted metric column `<col>`, an additional column `log1p_<col>` is added
+containing `log1p(<col>)`. Mirrors scanpy's `log1p` flag.
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
+
+[Default]{.arg-key} `true`
+:::
+::::
+:::::
 
 ### Metrics added to .obs
 
-|Name                             |Description                                                                                                                                                                                                                             |Attributes                                                                             |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--var_qc_metrics`               |Keys to select a boolean (containing only True or False) column from .var. For each cell, calculate the proportion of total values for genes which are labeled 'True',  compared to the total sum of the values for all genes.          |List of `string`, example: `"ercc,highly_variable,mitochondrial"`, multiple_sep: `";"` |
-|`--var_qc_metrics_fill_na_value` |Fill any 'NA' values found in the columns specified with --var_qc_metrics to 'True' or 'False'. as False.                                                                                                                               |`boolean`                                                                              |
-|`--top_n_vars`                   |Number of top vars to be used to calculate cumulative proportions. If not specified, proportions are not calculated. `--top_n_vars 20;50` finds cumulative proportion to the 20th and 50th most expressed vars.                         |List of `integer`, multiple_sep: `";"`                                                 |
-|`--output_obs_top_n_vars`        |Format string for the names of the .obs columns that contain the cumulative proportion of counts in the top N vars (one column per value in `--top_n_vars`). Use `{n}` as a placeholder for the top-N value provided in `--top_n_vars`. |`string`, default: `"pct_of_counts_in_top_{n}_vars"`                                   |
-|`--output_obs_num_nonzero_vars`  |Name of column in .obs describing, for each observation, the number of stored values (including explicit zeroes). In other words, the name of the column that counts for each row the number of columns that contain data.              |`string`, default: `"num_nonzero_vars"`                                                |
-|`--output_obs_total_counts_vars` |Name of the column for .obs describing, for each observation (row), the sum of the stored values in the columns.                                                                                                                        |`string`, default: `"total_counts"`                                                    |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--var_qc_metrics`
+:::
+::: {.arg-desc role="cell"}
+Keys to select a boolean (containing only True or False) column from .var.
+For each cell, calculate the proportion of total values for genes which are labeled 'True',
+compared to the total sum of the values for all genes.
+:::
+::: {.arg-attrs role="cell"}
+List of `string`
 
+[Example]{.arg-key} `"ercc,highly_variable,mitochondrial"`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--var_qc_metrics_fill_na_value`
+:::
+::: {.arg-desc role="cell"}
+Fill any 'NA' values found in the columns specified with --var_qc_metrics to 'True' or 'False'.
+as False.
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--top_n_vars`
+:::
+::: {.arg-desc role="cell"}
+Number of top vars to be used to calculate cumulative proportions.
+If not specified, proportions are not calculated. `--top_n_vars 20;50` finds
+cumulative proportion to the 20th and 50th most expressed vars.
+:::
+::: {.arg-attrs role="cell"}
+List of `integer`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_obs_top_n_vars`
+:::
+::: {.arg-desc role="cell"}
+Format string for the names of the .obs columns that contain the cumulative
+proportion of counts in the top N vars (one column per value in `--top_n_vars`).
+Use `{n}` as a placeholder for the top-N value provided in `--top_n_vars`.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"pct_of_counts_in_top_{n}_vars"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_obs_num_nonzero_vars`
+:::
+::: {.arg-desc role="cell"}
+Name of column in .obs describing, for each observation, the number of stored values
+(including explicit zeroes). In other words, the name of the column that counts
+for each row the number of columns that contain data.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"num_nonzero_vars"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_obs_total_counts_vars`
+:::
+::: {.arg-desc role="cell"}
+Name of the column for .obs describing, for each observation (row),
+the sum of the stored values in the columns.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"total_counts"`
+:::
+::::
+:::::
 
 ### Metrics added to .var
 
-|Name                            |Description                                                                                                                                                                                                    |Attributes                             |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output_var_num_nonzero_obs`  |Name of column describing, for each feature, the number of stored values (including explicit zeroes). In other words, the name of the column that counts for each column the number of rows that contain data. |`string`, default: `"num_nonzero_obs"` |
-|`--output_var_total_counts_obs` |Name of the column in .var describing, for each feature (column), the sum of the stored values in the rows.                                                                                                    |`string`, default: `"total_counts"`    |
-|`--output_var_obs_mean`         |Name of the column in .obs providing the mean of the values in each row.                                                                                                                                       |`string`, default: `"obs_mean"`        |
-|`--output_var_pct_dropout`      |Name of the column in .obs providing for each feature the percentage of observations the feature does not appear on (i.e. is missing). Same as `--num_nonzero_obs` but percentage based.                       |`string`, default: `"pct_dropout"`     |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_var_num_nonzero_obs`
+:::
+::: {.arg-desc role="cell"}
+Name of column describing, for each feature, the number of stored values
+(including explicit zeroes). In other words, the name of the column that counts
+for each column the number of rows that contain data.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Default]{.arg-key} `"num_nonzero_obs"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_var_total_counts_obs`
+:::
+::: {.arg-desc role="cell"}
+Name of the column in .var describing, for each feature (column),
+the sum of the stored values in the rows.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"total_counts"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_var_obs_mean`
+:::
+::: {.arg-desc role="cell"}
+Name of the column in .obs providing the mean of the values in each row.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"obs_mean"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_var_pct_dropout`
+:::
+::: {.arg-desc role="cell"}
+Name of the column in .obs providing for each feature the percentage of
+observations the feature does not appear on (i.e. is missing). Same as `--num_nonzero_obs`
+but percentage based.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"pct_dropout"`
+:::
+::::
+:::::
 
 ### Outputs
 
-|Name                   |Description                                                                                                    |Attributes                       |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output`             |Output data. Can be encoded using H5 or Zarr v3, matching the format of the input data.                        |`file`, example: `"output.h5mu"` |
-|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied. |`string`, example: `"gzip"`      |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Output data. Can be encoded using H5 or Zarr v3, matching the format of the input data.
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"output.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_compression`
+:::
+::: {.arg-desc role="cell"}
+Compression format to use for the output AnnData and/or Mudata H5 files.
+By default no compression is applied.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"gzip"`
+
+[Choices]{.arg-key} `"gzip"`, `"lzf"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -109,12 +381,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/qc/calculate_qc_metrics).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/qc/calculate_qc_metrics);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -126,8 +399,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

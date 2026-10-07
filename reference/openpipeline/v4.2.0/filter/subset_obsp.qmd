@@ -5,7 +5,7 @@ title: "subset_obsp"
 subtitle: "openpipeline v4.2.0"
 toc: true
 namespace: "Filter"
-description: "Create a subset of an .obsp field in a mudata file, by filtering the columns based on the values of an .obs column."
+description: "Create a subset of an .obsp field in a mudata file, by filtering the columns based on the values of an .obs column. The resulting subset is moved to an .obsm slot."
 type: "module"
 latest: "true"
 ---
@@ -34,28 +34,150 @@ The resulting subset is moved to an .obsm slot
 
 ### Arguments
 
-|Name                   |Description                                                                                                    |Attributes                  |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied. |`string`, example: `"gzip"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_compression`
+:::
+::: {.arg-desc role="cell"}
+Compression format to use for the output AnnData and/or Mudata H5 files.
+By default no compression is applied.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Example]{.arg-key} `"gzip"`
+
+[Choices]{.arg-key} `"gzip"`, `"lzf"`
+:::
+::::
+:::::
 
 ### Input
 
-|Name                |Description                                           |Attributes                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`           |Input h5mu file                                       |`file`, required, example: `"input.h5mu"` |
-|`--modality`        |Which modality from the input MuData file to process. |`string`, default: `"rna"`                |
-|`--input_obsp_key`  |The .obsp field to be filtered.                       |`string`, required                        |
-|`--input_obs_key`   |The .obs column to filter on.                         |`string`, required                        |
-|`--input_obs_value` |The value to filter on in the .obs column.            |`string`, required                        |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Input h5mu file
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
+[Example]{.arg-key} `"input.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--modality`
+:::
+::: {.arg-desc role="cell"}
+Which modality from the input MuData file to process.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"rna"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_obsp_key`
+:::
+::: {.arg-desc role="cell"}
+The .obsp field to be filtered.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_obs_key`
+:::
+::: {.arg-desc role="cell"}
+The .obs column to filter on.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_obs_value`
+:::
+::: {.arg-desc role="cell"}
+The value to filter on in the .obs column.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
+:::
+::::
+:::::
 
 ### Output
 
-|Name                |Description                           |Attributes                       |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output`          |Output h5mu file.                     |`file`, example: `"output.h5mu"` |
-|`--output_obsm_key` |The .obsm key to store the subset in. |`string`, required               |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Output h5mu file.
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"output.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_obsm_key`
+:::
+::: {.arg-desc role="cell"}
+The .obsm key to store the subset in.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
+:::
+::::
+:::::
 
 ## Authors
 
@@ -79,12 +201,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/filter/subset_obsp).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/filter/subset_obsp);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -96,8 +219,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
