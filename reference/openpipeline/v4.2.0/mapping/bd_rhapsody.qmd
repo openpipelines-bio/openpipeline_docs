@@ -36,6 +36,7 @@ ATAC-Seq
 The CWL pipeline file is obtained by cloning 'https://bitbucket.org/CRSwDev/cwl' and removing all objects with class 'DockerRequirement' from the YAML.
 :::
 
+
 ## Argument groups
 
 ### Inputs

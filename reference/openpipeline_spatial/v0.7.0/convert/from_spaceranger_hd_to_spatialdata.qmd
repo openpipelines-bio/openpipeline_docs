@@ -35,6 +35,7 @@ at the bin size given by `--bin_size`. In both cases the loaded table is
 renamed to "table" so that downstream components stay technology-agnostic.
 :::
 
+
 ## Argument group
 
 ### Arguments

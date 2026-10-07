@@ -27,6 +27,7 @@ Namespace: `query`
 
 :::
 
+
 ## Argument group
 
 ### Input database

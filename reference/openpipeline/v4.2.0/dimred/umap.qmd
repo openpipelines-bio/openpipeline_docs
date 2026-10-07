@@ -27,6 +27,7 @@ Namespace: `dimred`
 
 :::
 
+
 ## Argument groups
 
 ### Inputs

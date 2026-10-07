@@ -38,6 +38,7 @@ Namespace: `convert`
   - `morphology_focus.ome.tif`: File containing morphology focus.
 :::
 
+
 ## Argument group
 
 ### Arguments

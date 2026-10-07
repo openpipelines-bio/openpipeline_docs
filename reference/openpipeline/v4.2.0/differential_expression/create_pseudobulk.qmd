@@ -27,6 +27,7 @@ Namespace: `differential_expression`
 
 :::
 
+
 ## Argument groups
 
 ### Inputs

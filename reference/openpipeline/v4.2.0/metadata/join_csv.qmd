@@ -27,6 +27,7 @@ Namespace: `metadata`
 
 :::
 
+
 ## Argument groups
 
 ### MuData Input

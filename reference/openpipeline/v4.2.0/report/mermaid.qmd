@@ -27,6 +27,7 @@ Namespace: `report`
 
 :::
 
+
 ## Argument group
 
 ### Arguments
