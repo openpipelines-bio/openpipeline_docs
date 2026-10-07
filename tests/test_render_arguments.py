@@ -167,6 +167,22 @@ def test_markdown_ends_a_list_at_an_unindented_line():
     assert ra.markdown(text) == "Modes:\n\n- a\n  note on a\n- b\n\nSee the docs."
 
 
+def test_set_body_description_replaces_the_generators_own_description_text():
+    # The generator puts every description line after the first in the body,
+    # between the Info/Links margin block and the first section.
+    page = (
+        '---\ntitle: "x"\n---\n\n::: {.column-margin}\ninfo\n:::\n\n'
+        "Second line from the generator.\n\n\n## Argument groups\n\nargs\n"
+    )
+    out = ra.set_body_description(page, "More.")
+    assert "Second line from the generator." not in out
+    assert "info\n:::\n\n::: {.ref-description}\nMore.\n:::\n\n## Argument groups" in out
+    # nothing left to show → the generator's text still goes
+    out = ra.set_body_description(page, "")
+    assert "Second line" not in out
+    assert "info\n:::\n\n## Argument groups" in out
+
+
 def test_process_page_is_idempotent():
     page = (
         '---\ntitle: "x"\ndescription: "flat"\n---\n\n'

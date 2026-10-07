@@ -27,6 +27,7 @@ Namespace: `single_cell`
 
 :::
 
+::: {.ref-description}
 The input is expected to already carry a major cell-type annotation in
 .obs (--obs_major_cell_type) on the modality to be subtyped (--modality).
 Each major cell type is then subtyped independently, so that the annotation
@@ -42,12 +43,13 @@ parallel_annotation workflow and are applied identically to every major
 cell type.
 
 Available annotation methods:
+
 - CellTypist
 - ScanVI with scArches
 - SingleR
 - SCVI integration followed by KNN label transfer
 - Harmony integration followed by KNN label transfer
-
+:::
 
 ## Visualisation
 
@@ -79,126 +81,905 @@ flowchart TB
 
 ### Inputs
 
-|Name                                 |Description                                                                                                                                                                                                                                            |Attributes                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--id`                               |ID of the sample.                                                                                                                                                                                                                                      |`string`, required, example: `"foo"`       |
-|`--input`                            |Input query h5mu file with a major cell-type annotation. Must be preprocessed in the same way as the reference.                                                                                                                                        |`file`, required, example: `"input.h5mu"`  |
-|`--modality`                         |Which modality to subtype. Must match the modality in --reference. Other modalities present in the input are passed through unaltered and merged back into the output.                                                                                 |`string`, default: `"rna"`                 |
-|`--obs_major_cell_type`              |The .obs column of --modality holding the major cell-type labels to split on. The target modality is split by this column and each major cell type is subtyped independently.                                                                          |`string`, required, example: `"cell_type"` |
-|`--input_layer`                      |The layer of the input query containing raw counts. Required by celltypist (which log-normalizes internally), scanvi_scarches and scvi_knn (which model raw counts directly). If not provided, .X will be used.                                        |`string`                                   |
-|`--input_layer_lognormalized`        |The layer of the input query containing log-normalized counts. Required by harmony_knn and scvi_knn.                                                                                                                                                   |`string`, default: `"log_normalized"`      |
-|`--input_obs_batch_label`            |.obs column in the input query containing batch labels. Required by harmony_knn, scanvi_scarches and scvi_knn.                                                                                                                                         |`string`, default: `"sample_id"`           |
-|`--input_var_gene_names`             |.var column containing gene names. By default the .var index is used.                                                                                                                                                                                  |`string`                                   |
-|`--input_reference_gene_overlap`     |Minimum number of genes required to overlap between query and reference.                                                                                                                                                                               |`integer`, default: `100`                  |
-|`--sanitize_ensembl_ids`             |Whether to sanitize ensembl gene ids by removing version numbers. Read by celltypist, scanvi_scarches, scvi_knn and singler.                                                                                                                           |`boolean`, default: `TRUE`                 |
-|`--input_obs_categorical_covariates` |.obs column(s) in the input query with categorical covariates for scanvi_scarches to correct for in addition to the batch label. Treated as nuisance factors; their order must match --reference_obs_categorical_covariates. None by default.          |List of `string`, multiple_sep: `";"`      |
-|`--input_obs_numerical_covariates`   |.obs column(s) in the input query with continuous (numerical) covariates for scanvi_scarches to correct for in addition to the batch label. Treated as nuisance factors; their order must match --reference_obs_numerical_covariates. None by default. |List of `string`, multiple_sep: `";"`      |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--id`
+:::
+::: {.arg-desc role="cell"}
+ID of the sample.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
 
+[Example]{.arg-key} `"foo"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Input query h5mu file with a major cell-type annotation. Must be
+preprocessed in the same way as the reference.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"input.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--modality`
+:::
+::: {.arg-desc role="cell"}
+Which modality to subtype. Must match the modality in --reference.
+Other modalities present in the input are passed through unaltered
+and merged back into the output.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"rna"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obs_major_cell_type`
+:::
+::: {.arg-desc role="cell"}
+The .obs column of --modality holding the major cell-type labels to
+split on. The target modality is split by this column and each major
+cell type is subtyped independently.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
+
+[Example]{.arg-key} `"cell_type"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_layer`
+:::
+::: {.arg-desc role="cell"}
+The layer of the input query containing raw counts. Required by
+celltypist (which log-normalizes internally), scanvi_scarches and
+scvi_knn (which model raw counts directly). If not provided, .X
+will be used.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_layer_lognormalized`
+:::
+::: {.arg-desc role="cell"}
+The layer of the input query containing log-normalized counts.
+Required by harmony_knn and scvi_knn.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"log_normalized"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_obs_batch_label`
+:::
+::: {.arg-desc role="cell"}
+.obs column in the input query containing batch labels. Required by
+harmony_knn, scanvi_scarches and scvi_knn.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"sample_id"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_var_gene_names`
+:::
+::: {.arg-desc role="cell"}
+.var column containing gene names. By default the .var index is used.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_reference_gene_overlap`
+:::
+::: {.arg-desc role="cell"}
+Minimum number of genes required to overlap between query and reference.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `100`
+
+[Min]{.arg-key} `1`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--sanitize_ensembl_ids`
+:::
+::: {.arg-desc role="cell"}
+Whether to sanitize ensembl gene ids by removing version numbers. Read by
+celltypist, scanvi_scarches, scvi_knn and singler.
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
+
+[Default]{.arg-key} `true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_obs_categorical_covariates`
+:::
+::: {.arg-desc role="cell"}
+.obs column(s) in the input query with categorical covariates for
+scanvi_scarches to correct for in addition to the batch label. Treated as
+nuisance factors; their order must match --reference_obs_categorical_covariates.
+None by default.
+:::
+::: {.arg-attrs role="cell"}
+List of `string`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_obs_numerical_covariates`
+:::
+::: {.arg-desc role="cell"}
+.obs column(s) in the input query with continuous (numerical) covariates for
+scanvi_scarches to correct for in addition to the batch label. Treated as
+nuisance factors; their order must match --reference_obs_numerical_covariates.
+None by default.
+:::
+::: {.arg-attrs role="cell"}
+List of `string`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::::
 
 ### Methods
 
-|Name                   |Description                                                    |Attributes                                                                              |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--annotation_methods` |Annotation methods to run in parallel on each major cell type. |List of `string`, required, example: `"celltypist", "harmony_knn"`, multiple_sep: `";"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--annotation_methods`
+:::
+::: {.arg-desc role="cell"}
+Annotation methods to run in parallel on each major cell type.
+:::
+::: {.arg-attrs role="cell"}
+List of `string` [required]{.arg-required}
 
+[Example]{.arg-key} `"celltypist"`, `"harmony_knn"`
+
+[Choices]{.arg-key} `"celltypist"`, `"harmony_knn"`, `"scanvi_scarches"`, `"scvi_knn"`, `"singler"`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::::
 
 ### Reference
 
-|Name                                       |Description                                                                                                                                                                                                                                                         |Attributes                                       |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--reference`                              |Reference h5mu file with labeled observations. Used by all annotation methods (celltypist, harmony_knn, scanvi_scarches and scvi_knn).                                                                                                                              |`file`, required, example: `"reference.h5mu"`    |
-|`--reference_layer`                        |Layer of the reference containing raw counts. If not provided, .X will be used.                                                                                                                                                                                     |`string`                                         |
-|`--reference_layer_lognormalized`          |Layer of the reference containing log-normalized counts.                                                                                                                                                                                                            |`string`, default: `"log_normalized"`            |
-|`--reference_obs_target`                   |.obs column in the reference containing the target (sub)cell-type labels.                                                                                                                                                                                           |`string`, example: `"cell_type"`                 |
-|`--reference_obs_major_cell_type`          |The .obs column in --reference holding the major cell-type labels, matching the label set in --obs_major_cell_type. The reference is split by this column and each query major cell type is subtyped against the matching subset of the reference.                  |`string`, required, example: `"major_cell_type"` |
-|`--allow_missing_reference_cell_type`      |Controls what happens when a query major cell type has no matching subset in the reference. When false (default), the workflow errors. When true, such cell types are passed through unannotated and merged back into the output alongside the subtyped cell types. |`boolean_true`                                   |
-|`--reference_obs_batch_label`              |.obs column in the reference containing batch labels.                                                                                                                                                                                                               |`string`, default: `"sample_id"`                 |
-|`--reference_var_gene_names`               |.var column in the reference containing gene names. Defaults to the .var index.                                                                                                                                                                                     |`string`                                         |
-|`--reference_var_input`                    |.var column in the reference flagging highly-variable genes (boolean). Used by celltypist and scanvi_scarches to subset features if provided.                                                                                                                       |`string`, default: `"filter_with_hvg"`           |
-|`--reference_obs_categorical_covariates`   |.obs column(s) in the reference with categorical covariates for scanvi_scarches to correct for in addition to the batch label. Treated as nuisance factors; their order must match --input_obs_categorical_covariates. None by default.                             |List of `string`, multiple_sep: `";"`            |
-|`--reference_obs_numerical_covariates`     |.obs column(s) in the reference with continuous (numerical) covariates for scanvi_scarches to correct for in addition to the batch label. Treated as nuisance factors; their order must match --input_obs_numerical_covariates. None by default.                    |List of `string`, multiple_sep: `";"`            |
-|`--reference_obs_label_unlabeled_category` |Value in --reference_obs_target that indicates unlabeled observations.                                                                                                                                                                                              |`string`, default: `"Unknown"`                   |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference`
+:::
+::: {.arg-desc role="cell"}
+Reference h5mu file with labeled observations. Used by all annotation
+methods (celltypist, harmony_knn, scanvi_scarches and scvi_knn).
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
+[Example]{.arg-key} `"reference.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference_layer`
+:::
+::: {.arg-desc role="cell"}
+Layer of the reference containing raw counts. If not provided, .X will be used.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference_layer_lognormalized`
+:::
+::: {.arg-desc role="cell"}
+Layer of the reference containing log-normalized counts.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"log_normalized"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference_obs_target`
+:::
+::: {.arg-desc role="cell"}
+.obs column in the reference containing the target (sub)cell-type labels.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"cell_type"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference_obs_major_cell_type`
+:::
+::: {.arg-desc role="cell"}
+The .obs column in --reference holding the major cell-type labels,
+matching the label set in --obs_major_cell_type. The reference is split
+by this column and each query major cell type is subtyped against the
+matching subset of the reference.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
+
+[Example]{.arg-key} `"major_cell_type"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--allow_missing_reference_cell_type`
+:::
+::: {.arg-desc role="cell"}
+Controls what happens when a query major cell type has no matching
+subset in the reference. When false (default), the workflow errors.
+When true, such cell types are passed through unannotated and merged
+back into the output alongside the subtyped cell types.
+:::
+::: {.arg-attrs role="cell"}
+`boolean_true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference_obs_batch_label`
+:::
+::: {.arg-desc role="cell"}
+.obs column in the reference containing batch labels.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"sample_id"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference_var_gene_names`
+:::
+::: {.arg-desc role="cell"}
+.var column in the reference containing gene names. Defaults to the .var index.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference_var_input`
+:::
+::: {.arg-desc role="cell"}
+.var column in the reference flagging highly-variable genes (boolean).
+Used by celltypist and scanvi_scarches to subset features if provided.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"filter_with_hvg"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference_obs_categorical_covariates`
+:::
+::: {.arg-desc role="cell"}
+.obs column(s) in the reference with categorical covariates for
+scanvi_scarches to correct for in addition to the batch label. Treated as
+nuisance factors; their order must match --input_obs_categorical_covariates.
+None by default.
+:::
+::: {.arg-attrs role="cell"}
+List of `string`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference_obs_numerical_covariates`
+:::
+::: {.arg-desc role="cell"}
+.obs column(s) in the reference with continuous (numerical) covariates for
+scanvi_scarches to correct for in addition to the batch label. Treated as
+nuisance factors; their order must match --input_obs_numerical_covariates.
+None by default.
+:::
+::: {.arg-attrs role="cell"}
+List of `string`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference_obs_label_unlabeled_category`
+:::
+::: {.arg-desc role="cell"}
+Value in --reference_obs_target that indicates unlabeled observations.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"Unknown"`
+:::
+::::
+:::::
 
 ### Clustering options
 
 Leiden clustering options shared by harmony_knn, scanvi_scarches, scvi_knn.
 
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--leiden_resolution`
+:::
+::: {.arg-desc role="cell"}
+Leiden clustering resolution(s). Higher values lead to more clusters.
+:::
+::: {.arg-attrs role="cell"}
+List of `double`
 
-|Name                  |Description                                                           |Attributes                                          |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--leiden_resolution` |Leiden clustering resolution(s). Higher values lead to more clusters. |List of `double`, default: `1`, multiple_sep: `";"` |
+[Default]{.arg-key} `1.0`
 
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::::
 
 ### Neighbor classifier options
 
 KNN options shared by harmony_knn, scanvi_scarches, scvi_knn.
 
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--knn_weights`
+:::
+::: {.arg-desc role="cell"}
+Weight function for KNN classifier.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
-|Name                |Description                                 |Attributes                     |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--knn_weights`     |Weight function for KNN classifier.         |`string`, default: `"uniform"` |
-|`--knn_n_neighbors` |Number of neighbors for the KNN classifier. |`integer`, default: `15`       |
+[Default]{.arg-key} `"uniform"`
 
+[Choices]{.arg-key} `"uniform"`, `"distance"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--knn_n_neighbors`
+:::
+::: {.arg-desc role="cell"}
+Number of neighbors for the KNN classifier.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `15`
+
+[Min]{.arg-key} `5`
+:::
+::::
+:::::
 
 ### scVI / scANVI / scArches training options
 
 Training arguments shared by scanvi_scarches and scvi_knn.
 
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scvi_early_stopping`
+:::
+::: {.arg-desc role="cell"}
+Whether to perform early stopping with respect to the validation set.
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scvi_early_stopping_monitor`
+:::
+::: {.arg-desc role="cell"}
+Metric logged during validation set epoch.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Default]{.arg-key} `"elbo_validation"`
 
-|Name                              |Description                                                                 |Attributes                             |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--scvi_early_stopping`           |Whether to perform early stopping with respect to the validation set.       |`boolean`                              |
-|`--scvi_early_stopping_monitor`   |Metric logged during validation set epoch.                                  |`string`, default: `"elbo_validation"` |
-|`--scvi_early_stopping_patience`  |Number of validation epochs with no improvement after which training stops. |`integer`, default: `45`               |
-|`--scvi_early_stopping_min_delta` |Minimum change in the monitored metric to qualify as an improvement.        |`double`, default: `0`                 |
-|`--scvi_max_epochs`               |Number of training passes through the dataset.                              |`integer`                              |
-|`--scvi_reduce_lr_on_plateau`     |Reduce learning rate when validation metric plateaus.                       |`boolean`, default: `TRUE`             |
-|`--scvi_lr_factor`                |Factor by which to reduce learning rate.                                    |`double`, default: `0.6`               |
-|`--scvi_lr_patience`              |Number of epochs with no improvement after which lr is reduced.             |`double`, default: `30`                |
+[Choices]{.arg-key} `"elbo_validation"`, `"reconstruction_loss_validation"`, `"kl_local_validation"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scvi_early_stopping_patience`
+:::
+::: {.arg-desc role="cell"}
+Number of validation epochs with no improvement after which training stops.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
 
+[Default]{.arg-key} `45`
+
+[Min]{.arg-key} `1`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scvi_early_stopping_min_delta`
+:::
+::: {.arg-desc role="cell"}
+Minimum change in the monitored metric to qualify as an improvement.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `0.0`
+
+[Min]{.arg-key} `0.0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scvi_max_epochs`
+:::
+::: {.arg-desc role="cell"}
+Number of training passes through the dataset.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scvi_reduce_lr_on_plateau`
+:::
+::: {.arg-desc role="cell"}
+Reduce learning rate when validation metric plateaus.
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
+
+[Default]{.arg-key} `true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scvi_lr_factor`
+:::
+::: {.arg-desc role="cell"}
+Factor by which to reduce learning rate.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `0.6`
+
+[Min]{.arg-key} `0.0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scvi_lr_patience`
+:::
+::: {.arg-desc role="cell"}
+Number of epochs with no improvement after which lr is reduced.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `30.0`
+
+[Min]{.arg-key} `0.0`
+:::
+::::
+:::::
 
 ### CellTypist options
 
-|Name                             |Description                                                                                                                                |Attributes                  |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--celltypist_majority_voting`   |Refine predicted labels by majority voting after over-clustering.                                                                          |`boolean`, default: `FALSE` |
-|`--celltypist_feature_selection` |Whether to perform feature selection during training.                                                                                      |`boolean`, default: `FALSE` |
-|`--celltypist_C`                 |Inverse of regularization strength in logistic regression.                                                                                 |`double`, default: `1`      |
-|`--celltypist_max_iter`          |Maximum iterations before reaching the cost-function minimum.                                                                              |`integer`, default: `1000`  |
-|`--celltypist_use_SGD`           |Whether to use stochastic gradient descent.                                                                                                |`boolean`, default: `FALSE` |
-|`--celltypist_min_prop`          |Minimum proportion of cells in a sub-cluster supporting a label for majority voting; only relevant if --celltypist_majority_voting is set. |`double`, default: `0`      |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--celltypist_majority_voting`
+:::
+::: {.arg-desc role="cell"}
+Refine predicted labels by majority voting after over-clustering.
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
 
+[Default]{.arg-key} `false`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--celltypist_feature_selection`
+:::
+::: {.arg-desc role="cell"}
+Whether to perform feature selection during training.
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
+
+[Default]{.arg-key} `false`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--celltypist_C`
+:::
+::: {.arg-desc role="cell"}
+Inverse of regularization strength in logistic regression.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `1.0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--celltypist_max_iter`
+:::
+::: {.arg-desc role="cell"}
+Maximum iterations before reaching the cost-function minimum.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `1000`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--celltypist_use_SGD`
+:::
+::: {.arg-desc role="cell"}
+Whether to use stochastic gradient descent.
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
+
+[Default]{.arg-key} `false`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--celltypist_min_prop`
+:::
+::: {.arg-desc role="cell"}
+Minimum proportion of cells in a sub-cluster supporting a label for
+majority voting; only relevant if --celltypist_majority_voting is set.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `0.0`
+:::
+::::
+:::::
 
 ### harmony_knn options
 
-|Name                               |Description                                                |Attributes                                          |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--harmony_knn_n_hvg`              |Number of highly-variable genes to keep for harmony_knn.   |`integer`, default: `2000`                          |
-|`--harmony_knn_pca_num_components` |Number of principal components to compute for harmony_knn. |`integer`                                           |
-|`--harmony_knn_theta`              |Diversity clustering penalty for harmony.                  |List of `double`, default: `2`, multiple_sep: `";"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--harmony_knn_n_hvg`
+:::
+::: {.arg-desc role="cell"}
+Number of highly-variable genes to keep for harmony_knn.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
 
+[Default]{.arg-key} `2000`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--harmony_knn_pca_num_components`
+:::
+::: {.arg-desc role="cell"}
+Number of principal components to compute for harmony_knn.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--harmony_knn_theta`
+:::
+::: {.arg-desc role="cell"}
+Diversity clustering penalty for harmony.
+:::
+::: {.arg-attrs role="cell"}
+List of `double`
+
+[Default]{.arg-key} `2.0`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::::
 
 ### scvi_knn options
 
-|Name               |Description                                           |Attributes                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--scvi_knn_n_hvg` |Number of highly-variable genes to keep for scvi_knn. |`integer`, default: `2000` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scvi_knn_n_hvg`
+:::
+::: {.arg-desc role="cell"}
+Number of highly-variable genes to keep for scvi_knn.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
 
+[Default]{.arg-key} `2000`
+:::
+::::
+:::::
 
 ### SingleR options
 
-|Name                              |Description                                                                                                                                  |Attributes                     |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--singler_input_obs_clusters`    |.obs column with cluster identities. If provided, SingleR annotates the aggregated cluster profiles; otherwise it annotates per observation. |`string`                       |
-|`--singler_de_method`             |Method to detect differentially expressed genes between pairs of labels.                                                                     |`string`, default: `"classic"` |
-|`--singler_de_n_genes`            |Number of differentially expressed genes per label pair to use as markers. Defaults to a SingleR heuristic based on the number of labels.    |`integer`                      |
-|`--singler_quantile`              |Quantile of the correlation distribution used to score each label.                                                                           |`double`, default: `0.8`       |
-|`--singler_fine_tune`             |Whether to fine-tune label assignment after the initial classification.                                                                      |`boolean`, default: `TRUE`     |
-|`--singler_fine_tuning_threshold` |Maximum difference from the maximum correlation to use in fine-tuning.                                                                       |`double`, default: `0.05`      |
-|`--singler_prune`                 |Whether to prune low-quality labels (replaced with NA in the pruned predictions output).                                                     |`boolean`, default: `TRUE`     |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--singler_input_obs_clusters`
+:::
+::: {.arg-desc role="cell"}
+.obs column with cluster identities. If provided, SingleR annotates the
+aggregated cluster profiles; otherwise it annotates per observation.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--singler_de_method`
+:::
+::: {.arg-desc role="cell"}
+Method to detect differentially expressed genes between pairs of labels.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Default]{.arg-key} `"classic"`
+
+[Choices]{.arg-key} `"classic"`, `"t"`, `"wilcox"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--singler_de_n_genes`
+:::
+::: {.arg-desc role="cell"}
+Number of differentially expressed genes per label pair to use as markers.
+Defaults to a SingleR heuristic based on the number of labels.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Min]{.arg-key} `1`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--singler_quantile`
+:::
+::: {.arg-desc role="cell"}
+Quantile of the correlation distribution used to score each label.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `0.8`
+
+[Min]{.arg-key} `0.0`
+
+[Max]{.arg-key} `1.0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--singler_fine_tune`
+:::
+::: {.arg-desc role="cell"}
+Whether to fine-tune label assignment after the initial classification.
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
+
+[Default]{.arg-key} `true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--singler_fine_tuning_threshold`
+:::
+::: {.arg-desc role="cell"}
+Maximum difference from the maximum correlation to use in fine-tuning.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `0.05`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--singler_prune`
+:::
+::: {.arg-desc role="cell"}
+Whether to prune low-quality labels (replaced with NA in the pruned
+predictions output).
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
+
+[Default]{.arg-key} `true`
+:::
+::::
+:::::
 
 ### Consensus vote options
 
@@ -211,49 +992,331 @@ consensus_pred_<reference_obs_target> and
 consensus_score_<reference_obs_target> when not set, and the suffix is
 omitted when no --reference_obs_target is set.
 
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--run_consensus`
+:::
+::: {.arg-desc role="cell"}
+Run a final consensus vote combining the per-method predictions. Only
+takes effect when more than one --annotation_methods is selected.
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
 
+[Default]{.arg-key} `true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--consensus_obs_predictions`
+:::
+::: {.arg-desc role="cell"}
+.obs slot for the consensus predicted cell type. Defaults to consensus_pred_<reference_obs_target>.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--consensus_obs_score`
+:::
+::: {.arg-desc role="cell"}
+.obs slot for the consensus score, defined as the fraction of total
+weight assigned to the winning cell type. Defaults to
+consensus_score_<reference_obs_target>.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--consensus_use_probabilities`
+:::
+::: {.arg-desc role="cell"}
+Scale each method's vote by its per-cell prediction probability. When
+false, every method votes with equal weight regardless of confidence.
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
 
-|Name                            |Description                                                                                                                                                       |Attributes                     |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--run_consensus`               |Run a final consensus vote combining the per-method predictions. Only takes effect when more than one --annotation_methods is selected.                           |`boolean`, default: `TRUE`     |
-|`--consensus_obs_predictions`   |.obs slot for the consensus predicted cell type. Defaults to consensus_pred_<reference_obs_target>.                                                               |`string`                       |
-|`--consensus_obs_score`         |.obs slot for the consensus score, defined as the fraction of total weight assigned to the winning cell type. Defaults to consensus_score_<reference_obs_target>. |`string`                       |
-|`--consensus_use_probabilities` |Scale each method's vote by its per-cell prediction probability. When false, every method votes with equal weight regardless of confidence.                       |`boolean`, default: `TRUE`     |
-|`--consensus_tie_label`         |Label to assign when two or more cell types receive equal votes. If not provided, tied cells are assigned a missing value.                                        |`string`, example: `"Unknown"` |
+[Default]{.arg-key} `true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--consensus_tie_label`
+:::
+::: {.arg-desc role="cell"}
+Label to assign when two or more cell types receive equal votes. If not
+provided, tied cells are assigned a missing value.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Example]{.arg-key} `"Unknown"`
+:::
+::::
+:::::
 
 ### Output slot naming
 
 Names of the .obs and .obsm slots each method writes to the subtyped output.
 
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--celltypist_obs_predictions`
+:::
+::: {.arg-desc role="cell"}
+.obs column for CellTypist predicted labels. Defaults to celltypist_pred_<reference_obs_target>.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--celltypist_obs_probability`
+:::
+::: {.arg-desc role="cell"}
+.obs column for CellTypist probabilities. Defaults to celltypist_probability_<reference_obs_target>.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--harmony_knn_obs_predictions`
+:::
+::: {.arg-desc role="cell"}
+.obs column for harmony_knn predicted labels. Defaults to harmony_knn_pred_<reference_obs_target>.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--harmony_knn_obs_probability`
+:::
+::: {.arg-desc role="cell"}
+.obs column for harmony_knn probabilities. Defaults to harmony_knn_probability_<reference_obs_target>.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--harmony_knn_obsm_integrated`
+:::
+::: {.arg-desc role="cell"}
 
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
-|Name                                |Description                                                                                                |Attributes                                  |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--celltypist_obs_predictions`      |.obs column for CellTypist predicted labels. Defaults to celltypist_pred_<reference_obs_target>.           |`string`                                    |
-|`--celltypist_obs_probability`      |.obs column for CellTypist probabilities. Defaults to celltypist_probability_<reference_obs_target>.       |`string`                                    |
-|`--harmony_knn_obs_predictions`     |.obs column for harmony_knn predicted labels. Defaults to harmony_knn_pred_<reference_obs_target>.         |`string`                                    |
-|`--harmony_knn_obs_probability`     |.obs column for harmony_knn probabilities. Defaults to harmony_knn_probability_<reference_obs_target>.     |`string`                                    |
-|`--harmony_knn_obsm_integrated`     |                                                                                                           |`string`, default: `"X_integrated_harmony"` |
-|`--scanvi_scarches_obs_predictions` |.obs column for scanvi_scarches predicted labels. Defaults to scanvi_pred_<reference_obs_target>.          |`string`                                    |
-|`--scanvi_scarches_obs_probability` |.obs column for scanvi_scarches probabilities. Defaults to scanvi_probability_<reference_obs_target>.      |`string`                                    |
-|`--scanvi_scarches_obsm_integrated` |                                                                                                           |`string`, default: `"X_integrated_scanvi"`  |
-|`--scvi_knn_obs_predictions`        |.obs column for scvi_knn predicted labels. Defaults to scvi_knn_pred_<reference_obs_target>.               |`string`                                    |
-|`--scvi_knn_obs_probability`        |.obs column for scvi_knn probabilities. Defaults to scvi_knn_probability_<reference_obs_target>.           |`string`                                    |
-|`--scvi_knn_obsm_integrated`        |                                                                                                           |`string`, default: `"X_integrated_scvi"`    |
-|`--singler_obs_predictions`         |.obs column for SingleR predicted labels. Defaults to singler_pred_<reference_obs_target>.                 |`string`                                    |
-|`--singler_obs_probability`         |.obs column for SingleR probabilities. Defaults to singler_probability_<reference_obs_target>.             |`string`                                    |
-|`--singler_obs_delta_next`          |.obs column for the SingleR delta-next score. Defaults to singler_delta_next_<reference_obs_target>.       |`string`                                    |
-|`--singler_obs_pruned_predictions`  |.obs column for SingleR pruned predicted labels. Defaults to singler_pruned_labels_<reference_obs_target>. |`string`                                    |
-|`--singler_obsm_scores`             |.obsm key for the SingleR per-label score matrix. Defaults to singler_scores_<reference_obs_target>.       |`string`                                    |
+[Default]{.arg-key} `"X_integrated_harmony"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scanvi_scarches_obs_predictions`
+:::
+::: {.arg-desc role="cell"}
+.obs column for scanvi_scarches predicted labels. Defaults to scanvi_pred_<reference_obs_target>.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scanvi_scarches_obs_probability`
+:::
+::: {.arg-desc role="cell"}
+.obs column for scanvi_scarches probabilities. Defaults to scanvi_probability_<reference_obs_target>.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scanvi_scarches_obsm_integrated`
+:::
+::: {.arg-desc role="cell"}
 
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"X_integrated_scanvi"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scvi_knn_obs_predictions`
+:::
+::: {.arg-desc role="cell"}
+.obs column for scvi_knn predicted labels. Defaults to scvi_knn_pred_<reference_obs_target>.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scvi_knn_obs_probability`
+:::
+::: {.arg-desc role="cell"}
+.obs column for scvi_knn probabilities. Defaults to scvi_knn_probability_<reference_obs_target>.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scvi_knn_obsm_integrated`
+:::
+::: {.arg-desc role="cell"}
+
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"X_integrated_scvi"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--singler_obs_predictions`
+:::
+::: {.arg-desc role="cell"}
+.obs column for SingleR predicted labels. Defaults to singler_pred_<reference_obs_target>.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--singler_obs_probability`
+:::
+::: {.arg-desc role="cell"}
+.obs column for SingleR probabilities. Defaults to singler_probability_<reference_obs_target>.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--singler_obs_delta_next`
+:::
+::: {.arg-desc role="cell"}
+.obs column for the SingleR delta-next score. Defaults to singler_delta_next_<reference_obs_target>.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--singler_obs_pruned_predictions`
+:::
+::: {.arg-desc role="cell"}
+.obs column for SingleR pruned predicted labels. Defaults to singler_pruned_labels_<reference_obs_target>.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--singler_obsm_scores`
+:::
+::: {.arg-desc role="cell"}
+.obsm key for the SingleR per-label score matrix. Defaults to singler_scores_<reference_obs_target>.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::::
 
 ### Output
 
-|Name                   |Description                                                                                                                                                                           |Attributes                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output`             |Output h5mu file — the input query with each selected method's subtype predictions and embeddings merged into the target modality, and the other modalities merged back in unaltered. |`file`, required, example: `"output.h5mu"` |
-|`--output_compression` |Compression format for the output h5mu file.                                                                                                                                          |`string`, example: `"gzip"`                |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Output h5mu file — the input query with each selected method's
+subtype predictions and embeddings merged into the target modality,
+and the other modalities merged back in unaltered.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"output.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_compression`
+:::
+::: {.arg-desc role="cell"}
+Compression format for the output h5mu file.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"gzip"`
+
+[Choices]{.arg-key} `"gzip"`, `"lzf"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -277,12 +1340,13 @@ nextflow run openpipelines-bio/openpipeline_composed \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline_composed/v0.3.0/components/single_cell/parallel_subtyping).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline_composed/v0.3.0/components/single_cell/parallel_subtyping);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -294,8 +1358,6 @@ nextflow run openpipelines-bio/openpipeline_composed \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

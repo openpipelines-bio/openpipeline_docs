@@ -3,7 +3,7 @@ package: "openpipeline_spatial"
 version: "v0.5.0"
 title: "xenium_spatial_statistics"
 namespace: "Feature annotation"
-description: "Calculate various spatial statistics from Xenium data including cell morphology ratios, position-based features, local density metrics, and global spatial patterns."
+description: "Calculate various spatial statistics from Xenium data including cell morphology ratios, position-based features, local density metrics, and global spatial patterns. This component expects a MuData object with a pre-computed spatial neighborhood graph in `.obsp`."
 type: "module"
 toc: true
 latest: "false"
@@ -27,36 +27,166 @@ Namespace: `feature_annotation`
 
 :::
 
-This component expects a MuData object with a pre-computed spatial neighborhood graph
-in `.obsp`
-
-
 ## Argument groups
 
 ### Inputs
 
-|Name                         |Description                                                                                                            |Attributes                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`                    |A MuData file containing spatial transcriptomics data and a pre-computed spatial neighborhood graph in `.obsp`.        |`file`, required, example: `"input.h5mu"` |
-|`--modality`                 |The name of the modality to use from the MuData object. This specifies which AnnData object contains the spatial data. |`string`, required, default: `"rna"`      |
-|`--obsm_spatial_coordinates` |The key in `.obsm` where spatial coordinates are stored. Expected shape is (n_cells, 2) for 2D coordinates.            |`string`, default: `"spatial"`            |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+A MuData file containing spatial transcriptomics data and a
+pre-computed spatial neighborhood graph in `.obsp`.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
+[Example]{.arg-key} `"input.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--modality`
+:::
+::: {.arg-desc role="cell"}
+The name of the modality to use from the MuData object.
+This specifies which AnnData object contains the spatial data.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
+
+[Default]{.arg-key} `"rna"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obsm_spatial_coordinates`
+:::
+::: {.arg-desc role="cell"}
+The key in `.obsm` where spatial coordinates are stored.
+Expected shape is (n_cells, 2) for 2D coordinates.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"spatial"`
+:::
+::::
+:::::
 
 ### Outputs
 
-|Name              |Description                                                                                                                       |Attributes                       |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output`        |The output MuData file with calculated spatial statistics. Per-cell metrics are stored in `.obs` and global statistics in `.uns`. |`file`, default: `"output.h5mu"` |
-|`--output_prefix` |Prefix to add to all generated column names in `.obs`.                                                                            |`string`, default: `"spatial_"`  |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+The output MuData file with calculated spatial statistics.
+Per-cell metrics are stored in `.obs` and global statistics in `.uns`.
+:::
+::: {.arg-attrs role="cell"}
+`file`
 
+[Default]{.arg-key} `"output.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_prefix`
+:::
+::: {.arg-desc role="cell"}
+Prefix to add to all generated column names in `.obs`.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"spatial_"`
+:::
+::::
+:::::
 
 ### Parameters
 
-|Name                   |Description                                                                                                                                       |Attributes                  |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--density_bandwidth`  |Bandwidth parameter for Gaussian kernel density estimation in spatial units (typically microns). Larger values create smoother density estimates. |`double`, default: `50`     |
-|`--calculate_ripley_l` |Whether to calculate Ripley's L statistic.  Warning: This is an O(N^2) operation and can be very slow for large datasets (>5000 cells).           |`boolean`, default: `FALSE` |
-|`--n_subsample_ripley` |Number of cells to subsample for Ripley's L calculation.  If -1, use all cells. Recommended to keep this below 5000 for performance.              |`integer`, default: `-1`    |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--density_bandwidth`
+:::
+::: {.arg-desc role="cell"}
+Bandwidth parameter for Gaussian kernel density estimation in spatial units
+(typically microns). Larger values create smoother density estimates.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `50.0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--calculate_ripley_l`
+:::
+::: {.arg-desc role="cell"}
+Whether to calculate Ripley's L statistic.
+Warning: This is an O(N^2) operation and can be very slow for large datasets (>5000 cells).
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
+
+[Default]{.arg-key} `false`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--n_subsample_ripley`
+:::
+::: {.arg-desc role="cell"}
+Number of cells to subsample for Ripley's L calculation.
+If -1, use all cells. Recommended to keep this below 5000 for performance.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `-1`
+:::
+::::
+:::::
 
 ## Example commands
 
@@ -75,12 +205,13 @@ nextflow run openpipelines-bio/openpipeline_spatial \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline_spatial/v0.5.0/components/feature_annotation/xenium_spatial_statistics).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline_spatial/v0.5.0/components/feature_annotation/xenium_spatial_statistics);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -92,8 +223,6 @@ nextflow run openpipelines-bio/openpipeline_spatial \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

@@ -336,10 +336,18 @@ jobs:
             echo "No new package versions — reference already up to date."
             exit 0
           fi
-          BRANCH="reference/new-versions"
+          # Open the PR against the branch this run was started from, so a
+          # manual run on a feature branch shows only the regenerated reference,
+          # not that branch's other unmerged work. One bot branch per base.
+          BASE="$GITHUB_REF_NAME"
+          if [ "$BASE" = "main" ]; then
+            BRANCH="reference/new-versions"
+          else
+            BRANCH="reference/new-versions-${BASE//\//-}"
+          fi
           git checkout -B "$BRANCH"
           git commit -m "Add reference for new package versions"
-          # The checkout only fetches main, and the freshly created branch has
+          # The checkout only fetches the run's branch, and the freshly created branch has
           # no upstream, so a bare --force-with-lease always rejects with
           # "stale info" once the bot branch exists from an earlier run. Fetch
           # it and lease against that ref explicitly; if it does not exist yet,
@@ -351,6 +359,6 @@ jobs:
           fi
           git push --force-with-lease="$LEASE" --set-upstream origin "$BRANCH"
           gh pr create --title "Add reference for new package versions" \
-            --base main --head "$BRANCH" \
+            --base "$BASE" --head "$BRANCH" \
             --body "New versioned reference pages generated from packages.viash-hub.com. Existing versions are untouched. Do not hand-edit \`reference/<package>/<version>/\`." \
             || echo "PR already open for $BRANCH; branch updated."

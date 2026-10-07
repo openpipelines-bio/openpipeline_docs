@@ -27,25 +27,98 @@ Namespace: `reference`
 
 :::
 
-
-
-
 ## Argument groups
 
 ### Input/Output
 
-|Name                  |Description                                                                                                                                                                                                                                                     |Attributes                                                                           |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--genome_fasta`      |The fasta files to be included in the reference. Corresponds to the --genomeFastaFiles argument in the STAR command.                                                                                                                                            |List of `file`, required, example: `"chr1.fasta", "chr2.fasta"`, multiple_sep: `";"` |
-|`--transcriptome_gtf` |Specifies the path to the file with annotated transcripts in the standard GTF format. STAR will extract splice junctions from this file and use them to greatly improve accuracy of the mapping. Corresponds to the --sjdbGTFfile argument in the STAR command. |`file`, example: `"transcriptome.gtf"`                                               |
-|`--output`            |Path to output directory. Corresponds to the --genomeDir argument in the STAR command.                                                                                                                                                                          |`file`, required, example: `"/path/to/foo"`                                          |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--genome_fasta`
+:::
+::: {.arg-desc role="cell"}
+The fasta files to be included in the reference. Corresponds to the --genomeFastaFiles argument in the STAR command.
+:::
+::: {.arg-attrs role="cell"}
+List of `file` [required]{.arg-required}
 
+[Example]{.arg-key} `"chr1.fasta"`, `"chr2.fasta"`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--transcriptome_gtf`
+:::
+::: {.arg-desc role="cell"}
+Specifies the path to the file with annotated transcripts in the standard GTF
+format. STAR will extract splice junctions from this file and use them to greatly improve
+accuracy of the mapping. Corresponds to the --sjdbGTFfile argument in the STAR command.
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"transcriptome.gtf"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Path to output directory. Corresponds to the --genomeDir argument in the STAR command.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"/path/to/foo"`
+:::
+::::
+:::::
 
 ### Genome indexing arguments
 
-|Name                    |Description                                                                                                                                                                                                                                                     |Attributes               |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--genomeSAindexNbases` |Length (bases) of the SA pre-indexing string. Typically between 10 and 15. Longer strings will use much more memory, but allow faster searches. For small genomes, the parameter {genomeSAindexNbases must be scaled down to min(14, log2(GenomeLength)/2 - 1). |`integer`, default: `14` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--genomeSAindexNbases`
+:::
+::: {.arg-desc role="cell"}
+Length (bases) of the SA pre-indexing string. Typically between 10 and 15.
+Longer strings will use much more memory, but allow faster searches. For small
+genomes, the parameter {genomeSAindexNbases must be scaled down to
+min(14, log2(GenomeLength)/2 - 1).
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `14`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -69,12 +142,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/reference/build_star_reference).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/reference/build_star_reference);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -86,8 +160,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

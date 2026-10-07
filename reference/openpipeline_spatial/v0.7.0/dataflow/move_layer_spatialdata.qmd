@@ -34,25 +34,119 @@ Namespace: `dataflow`
 
 ### Inputs
 
-|Name            |Description                                                  |Attributes                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`       |Path to the input SpatialData Zarr store                     |`file`, required, example: `"input.zarr"` |
-|`--input_layer` |Name of the layer to move. If not provided, X will be moved. |`string`, example: `"old_layer"`          |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Path to the input SpatialData Zarr store
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
+[Example]{.arg-key} `"input.zarr"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_layer`
+:::
+::: {.arg-desc role="cell"}
+Name of the layer to move. If not provided, X will be moved.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"old_layer"`
+:::
+::::
+:::::
 
 ### Outputs
 
-|Name             |Description                                                                                           |Attributes                       |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output`       |Path to the output SpatialData Zarr store                                                             |`file`, default: `"output.zarr"` |
-|`--output_layer` |Name of the new layer to create with the moved data. If not provided, input layer will be moved to X. |`string`, example: `"new_layer"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Path to the output SpatialData Zarr store
+:::
+::: {.arg-attrs role="cell"}
+`file`
 
+[Default]{.arg-key} `"output.zarr"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_layer`
+:::
+::: {.arg-desc role="cell"}
+Name of the new layer to create with the moved data. If not provided, input layer will be moved to X.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"new_layer"`
+:::
+::::
+:::::
 
 ### Options
 
-|Name                   |Description                                                                                                                                                                                                        |Attributes                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--delete_input_layer` |Whether to delete the input layer after moving it to the new layer. If true (default), the input layer is moved to the new location, if false it is copied to the new location and the original layer is retained. |`boolean`, default: `TRUE` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--delete_input_layer`
+:::
+::: {.arg-desc role="cell"}
+Whether to delete the input layer after moving it to the new layer.
+If true (default), the input layer is moved to the new location, if
+false it is copied to the new location and the original layer is
+retained.
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
+
+[Default]{.arg-key} `true`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -76,12 +170,13 @@ nextflow run openpipelines-bio/openpipeline_spatial \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline_spatial/v0.7.0/components/dataflow/move_layer_spatialdata).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline_spatial/v0.7.0/components/dataflow/move_layer_spatialdata);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -93,8 +188,6 @@ nextflow run openpipelines-bio/openpipeline_spatial \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

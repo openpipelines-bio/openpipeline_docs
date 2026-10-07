@@ -5,7 +5,7 @@ title: "tiledb_healthcheck"
 subtitle: "openpipeline v4.2.0"
 toc: true
 namespace: "Query"
-description: "Checks if a provided location can be queried as a TileDB-SOMA database"
+description: "Checks if a provided location can be queried as a TileDB-SOMA database."
 type: "module"
 latest: "true"
 ---
@@ -27,20 +27,49 @@ Namespace: `query`
 
 :::
 
-
-
-
 ## Argument group
 
 ### Input database
 
 Open a TileDB SOMA database by URI.
 
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_uri`
+:::
+::: {.arg-desc role="cell"}
+If specified, a URI containing the TileDB-SOMA objects.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
 
-|Name          |Description                                             |Attributes                                        |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input_uri` |If specified, a URI containing the TileDB-SOMA objects. |`string`, required, example: `"s3://bucket/path"` |
-|`--s3_region` |Region where the TileDB-SOMA database is hosted.        |`string`, required                                |
+[Example]{.arg-key} `"s3://bucket/path"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--s3_region`
+:::
+::: {.arg-desc role="cell"}
+Region where the TileDB-SOMA database is hosted.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
+:::
+::::
+:::::
 
 ## Authors
 
@@ -64,12 +93,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/query/tiledb_healthcheck).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/query/tiledb_healthcheck);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -81,8 +111,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

@@ -5,7 +5,7 @@ title: "scanvi"
 subtitle: "openpipeline v4.2.0"
 toc: true
 namespace: "Annotate"
-description: "scANVI () is a semi-supervised model for single-cell transcriptomics data."
+description: "scANVI () is a semi-supervised model for single-cell transcriptomics data. scANVI is an scVI extension that can leverage the cell type knowledge for a subset of the cells present in the data sets to infer the states of the rest of the cells. This component will instantiate a scANVI model from a pre-trained scVI model, integrate the data and perform label prediction."
 type: "module"
 latest: "true"
 ---
@@ -27,56 +27,371 @@ Namespace: `annotate`
 
 :::
 
-scANVI is an scVI extension that can leverage the cell type knowledge for a subset of the cells present in the data sets to infer the states of the rest of the cells. This component will instantiate a scANVI model from a pre-trained scVI model, integrate the data and perform label prediction
-
-
 ## Argument groups
 
 ### Inputs
 
-|Name                     |Description                                                                                                           |Attributes                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`                |Input h5mu file. Note that this needs to be the exact same dataset as the --scvi_model was trained on.                |`file`, required, example: `"input.h5mu"` |
-|`--modality`             |Which modality from the input MuData file to process.                                                                 |`string`, default: `"rna"`                |
-|`--input_layer`          |Input layer to use. If None, X is used                                                                                |`string`                                  |
-|`--var_input`            |.var column containing highly variable genes that were used to train the scVi model. By default, do not subset genes. |`string`                                  |
-|`--var_gene_names`       |.var column containing gene names. By default, use the index.                                                         |`string`                                  |
-|`--obs_labels`           |.obs field containing the labels                                                                                      |`string`, required                        |
-|`--unlabeled_category`   |Value in the --obs_labels field that indicates unlabeled observations                                                 |`string`, default: `"Unknown"`            |
-|`--sanitize_ensembl_ids` |Whether to sanitize ensembl ids by removing version numbers.                                                          |`boolean`, default: `TRUE`                |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Input h5mu file. Note that this needs to be the exact same dataset as the --scvi_model was trained on.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
+[Example]{.arg-key} `"input.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--modality`
+:::
+::: {.arg-desc role="cell"}
+Which modality from the input MuData file to process.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"rna"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_layer`
+:::
+::: {.arg-desc role="cell"}
+Input layer to use. If None, X is used
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--var_input`
+:::
+::: {.arg-desc role="cell"}
+.var column containing highly variable genes that were used to train the scVi model. By default, do not subset genes.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--var_gene_names`
+:::
+::: {.arg-desc role="cell"}
+.var column containing gene names. By default, use the index.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obs_labels`
+:::
+::: {.arg-desc role="cell"}
+.obs field containing the labels
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--unlabeled_category`
+:::
+::: {.arg-desc role="cell"}
+Value in the --obs_labels field that indicates unlabeled observations
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"Unknown"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--sanitize_ensembl_ids`
+:::
+::: {.arg-desc role="cell"}
+Whether to sanitize ensembl ids by removing version numbers.
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
+
+[Default]{.arg-key} `true`
+:::
+::::
+:::::
 
 ### scVI Model
 
-|Name           |Description                                                          |Attributes                                   |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--scvi_model` |Pretrained SCVI reference model to initialize the SCANVI model with. |`file`, required, example: `"scvi_model.pt"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scvi_model`
+:::
+::: {.arg-desc role="cell"}
+Pretrained SCVI reference model to initialize the SCANVI model with.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
+[Example]{.arg-key} `"scvi_model.pt"`
+:::
+::::
+:::::
 
 ### Outputs
 
-|Name                         |Description                                                                                                    |Attributes                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output`                   |Output h5mu file.                                                                                              |`file`, required, example: `"output.h5mu"` |
-|`--output_model`             |Folder where the state of the trained model will be saved to.                                                  |`file`, example: `"path/to/output_model"`  |
-|`--obsm_output`              |In which .obsm slot to store the resulting integrated embedding.                                               |`string`, default: `"X_scanvi_integrated"` |
-|`--obs_output_predictions`   |In which .obs slot to store the predicted labels.                                                              |`string`, default: `"scanvi_pred"`         |
-|`--obs_output_probabilities` |In which. obs slot to store the probabilities of the predicted labels.                                         |`string`, default: `"scanvi_proba"`        |
-|`--output_compression`       |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied. |`string`, example: `"gzip"`                |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Output h5mu file.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
+[Example]{.arg-key} `"output.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_model`
+:::
+::: {.arg-desc role="cell"}
+Folder where the state of the trained model will be saved to.
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"path/to/output_model"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obsm_output`
+:::
+::: {.arg-desc role="cell"}
+In which .obsm slot to store the resulting integrated embedding.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"X_scanvi_integrated"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obs_output_predictions`
+:::
+::: {.arg-desc role="cell"}
+In which .obs slot to store the predicted labels.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"scanvi_pred"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obs_output_probabilities`
+:::
+::: {.arg-desc role="cell"}
+In which. obs slot to store the probabilities of the predicted labels.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"scanvi_proba"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_compression`
+:::
+::: {.arg-desc role="cell"}
+Compression format to use for the output AnnData and/or Mudata H5 files.
+By default no compression is applied.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"gzip"`
+
+[Choices]{.arg-key} `"gzip"`, `"lzf"`
+:::
+::::
+:::::
 
 ### scANVI training arguments
 
-|Name                         |Description                                                                                                                                          |Attributes                             |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--early_stopping`           |Whether to perform early stopping with respect to the validation set.                                                                                |`boolean`                              |
-|`--early_stopping_monitor`   |Metric logged during validation set epoch.                                                                                                           |`string`, default: `"elbo_validation"` |
-|`--early_stopping_patience`  |Number of validation epochs with no improvement after which training will be stopped.                                                                |`integer`, default: `45`               |
-|`--early_stopping_min_delta` |Minimum change in the monitored quantity to qualify as an improvement, i.e. an absolute change of less than min_delta, will count as no improvement. |`double`, default: `0`                 |
-|`--max_epochs`               |Number of passes through the dataset, defaults to (20000 / number of cells) * 400 or 400; whichever is smallest.                                     |`integer`                              |
-|`--reduce_lr_on_plateau`     |Whether to monitor validation loss and reduce learning rate when validation set `lr_scheduler_metric` plateaus.                                      |`boolean`, default: `TRUE`             |
-|`--lr_factor`                |Factor to reduce learning rate.                                                                                                                      |`double`, default: `0.6`               |
-|`--lr_patience`              |Number of epochs with no improvement after which learning rate will be reduced.                                                                      |`double`, default: `30`                |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--early_stopping`
+:::
+::: {.arg-desc role="cell"}
+Whether to perform early stopping with respect to the validation set.
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--early_stopping_monitor`
+:::
+::: {.arg-desc role="cell"}
+Metric logged during validation set epoch.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"elbo_validation"`
+
+[Choices]{.arg-key} `"elbo_validation"`, `"reconstruction_loss_validation"`, `"kl_local_validation"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--early_stopping_patience`
+:::
+::: {.arg-desc role="cell"}
+Number of validation epochs with no improvement after which training will be stopped.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `45`
+
+[Min]{.arg-key} `1`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--early_stopping_min_delta`
+:::
+::: {.arg-desc role="cell"}
+Minimum change in the monitored quantity to qualify as an improvement, i.e. an absolute change of less than min_delta, will count as no improvement.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `0.0`
+
+[Min]{.arg-key} `0.0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--max_epochs`
+:::
+::: {.arg-desc role="cell"}
+Number of passes through the dataset, defaults to (20000 / number of cells) * 400 or 400; whichever is smallest.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reduce_lr_on_plateau`
+:::
+::: {.arg-desc role="cell"}
+Whether to monitor validation loss and reduce learning rate when validation set `lr_scheduler_metric` plateaus.
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
+
+[Default]{.arg-key} `true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--lr_factor`
+:::
+::: {.arg-desc role="cell"}
+Factor to reduce learning rate.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `0.6`
+
+[Min]{.arg-key} `0.0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--lr_patience`
+:::
+::: {.arg-desc role="cell"}
+Number of epochs with no improvement after which learning rate will be reduced.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `30.0`
+
+[Min]{.arg-key} `0.0`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -104,12 +419,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/annotate/scanvi).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/annotate/scanvi);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -121,8 +437,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

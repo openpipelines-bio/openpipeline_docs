@@ -5,7 +5,7 @@ title: "harmonypy"
 subtitle: "openpipeline v4.2.0"
 toc: true
 namespace: "Integrate"
-description: "Performs Harmony integration based as described in https://github.com/immunogenomics/harmony."
+description: "Performs Harmony integration based as described in https://github.com/immunogenomics/harmony. Based on an implementation in python from https://github.com/slowkow/harmonypy"
 type: "module"
 latest: "true"
 ---
@@ -27,23 +27,134 @@ Namespace: `integrate`
 
 :::
 
-Based on an implementation in python from https://github.com/slowkow/harmonypy
-
-
 ## Argument group
 
 ### Arguments
 
-|Name                   |Description                                                                                                                                                                                                                                                                                   |Attributes                                                                    |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`              |Input h5mu file                                                                                                                                                                                                                                                                               |`file`, required, example: `"input.h5mu"`                                     |
-|`--output`             |Output h5mu file.                                                                                                                                                                                                                                                                             |`file`, required, example: `"output.h5mu"`                                    |
-|`--modality`           |Which modality from the input MuData file to process.                                                                                                                                                                                                                                         |`string`, default: `"rna"`                                                    |
-|`--obsm_input`         |Which .obsm slot to use as a starting PCA embedding.                                                                                                                                                                                                                                          |`string`, default: `"X_pca"`                                                  |
-|`--obsm_output`        |In which .obsm slot to store the resulting integrated embedding.                                                                                                                                                                                                                              |`string`, default: `"X_pca_integrated"`                                       |
-|`--theta`              |Diversity clustering penalty parameter. Can be set as a single value for all batch observations or as multiple values, one for each observation in the batches defined by --obs_covariates. theta=0 does not encourage any diversity. Larger values of theta result in more diverse clusters. |List of `double`, default: `2`, multiple_sep: `";"`                           |
-|`--obs_covariates`     |The .obs field(s) that define the covariate(s) to regress out.                                                                                                                                                                                                                                |List of `string`, required, example: `"batch", "sample"`, multiple_sep: `";"` |
-|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied.                                                                                                                                                                                |`string`, example: `"gzip"`                                                   |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Input h5mu file
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"input.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Output h5mu file.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"output.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--modality`
+:::
+::: {.arg-desc role="cell"}
+Which modality from the input MuData file to process.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"rna"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obsm_input`
+:::
+::: {.arg-desc role="cell"}
+Which .obsm slot to use as a starting PCA embedding.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"X_pca"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obsm_output`
+:::
+::: {.arg-desc role="cell"}
+In which .obsm slot to store the resulting integrated embedding.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"X_pca_integrated"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--theta`
+:::
+::: {.arg-desc role="cell"}
+Diversity clustering penalty parameter. Can be set as a single value for all batch observations or as multiple values, one for each observation in the batches defined by --obs_covariates. theta=0 does not encourage any diversity. Larger values of theta result in more diverse clusters.
+:::
+::: {.arg-attrs role="cell"}
+List of `double`
+
+[Default]{.arg-key} `2.0`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obs_covariates`
+:::
+::: {.arg-desc role="cell"}
+The .obs field(s) that define the covariate(s) to regress out.
+:::
+::: {.arg-attrs role="cell"}
+List of `string` [required]{.arg-required}
+
+[Example]{.arg-key} `"batch"`, `"sample"`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_compression`
+:::
+::: {.arg-desc role="cell"}
+Compression format to use for the output AnnData and/or Mudata H5 files.
+By default no compression is applied.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"gzip"`
+
+[Choices]{.arg-key} `"gzip"`, `"lzf"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -69,12 +180,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/integrate/harmonypy).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/integrate/harmonypy);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -86,8 +198,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

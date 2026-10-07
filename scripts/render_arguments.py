@@ -187,15 +187,26 @@ def set_description(page, summary):
 
 
 BODY_DESC_RE = re.compile(r'::: \{\.ref-description\}\n.*?\n:::\n\n?', re.S)
+MARGIN_RE = re.compile(r'(?ms)^::: \{\.column-margin\}\n.*?^:::\n')
 
 
 def set_body_description(page, rest):
     """Put `rest` (the description after its first paragraph) in a
-    `.ref-description` block right before the page's first section."""
+    `.ref-description` block right before the page's first section.
+
+    The generator writes its own copy of the description's later lines between
+    the Info/Links margin block and the first section; that area is replaced
+    as a whole so the text never appears twice.
+    """
+    block = "::: {.ref-description}\n" + rest + "\n:::\n\n" if rest else ""
+    margin = MARGIN_RE.search(page)
+    if margin:
+        nxt = re.compile(r'(?m)^## ').search(page, margin.end())
+        end = nxt.start() if nxt else len(page)
+        return page[:margin.end()] + "\n" + block + page[end:]
     page = BODY_DESC_RE.sub("", page)
-    if not rest:
+    if not block:
         return page
-    block = "::: {.ref-description}\n" + rest + "\n:::\n\n"
     m = re.search(r'(?m)^## ', page)
     if not m:
         return page.rstrip() + "\n\n" + block

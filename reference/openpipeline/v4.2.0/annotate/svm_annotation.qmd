@@ -27,65 +27,340 @@ Namespace: `annotate`
 
 :::
 
-
-
-
 ## Argument groups
 
 ### Inputs
 
 Input dataset (query) arguments
 
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+The input (query) data to be labeled. Should be a .h5mu file.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
-|Name                             |Description                                                                                                                                |Attributes                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`                        |The input (query) data to be labeled. Should be a .h5mu file.                                                                              |`file`, required, example: `"input.h5mu"` |
-|`--modality`                     |Which modality to process.                                                                                                                 |`string`, default: `"rna"`                |
-|`--input_layer`                  |The layer in the input data to be used for cell type annotation if .X is not to be used.                                                   |`string`                                  |
-|`--input_var_gene_names`         |The name of the adata var column in the input data containing gene names; when no gene_name_layer is provided, the var index will be used. |`string`                                  |
-|`--input_reference_gene_overlap` |The minimum number of genes present in both the reference and query datasets.                                                              |`integer`, default: `100`                 |
-|`--sanitize_ensembl_ids`         |Whether to sanitize ensembl ids by removing version numbers.                                                                               |`boolean`, default: `TRUE`                |
+[Example]{.arg-key} `"input.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--modality`
+:::
+::: {.arg-desc role="cell"}
+Which modality to process.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Default]{.arg-key} `"rna"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_layer`
+:::
+::: {.arg-desc role="cell"}
+The layer in the input data to be used for cell type annotation if .X is not to be used.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_var_gene_names`
+:::
+::: {.arg-desc role="cell"}
+The name of the adata var column in the input data containing gene names; when no gene_name_layer is provided, the var index will be used.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_reference_gene_overlap`
+:::
+::: {.arg-desc role="cell"}
+The minimum number of genes present in both the reference and query datasets.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `100`
+
+[Min]{.arg-key} `1`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--sanitize_ensembl_ids`
+:::
+::: {.arg-desc role="cell"}
+Whether to sanitize ensembl ids by removing version numbers.
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
+
+[Default]{.arg-key} `true`
+:::
+::::
+:::::
 
 ### Reference
 
 Arguments related to the reference dataset.
 
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference`
+:::
+::: {.arg-desc role="cell"}
+The reference data to train the CellTypist classifiers on. Only required if a pre-trained --model is not provided.
+:::
+::: {.arg-attrs role="cell"}
+`file`
 
-|Name                         |Description                                                                                                                                                                  |Attributes                          |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--reference`                |The reference data to train the CellTypist classifiers on. Only required if a pre-trained --model is not provided.                                                           |`file`, example: `"reference.h5mu"` |
-|`--reference_layer`          |The layer in the reference data to be used for cell type annotation if .X is not to be used. Data are expected to be processed in the same way as the --input query dataset. |`string`                            |
-|`--reference_obs_target`     |Key in .obs attribute of reference modality with cell-type information.                                                                                                      |`string`, required                  |
-|`--reference_var_gene_names` |The name of the adata var column in the reference data containing gene names; when no gene_name_layer is provided, the var index will be used.                               |`string`                            |
-|`--reference_var_input`      |.var column containing highly variable genes. By default, do not subset genes.                                                                                               |`string`                            |
-
+[Example]{.arg-key} `"reference.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference_layer`
+:::
+::: {.arg-desc role="cell"}
+The layer in the reference data to be used for cell type annotation if .X is not to be used. Data are expected to be processed in the same way as the --input query dataset.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference_obs_target`
+:::
+::: {.arg-desc role="cell"}
+Key in .obs attribute of reference modality with cell-type information.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference_var_gene_names`
+:::
+::: {.arg-desc role="cell"}
+The name of the adata var column in the reference data containing gene names; when no gene_name_layer is provided, the var index will be used.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference_var_input`
+:::
+::: {.arg-desc role="cell"}
+.var column containing highly variable genes. By default, do not subset genes.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::::
 
 ### Outputs
 
 Output arguments.
 
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Output h5mu file.
+:::
+::: {.arg-attrs role="cell"}
+`file`
 
-|Name                       |Description                                                                                                    |Attributes                             |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output`                 |Output h5mu file.                                                                                              |`file`, example: `"output.h5mu"`       |
-|`--output_obs_prediction`  |In which `.obs` slots to store the predicted information.                                                      |`string`, default: `"svm_pred"`        |
-|`--output_obs_probability` |In which `.obs` slots to store the probability of the predictions.                                             |`string`, default: `"svm_probability"` |
-|`--output_compression`     |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied. |`string`, example: `"gzip"`            |
+[Example]{.arg-key} `"output.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_obs_prediction`
+:::
+::: {.arg-desc role="cell"}
+In which `.obs` slots to store the predicted information.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Default]{.arg-key} `"svm_pred"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_obs_probability`
+:::
+::: {.arg-desc role="cell"}
+In which `.obs` slots to store the probability of the predictions.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"svm_probability"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_compression`
+:::
+::: {.arg-desc role="cell"}
+Compression format to use for the output AnnData and/or Mudata H5 files.
+By default no compression is applied.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"gzip"`
+
+[Choices]{.arg-key} `"gzip"`, `"lzf"`
+:::
+::::
+:::::
 
 ### Model arguments
 
 Model arguments.
 
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--model`
+:::
+::: {.arg-desc role="cell"}
+Pretrained model in pkl format. If not provided, the model will be trained on the reference data and --reference should be provided.
+:::
+::: {.arg-attrs role="cell"}
+`file`
 
-|Name                  |Description                                                                                                                                                                                                                                                                         |Attributes                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--model`             |Pretrained model in pkl format. If not provided, the model will be trained on the reference data and --reference should be provided.                                                                                                                                                |`file`, example: `"pretrained_model.pkl"` |
-|`--feature_selection` |Whether to perform feature selection.                                                                                                                                                                                                                                               |`boolean`, default: `TRUE`                |
-|`--max_iter`          |Maximum number of iterations for the SVM.                                                                                                                                                                                                                                           |`integer`, default: `5000`                |
-|`--c_reg`             |Regularization parameter for the SVM.                                                                                                                                                                                                                                               |`double`, default: `1`                    |
-|`--class_weight`      |"Class weights for the SVM.  The `uniform` mode gives all classes a weight  of one.  The `balanced` mode (default) uses the values of y to automatically adjust weights inversely  proportional to class frequencies in the input data as n_samples / (n_classes * np.bincount(y))" |`string`, default: `"balanced"`           |
+[Example]{.arg-key} `"pretrained_model.pkl"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--feature_selection`
+:::
+::: {.arg-desc role="cell"}
+Whether to perform feature selection.
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
+
+[Default]{.arg-key} `true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--max_iter`
+:::
+::: {.arg-desc role="cell"}
+Maximum number of iterations for the SVM.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `5000`
+
+[Min]{.arg-key} `1`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--c_reg`
+:::
+::: {.arg-desc role="cell"}
+Regularization parameter for the SVM.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `1.0`
+
+[Min]{.arg-key} `0.0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--class_weight`
+:::
+::: {.arg-desc role="cell"}
+"Class weights for the SVM.  The `uniform` mode gives all classes a weight  of one.
+The `balanced` mode (default) uses the values of y to automatically adjust weights inversely
+proportional to class frequencies in the input data as n_samples / (n_classes * np.bincount(y))"
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"balanced"`
+
+[Choices]{.arg-key} `"balanced"`, `"uniform"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -109,12 +384,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/annotate/svm_annotation).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/annotate/svm_annotation);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -126,8 +402,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
