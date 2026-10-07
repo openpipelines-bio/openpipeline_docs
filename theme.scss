@@ -338,6 +338,69 @@ a.concept-card.blue:hover { box-shadow: 0 0 0 1px var(--composed), var(--shadow)
 .concept-card .go { font-family: var(--mono); font-size: 13px; color: var(--accent-ink); margin-top: 10px; display: inline-block; }
 
 // ---------------------------------------------------------------------------
+// Two-axes grid (concepts/data-state): samples down the rows, modalities across
+// the columns. Cells are data shapes (green); the gutters between them hold the
+// axis-changing operations (blue). Columns: row header · cell · op · cell.
+// ---------------------------------------------------------------------------
+.axes-grid {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto minmax(0, 1fr);
+  grid-template-rows: auto auto auto auto;
+  gap: 8px;
+  align-items: stretch;
+  margin: 8px 0 4px;
+  font-size: 14px;
+}
+.axes-grid small { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.axes-grid .ag-colhead,
+.axes-grid .ag-rowhead {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--ink);
+  line-height: 1.3;
+}
+.axes-grid .ag-colhead { grid-row: 1; text-align: center; padding-bottom: 2px; border-bottom: 2px solid var(--border); }
+.axes-grid .ag-rowhead { grid-column: 1; align-self: center; text-align: right; padding-right: 6px; border-right: 2px solid var(--border); }
+.axes-grid .ag-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: var(--accent-soft);
+  border: 1px solid var(--brand);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+.axes-grid .ag-cell b { font-family: var(--mono); font-size: 13px; }
+.axes-grid .ag-cell span:last-child { color: var(--muted); }
+.axes-grid .ag-end { box-shadow: 0 0 0 2px var(--brand); }
+.axes-grid .ag-num {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--accent-ink);
+  font-weight: 600;
+}
+.axes-grid .ag-op {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--composed);
+  text-align: center;
+  line-height: 1.3;
+}
+.axes-grid .ag-op-h { flex-direction: column; max-width: 9em; padding: 0 4px; }
+.axes-grid .ag-op small { color: var(--composed); opacity: .8; }
+.axes-grid .ag-arrow { font-size: 20px; line-height: 1; }
+@media (max-width: 575px) {
+  .axes-grid { gap: 6px; font-size: 13px; }
+  .axes-grid .ag-cell { padding: 10px; }
+  .axes-grid .ag-op-h { max-width: 6em; }
+}
+
+// ---------------------------------------------------------------------------
 // Reference catalog (reference/index.qmd) — ported from design/mockup.html:
 // tag-pill facets (package + type), in-table package tags, mono table.
 // ---------------------------------------------------------------------------
@@ -383,6 +446,82 @@ a.concept-card.blue:hover { box-shadow: 0 0 0 1px var(--composed), var(--shadow)
 // Reference component pages — clean icon links (no solid buttons)
 .vh-icon { height: 1em; width: auto; vertical-align: -0.15em; }
 .column-margin .fa, .column-margin .fa-brands { margin-right: 2px; }
+// Workflow diagram + its legend line, centred in the content column.
+section#visualisation figure,
+section#visualisation > p:has(> em) { text-align: center; }
+section#visualisation figure svg { margin-inline: auto; }
+
+// Rest of a component's description (after the first paragraph, which is the
+// title-block description); styled to read as its continuation.
+.ref-description { color: var(--op-muted); font-size: 1.05rem; margin-bottom: 1.25rem; }
+.ref-description ul, .ref-description ol { padding-left: 1.2rem; }
+
+// Argument tables (scripts/render_arguments.py): a div grid styled like the
+// content tables below, so cells can hold real markdown (lists, paragraphs).
+// All rows share the table's column tracks (subgrid), so the Name column can
+// size to the longest argument name instead of breaking names mid-word.
+.arg-table {
+  display: grid;
+  grid-template-columns: fit-content(40%) minmax(0, 1fr) minmax(10rem, 28%);
+  border: 1px solid var(--op-border);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--surface);
+  font-size: 14px;
+  margin-bottom: 1.5rem;
+}
+.arg-row {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+  border-bottom: 1px solid var(--op-border);
+}
+.arg-row:last-child { border-bottom: 0; }
+.arg-row:not(.arg-head):hover { background: var(--surface-2); }
+.arg-row > div { padding: 11px 14px; min-width: 0; overflow-wrap: anywhere; }
+.arg-row > div > :last-child { margin-bottom: 0; }
+// Never break an argument name (browsers break after the leading "--").
+.arg-name code { white-space: nowrap; }
+.arg-row > .arg-name { overflow-x: auto; }
+.arg-head {
+  background: var(--surface-2);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--op-muted);
+}
+.arg-desc ul, .arg-desc ol { padding-left: 1.2rem; margin-bottom: .5rem; }
+.arg-attrs p { margin-bottom: .3rem; }
+.arg-key {
+  display: inline-block;
+  min-width: 4.8rem;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--op-muted);
+}
+.arg-required {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--op-accent-ink);
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  padding: 0 4px;
+  margin-left: 4px;
+}
+// Narrow screens: stack each argument's cells instead of three squeezed columns.
+@media (max-width: 767.98px) {
+  .arg-table, .arg-row { grid-template-columns: minmax(0, 1fr); }
+  .arg-head { display: none; }
+  .arg-row > div { padding: 6px 14px; }
+  .arg-row > .arg-name { padding-top: 11px; font-weight: 600; }
+  .arg-row > .arg-attrs { padding-bottom: 11px; }
+}
 
 // ===========================================================================
 // Global chrome — mockup parity (design/mockup.html).
@@ -414,6 +553,11 @@ a.concept-card.blue:hover { box-shadow: 0 0 0 1px var(--composed), var(--shadow)
 // theme-dark.scss flips these back to a light fill for the dark bar.
 .navbar .quarto-navigation-tool { color: var(--op-muted); }
 .navbar .quarto-navigation-tool:hover { color: var(--op-ink); }
+// Search icon: Quarto bakes the navbar foreground (white) into it. The CSS
+// variables flip with the colour scheme, so one rule covers light and dark.
+.navbar .aa-DetachedSearchButton .aa-DetachedSearchButtonIcon,
+.navbar #quarto-search.type-overlay .aa-Autocomplete svg.aa-SubmitIcon { color: var(--op-muted); }
+.navbar .aa-DetachedSearchButton:hover .aa-DetachedSearchButtonIcon { color: var(--op-ink); }
 // moon when light is active (click → dark); sun when dark is active (click → light)
 .navbar .quarto-color-scheme-toggle:not(.alternate) .bi::before {
   background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%2313201a" viewBox="0 0 16 16"><path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"/></svg>');

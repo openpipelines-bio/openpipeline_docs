@@ -5,7 +5,7 @@ title: "from_xenium_to_spatialexperiment"
 subtitle: "openpipeline_spatial v0.7.0"
 toc: true
 namespace: "Convert"
-description: "Creates a SpatialExperiment object from the downloaded unzipped Xenium Output Bundle directory for 10x Genomics Xenium spatial gene expression data, and saves it as a SpatialExperiment object."
+description: "Creates a SpatialExperiment object from the downloaded unzipped Xenium Output Bundle directory for 10x Genomics Xenium spatial gene expression data, and saves it as a SpatialExperiment object. The constructor assumes the downloaded unzipped Xenium Output Bundle has the following structure:"
 type: "module"
 latest: "true"
 ---
@@ -27,8 +27,7 @@ Namespace: `convert`
 
 :::
 
-The constructor assumes the downloaded unzipped Xenium Output Bundle has the following structure:
-
+::: {.ref-description}
 Mandatory files
 · | — cell_feature_matrix.h5
 · | — cells.parquet
@@ -37,20 +36,93 @@ Optional files, by default added to the metadata() as a list of paths (will be c
 · | — cell_boundaries.parquet
 · | — nucleus_boundaries.parquet
 · | — experiment.xenium
-
-
+:::
 
 ## Argument group
 
 ### Arguments
 
-|Name                                |Description                                                                                                                                                           |Attributes                                                                                                                            |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`                           |Input Xenium Output Bundle                                                                                                                                            |`file`, required, example: `"path/to/xenium_bundle"`                                                                                  |
-|`--add_experiment_xenium`           |Whether to add xenium.experiment parameters to the metadata.                                                                                                          |`boolean`, default: `TRUE`                                                                                                            |
-|`--add_parquet_paths`               |Whether to add parquet paths to the metadata.  If True, `transcripts.parquet`, `cell_boundaries.parquet`, `nucleus_boundaries.parquet` will be added to the metadata. |`boolean`, default: `TRUE`                                                                                                            |
-|`--alternative_experiment_features` |Feature names containing these strings will be moved to altExps(sxe) slots as separate SpatialExperiment objects.                                                     |List of `string`, default: `"NegControlProbe", "UnassignedCodeword", "NegControlCodeword", "antisense", "BLANK"`, multiple_sep: `";"` |
-|`--output`                          |Output SpatialExperiment file                                                                                                                                         |`file`, required, example: `"output.rds"`                                                                                             |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Input Xenium Output Bundle
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"path/to/xenium_bundle"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--add_experiment_xenium`
+:::
+::: {.arg-desc role="cell"}
+Whether to add xenium.experiment parameters to the metadata.
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
+
+[Default]{.arg-key} `true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--add_parquet_paths`
+:::
+::: {.arg-desc role="cell"}
+Whether to add parquet paths to the metadata.
+If True, `transcripts.parquet`, `cell_boundaries.parquet`, `nucleus_boundaries.parquet` will be added to the metadata.
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
+
+[Default]{.arg-key} `true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--alternative_experiment_features`
+:::
+::: {.arg-desc role="cell"}
+Feature names containing these strings will be moved to altExps(sxe) slots as separate SpatialExperiment objects.
+:::
+::: {.arg-attrs role="cell"}
+List of `string`
+
+[Default]{.arg-key} `"NegControlProbe"`, `"UnassignedCodeword"`, `"NegControlCodeword"`, `"antisense"`, `"BLANK"`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Output SpatialExperiment file
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"output.rds"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -74,12 +146,13 @@ nextflow run openpipelines-bio/openpipeline_spatial \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline_spatial/v0.7.0/components/convert/from_xenium_to_spatialexperiment).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline_spatial/v0.7.0/components/convert/from_xenium_to_spatialexperiment);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -91,8 +164,6 @@ nextflow run openpipelines-bio/openpipeline_spatial \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

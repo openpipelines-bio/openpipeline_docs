@@ -27,67 +27,462 @@ Namespace: `labels_transfer`
 
 :::
 
-
-
-
 ## Argument groups
 
 ### Input dataset (query) arguments
 
-|Name                    |Description                                                                                                                                                                                                                                              |Attributes                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`               |The query data to transfer the labels to. Should be a .h5mu file.                                                                                                                                                                                        |`file`, required, example: `"input.h5mu"` |
-|`--modality`            |Which modality to use.                                                                                                                                                                                                                                   |`string`, default: `"rna"`                |
-|`--input_obsm_features` |The `.obsm` key of the embedding to use for the classifier's inference. If not provided, the `.X` slot will be used instead. Make sure that embedding was obtained in the same way as the reference embedding (e.g. by the same model or preprocessing). |`string`, example: `"X_scvi"`             |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+The query data to transfer the labels to. Should be a .h5mu file.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
+[Example]{.arg-key} `"input.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--modality`
+:::
+::: {.arg-desc role="cell"}
+Which modality to use.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"rna"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_obsm_features`
+:::
+::: {.arg-desc role="cell"}
+The `.obsm` key of the embedding to use for the classifier's inference. If not provided, the `.X` slot will be used instead.
+Make sure that embedding was obtained in the same way as the reference embedding (e.g. by the same model or preprocessing).
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"X_scvi"`
+:::
+::::
+:::::
 
 ### Reference dataset arguments
 
-|Name                        |Description                                                                                                                                                                                                                                         |Attributes                                                                                                                                      |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--reference`               |The reference data to train classifiers on.                                                                                                                                                                                                         |`file`, example: `"reference.h5mu"`                                                                                                             |
-|`--reference_obsm_features` |The `.obsm` key of the embedding to use for the classifier's training. If not provided, the `.X` slot will be used instead. Make sure that embedding was obtained in the same way as the query embedding (e.g. by the same model or preprocessing). |`string`, example: `"X_scvi"`                                                                                                                   |
-|`--reference_obs_targets`   |The `.obs` key(s) of the target labels to transfer.                                                                                                                                                                                                 |List of `string`, default: `"ann_level_1", "ann_level_2", "ann_level_3", "ann_level_4", "ann_level_5", "ann_finest_level"`, multiple_sep: `";"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference`
+:::
+::: {.arg-desc role="cell"}
+The reference data to train classifiers on.
+:::
+::: {.arg-attrs role="cell"}
+`file`
 
+[Example]{.arg-key} `"reference.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference_obsm_features`
+:::
+::: {.arg-desc role="cell"}
+The `.obsm` key of the embedding to use for the classifier's training. If not provided, the `.X` slot will be used instead.
+Make sure that embedding was obtained in the same way as the query embedding (e.g. by the same model or preprocessing).
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"X_scvi"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reference_obs_targets`
+:::
+::: {.arg-desc role="cell"}
+The `.obs` key(s) of the target labels to transfer.
+:::
+::: {.arg-attrs role="cell"}
+List of `string`
+
+[Default]{.arg-key} `"ann_level_1"`, `"ann_level_2"`, `"ann_level_3"`, `"ann_level_4"`, `"ann_level_5"`, `"ann_finest_level"`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::::
 
 ### Outputs
 
-|Name                       |Description                                                                                                                                                                                                                              |Attributes                            |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output`                 |The query data in .h5mu format with predicted labels transferred from the reference.                                                                                                                                                     |`file`, required                      |
-|`--output_obs_predictions` |In which `.obs` slots to store the predicted information. If provided, must have the same length as `--reference_obs_targets`. If empty, will default to the `reference_obs_targets` combined with the `"_pred"` suffix.                 |List of `string`, multiple_sep: `";"` |
-|`--output_obs_probability` |In which `.obs` slots to store the probability of the predictions. If provided, must have the same length as `--reference_obs_targets`. If empty, will default to the `reference_obs_targets` combined with the `"_probability"` suffix. |List of `string`, multiple_sep: `";"` |
-|`--output_compression`     |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied.                                                                                                                           |`string`, example: `"gzip"`           |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+The query data in .h5mu format with predicted labels transferred from the reference.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_obs_predictions`
+:::
+::: {.arg-desc role="cell"}
+In which `.obs` slots to store the predicted information.
+If provided, must have the same length as `--reference_obs_targets`.
+If empty, will default to the `reference_obs_targets` combined with the `"_pred"` suffix.
+:::
+::: {.arg-attrs role="cell"}
+List of `string`
 
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_obs_probability`
+:::
+::: {.arg-desc role="cell"}
+In which `.obs` slots to store the probability of the predictions.
+If provided, must have the same length as `--reference_obs_targets`.
+If empty, will default to the `reference_obs_targets` combined with the `"_probability"` suffix.
+:::
+::: {.arg-attrs role="cell"}
+List of `string`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_compression`
+:::
+::: {.arg-desc role="cell"}
+Compression format to use for the output AnnData and/or Mudata H5 files.
+By default no compression is applied.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"gzip"`
+
+[Choices]{.arg-key} `"gzip"`, `"lzf"`
+:::
+::::
+:::::
 
 ### Execution arguments
 
-|Name                      |Description                                                                                                                                                                              |Attributes                                             |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--force_retrain`         |Retrain models on the reference even if model_output directory already has trained classifiers. WARNING! It will rewrite existing classifiers for targets in the model_output directory! |`boolean_true`                                         |
-|`--use_gpu`               |Use GPU during models training and inference (recommended).                                                                                                                              |`boolean`, default: `FALSE`                            |
-|`--verbosity`             |The verbosity level for evaluation of the classifier from the range [0,2]                                                                                                                |`integer`, default: `1`                                |
-|`--model_output`          |Output directory for model                                                                                                                                                               |`file`, default: `"model"`, example: `"path/to/model"` |
-|`--output_uns_parameters` |The key in `uns` slot of the output AnnData object to store the parameters of the XGBoost classifier.                                                                                    |`string`, default: `"xgboost_parameters"`              |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--force_retrain`
+:::
+::: {.arg-desc role="cell"}
+Retrain models on the reference even if model_output directory already has trained classifiers. WARNING! It will rewrite existing classifiers for targets in the model_output directory!
+:::
+::: {.arg-attrs role="cell"}
+`boolean_true`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--use_gpu`
+:::
+::: {.arg-desc role="cell"}
+Use GPU during models training and inference (recommended).
+:::
+::: {.arg-attrs role="cell"}
+`boolean`
 
+[Default]{.arg-key} `false`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--verbosity`
+:::
+::: {.arg-desc role="cell"}
+The verbosity level for evaluation of the classifier from the range [0,2]
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `1`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--model_output`
+:::
+::: {.arg-desc role="cell"}
+Output directory for model
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Default]{.arg-key} `"model"`
+
+[Example]{.arg-key} `"path/to/model"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_uns_parameters`
+:::
+::: {.arg-desc role="cell"}
+The key in `uns` slot of the output AnnData object to store the parameters of the XGBoost classifier.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"xgboost_parameters"`
+:::
+::::
+:::::
 
 ### Learning parameters
 
-|Name                  |Description                                                                                                                                                                                       |Attributes                     |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--learning_rate`     |Step size shrinkage used in update to prevents overfitting. Range: [0,1]. See https://xgboost.readthedocs.io/en/stable/parameter.html#parameters-for-tree-booster for the reference               |`double`, default: `0.3`       |
-|`--min_split_loss`    |Minimum loss reduction required to make a further partition on a leaf node of the tree. See https://xgboost.readthedocs.io/en/stable/parameter.html#parameters-for-tree-booster for the reference |`double`, default: `0`         |
-|`--max_depth`         |Maximum depth of a tree. See https://xgboost.readthedocs.io/en/stable/parameter.html#parameters-for-tree-booster for the reference                                                                |`integer`, default: `6`        |
-|`--min_child_weight`  |Minimum sum of instance weight (hessian) needed in a child. See https://xgboost.readthedocs.io/en/stable/parameter.html#parameters-for-tree-booster for the reference                             |`integer`, default: `1`        |
-|`--max_delta_step`    |Maximum delta step we allow each leaf output to be. See https://xgboost.readthedocs.io/en/stable/parameter.html#parameters-for-tree-booster for the reference                                     |`double`, default: `0`         |
-|`--subsample`         |Subsample ratio of the training instances. See https://xgboost.readthedocs.io/en/stable/parameter.html#parameters-for-tree-booster for the reference                                              |`double`, default: `1`         |
-|`--sampling_method`   |The method to use to sample the training instances. See https://xgboost.readthedocs.io/en/stable/parameter.html#parameters-for-tree-booster for the reference                                     |`string`, default: `"uniform"` |
-|`--colsample_bytree`  |Fraction of columns to be subsampled. Range (0, 1]. See https://xgboost.readthedocs.io/en/stable/parameter.html#parameters-for-tree-booster for the reference                                     |`double`, default: `1`         |
-|`--colsample_bylevel` |Subsample ratio of columns for each level. Range (0, 1]. See https://xgboost.readthedocs.io/en/stable/parameter.html#parameters-for-tree-booster for the reference                                |`double`, default: `1`         |
-|`--colsample_bynode`  |Subsample ratio of columns for each node (split). Range (0, 1]. See https://xgboost.readthedocs.io/en/stable/parameter.html#parameters-for-tree-booster for the reference                         |`double`, default: `1`         |
-|`--reg_lambda`        |L2 regularization term on weights. See https://xgboost.readthedocs.io/en/stable/parameter.html#parameters-for-tree-booster for the reference                                                      |`double`, default: `1`         |
-|`--reg_alpha`         |L1 regularization term on weights. See https://xgboost.readthedocs.io/en/stable/parameter.html#parameters-for-tree-booster for the reference                                                      |`double`, default: `0`         |
-|`--scale_pos_weight`  |Control the balance of positive and negative weights, useful for unbalanced classes. See https://xgboost.readthedocs.io/en/stable/parameter.html#parameters-for-tree-booster for the reference    |`double`, default: `1`         |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--learning_rate`
+:::
+::: {.arg-desc role="cell"}
+Step size shrinkage used in update to prevents overfitting. Range: [0,1]. See https://xgboost.readthedocs.io/en/stable/parameter.html#parameters-for-tree-booster for the reference
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `0.3`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--min_split_loss`
+:::
+::: {.arg-desc role="cell"}
+Minimum loss reduction required to make a further partition on a leaf node of the tree. See https://xgboost.readthedocs.io/en/stable/parameter.html#parameters-for-tree-booster for the reference
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `0.0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--max_depth`
+:::
+::: {.arg-desc role="cell"}
+Maximum depth of a tree. See https://xgboost.readthedocs.io/en/stable/parameter.html#parameters-for-tree-booster for the reference
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `6`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--min_child_weight`
+:::
+::: {.arg-desc role="cell"}
+Minimum sum of instance weight (hessian) needed in a child. See https://xgboost.readthedocs.io/en/stable/parameter.html#parameters-for-tree-booster for the reference
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `1`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--max_delta_step`
+:::
+::: {.arg-desc role="cell"}
+Maximum delta step we allow each leaf output to be. See https://xgboost.readthedocs.io/en/stable/parameter.html#parameters-for-tree-booster for the reference
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `0.0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--subsample`
+:::
+::: {.arg-desc role="cell"}
+Subsample ratio of the training instances. See https://xgboost.readthedocs.io/en/stable/parameter.html#parameters-for-tree-booster for the reference
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `1.0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--sampling_method`
+:::
+::: {.arg-desc role="cell"}
+The method to use to sample the training instances. See https://xgboost.readthedocs.io/en/stable/parameter.html#parameters-for-tree-booster for the reference
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"uniform"`
+
+[Choices]{.arg-key} `"uniform"`, `"gradient_based"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--colsample_bytree`
+:::
+::: {.arg-desc role="cell"}
+Fraction of columns to be subsampled. Range (0, 1]. See https://xgboost.readthedocs.io/en/stable/parameter.html#parameters-for-tree-booster for the reference
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `1.0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--colsample_bylevel`
+:::
+::: {.arg-desc role="cell"}
+Subsample ratio of columns for each level. Range (0, 1]. See https://xgboost.readthedocs.io/en/stable/parameter.html#parameters-for-tree-booster for the reference
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `1.0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--colsample_bynode`
+:::
+::: {.arg-desc role="cell"}
+Subsample ratio of columns for each node (split). Range (0, 1]. See https://xgboost.readthedocs.io/en/stable/parameter.html#parameters-for-tree-booster for the reference
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `1.0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reg_lambda`
+:::
+::: {.arg-desc role="cell"}
+L2 regularization term on weights. See https://xgboost.readthedocs.io/en/stable/parameter.html#parameters-for-tree-booster for the reference
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `1.0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--reg_alpha`
+:::
+::: {.arg-desc role="cell"}
+L1 regularization term on weights. See https://xgboost.readthedocs.io/en/stable/parameter.html#parameters-for-tree-booster for the reference
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `0.0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--scale_pos_weight`
+:::
+::: {.arg-desc role="cell"}
+Control the balance of positive and negative weights, useful for unbalanced classes. See https://xgboost.readthedocs.io/en/stable/parameter.html#parameters-for-tree-booster for the reference
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `1.0`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -111,12 +506,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/labels_transfer/xgboost).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/labels_transfer/xgboost);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -128,8 +524,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

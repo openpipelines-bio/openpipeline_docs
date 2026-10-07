@@ -5,7 +5,7 @@ title: "cellxgene_census"
 subtitle: "openpipeline v4.2.0"
 toc: true
 namespace: "Query"
-description: "Query cells from a CellxGene Census or custom TileDBSoma object."
+description: "Query cells from a CellxGene Census or custom TileDBSoma object. Aside from fetching the cells' RNA counts (`.X`), cell metadata (`.obs`) and gene metadata (`.var`), this component also fetches the dataset metadata and joins it into the cell metadata."
 type: "module"
 latest: "true"
 ---
@@ -27,71 +27,297 @@ Namespace: `query`
 
 :::
 
-Aside from fetching the cells' RNA counts (`.X`), cell metadata
-(`.obs`) and gene metadata (`.var`), this component also fetches
-the dataset metadata and joins it into the cell metadata
-
-
 ## Argument groups
 
 ### Input database
 
 Open CellxGene Census by version or URI.
 
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_uri`
+:::
+::: {.arg-desc role="cell"}
+If specified, a URI containing the Census SOMA objects. If specified, will take precedence over the `--census_version` argument.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
-|Name                     |Description                                                                                                                                                                                                      |Attributes                              |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input_uri`            |If specified, a URI containing the Census SOMA objects. If specified, will take precedence over the `--census_version` argument.                                                                                 |`string`, example: `"s3://bucket/path"` |
-|`--census_version`       |Which release of CellxGene census to use. Possible values are "latest", "stable", or the date of one of the releases (e.g. "2023-07-25"). For more information, check the documentation on [Census data releases](https://chanzuckerberg.github.io/cellxgene-census/cellxgene_census_docsite_data_release_info.html).|`string`, example: `"stable"`           |
-|`--add_dataset_metadata` |If true, the experiment metadata will be added to the cell metadata. More specifically: `collection_id`, `collection_name`, `collection_doi`, `dataset_title`.                                                   |`boolean_true`                          |
+[Example]{.arg-key} `"s3://bucket/path"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--census_version`
+:::
+::: {.arg-desc role="cell"}
+Which release of CellxGene census to use. Possible values are "latest", "stable", or the date of one of the releases (e.g. "2023-07-25"). For more information, check the documentation on [Census data releases](https://chanzuckerberg.github.io/cellxgene-census/cellxgene_census_docsite_data_release_info.html).
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Example]{.arg-key} `"stable"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--add_dataset_metadata`
+:::
+::: {.arg-desc role="cell"}
+If true, the experiment metadata will be added to the cell metadata. More specifically: `collection_id`, `collection_name`, `collection_doi`, `dataset_title`.
+:::
+::: {.arg-attrs role="cell"}
+`boolean_true`
+:::
+::::
+:::::
 
 ### Cell query
 
 Arguments related to the query.
 
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--species`
+:::
+::: {.arg-desc role="cell"}
+The organism to query, usually one of `Homo sapiens` or `Mus musculus`.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
 
-|Name                 |Description                                                                                                              |Attributes                                                                                                                                                          |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--species`          |The organism to query, usually one of `Homo sapiens` or `Mus musculus`.                                                  |`string`, required, example: `"homo_sapiens"`                                                                                                                       |
-|`--obs_value_filter` |Filter for selecting the `obs` metadata (i.e. cells). Value is a filter query written in the SOMA `value_filter` syntax. |`string`, required, example: `"is_primary_data == True and cell_type_ontology_term_id in ['CL:0000136', 'CL:1000311', 'CL:0002616'] and suspension_type == 'cell'"` |
+[Example]{.arg-key} `"homo_sapiens"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obs_value_filter`
+:::
+::: {.arg-desc role="cell"}
+Filter for selecting the `obs` metadata (i.e. cells). Value is a filter query written in the SOMA `value_filter` syntax.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
 
+[Example]{.arg-key} `"is_primary_data == True and cell_type_ontology_term_id in ['CL:0000136', 'CL:1000311', 'CL:0002616'] and suspension_type == 'cell'"`
+:::
+::::
+:::::
 
 ### Filter cells by grouping
 
 Filter groups with fewer than X number of cells.
 
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--cell_filter_grouping`
+:::
+::: {.arg-desc role="cell"}
+A subset of 'obs' columns by which to group the cells for filtering.
+Only groups surpassing or equal to the `--cell_filter_minimum_count`
+threshold will be retained. Take care not to introduce a selection
+bias against cells with more fine-grained ontology annotations.
+:::
+::: {.arg-attrs role="cell"}
+List of `string`
 
-|Name                          |Description                                                                                                                                                                                                                                                                  |Attributes                                                                                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--cell_filter_grouping`      |A subset of 'obs' columns by which to group the cells for filtering. Only groups surpassing or equal to the `--cell_filter_minimum_count` threshold will be retained. Take care not to introduce a selection bias against cells with more fine-grained ontology annotations. |List of `string`, example: `"dataset_id", "tissue", "assay", "disease", "cell_type"`, multiple_sep: `";"` |
-|`--cell_filter_minimum_count` |A minimum number of cells per group to retain. If `--cell_filter_grouping` is defined, this parameter should also be provided and vice versa.                                                                                                                                |`integer`, example: `100`                                                                                 |
+[Example]{.arg-key} `"dataset_id"`, `"tissue"`, `"assay"`, `"disease"`, `"cell_type"`
 
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--cell_filter_minimum_count`
+:::
+::: {.arg-desc role="cell"}
+A minimum number of cells per group to retain. If `--cell_filter_grouping`
+is defined, this parameter should also be provided and vice versa.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Example]{.arg-key} `100`
+:::
+::::
+:::::
 
 ### Count filtering
 
 Arguments related to filtering cells and genes by counts.
 
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--cell_filter_min_genes`
+:::
+::: {.arg-desc role="cell"}
+Remove cells with less than this number of genes.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
 
-|Name                       |Description                                               |Attributes               |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--cell_filter_min_genes`  |Remove cells with less than this number of genes.         |`integer`, default: `50` |
-|`--cell_filter_min_counts` |Remove cells with less than this number of counts.        |`integer`, default: `0`  |
-|`--gene_filter_min_cells`  |Remove genes expressed in less than this number of cells. |`integer`, default: `5`  |
-|`--gene_filter_min_counts` |Remove genes with less than this number of counts.        |`integer`, default: `0`  |
+[Default]{.arg-key} `50`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--cell_filter_min_counts`
+:::
+::: {.arg-desc role="cell"}
+Remove cells with less than this number of counts.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
 
+[Default]{.arg-key} `0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--gene_filter_min_cells`
+:::
+::: {.arg-desc role="cell"}
+Remove genes expressed in less than this number of cells.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `5`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--gene_filter_min_counts`
+:::
+::: {.arg-desc role="cell"}
+Remove genes with less than this number of counts.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Default]{.arg-key} `0`
+:::
+::::
+:::::
 
 ### Outputs
 
 Output arguments.
 
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Output h5mu file.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
-|Name                    |Description                                                                                                    |Attributes                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output`              |Output h5mu file.                                                                                              |`file`, required, example: `"output.h5mu"` |
-|`--output_modality`     |Which modality to store the output in.                                                                         |`string`, default: `"rna"`                 |
-|`--output_layer_counts` |Which layer to store the raw counts in. If not provided, the .X layer will be used.                            |`string`                                   |
-|`--output_compression`  |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied. |`string`, example: `"gzip"`                |
+[Example]{.arg-key} `"output.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_modality`
+:::
+::: {.arg-desc role="cell"}
+Which modality to store the output in.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"rna"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_layer_counts`
+:::
+::: {.arg-desc role="cell"}
+Which layer to store the raw counts in. If not provided, the .X layer will be used.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_compression`
+:::
+::: {.arg-desc role="cell"}
+Compression format to use for the output AnnData and/or Mudata H5 files.
+By default no compression is applied.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"gzip"`
+
+[Choices]{.arg-key} `"gzip"`, `"lzf"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -121,12 +347,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/query/cellxgene_census).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/query/cellxgene_census);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -138,8 +365,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

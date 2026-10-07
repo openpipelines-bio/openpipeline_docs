@@ -5,7 +5,7 @@ title: "from_h5mu_to_seurat_with_fov"
 subtitle: "openpipeline_spatial v0.7.0"
 toc: true
 namespace: "Convert"
-description: "Converts a single modality of an h5mu file into a Seurat object with a Field of View (FOV) built from centroid coordinates of spatially-resolved single cells"
+description: "Converts a single modality of an h5mu file into a Seurat object with a Field of View (FOV) built from centroid coordinates of spatially-resolved single cells."
 type: "module"
 latest: "true"
 ---
@@ -27,36 +27,169 @@ Namespace: `convert`
 
 :::
 
-
-
-
 ## Argument groups
 
 ### Inputs
 
-|Name                          |Description                                                                                    |Attributes                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`                     |Input h5mu file                                                                                |`file`, required, example: `"input.h5mu"` |
-|`--modality`                  |Modality of the h5mu file to convert.                                                          |`string`, default: `"rna"`                |
-|`--obsm_centroid_coordinates` |Key name of the .obsm slot in the input file that contains the spatial (centroid) coordinates. |`string`, default: `"spatial"`            |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Input h5mu file
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
+[Example]{.arg-key} `"input.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--modality`
+:::
+::: {.arg-desc role="cell"}
+Modality of the h5mu file to convert.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"rna"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obsm_centroid_coordinates`
+:::
+::: {.arg-desc role="cell"}
+Key name of the .obsm slot in the input file that contains the spatial (centroid) coordinates.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"spatial"`
+:::
+::::
+:::::
 
 ### Centroid arguments
 
-|Name                |Description                                                                                                                                                    |Attributes |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--centroid_nsides` |Number of sides of the polygon to be created around each centroid coordinate to represent the cell shape. If not provided, circles will be created.            |`integer`  |
-|`--centroid_radius` |Radius of the shape around each centroid coordinate to represent the cell shape. If not provided, Seurat computes a default based on the centroid coordinates. |`double`   |
-|`--centroid_theta`  |Angle to adjust the shapes around each centroid when plotting. If not provided, no adjustment will be made (theta = 0)                                         |`double`   |
-
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--centroid_nsides`
+:::
+::: {.arg-desc role="cell"}
+Number of sides of the polygon to be created around each centroid coordinate to represent the cell shape.
+If not provided, circles will be created.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--centroid_radius`
+:::
+::: {.arg-desc role="cell"}
+Radius of the shape around each centroid coordinate to represent the cell shape.
+If not provided, Seurat computes a default based on the centroid coordinates.
+:::
+::: {.arg-attrs role="cell"}
+`double`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--centroid_theta`
+:::
+::: {.arg-desc role="cell"}
+Angle to adjust the shapes around each centroid when plotting.
+If not provided, no adjustment will be made (theta = 0)
+:::
+::: {.arg-attrs role="cell"}
+`double`
+:::
+::::
+:::::
 
 ### Outputs
 
-|Name          |Description                                                        |Attributes                                |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output`    |Output Seurat file                                                 |`file`, required, example: `"output.rds"` |
-|`--assay`     |Name of the assay to be created.                                   |`string`, default: `"RNA"`                |
-|`--x_mapping` |Name of the Seurat layer in which the AnnData .X matrix is stored. |`string`, default: `"counts"`             |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Output Seurat file
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"output.rds"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--assay`
+:::
+::: {.arg-desc role="cell"}
+Name of the assay to be created.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"RNA"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--x_mapping`
+:::
+::: {.arg-desc role="cell"}
+Name of the Seurat layer in which the AnnData .X matrix is stored.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"counts"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -80,12 +213,13 @@ nextflow run openpipelines-bio/openpipeline_spatial \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline_spatial/v0.7.0/components/convert/from_h5mu_to_seurat_with_fov).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline_spatial/v0.7.0/components/convert/from_h5mu_to_seurat_with_fov);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -97,8 +231,6 @@ nextflow run openpipelines-bio/openpipeline_spatial \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

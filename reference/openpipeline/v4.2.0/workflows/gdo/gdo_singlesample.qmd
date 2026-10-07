@@ -27,8 +27,6 @@ Namespace: `workflows/gdo`
 
 :::
 
-
-
 ## Visualisation
 
 ```{mermaid}
@@ -46,29 +44,166 @@ flowchart TB
 
 ### Input
 
-|Name      |Description                                             |Attributes                                  |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--id`    |ID of the sample.                                       |`string`, required, example: `"foo"`        |
-|`--input` |Path to the sample.                                     |`file`, required, example: `"dataset.h5mu"` |
-|`--layer` |Input layer to start from. By default, .X will be used. |`string`                                    |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--id`
+:::
+::: {.arg-desc role="cell"}
+ID of the sample.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
 
+[Example]{.arg-key} `"foo"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Path to the sample.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"dataset.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--layer`
+:::
+::: {.arg-desc role="cell"}
+Input layer to start from. By default, .X will be used.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+:::
+::::
+:::::
 
 ### Output
 
-|Name       |Description                     |Attributes                                 |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output` |Destination path to the output. |`file`, required, example: `"output.h5mu"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Destination path to the output.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
+[Example]{.arg-key} `"output.h5mu"`
+:::
+::::
+:::::
 
 ### Filtering options
 
-|Name                    |Description                                 |Attributes                    |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--min_counts`          |Minimum number of counts captured per cell. |`integer`, example: `200`     |
-|`--max_counts`          |Maximum number of counts captured per cell. |`integer`, example: `5000000` |
-|`--min_guides_per_cell` |Minimum of non-zero values per cell.        |`integer`, example: `200`     |
-|`--max_guides_per_cell` |Maximum of non-zero values per cell.        |`integer`, example: `1500000` |
-|`--min_cells_per_guide` |Minimum of non-zero values per gene.        |`integer`, example: `3`       |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--min_counts`
+:::
+::: {.arg-desc role="cell"}
+Minimum number of counts captured per cell.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Example]{.arg-key} `200`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--max_counts`
+:::
+::: {.arg-desc role="cell"}
+Maximum number of counts captured per cell.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Example]{.arg-key} `5000000`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--min_guides_per_cell`
+:::
+::: {.arg-desc role="cell"}
+Minimum of non-zero values per cell.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Example]{.arg-key} `200`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--max_guides_per_cell`
+:::
+::: {.arg-desc role="cell"}
+Maximum of non-zero values per cell.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Example]{.arg-key} `1500000`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--min_cells_per_guide`
+:::
+::: {.arg-desc role="cell"}
+Minimum of non-zero values per gene.
+:::
+::: {.arg-attrs role="cell"}
+`integer`
+
+[Example]{.arg-key} `3`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -92,12 +227,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/gdo/gdo_singlesample).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/workflows/gdo/gdo_singlesample);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -109,8 +245,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

@@ -5,7 +5,7 @@ title: "delimit_fraction"
 subtitle: "openpipeline v4.2.0"
 toc: true
 namespace: "Filter"
-description: "Turns a column containing values between 0 and 1 into a boolean column based on thresholds"
+description: "Turns a column containing values between 0 and 1 into a boolean column based on thresholds."
 type: "module"
 latest: "true"
 ---
@@ -27,35 +27,169 @@ Namespace: `filter`
 
 :::
 
-
-
-
 ## Argument groups
 
 ### Inputs
 
-|Name                    |Description                                                                                                |Attributes                                              |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`               |Input h5mu file                                                                                            |`file`, required, example: `"input.h5mu"`               |
-|`--modality`            |Which modality from the input MuData file to process.                                                      |`string`, default: `"rna"`                              |
-|`--obs_fraction_column` |Name of column from .var dataframe selecting a column that contains floating point values between 0 and 1. |`string`, required, example: `"fraction_mitochondrial"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Input h5mu file
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
+[Example]{.arg-key} `"input.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--modality`
+:::
+::: {.arg-desc role="cell"}
+Which modality from the input MuData file to process.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"rna"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obs_fraction_column`
+:::
+::: {.arg-desc role="cell"}
+Name of column from .var dataframe selecting
+a column that contains floating point values between 0 and 1.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
+
+[Example]{.arg-key} `"fraction_mitochondrial"`
+:::
+::::
+:::::
 
 ### Outputs
 
-|Name                   |Description                                                                                                    |Attributes                       |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output`             |Output h5mu file.                                                                                              |`file`, example: `"output.h5mu"` |
-|`--obs_name_filter`    |In which .obs slot to store a boolean array corresponding to which observations should be removed.             |`string`, required               |
-|`--output_compression` |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied. |`string`, example: `"gzip"`      |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Output h5mu file.
+:::
+::: {.arg-attrs role="cell"}
+`file`
 
+[Example]{.arg-key} `"output.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--obs_name_filter`
+:::
+::: {.arg-desc role="cell"}
+In which .obs slot to store a boolean array corresponding to which observations should be removed.
+:::
+::: {.arg-attrs role="cell"}
+`string` [required]{.arg-required}
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_compression`
+:::
+::: {.arg-desc role="cell"}
+Compression format to use for the output AnnData and/or Mudata H5 files.
+By default no compression is applied.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"gzip"`
+
+[Choices]{.arg-key} `"gzip"`, `"lzf"`
+:::
+::::
+:::::
 
 ### Arguments
 
-|Name             |Description                                                      |Attributes             |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--min_fraction` |Min fraction for an observation to be retained (True in output). |`double`, default: `0` |
-|`--max_fraction` |Max fraction for an observation to be retained (True in output). |`double`, default: `1` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--min_fraction`
+:::
+::: {.arg-desc role="cell"}
+Min fraction for an observation to be retained (True in output).
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `0.0`
+
+[Min]{.arg-key} `0.0`
+
+[Max]{.arg-key} `1.0`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--max_fraction`
+:::
+::: {.arg-desc role="cell"}
+Max fraction for an observation to be retained (True in output).
+:::
+::: {.arg-attrs role="cell"}
+`double`
+
+[Default]{.arg-key} `1.0`
+
+[Min]{.arg-key} `0.0`
+
+[Max]{.arg-key} `1.0`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -79,12 +213,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/filter/delimit_fraction).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/filter/delimit_fraction);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -96,8 +231,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

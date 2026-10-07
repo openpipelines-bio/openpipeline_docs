@@ -62,7 +62,10 @@
     });
     wrap.appendChild(sel);
 
-    var header = document.getElementById("title-block-header");
+    // After the full description when the page has one (it continues the
+    // title-block description), else right after the title block.
+    var header = document.querySelector(".ref-description") ||
+      document.getElementById("title-block-header");
     if (header && header.parentNode) {
       header.parentNode.insertBefore(wrap, header.nextSibling);
     } else {

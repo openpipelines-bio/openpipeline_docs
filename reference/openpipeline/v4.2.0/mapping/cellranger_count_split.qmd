@@ -27,22 +27,114 @@ Namespace: `mapping`
 
 :::
 
-
-
-
 ## Argument group
 
 ### Arguments
 
-|Name                |Description                                              |Attributes                                         |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`           |Output directory from a Cell Ranger count run.           |`file`, required, example: `"input_dir"`           |
-|`--filtered_h5`     |Output path for the h5 file storing the filtered counts. |`file`, example: `"filtered_feature_bc_matrix.h5"` |
-|`--metrics_summary` |Where to store the 'metrics_summary' CSV file.           |`file`, example: `"metrics_summary.csv"`           |
-|`--molecule_info`   |Where to store Cell Ranger's 'molecule_info.h5' file.    |`file`, example: `"molecule_info.h5"`              |
-|`--bam`             |Location of output BAM files.                            |`file`, example: `"possorted_genome_bam.bam"`      |
-|`--bai`             |Where to store the BAM index files.                      |`file`, example: `"possorted_genome_bam.bam.bai"`  |
-|`--raw_h5`          |Output path for the h5 file storing the raw counts.      |`file`, example: `"raw_feature_bc_matrix.h5"`      |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Output directory from a Cell Ranger count run.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"input_dir"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--filtered_h5`
+:::
+::: {.arg-desc role="cell"}
+Output path for the h5 file storing the filtered counts.
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"filtered_feature_bc_matrix.h5"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--metrics_summary`
+:::
+::: {.arg-desc role="cell"}
+Where to store the 'metrics_summary' CSV file.
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"metrics_summary.csv"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--molecule_info`
+:::
+::: {.arg-desc role="cell"}
+Where to store Cell Ranger's 'molecule_info.h5' file.
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"molecule_info.h5"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--bam`
+:::
+::: {.arg-desc role="cell"}
+Location of output BAM files.
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"possorted_genome_bam.bam"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--bai`
+:::
+::: {.arg-desc role="cell"}
+Where to store the BAM index files.
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"possorted_genome_bam.bam.bai"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--raw_h5`
+:::
+::: {.arg-desc role="cell"}
+Output path for the h5 file storing the raw counts.
+:::
+::: {.arg-attrs role="cell"}
+`file`
+
+[Example]{.arg-key} `"raw_feature_bc_matrix.h5"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -70,12 +162,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/mapping/cellranger_count_split).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/mapping/cellranger_count_split);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -87,8 +180,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

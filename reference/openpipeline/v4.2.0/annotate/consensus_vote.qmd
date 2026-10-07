@@ -5,7 +5,7 @@ title: "consensus_vote"
 subtitle: "openpipeline v4.2.0"
 toc: true
 namespace: "Annotate"
-description: "Combines cell type predictions from multiple annotation methods into a single consensus prediction using a weighted majority vote."
+description: "Combines cell type predictions from multiple annotation methods into a single consensus prediction using a weighted majority vote. For each cell, each method votes for its predicted cell type, optionally weighted by the probability score and/or a per-method weight. The consensus prediction is the cell type with the highest total weighted vote. Note that this method does not leverage pre-existing ontology or perform any reconciliation of cell type labels across methods, so the same cell type may be represented by different labels in different methods and will be treated as distinct cell types in the vote."
 type: "module"
 latest: "true"
 ---
@@ -27,38 +27,190 @@ Namespace: `annotate`
 
 :::
 
-
-For each cell, each method votes for its predicted cell type, optionally weighted by the probability score and/or a per-method weight. The consensus prediction is the cell type with the highest total weighted vote. Note that this method does not leverage pre-existing ontology or perform any reconciliation of cell type labels across methods, so the same cell type may be represented by different labels in different methods and will be treated as distinct cell types in the vote
-
-
 ## Argument groups
 
 ### Inputs
 
 Input dataset arguments.
 
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input`
+:::
+::: {.arg-desc role="cell"}
+Input h5mu file containing cell type predictions in .obs.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
 
-|Name                        |Description                                                                                                                                                                                                                                                                                          |Attributes                                                                                         |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input`                   |Input h5mu file containing cell type predictions in .obs.                                                                                                                                                                                                                                            |`file`, required, example: `"input.h5mu"`                                                          |
-|`--modality`                |Which modality to process.                                                                                                                                                                                                                                                                           |`string`, default: `"rna"`                                                                         |
-|`--input_obs_predictions`   |One or more .obs column names containing cell type predictions (labels) from different annotation methods.                                                                                                                                                                                           |List of `string`, required, example: `"scanvi_pred", "celltypist_pred"`, multiple_sep: `";"`       |
-|`--input_obs_probabilities` |One or more .obs column names containing prediction probability scores, one per method in --input_obs_predictions. When provided, each method's vote is scaled by the probability score for that cell (in addition to any per-method --weights). Must be the same length as --input_obs_predictions. |List of `string`, example: `"scanvi_prob", "celltypist_prob", "singler_prob"`, multiple_sep: `";"` |
-|`--tie_label`               |Label to assign when two or more cell types receive equal votes. If not provided, tied cells are assigned None (missing value).                                                                                                                                                                      |`string`, example: `"Unknown"`                                                                     |
-|`--weights`                 |Per-method weights for the consensus vote. Must be the same length as --input_obs_predictions when provided. Weights are normalized to sum to 1 before use. If not provided, all methods are weighted equally.                                                                                       |List of `double`, example: `1, 2`, multiple_sep: `";"`                                             |
+[Example]{.arg-key} `"input.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--modality`
+:::
+::: {.arg-desc role="cell"}
+Which modality to process.
+:::
+::: {.arg-attrs role="cell"}
+`string`
 
+[Default]{.arg-key} `"rna"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_obs_predictions`
+:::
+::: {.arg-desc role="cell"}
+One or more .obs column names containing cell type predictions (labels) from
+different annotation methods.
+:::
+::: {.arg-attrs role="cell"}
+List of `string` [required]{.arg-required}
+
+[Example]{.arg-key} `"scanvi_pred"`, `"celltypist_pred"`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_obs_probabilities`
+:::
+::: {.arg-desc role="cell"}
+One or more .obs column names containing prediction probability scores,
+one per method in --input_obs_predictions. When provided, each method's
+vote is scaled by the probability score for that cell (in addition to
+any per-method --weights). Must be the same length as --input_obs_predictions.
+:::
+::: {.arg-attrs role="cell"}
+List of `string`
+
+[Example]{.arg-key} `"scanvi_prob"`, `"celltypist_prob"`, `"singler_prob"`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--tie_label`
+:::
+::: {.arg-desc role="cell"}
+Label to assign when two or more cell types receive equal votes.
+If not provided, tied cells are assigned None (missing value).
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"Unknown"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--weights`
+:::
+::: {.arg-desc role="cell"}
+Per-method weights for the consensus vote. Must be the same length as
+--input_obs_predictions when provided. Weights are normalized to sum to 1
+before use. If not provided, all methods are weighted equally.
+:::
+::: {.arg-attrs role="cell"}
+List of `double`
+
+[Example]{.arg-key} `1.0`, `2.0`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::::
 
 ### Outputs
 
 Output arguments.
 
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output`
+:::
+::: {.arg-desc role="cell"}
+Output h5mu file.
+:::
+::: {.arg-attrs role="cell"}
+`file`
 
-|Name                       |Description                                                                                                                   |Attributes                             |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--output`                 |Output h5mu file.                                                                                                             |`file`, example: `"output.h5mu"`       |
-|`--output_obs_predictions` |In which `.obs` slot to store the consensus predicted cell type.                                                              |`string`, default: `"consensus_pred"`  |
-|`--output_obs_score`       |In which `.obs` slot to store the consensus score, defined as the fraction of total weight assigned to the winning cell type. |`string`, default: `"consensus_score"` |
-|`--output_compression`     |Compression format to use for the output AnnData and/or Mudata H5 files. By default no compression is applied.                |`string`, example: `"gzip"`            |
+[Example]{.arg-key} `"output.h5mu"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_obs_predictions`
+:::
+::: {.arg-desc role="cell"}
+In which `.obs` slot to store the consensus predicted cell type.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"consensus_pred"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_obs_score`
+:::
+::: {.arg-desc role="cell"}
+In which `.obs` slot to store the consensus score, defined as the fraction
+of total weight assigned to the winning cell type.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Default]{.arg-key} `"consensus_score"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_compression`
+:::
+::: {.arg-desc role="cell"}
+Compression format to use for the output AnnData and/or Mudata H5 files.
+By default no compression is applied.
+:::
+::: {.arg-attrs role="cell"}
+`string`
+
+[Example]{.arg-key} `"gzip"`
+
+[Choices]{.arg-key} `"gzip"`, `"lzf"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -82,12 +234,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/annotate/consensus_vote).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/annotate/consensus_vote);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -99,8 +252,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).

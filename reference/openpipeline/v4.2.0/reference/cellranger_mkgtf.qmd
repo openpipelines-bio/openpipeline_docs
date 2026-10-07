@@ -27,18 +27,64 @@ Namespace: `reference`
 
 :::
 
-
-
-
 ## Argument group
 
 ### Arguments
 
-|Name           |Description                                                                                            |Attributes                                                                                                                    |
-|:----------|:--------------------------------------------------|:--------------------|
-|`--input_gtf`  |Reference GTF annotation.                                                                              |`file`, required, example: `"transcriptome_annotation.gtf.gz"`                                                                |
-|`--output_gtf` |Output GTF file.                                                                                       |`file`, required, example: `"output.gtf.gz"`                                                                                  |
-|`--attribute`  |Key-value pair in attributes field to be kept in the GTF file of the format attribute:attribute_value. |List of `string`, required, example: `"gene_type:transcribed_unprocessed_pseudogene", "gene_type:miRNA"`, multiple_sep: `";"` |
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_gtf`
+:::
+::: {.arg-desc role="cell"}
+Reference GTF annotation.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"transcriptome_annotation.gtf.gz"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_gtf`
+:::
+::: {.arg-desc role="cell"}
+Output GTF file.
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"output.gtf.gz"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--attribute`
+:::
+::: {.arg-desc role="cell"}
+Key-value pair in attributes field to be kept in the GTF file of the format attribute:attribute_value.
+:::
+::: {.arg-attrs role="cell"}
+List of `string` [required]{.arg-required}
+
+[Example]{.arg-key} `"gene_type:transcribed_unprocessed_pseudogene"`, `"gene_type:miRNA"`
+
+[Separator]{.arg-key} `";"`
+:::
+::::
+:::::
 
 ## Authors
 
@@ -62,12 +108,13 @@ nextflow run openpipelines-bio/openpipeline \
 
 ### Run command
 
-<details>
-<summary>Example of `params.yaml`</summary>
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
 
-Generate a `params.yaml` for this component on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/reference/cellranger_mkgtf).
-
-</details>
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline/v4.2.0/components/reference/cellranger_mkgtf);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
 
 Run locally with:
 
@@ -79,8 +126,6 @@ nextflow run openpipelines-bio/openpipeline \
   -params-file params.yaml
 ```
 
-:::{.callout-note}
-Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend.
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
 :::
-
-Running on Seqera or through Viash Hub is explained in the [guides](/guides/index.qmd).
