@@ -26,7 +26,6 @@ Namespace: `workflows/ingestion`
 [![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline_spatial/v0.5.0/components/workflows/ingestion/spaceranger_mapping)
 
 :::
-
 ## Visualisation
 
 ```{mermaid}

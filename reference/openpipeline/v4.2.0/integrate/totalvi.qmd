@@ -27,6 +27,7 @@ Namespace: `integrate`
 
 :::
 
+
 ## Argument groups
 
 ### Inputs

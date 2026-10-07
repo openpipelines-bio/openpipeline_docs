@@ -27,6 +27,7 @@ Namespace: `neighbors`
 
 :::
 
+
 ## Argument group
 
 ### Arguments

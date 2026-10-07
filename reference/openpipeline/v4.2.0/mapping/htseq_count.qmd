@@ -33,6 +33,7 @@ This script takes one or more alignment files in SAM/BAM format and a feature fi
 See http://htseq.readthedocs.io/en/master/count.html for details.
 :::
 
+
 ## Argument groups
 
 ### Input

@@ -34,6 +34,7 @@ and spatial connectivities matrices, weighted by `alpha`.
 $C_{joint} = (1 - \alpha) \cdot C_{expression} + \alpha \cdot C_{spatial}$
 :::
 
+
 ## Argument groups
 
 ### Inputs

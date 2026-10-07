@@ -27,6 +27,7 @@ Namespace: `qc`
 
 :::
 
+
 ## Argument group
 
 ### Arguments

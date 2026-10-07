@@ -34,6 +34,7 @@ TF-IDF normalization is applied to single-cell ATAC-seq data to highlight the im
 across different cells while down-weighting regions that are commonly accessible across many cells.
 :::
 
+
 ## Argument group
 
 ### Arguments

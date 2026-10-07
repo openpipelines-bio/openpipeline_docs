@@ -27,6 +27,7 @@ Namespace: `nichecompass`
 
 :::
 
+
 ## Argument groups
 
 ### Inputs

@@ -36,6 +36,7 @@ Note that to generate an index file (by specifying `--output_bai`), the default 
 Thus the `--sort_by_read_names` and `--sort_by <TAG>` options are incompatible with `--output_bai`.
 :::
 
+
 ## Argument groups
 
 ### Input
