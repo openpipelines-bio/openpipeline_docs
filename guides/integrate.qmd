@@ -59,6 +59,12 @@ more, smaller clusters.
 → neighbor graph → Leiden clustering → UMAP. The corrected embedding, not the
 UMAP, is what annotation and other downstream tools consume.
 
+::: {.callout-warning title="Watch for over-correction"}
+Batch integration can remove real biological variation along with technical noise, especially when biology is confounded with batch (for example, in cancer cohorts where each patient or tumor is often its own batch).
+Check integration results against known biology (e.g. expected marker genes or cell-type proportions) before trusting them, and consider comparing an integrated and an unintegrated analysis.
+See Luecken et al., *Nature Methods* (2022) and Büttner et al., *Nature Methods* (2019) for benchmarks of this batch-removal vs. biology-conservation trade-off.
+:::
+
 ## Output
 
 | Slot | Content |

@@ -42,6 +42,31 @@ We use these terms to refer to different parts of OpenPipelines:
 </div>
 ```
 
+::: {#fig-building-blocks}
+
+```{=html}
+<div class="nest-fig" role="img" aria-label="A workflow box containing a subworkflow and a component. The subworkflow itself contains two components. Every box is a module.">
+  <div class="nest-box nest-wf">
+    <span class="nest-label">workflow</span>
+    <div class="nest-row">
+      <div class="nest-box nest-wf">
+        <span class="nest-label">subworkflow</span>
+        <div class="nest-row">
+          <div class="nest-box nest-comp"><b>component</b><small>config + script</small></div>
+          <span class="nest-arrow">→</span>
+          <div class="nest-box nest-comp"><b>component</b><small>config + script</small></div>
+        </div>
+      </div>
+      <span class="nest-arrow">→</span>
+      <div class="nest-box nest-comp"><b>component</b><small>config + script</small></div>
+    </div>
+  </div>
+</div>
+```
+
+Components are the building blocks of workflows, and a workflow can itself be a step in a larger workflow. Viash builds every box, at any level, into a module that can also run on its own.
+:::
+
 ## Code-level vs. execution-level modularity
 
 OpenPipelines is modular at both the code and execution levels.
@@ -63,6 +88,26 @@ Every module is an independent containerized unit that can be run on its own or 
   Built components can be run as executables or Nextflow modules.
 - **Consistent data format**: Components in OpenPipelines store data in the [MuData](mudata.qmd) format.
   Using a consistent data format means components can easily be rearranged or substituted without needing additional data manipulation.
+
+::: {#fig-execution-modularity}
+
+```{=html}
+<div class="nest-fig" role="img" aria-label="A workflow chaining three components: filter_with_counts in a Python and scanpy container, scvi in a Python and scvi-tools container, and singler in an R and SingleR container. Each passes an h5mu file to the next.">
+  <div class="nest-box nest-wf">
+    <span class="nest-label">workflow</span>
+    <div class="nest-row nest-col">
+      <div class="nest-box nest-comp"><b>filter_with_counts</b><small class="nest-env">Python · scanpy</small></div>
+      <span class="nest-arrow nest-arrow-data"><a href="mudata.qmd">.h5mu</a>↓</span>
+      <div class="nest-box nest-comp"><b>scvi</b><small class="nest-env">Python · scvi-tools</small></div>
+      <span class="nest-arrow nest-arrow-data"><a href="mudata.qmd">.h5mu</a>↓</span>
+      <div class="nest-box nest-comp"><b>singler</b><small class="nest-env">R · SingleR</small></div>
+    </div>
+  </div>
+</div>
+```
+
+Three components chained in a workflow. Each runs in its own container with its own dependencies, even a different language. The only contract between them is the [MuData](mudata.qmd) (`.h5mu`) file passed along.
+:::
 
 ## Why modularity is important
 
