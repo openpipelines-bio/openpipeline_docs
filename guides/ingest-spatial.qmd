@@ -4,7 +4,7 @@ description: "From spatial platform output to a spatial H5MU with coordinates."
 order: 15
 ---
 
-[`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial}<span class="swatch openpipeline_spatial"></span>
+[<span class="swatch openpipeline_spatial"></span>`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial}
 
 Spatial ingestion lives in **`openpipeline_spatial`** (which pins core
 `openpipeline`). It turns the output of a spatial platform into an `.h5mu` that
@@ -19,18 +19,18 @@ imaging-based platforms are converted from the vendor's output:
 
 | Workflow / technology | Use when |
 |---|---|
-| [`ingestion/spaceranger_mapping`](../reference/openpipeline_spatial/v0.5.0/workflows/ingestion/spaceranger_mapping.qmd) | Visium: map FASTQs with Space Ranger |
-| [`convert/from_spaceranger_to_h5mu`](../reference/openpipeline_spatial/v0.5.0/convert/from_spaceranger_to_h5mu.qmd) | Visium: you already have Space Ranger output |
-| [`convert/from_xenium_to_h5mu`](../reference/openpipeline_spatial/v0.5.0/convert/from_xenium_to_h5mu.qmd) | 10x Xenium |
-| [`convert/from_cosmx_to_h5mu`](../reference/openpipeline_spatial/v0.5.0/convert/from_cosmx_to_h5mu.qmd) | NanoString CosMx |
-| [`convert/from_cells2stats_to_h5mu`](../reference/openpipeline_spatial/v0.5.0/convert/from_cells2stats_to_h5mu.qmd) | Element AVITI (cells2stats) |
-| [`convert/from_spatialdata_to_h5mu`](../reference/openpipeline_spatial/v0.5.0/convert/from_spatialdata_to_h5mu.qmd) | you already have a SpatialData object |
+| [`ingestion/spaceranger_mapping`](../reference/openpipeline_spatial/v0.7.0/workflows/ingestion/spaceranger_mapping.qmd) | Visium: map FASTQs with Space Ranger |
+| [`convert/from_spaceranger_to_h5mu`](../reference/openpipeline_spatial/v0.7.0/convert/from_spaceranger_to_h5mu.qmd) | Visium: you already have Space Ranger output |
+| [`convert/from_xenium_to_h5mu`](../reference/openpipeline_spatial/v0.7.0/convert/from_xenium_to_h5mu.qmd) | 10x Xenium |
+| [`convert/from_cosmx_to_h5mu`](../reference/openpipeline_spatial/v0.7.0/convert/from_cosmx_to_h5mu.qmd) | CosMx |
+| [`convert/from_cells2stats_to_h5mu`](../reference/openpipeline_spatial/v0.7.0/convert/from_cells2stats_to_h5mu.qmd) | Element AVITI24 (cells2stats) |
+| [`convert/from_spatialdata_to_h5mu`](../reference/openpipeline_spatial/v0.7.0/convert/from_spatialdata_to_h5mu.qmd) | You already have a SpatialData object |
 
-The [pipeline overview](../workflows/index.qmd) shows where these fit.
+The [Workflows overview](../overview/index.qmd) shows where these fit.
 
 ## Example: Visium with Space Ranger
 
-For example, to map Visium FASTQs, `ingestion/spaceranger_mapping` takes a
+To map Visium FASTQs, `ingestion/spaceranger_mapping` takes a
 `param_list` with each sample's reads, tissue image, and slide/area; the
 reference and probe set are shared across samples:
 
@@ -49,19 +49,19 @@ publish_dir: results/ingestion
 
 ```bash
 nextflow run https://packages.viash-hub.com/vsh/openpipeline_spatial.git \
-  -r v0.5.0 -latest -profile docker \
+  -r v0.7.0 -latest -profile docker \
   -main-script target/nextflow/workflows/ingestion/spaceranger_mapping/main.nf \
   -params-file params.yaml
 ```
 
 ## Key choices
 
-- **Imaging-based** platforms (Xenium, CosMx, AVITI) start from the vendor's
-  processed output, use the matching `convert/from_*` workflow.
-- **Sequencing-based** Visium can be mapped from FASTQs with
+- **Imaging-based platforms**: Xenium, CosMx, and AVITI24 start from the vendor's
+  processed output; use the matching `convert/from_*` workflow.
+- **Sequencing-based platforms**: Visium can be mapped from FASTQs with
   `spaceranger_mapping`, or converted from existing Space Ranger output with
   `from_spaceranger_to_h5mu`.
-- **A whole cohort in one run:** pass a [`param_list`](process-many-samples.qmd)
+- **A whole cohort in one run**: pass a [`param_list`](process-many-samples.qmd)
   with one entry per sample.
 
 ## Output

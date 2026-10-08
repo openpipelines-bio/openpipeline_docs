@@ -4,7 +4,7 @@ description: "Write a Viash component that fits OpenPipelines conventions"
 order: 40
 ---
 
-A component is one step of a pipeline: a script plus a `config.vsh.yaml` that
+A component is one step of a workflow: a script plus a `config.vsh.yaml` that
 describes its inputs, outputs, dependencies, and container. OpenPipelines builds
 every component with [Viash](https://viash.io). The how-to for writing a config
 lives in the [Viash guide](https://viash.io/guide/) and
@@ -14,7 +14,7 @@ component.
 
 ## OpenPipelines conventions
 
-:::{.callout-tip}
+::: {.callout-tip appearance="simple"}
 ## Check the reference first
 Before starting a new component, browse the
 [reference](../reference/index.qmd) to see whether one already exists that does
@@ -24,12 +24,12 @@ what you need, or that you can extend.
 - **One common data format.** Every component reads and writes the same
   [MuData](../concepts/mudata.qmd) object. Any component can therefore slot
   before or after any other.
-- **Where it lives.** A component sits in `src/<namespace>/<component>/`, grouped
-  into [namespaces](project-structure.qmd#sec-project-structure) by function such
+- **Location.** A component sits in `src/<namespace>/<component>/`, grouped
+  into [namespaces](project-structure.qmd#sec-project-structure) by function, such
   as `convert`, `filter`, or `transform`.
-- **Author info is centralized.** Each contributor has a YAML file in
+- **Centralized author info.** Each contributor has a YAML file in
   `src/authors/`. When you contribute code, add yourself to the component with
-  Viash's `__merge__` directive so author details stay consistent across
+  Viash's [`__merge__`](https://viash.io/reference/config/#merge__) directive so author details stay consistent across
   components. The role is either `author` or `contributor`:
 
   ```yaml
@@ -39,7 +39,7 @@ what you need, or that you can extend.
   ```
 
 - **Resource labels.** Declare CPU, memory, and GPU needs with
-  [resource labels](../guides/tune-resources.qmd) on the `nextflow` runner.
+  [resource labels](../guides/tune-resources.qmd) on the [`nextflow` runner](https://viash.io/reference/config/runners/nextflow/directives.html).
 - **Base containers.** Start from a reputable, actively maintained base image and
   install dependencies through a package manager. Use the current tag rather than
   pinning an old one. Common choices are
@@ -54,7 +54,7 @@ what you need, or that you can extend.
 The quickest way to start is to **copy the existing component closest to what you
 need** and adapt it. A component folder holds the config, the script, and a test:
 
-```
+```text
 src/transform/log1p/
 ├── config.vsh.yaml   # metadata: arguments, resources, container
 ├── script.py         # the logic
@@ -63,7 +63,7 @@ src/transform/log1p/
 
 ### The config
 
-`config.vsh.yaml` declares the interface and the container. Trimmed from the real
+`config.vsh.yaml` declares the interface ([arguments](https://viash.io/reference/config/arguments/)) and the container ([engines](https://viash.io/reference/config/engines/docker/)). Trimmed from the real
 [`transform/log1p`](https://github.com/openpipelines-bio/openpipeline/blob/main/src/transform/log1p/config.vsh.yaml):
 
 ```yaml
@@ -103,17 +103,20 @@ runners:
       label: [midmem, lowcpu, highdisk]     # resource labels
 ```
 
-A few OpenPipelines habits show up here: `--input`/`--output` are `file`
-arguments carrying the [MuData](../concepts/mudata.qmd) object, a `--modality`
-argument selects which modality to act on, shared Python requirements and helper
-scripts are pulled in with `__merge__` instead of copied, and the `nextflow`
-runner carries [resource labels](../guides/tune-resources.qmd).
+A few OpenPipelines habits show up here:
+
+- `--input`/`--output` are `file` arguments carrying the
+  [MuData](../concepts/mudata.qmd) object.
+- A `--modality` argument selects which modality to act on.
+- Shared Python requirements and helper scripts are pulled in with `__merge__`
+  instead of copied.
+- The `nextflow` runner carries [resource labels](../guides/tune-resources.qmd).
 
 ### The script
 
 The script does the work. OpenPipelines scripts read the MuData object, operate on
-the requested modality, and write it back out. Every script opens with a `##
-VIASH START` / `## VIASH END` block so it can be run standalone while iterating
+the requested modality, and write it back out. Every script opens with a
+`## VIASH START` / `## VIASH END` block so it can be run standalone while iterating
 (see [Build and test locally](development-workflow.qmd)):
 
 ```python
@@ -136,18 +139,18 @@ data.X = sc.pp.log1p(data.X, copy=True)
 data.write_h5mu(par["output"])
 ```
 
-Viash replaces the `VIASH START`/`END` block with the real arguments at run time
+Viash replaces the `## VIASH START` / `## VIASH END` block with the real arguments at build time
 and exposes them as `par`; `meta` carries build metadata such as
-`resources_dir`, where the merged helper scripts land.
+`resources_dir`, where the merged helper scripts land. See [Viash variables](https://viash.io/guide/component/variables.html) for the full list.
 
 ## Build and test
 
 There is no separate build step while developing a component: `viash run` and
 `viash test` compile it on the fly. See
 [Build and test locally](development-workflow.qmd) for the loop and
-[Testing](testing.qmd) for writing the test.
+[Testing](testing.qmd) for running the tests.
 
-:::{.callout-tip}
+::: {.callout-tip appearance="simple"}
 ## Descriptions become the reference
 The `description` fields on the component and each argument are what the
 [reference documentation](../reference/index.qmd) is generated from. Writing them
@@ -156,6 +159,6 @@ clearly is the same task as documenting your component.
 
 ## Publishing
 
-When your component is ready, open a pull request and follow
+When your component is ready, follow
 [Open a pull request](pull-requests.qmd). Once merged, Viash Hub builds it into
 the package and publishes it with the next release.

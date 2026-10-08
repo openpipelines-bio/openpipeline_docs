@@ -8,12 +8,12 @@ OpenPipelines is built with [Viash](https://viash.io), so the whole local loop
 runs through the `viash` CLI. You edit source, run it, and test it, all without a
 separate build step. This page covers how that loop works and where the test data
 comes from. The [component](creating-components.qmd) and
-[pipeline](creating-pipelines.qmd) pages build on it.
+[workflow](creating-workflows.qmd) pages build on it.
 
 ## The edit-run-test loop
 
-While developing a single component you rarely need to build anything. `viash
-run` and `viash test` compile the component on the fly from its
+While developing a single component, you rarely need to build anything.
+[`viash run`](https://viash.io/reference/cli/run.html) and [`viash test`](https://viash.io/reference/cli/test.html) compile the component on the fly from its
 `config.vsh.yaml`, so the loop is:
 
 ```bash
@@ -28,9 +28,9 @@ Both commands read the config, assemble the container, and execute your script.
 Edit the script or config, rerun, repeat. See the
 [Viash guide](https://viash.io/guide/) for what these commands do under the hood.
 
-:::{.callout-tip}
+::: {.callout-tip appearance="simple"}
 ## Run the script on its own while iterating
-Every OpenPipeline script has a `## VIASH START` / `## VIASH END` block near the
+Every OpenPipelines script has a [`## VIASH START` / `## VIASH END` block](https://viash.io/reference/viash_code_block/) near the
 top that defines a `par` dictionary with sample paths and values:
 
 ```python
@@ -40,15 +40,15 @@ par = {"input": "…", "output": "output.h5mu", "modality": "rna"}
 ```
 
 Viash strips this block out at build time and injects the real arguments, but
-because it is plain code you can also run the script directly (`python
-script.py`) to debug with a fast inner loop, then verify with `viash run`.
+because it is plain code you can also run the script directly
+(`python script.py`) to debug with a fast inner loop, then verify with `viash run`.
 :::
 
 ## Building the target code
 
-Workflows are different: a [VDSL3 pipeline](creating-pipelines.qmd) imports the
+Workflows are different: a [VDSL3 workflow](creating-workflows.qmd) imports the
 compiled Nextflow modules of the components it depends on, so those have to exist
-as **target code** first. Build the package (or a single namespace) with:
+as **target code** first. Build the package (or a single namespace) with [`viash ns build`](https://viash.io/reference/cli/ns_build.html):
 
 ```bash
 viash ns build --parallel                 # the whole package
@@ -62,9 +62,9 @@ changing anything a workflow depends on.
 
 ## Fetch the test resources {#sec-test-resources}
 
-Test data lives in a remote **S3 bucket**, not in the repository, and the CI uses
+Test data lives in a remote **S3 bucket**, not in the repository. CI uses
 the exact same resources, so what you run locally matches what CI checks. Each
-package repository declares its own bucket in its `_viash.yaml`, so there is
+package repository declares its own bucket in its [`_viash.yaml`](https://viash.io/reference/packageConfig/), so there is
 nothing to configure. Rather than duplicating the download logic, the core
 `openpipeline` package provides the `sync_test_resources` component. Run it from
 the **root of the repository you are working in**; it reads the local
@@ -78,7 +78,7 @@ nextflow run openpipelines-bio/openpipeline \
   --output .
 ```
 
-:::{.callout-note appearance="simple"}
+::: {.callout-note}
 Use the `openpipeline` version your package pins, and always sync from the
 repository you are working in so you get its own bucket.
 :::

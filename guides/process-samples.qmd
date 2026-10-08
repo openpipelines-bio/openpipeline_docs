@@ -4,13 +4,13 @@ description: "Per-sample QC and filtering, then cohort normalization and PCA."
 order: 30
 ---
 
-[`openpipeline`]{.pkg-tag .pkg-openpipeline}<span class="swatch openpipeline"></span>
+[<span class="swatch openpipeline"></span>`openpipeline`]{.pkg-tag .pkg-openpipeline}
 
 Sample processing takes the per-sample [ingested](ingest-10x.qmd) `.h5mu` files
 and produces one clean, normalized cohort object with a PCA embedding, ready for
-[integration](integrate.qmd). `process_samples` wraps the whole thing, per-sample
-QC and filtering, concatenation, normalization, highly-variable-feature
-selection, and PCA, into a single command.
+[integration](integrate.qmd). `process_samples` wraps the whole thing (per-sample
+QC and filtering, concatenation, normalization, highly variable feature
+selection, and PCA) into a single command.
 
 ## Options
 
@@ -21,7 +21,7 @@ selection, and PCA, into a single command.
 
 ## Example: process a cohort
 
-For example, pass a [`param_list`](process-many-samples.qmd) of ingested samples
+Pass a [`param_list`](process-many-samples.qmd) of ingested samples
 with your QC thresholds:
 
 ```yaml
@@ -58,10 +58,10 @@ thresholds. Combine filtering strategies as needed:
 - **Quantile-based**: derive thresholds from the data's own distribution (e.g.
   trimming extreme percentiles) rather than fixed cutoffs.
 - **Feature-based**: keep or drop cells based on specific features or feature sets.
-- **Mitochondrial / ribosomal fraction**: remove cells with a high fraction of
+- **Mitochondrial/ribosomal fraction**: remove cells with a high fraction of
   counts in mitochondrial or ribosomal genes, a hallmark of damaged cells.
-- **Doublet detection (Scrublet)**: flag likely doublet cells, droplet-based RNA
-  count data only.
+- **Doublet detection (Scrublet)**: flag likely doublet cells (droplet-based RNA
+  count data only).
 
 **Across the cohort, after concatenation.** Samples are concatenated (a
 `sample_id` column records each cell's origin; conflicting metadata columns move
@@ -78,10 +78,10 @@ see variation across the full cohort:
 
 **What QC removes.** The raw matrix holds more than real cells:
 
-- **Empty droplets**, barcodes that caught ambient RNA (very low counts).
-- **Dying / damaged cells**, low counts with a high mitochondrial fraction (mito
+- **Empty droplets**: barcodes that caught ambient RNA (very low counts).
+- **Dying/damaged cells**: low counts with a high mitochondrial fraction (mito
   RNA leaks into the cytoplasm when the membrane is damaged).
-- **Doublets**, two cells sequenced as one, at roughly double the expected depth.
+- **Doublets**: two cells sequenced as one, at roughly double the expected depth.
 
 **Thresholds are dataset-specific.** Inspect the distributions first with a
 [QC report](qc-report.qmd), then set `rna_min_counts` / `rna_max_counts` /
@@ -99,8 +99,8 @@ One merged `.h5mu`: normalized counts in `.layers["log_normalized"]`, selected
 features flagged in `.var`, a PCA embedding in `.obsm["X_pca"]`, and
 `.obs["sample_id"]`. Next: [integration](integrate.qmd).
 
-:::{.callout-tip}
+::: {.callout-tip appearance="simple"}
 Why per-sample steps (QC, filtering) run before concatenation and cohort steps
 (normalization, PCA) run after: see
-[Advanced architecture](../concepts/data-state.qmd).
+[Architecture: advanced](../concepts/data-state.qmd).
 :::

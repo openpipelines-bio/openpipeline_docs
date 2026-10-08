@@ -15,23 +15,23 @@ inherits sensible defaults from each step it runs.
 
 | Label | CPUs | Memory (attempt 1) |
 |---|---|---|
-| `singlecpu` | 1 |, |
-| `lowcpu` | 4 |, |
-| `midcpu` | 10 |, |
-| `highcpu` | 20 |, |
-| `lowmem` |, | 4 GB |
-| `midmem` |, | 25 GB |
-| `highmem` |, | 50 GB |
-| `veryhighmem` |, | 75 GB |
+| `singlecpu` | 1 | n/a |
+| `lowcpu` | 4 | n/a |
+| `midcpu` | 10 | n/a |
+| `highcpu` | 20 | n/a |
+| `lowmem` | n/a | 4 GB |
+| `midmem` | n/a | 25 GB |
+| `highmem` | n/a | 50 GB |
+| `veryhighmem` | n/a | 75 GB |
 
-Labels combine, a component tagged `[highcpu, midmem]` requests 20 CPUs and
+Labels combine: a component tagged `[highcpu, midmem]` requests 20 CPUs and
 25 GB. Requests scale automatically on retry, so a step that runs out of memory
 is resubmitted with more.
 
 There are also disk labels (`lowdisk`, `middisk`, `highdisk`, `veryhighdisk`),
 but unlike CPU and memory they have **no value by default**: components carry
-the label without it requesting any disk. When processing very large datasets,
-give them an effect by setting sizes in your compute environment, for example
+the label, but it requests no disk. To make the labels take effect for very large
+datasets, set sizes in your compute environment, for example
 `withLabel: highdisk { disk = { 200.GB * task.attempt } }`.
 
 ## Override resources at run time
@@ -68,9 +68,9 @@ nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
   -c my_resources.config
 ```
 
-:::{.callout-tip}
+::: {.callout-tip appearance="simple"}
 The same `-c config` mechanism is how you point a run at cloud executors
-(AWS Batch, Google Cloud Batch, an HPC scheduler). See the
+(AWS Batch, Google Cloud Batch, or an HPC scheduler). See the
 [Nextflow executor docs](https://www.nextflow.io/docs/latest/executor.html).
 :::
 
@@ -97,7 +97,7 @@ process {
 nextflow run ... -c gpu.config
 ```
 
-The exact settings depend on your executor and container runtime, see the
+The exact settings depend on your executor and container runtime; see the
 [Nextflow accelerator / GPU documentation](https://www.nextflow.io/docs/latest/process.html#accelerator).
 GPU drop-ins for the steps whose tools have no native GPU path are covered in
 [Speed up with GPUs](gpu.qmd).

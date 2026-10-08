@@ -4,19 +4,19 @@ description: "A developer's view: how the data object is organized, changes shap
 order: 70
 ---
 
-There are two ways to read the pipeline. The [pipeline overview](../workflows/index.qmd)
-walks it **by stage**, the way an analyst
-thinks. This page reads it the way the workflows are **actually built**, the view
+There are two ways to read the pipeline. The [Workflows overview](../overview/index.qmd)
+walks through it by stage, the way an analyst
+thinks. This page reads it the way the workflows are actually built: the view
 you need if you are writing or wiring components. It covers how the data object is
-organized along **two axes** (samples and modalities), what gets **written into
-it** at each step, and how components **hand data off** to one another.
+organized along two axes (samples and modalities), what gets written into
+it at each step, and how components hand data off to one another.
 
 ## The data is organized along two axes
 
 Two independent questions describe the object's shape at any point in the
-pipeline: **how many samples** does it hold, and **how many modalities**. Steps
+pipeline: how many samples does it hold, and how many modalities. Steps
 move the data along one axis or the other, and a given component only makes sense
-at one position. The overview below shows both axes in play; the sections after
+at one position. The overview below shows both axes in play; the following sections
 zoom in on each.
 
 Most of these shape changes happen inside the `multiomics/process_samples`
@@ -65,17 +65,17 @@ workflows start from its output (4).
 The data visits the four combinations of the two axes in order (1 → 4), from ingestion output to the input of integration and downstream analysis. Each blue step moves the data along one axis only: split and merge along the modality axis, concatenate along the sample axis. The processing done in each shape is noted inside it.
 :::
 
-### Samples: single-sample vs multi-sample
+### Samples: single-sample vs. multi-sample
 
-Per-sample work like QC and filtering reasons about a **single sample's own
-distribution**, so it runs while each sample is still its own file. Cross-sample
+Per-sample work like QC and filtering reasons about a single sample's own
+distribution, so it runs while each sample is still its own file. Cross-sample
 work (normalization, feature selection, PCA) needs to see variation across the
-**whole cohort**, so it runs only after the per-sample files are
-**concatenated** into one.
+whole cohort, so it runs only after the per-sample files are
+concatenated into one.
 
 Concatenation joins the observations of every sample into a single object, done
 for each modality separately. A `sample_id` column is added to `.obs` to record
-where each cell came from. When samples carry **conflicting** `.obs` / `.var`
+where each cell came from. When samples carry conflicting `.obs` / `.var`
 annotations, the `concatenate_h5mu` component's default `other_axis_mode: move`
 gathers the clashing columns into `.obsm` / `.varm` so you can inspect them
 instead of silently dropping one.
@@ -99,13 +99,13 @@ flowchart LR
   cc --> coh
 ```
 
-### Modalities: multimodal vs unimodal
+### Modalities: multimodal vs. unimodal
 
 Ingestion produces a **multimodal** object: several modalities (`rna`, `prot`,
-`atac`, ...) living side by side under `.mod`. But many per-modality steps
-(RNA normalization, protein CLR, ...) only know how to operate on **one modality
-at a time**. So the pipeline **splits** the multimodal object into one
-**unimodal** file per modality, processes each on its own, then **merges** them
+`atac`, …) living side by side under `.mod`. But many per-modality steps
+(RNA normalization, protein CLR, …) only know how to operate on one modality
+at a time. So the pipeline splits the multimodal object into one
+**unimodal** file per modality, processes each on its own, then merges them
 back into a single multimodal object. Split and merge are inverse operations
 along the modality axis.
 
@@ -140,7 +140,7 @@ flowchart LR
   mrg --> out
 ```
 
-The same axis reappears at **integration**, where methods differ by how far
+The same axis reappears at integration, where methods differ by how far
 across modalities they reach:
 
 - **Unimodal** integration aligns cells across batches within one modality:
@@ -161,7 +161,7 @@ axis, they pin down exactly what a workflow assumes about its input.
 | single-sample · multimodal | one sample | all together | ingestion output; read by `dataflow/split_modalities` |
 | single-sample · unimodal | one sample | one | `rna/rna_singlesample`, `prot/prot_singlesample` |
 | multi-sample · unimodal | cohort | one | `rna/rna_multisample`, `prot/prot_multisample` |
-| multi-sample · multimodal | cohort | all together | `integration/harmony_leiden`, ... (after `dataflow/merge`) |
+| multi-sample · multimodal | cohort | all together | `integration/harmony_leiden`, … (after `dataflow/merge`) |
 
 The `multiomics` workflows (`process_samples`, and `process_batches` for large
 cohorts) move data between these states, so you rarely wire the transitions by
@@ -169,7 +169,7 @@ hand.
 
 ## The object fills up as it flows
 
-The object is never overwritten in place. Each step **adds** to it, writing its
+The object is never overwritten in place. Each step adds to it, writing its
 result into a specific MuData slot (`.X`, `.layers`, `.obs`, `.var`, `.obsm`)
 while leaving the earlier ones intact. Following which slot a step reads and which
 it writes is often the fastest way to understand where it belongs.
@@ -211,8 +211,8 @@ re-run a step with different parameters without re-ingesting.
 
 ## Components exchange data through disk
 
-Components do not share an in-memory object. Each one **reads an H5MU file from
-disk, does its work, and writes a new H5MU back out**; the next component reads
+Components do not share an in-memory object. Each one reads an H5MU file from
+disk, does its work, and writes a new H5MU back out. The next component reads
 that file in turn. This on-disk hand-off is what lets Nextflow run independent
 branches in parallel, cache and resume completed steps, and wire **one-to-many**
 (split one multimodal file into per-modality files) or **many-to-one**
@@ -222,11 +222,11 @@ means every intermediate is a real file you can open and inspect.
 ## When you author a component
 
 Before adding a component to a workflow, decide where on the two axes it reads: a
-**single sample** (so it belongs before concatenation, in a `_singlesample`
-workflow) or the **whole cohort** (so it belongs after, in a `_multisample`
-workflow), and **one modality** (so it runs after a split) or **all modalities
-together** (so it runs after a merge). Those questions tell you where the
+single sample (so it belongs before concatenation, in a `_singlesample`
+workflow) or the whole cohort (so it belongs after, in a `_multisample`
+workflow), and one modality (so it runs after a split) or all modalities
+together (so it runs after a merge). Those questions tell you where the
 component slots in and which assumptions hold (is `sample_id` present yet? is the
 data normalized? is this file unimodal?). See
-[Create a pipeline](../contributing/creating-pipelines.qmd) for the mechanics of
+[Create a workflow](../contributing/creating-workflows.qmd) for the mechanics of
 wiring one in.

@@ -1,5 +1,5 @@
 ---
-pagetitle: "Team — OpenPipelines"
+pagetitle: "Team"
 title: "Team"
 description: "The people building and maintaining OpenPipelines."
 toc: false
@@ -13,6 +13,8 @@ css: team.css
      maintainers, advisors and sponsors come from data/members/.
      See design/team-authorship.md. -->
 
+[{{< fa brands orcid >}}]{.d-none}
+
 ## Package maintainers
 
 ```{=html}
@@ -21,12 +23,12 @@ css: team.css
     <img loading="lazy" class="avatar avatar-circle" src="https://github.com/DriesSchaumont.png" alt="Dries Schaumont" />
     <div class="portrait-title">
       <h4>Dries Schaumont</h4>
-      <h6 class="team-role"><i>Package Manager &amp; Maintainer</i></h6>
+      <h6 class="team-role"><i>Package Manager and Maintainer</i></h6>
       <h6><i>Bioinformatics Engineer at <a href="https://www.data-intuitive.com">Data Intuitive</a></i></h6>
       <div class="network">
         <a class="network-icon" href="mailto:dries@data-intuitive.com" title="E-mail"><i class="bi bi-envelope"></i></a>
         <a class="network-icon" href="https://github.com/DriesSchaumont" title="GitHub"><i class="bi bi-github"></i></a>
-        <a class="network-icon" href="https://orcid.org/0000-0002-4389-0440" title="ORCID"><span class="link-text">ORCID</span></a>
+        <a class="network-icon" href="https://orcid.org/0000-0002-4389-0440" title="ORCID"><i class="fa-brands fa-orcid"></i></a>
         <a class="network-icon" href="https://www.linkedin.com/in/dries-schaumont" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
       </div>
     </div>
@@ -40,7 +42,7 @@ css: team.css
       <div class="network">
         <a class="network-icon" href="mailto:dorien@data-intuitive.com" title="E-mail"><i class="bi bi-envelope"></i></a>
         <a class="network-icon" href="https://github.com/dorien-er" title="GitHub"><i class="bi bi-github"></i></a>
-        <a class="network-icon" href="https://orcid.org/0000-0002-6261-8151" title="ORCID"><span class="link-text">ORCID</span></a>
+        <a class="network-icon" href="https://orcid.org/0000-0002-6261-8151" title="ORCID"><i class="fa-brands fa-orcid"></i></a>
         <a class="network-icon" href="https://www.linkedin.com/in/dorien-roosen" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
       </div>
     </div>
@@ -71,7 +73,7 @@ css: team.css
       <h4>Angela Oliveira Pisco</h4>
       <div class="network">
         <a class="network-icon" href="https://github.com/aopisco" title="GitHub"><i class="bi bi-github"></i></a>
-        <a class="network-icon" href="https://orcid.org/0000-0003-0142-2355" title="ORCID"><span class="link-text">ORCID</span></a>
+        <a class="network-icon" href="https://orcid.org/0000-0003-0142-2355" title="ORCID"><i class="fa-brands fa-orcid"></i></a>
         <a class="network-icon" href="https://www.linkedin.com/in/aopisco" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
       </div>
     </div>
@@ -82,7 +84,7 @@ css: team.css
       <h4>Dorien Roosen</h4>
       <div class="network">
         <a class="network-icon" href="https://github.com/dorien-er" title="GitHub"><i class="bi bi-github"></i></a>
-        <a class="network-icon" href="https://orcid.org/0000-0002-6261-8151" title="ORCID"><span class="link-text">ORCID</span></a>
+        <a class="network-icon" href="https://orcid.org/0000-0002-6261-8151" title="ORCID"><i class="fa-brands fa-orcid"></i></a>
         <a class="network-icon" href="https://www.linkedin.com/in/dorien-roosen" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
       </div>
     </div>
@@ -103,7 +105,7 @@ css: team.css
       <h4>Dries Schaumont</h4>
       <div class="network">
         <a class="network-icon" href="https://github.com/DriesSchaumont" title="GitHub"><i class="bi bi-github"></i></a>
-        <a class="network-icon" href="https://orcid.org/0000-0002-4389-0440" title="ORCID"><span class="link-text">ORCID</span></a>
+        <a class="network-icon" href="https://orcid.org/0000-0002-4389-0440" title="ORCID"><i class="fa-brands fa-orcid"></i></a>
         <a class="network-icon" href="https://www.linkedin.com/in/dries-schaumont" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
       </div>
     </div>
@@ -114,7 +116,7 @@ css: team.css
       <h4>Isabelle Bergiers</h4>
       <div class="network">
         <a class="network-icon" href="https://github.com/Isabelle-b" title="GitHub"><i class="bi bi-github"></i></a>
-        <a class="network-icon" href="https://orcid.org/0000-0001-9622-7960" title="ORCID"><span class="link-text">ORCID</span></a>
+        <a class="network-icon" href="https://orcid.org/0000-0001-9622-7960" title="ORCID"><i class="fa-brands fa-orcid"></i></a>
       </div>
     </div>
   </div>
@@ -134,7 +136,7 @@ css: team.css
       <h4>Kai Waldrant</h4>
       <div class="network">
         <a class="network-icon" href="https://github.com/KaiWaldrant" title="GitHub"><i class="bi bi-github"></i></a>
-        <a class="network-icon" href="https://orcid.org/0009-0003-8555-1361" title="ORCID"><span class="link-text">ORCID</span></a>
+        <a class="network-icon" href="https://orcid.org/0009-0003-8555-1361" title="ORCID"><i class="fa-brands fa-orcid"></i></a>
         <a class="network-icon" href="https://www.linkedin.com/in/kaiwaldrant" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
       </div>
     </div>
@@ -145,7 +147,7 @@ css: team.css
       <h4>Luke Zappia</h4>
       <div class="network">
         <a class="network-icon" href="https://github.com/lazappi" title="GitHub"><i class="bi bi-github"></i></a>
-        <a class="network-icon" href="https://orcid.org/0000-0001-7744-8565" title="ORCID"><span class="link-text">ORCID</span></a>
+        <a class="network-icon" href="https://orcid.org/0000-0001-7744-8565" title="ORCID"><i class="fa-brands fa-orcid"></i></a>
         <a class="network-icon" href="https://www.linkedin.com/in/lazappi" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
       </div>
     </div>
@@ -156,7 +158,7 @@ css: team.css
       <h4>Malte D. Luecken</h4>
       <div class="network">
         <a class="network-icon" href="https://github.com/LuckyMD" title="GitHub"><i class="bi bi-github"></i></a>
-        <a class="network-icon" href="https://orcid.org/0000-0001-7464-7921" title="ORCID"><span class="link-text">ORCID</span></a>
+        <a class="network-icon" href="https://orcid.org/0000-0001-7464-7921" title="ORCID"><i class="fa-brands fa-orcid"></i></a>
         <a class="network-icon" href="https://www.linkedin.com/in/malte-l%C3%BCcken-b8b21049" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
       </div>
     </div>
@@ -167,7 +169,7 @@ css: team.css
       <h4>Marijke Van Moerbeke</h4>
       <div class="network">
         <a class="network-icon" href="https://github.com/mvanmoerbeke" title="GitHub"><i class="bi bi-github"></i></a>
-        <a class="network-icon" href="https://orcid.org/0000-0002-3097-5621" title="ORCID"><span class="link-text">ORCID</span></a>
+        <a class="network-icon" href="https://orcid.org/0000-0002-3097-5621" title="ORCID"><i class="fa-brands fa-orcid"></i></a>
         <a class="network-icon" href="https://www.linkedin.com/in/marijke-van-moerbeke-84303a34" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
       </div>
     </div>
@@ -178,7 +180,7 @@ css: team.css
       <h4>Matthias Beyens</h4>
       <div class="network">
         <a class="network-icon" href="https://github.com/MatthiasBeyens" title="GitHub"><i class="bi bi-github"></i></a>
-        <a class="network-icon" href="https://orcid.org/0000-0003-3304-0706" title="ORCID"><span class="link-text">ORCID</span></a>
+        <a class="network-icon" href="https://orcid.org/0000-0003-3304-0706" title="ORCID"><i class="fa-brands fa-orcid"></i></a>
         <a class="network-icon" href="https://www.linkedin.com/in/mbeyens" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
       </div>
     </div>
@@ -190,6 +192,15 @@ css: team.css
       <div class="network">
         <a class="network-icon" href="https://github.com/mauro-saporita" title="GitHub"><i class="bi bi-github"></i></a>
         <a class="network-icon" href="https://www.linkedin.com/in/mauro-saporita-930b06a5" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+      </div>
+    </div>
+  </div>
+  <div class="people-person">
+    <img loading="lazy" class="avatar avatar-circle" src="https://github.com/mimi-DT.png" alt="Mirte De Temmerman" />
+    <div class="portrait-title">
+      <h4>Mirte De Temmerman</h4>
+      <div class="network">
+        <a class="network-icon" href="https://github.com/mimi-DT" title="GitHub"><i class="bi bi-github"></i></a>
       </div>
     </div>
   </div>
@@ -209,7 +220,7 @@ css: team.css
       <h4>Robrecht Cannoodt</h4>
       <div class="network">
         <a class="network-icon" href="https://github.com/rcannood" title="GitHub"><i class="bi bi-github"></i></a>
-        <a class="network-icon" href="https://orcid.org/0000-0003-3641-729X" title="ORCID"><span class="link-text">ORCID</span></a>
+        <a class="network-icon" href="https://orcid.org/0000-0003-3641-729X" title="ORCID"><i class="fa-brands fa-orcid"></i></a>
         <a class="network-icon" href="https://www.linkedin.com/in/robrechtcannoodt" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
       </div>
     </div>
@@ -230,7 +241,7 @@ css: team.css
       <h4>Sarah Ouologuem</h4>
       <div class="network">
         <a class="network-icon" href="https://github.com/SarahOuologuem" title="GitHub"><i class="bi bi-github"></i></a>
-        <a class="network-icon" href="https://orcid.org/0009-0005-3398-1700" title="ORCID"><span class="link-text">ORCID</span></a>
+        <a class="network-icon" href="https://orcid.org/0009-0005-3398-1700" title="ORCID"><i class="fa-brands fa-orcid"></i></a>
       </div>
     </div>
   </div>
@@ -250,7 +261,7 @@ css: team.css
       <h4>Vladimir Shitov</h4>
       <div class="network">
         <a class="network-icon" href="https://github.com/vladimirshitov" title="GitHub"><i class="bi bi-github"></i></a>
-        <a class="network-icon" href="https://orcid.org/0000-0002-1960-8812" title="ORCID"><span class="link-text">ORCID</span></a>
+        <a class="network-icon" href="https://orcid.org/0000-0002-1960-8812" title="ORCID"><i class="fa-brands fa-orcid"></i></a>
         <a class="network-icon" href="https://www.linkedin.com/in/vladimir-shitov-9a659513b" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
       </div>
     </div>
@@ -267,7 +278,7 @@ css: team.css
       <h4>Xichen Wu</h4>
       <div class="network">
         <a class="network-icon" href="https://github.com/wxicu" title="GitHub"><i class="bi bi-github"></i></a>
-        <a class="network-icon" href="https://orcid.org/0009-0008-2168-4508" title="ORCID"><span class="link-text">ORCID</span></a>
+        <a class="network-icon" href="https://orcid.org/0009-0008-2168-4508" title="ORCID"><i class="fa-brands fa-orcid"></i></a>
         <a class="network-icon" href="https://www.linkedin.com/in/xichen-wu" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
       </div>
     </div>
@@ -275,7 +286,7 @@ css: team.css
 </div>
 ```
 
-## Scientific & technical advisors
+## Scientific and technical advisors
 
 ```{=html}
 <div class="people-widget justify-content-evenly">
@@ -285,7 +296,7 @@ css: team.css
       <h4>Dries De Maeyer</h4>
       <div class="network">
         <a class="network-icon" href="https://github.com/ddemaeyer" title="GitHub"><i class="bi bi-github"></i></a>
-        <a class="network-icon" href="https://orcid.org/0000-0002-1314-3348" title="ORCID"><span class="link-text">ORCID</span></a>
+        <a class="network-icon" href="https://orcid.org/0000-0002-1314-3348" title="ORCID"><i class="fa-brands fa-orcid"></i></a>
         <a class="network-icon" href="https://www.linkedin.com/in/dries-de-maeyer-b46a814" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
       </div>
     </div>
@@ -306,7 +317,7 @@ css: team.css
       <h4>Malte D. Luecken</h4>
       <div class="network">
         <a class="network-icon" href="https://github.com/LuckyMD" title="GitHub"><i class="bi bi-github"></i></a>
-        <a class="network-icon" href="https://orcid.org/0000-0001-7464-7921" title="ORCID"><span class="link-text">ORCID</span></a>
+        <a class="network-icon" href="https://orcid.org/0000-0001-7464-7921" title="ORCID"><i class="fa-brands fa-orcid"></i></a>
         <a class="network-icon" href="https://www.linkedin.com/in/malte-l%C3%BCcken-b8b21049" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
       </div>
     </div>
@@ -317,7 +328,7 @@ css: team.css
       <h4>Robrecht Cannoodt</h4>
       <div class="network">
         <a class="network-icon" href="https://github.com/rcannood" title="GitHub"><i class="bi bi-github"></i></a>
-        <a class="network-icon" href="https://orcid.org/0000-0003-3641-729X" title="ORCID"><span class="link-text">ORCID</span></a>
+        <a class="network-icon" href="https://orcid.org/0000-0003-3641-729X" title="ORCID"><i class="fa-brands fa-orcid"></i></a>
         <a class="network-icon" href="https://www.linkedin.com/in/robrechtcannoodt" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
       </div>
     </div>
@@ -355,7 +366,7 @@ css: team.css
       <h6><i>Senior Principle Scientist at <a href="https://www.jnj.com/">Johnson &amp; Johnson</a></i></h6>
       <div class="network">
         <a class="network-icon" href="https://github.com/ddemaeyer" title="GitHub"><i class="bi bi-github"></i></a>
-        <a class="network-icon" href="https://orcid.org/0000-0002-1314-3348" title="ORCID"><span class="link-text">ORCID</span></a>
+        <a class="network-icon" href="https://orcid.org/0000-0002-1314-3348" title="ORCID"><i class="fa-brands fa-orcid"></i></a>
         <a class="network-icon" href="https://www.linkedin.com/in/dries-de-maeyer-b46a814" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
       </div>
     </div>
@@ -366,7 +377,7 @@ css: team.css
       <h4>Joke Reumers</h4>
       <h6><i>Director Portfolio Management at <a href="https://www.jnj.com/">Johnson &amp; Johnson</a></i></h6>
       <div class="network">
-        <a class="network-icon" href="https://orcid.org/0000-0001-5434-6515" title="ORCID"><span class="link-text">ORCID</span></a>
+        <a class="network-icon" href="https://orcid.org/0000-0001-5434-6515" title="ORCID"><i class="fa-brands fa-orcid"></i></a>
         <a class="network-icon" href="https://www.linkedin.com/in/jokereumers" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
       </div>
     </div>
@@ -378,7 +389,7 @@ css: team.css
       <h6><i>Founder and CEO at <a href="https://www.data-intuitive.com">Data Intuitive</a></i></h6>
       <div class="network">
         <a class="network-icon" href="https://github.com/tverbeiren" title="GitHub"><i class="bi bi-github"></i></a>
-        <a class="network-icon" href="https://orcid.org/0000-0002-7007-6866" title="ORCID"><span class="link-text">ORCID</span></a>
+        <a class="network-icon" href="https://orcid.org/0000-0002-7007-6866" title="ORCID"><i class="fa-brands fa-orcid"></i></a>
         <a class="network-icon" href="https://www.linkedin.com/in/verbeiren" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
       </div>
     </div>

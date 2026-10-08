@@ -10,7 +10,7 @@ object.
 
 The pages below explain the design choices behind it. Read top to bottom for the
 full picture, or jump to whichever answers your question. For how these ideas play
-out across the actual pipeline, see [the pipeline overview](../workflows/index.qmd).
+out across the actual pipeline, see [Workflows overview](../overview/index.qmd).
 
 ```{=html}
 <div class="concept-list">
@@ -28,7 +28,7 @@ out across the actual pipeline, see [the pipeline overview](../workflows/index.q
   </a>
 
   <a class="concept-card" href="mudata.html">
-    <div class="ct">MuData as the standard data format</div>
+    <div class="ct">MuData as a standard data format</div>
     <p>The shared data format that lets any component fit together with any other.</p>
     <span class="go">Read →</span>
   </a>

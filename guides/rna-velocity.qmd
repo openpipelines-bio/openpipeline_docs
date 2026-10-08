@@ -4,7 +4,7 @@ description: "Directional cell-state dynamics from spliced vs. unspliced counts.
 order: 55
 ---
 
-[`openpipeline`]{.pkg-tag .pkg-openpipeline}<span class="swatch openpipeline"></span>
+[<span class="swatch openpipeline"></span>`openpipeline`]{.pkg-tag .pkg-openpipeline}
 
 RNA velocity infers where each cell is heading by comparing **unspliced** (newly
 transcribed, intron-containing) to **spliced** (mature) mRNA: a high unspliced
@@ -15,12 +15,12 @@ velocity vector per cell, projected onto the UMAP.
 
 | Component | Use when |
 |---|---|
-| [`velocity/velocyto`](../reference/openpipeline/v4.2.0/velocity/velocyto.qmd) | Extract spliced / unspliced counts from aligned BAMs (during ingestion) |
+| [`velocity/velocyto`](../reference/openpipeline/v4.2.0/velocity/velocyto.qmd) | Extract spliced/unspliced counts from aligned BAMs (during ingestion) |
 | [`velocity/scvelo`](../reference/openpipeline/v4.2.0/velocity/scvelo.qmd) | Compute velocity from an object that carries those layers |
 
 ## Example: scVelo
 
-For example, once your object carries `spliced` / `unspliced` layers:
+Once your object carries `spliced` / `unspliced` layers:
 
 ```bash
 nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
@@ -36,11 +36,12 @@ nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
 
 ## Key choices
 
-- **Spliced / unspliced counts are a prerequisite.** They come from `velocyto`
-  run against the aligned BAMs at [ingestion](ingest-10x.qmd) time, a standard
+- **Spliced/unspliced counts are a prerequisite.** They come from `velocyto`
+  run against the aligned BAMs at [ingestion](ingest-10x.qmd) time; a standard
   count matrix doesn't carry them.
 - `--n_top_genes`, `--n_principal_components`, and `--n_neighbors` tune the
-  velocity graph, see the reference for defaults.
+  velocity graph; see the
+  [reference](../reference/openpipeline/v4.2.0/velocity/scvelo.qmd) for defaults.
 
 ## Output
 

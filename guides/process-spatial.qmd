@@ -4,22 +4,22 @@ description: "The core processing flow, adapted for spatial data."
 order: 35
 ---
 
-[`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial}<span class="swatch openpipeline_spatial"></span>
+[<span class="swatch openpipeline_spatial"></span>`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial}
 
 `spatial_process_samples`, from **`openpipeline_spatial`**, runs the same
-per-sample and cohort steps as core [sample processing](process-samples.qmd),
-filtering, normalization, feature selection, PCA, but adapted for spatial data
+per-sample and cohort steps as core [sample processing](process-samples.qmd)
+(filtering, normalization, feature selection, and PCA), but adapted for spatial data
 and keeping the per-spot coordinates in `.obsm["spatial"]` intact.
 
 ## Options
 
 | Workflow | Use when |
 |---|---|
-| [`multiomics/spatial_process_samples`](../reference/openpipeline_spatial/v0.5.0/workflows/multiomics/spatial_process_samples.qmd) | Processing a [spatially-ingested](ingest-spatial.qmd) cohort |
+| [`multiomics/spatial_process_samples`](../reference/openpipeline_spatial/v0.7.0/workflows/multiomics/spatial_process_samples.qmd) | Processing a [spatially ingested](ingest-spatial.qmd) cohort |
 
 ## Example: process a spatial cohort
 
-For example, on a [`param_list`](process-many-samples.qmd) of spatial `.h5mu`
+On a [`param_list`](process-many-samples.qmd) of spatial `.h5mu`
 files:
 
 ```yaml
@@ -34,7 +34,7 @@ publish_dir: results/processed
 
 ```bash
 nextflow run https://packages.viash-hub.com/vsh/openpipeline_spatial.git \
-  -r v0.5.0 -latest -profile docker \
+  -r v0.7.0 -latest -profile docker \
   -main-script target/nextflow/workflows/multiomics/spatial_process_samples/main.nf \
   -params-file params.yaml
 ```
@@ -53,7 +53,7 @@ distribution:
 - **Quantile-based**: derive thresholds from the data's own distribution rather
   than fixed cutoffs.
 - **Feature-based**: keep or drop cells based on specific features or feature sets.
-- **Mitochondrial / ribosomal fraction**: remove cells with a high fraction of
+- **Mitochondrial/ribosomal fraction**: remove cells with a high fraction of
   mitochondrial or ribosomal counts.
 
 **Across the cohort, after concatenation.** Samples are concatenated (a
@@ -66,7 +66,7 @@ untouched.
 
 - Thresholds work as in core [sample processing](process-samples.qmd); set them
   from a [spatial QC report](qc-report-spatial.qmd).
-- Coordinates in `.obsm["spatial"]` are carried through untouched, downstream
+- Coordinates in `.obsm["spatial"]` are carried through untouched; downstream
   spatial steps (e.g. [niche identification](spatial-niches.qmd)) depend on them.
 
 ## Output

@@ -60,4 +60,3 @@
   line-height: 1;
 }
 .network-icon:hover { color: var(--op-accent-ink); }
-.network-icon .link-text { font-size: 0.72rem; }

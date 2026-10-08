@@ -2,14 +2,16 @@
 title: "Workflows overview"
 description: "Workflows offered by OpenPipelines and where they fit in the analysis process."
 order: 60
+aliases:
+  - ../workflows/index.html
 ---
 
-OpenPipeline takes single-cell and spatial data from raw sequencing output, or from imaging-based spatial platforms, to a processed, standardized dataset.
-This includes ingestion, per-sample processing (filtering, quality control, normalization), integration and downstream analysis.
+OpenPipelines takes single-cell and spatial data from raw sequencing output, or from imaging-based spatial platforms, to a processed, standardized dataset.
+This includes ingestion, per-sample processing (filtering, quality control, normalization), integration, and downstream analysis.
 The workflows and tools used depend on the data modality and the technology platform.
 
-::: {.callout-tip appearance="simple" title="New to OpenPipeline?"}
-This page maps the complete analysis pipeline end to end. If terms like *component*, *workflow* or *Viash Hub* are unfamiliar, start with [Concepts](../concepts/index.qmd) instead.
+::: {.callout-tip appearance="simple" title="New to OpenPipelines?"}
+This page maps all OpenPipelines workflows end to end. If terms like *component*, *workflow*, or *Viash Hub* are unfamiliar, start with [How it works](../concepts/index.qmd) instead.
 :::
 
 ```{=html}
@@ -44,19 +46,19 @@ If you already have FASTQ files or a pre-built count matrix, skip directly to
 
 ## Ingestion {#ingestion}
 
-Ingestion workflows convert raw platform outputs to a standardised MuData (`.h5mu`) format.
+Ingestion workflows convert raw platform outputs to a standardized MuData (`.h5mu`) format.
 For single-cell and sequencing-based spatial data (Visium, Visium HD), this involves aligning sequencing reads to a reference genome, assigning them to cells/spatial coordinates, and counting them by UMI.
-Imaging-based spatial platforms (Xenium, CosMx, AVITI) skip high-throughput library prep and alignment; instead, the vendor's primary output files (matrices, feature locations, and cell segmentation boundaries) are converted to standardized structures.
+Imaging-based spatial platforms (Xenium, CosMx, AVITI24) skip high-throughput library prep and alignment; instead, the vendor's primary output files (matrices, feature locations, and cell segmentation boundaries) are converted to standardized structures.
 
 ::: {.callout-tip appearance="simple" title="Guides"}
-[Ingestion](../guides/ingest-10x.qmd) and [Spatial ingestion](../guides/ingest-spatial.qmd) cover workflow selection, reference genome setup, and examples.
+[Ingest data](../guides/ingest-10x.qmd) and [Ingest spatial data](../guides/ingest-spatial.qmd) cover workflow selection, reference genome setup, and examples.
 :::
 
 ::: {.panel-tabset}
 
 ### Single-cell
 
-OpenPipeline supports 10x Genomics and BD Rhapsody. Which mapper to use depends on the platform and library type (gene expression only, or gene expression + ADT/HTO + VDJ).
+OpenPipelines supports 10x Genomics and BD Rhapsody. Which mapper to use depends on the platform and library type (gene expression only, or gene expression + ADT/HTO + VDJ).
 
 | Workflow / component | Package | Description |
 |---|---|---|
@@ -68,20 +70,20 @@ OpenPipeline supports 10x Genomics and BD Rhapsody. Which mapper to use depends 
 ### Spatial
 
 Sequencing-based Visium data is mapped from FASTQs with Space Ranger, the same way single-cell data is.
-Imaging-based platforms (Xenium, CosMx, AVITI) are converted directly from the vendor's own output, since they do not generate FASTQ files or require read mapping.
+Imaging-based platforms (Xenium, CosMx, AVITI24) are converted directly from the vendor's own output, since they do not generate FASTQ files or require read mapping.
 
 | Workflow / component | Package | Description |
 |---|---|---|
-| [`ingestion/spaceranger_mapping`](../reference/openpipeline_spatial/v0.5.0/workflows/ingestion/spaceranger_mapping.qmd) | [<span class="swatch openpipeline_spatial"></span>`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial} | Space Ranger mapping for Visium (sequencing-based) |
-| [`convert/from_spaceranger_to_h5mu`](../reference/openpipeline_spatial/v0.5.0/convert/from_spaceranger_to_h5mu.qmd) | [<span class="swatch openpipeline_spatial"></span>`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial} | Visium (Space Ranger) output → H5MU |
-| [`convert/from_xenium_to_h5mu`](../reference/openpipeline_spatial/v0.5.0/convert/from_xenium_to_h5mu.qmd) | [<span class="swatch openpipeline_spatial"></span>`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial} | 10x Xenium output → H5MU (imaging-based) |
-| [`convert/from_cosmx_to_h5mu`](../reference/openpipeline_spatial/v0.5.0/convert/from_cosmx_to_h5mu.qmd) | [<span class="swatch openpipeline_spatial"></span>`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial} | NanoString CosMx output → H5MU (imaging-based) |
-| [`convert/from_cells2stats_to_h5mu`](../reference/openpipeline_spatial/v0.5.0/convert/from_cells2stats_to_h5mu.qmd) | [<span class="swatch openpipeline_spatial"></span>`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial} | Element AVITI (cells2stats) output → H5MU |
-| [`convert/from_spatialdata_to_h5mu`](../reference/openpipeline_spatial/v0.5.0/convert/from_spatialdata_to_h5mu.qmd) | [<span class="swatch openpipeline_spatial"></span>`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial} | SpatialData object → H5MU |
+| [`ingestion/spaceranger_mapping`](../reference/openpipeline_spatial/v0.7.0/workflows/ingestion/spaceranger_mapping.qmd) | [<span class="swatch openpipeline_spatial"></span>`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial} | Space Ranger mapping for Visium (sequencing-based) |
+| [`convert/from_spaceranger_to_h5mu`](../reference/openpipeline_spatial/v0.7.0/convert/from_spaceranger_to_h5mu.qmd) | [<span class="swatch openpipeline_spatial"></span>`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial} | Visium (Space Ranger) output → H5MU |
+| [`convert/from_xenium_to_h5mu`](../reference/openpipeline_spatial/v0.7.0/convert/from_xenium_to_h5mu.qmd) | [<span class="swatch openpipeline_spatial"></span>`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial} | 10x Xenium output → H5MU (imaging-based) |
+| [`convert/from_cosmx_to_h5mu`](../reference/openpipeline_spatial/v0.7.0/convert/from_cosmx_to_h5mu.qmd) | [<span class="swatch openpipeline_spatial"></span>`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial} | CosMx output → H5MU (imaging-based) |
+| [`convert/from_cells2stats_to_h5mu`](../reference/openpipeline_spatial/v0.7.0/convert/from_cells2stats_to_h5mu.qmd) | [<span class="swatch openpipeline_spatial"></span>`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial} | AVITI24 (cells2stats) output → H5MU |
+| [`convert/from_spatialdata_to_h5mu`](../reference/openpipeline_spatial/v0.7.0/convert/from_spatialdata_to_h5mu.qmd) | [<span class="swatch openpipeline_spatial"></span>`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial} | SpatialData object → H5MU |
 
 :::
 
-::: {.callout-note collapse="true" title="Already have a count matrix, but not in H5MU?"}
+::: {.callout-note appearance="simple" collapse="true" title="Already have a count matrix, but not in H5MU?"}
 If your data is stored in another format (AnnData, Seurat,
 10x HDF5/MEX, TileDB), convert it to H5MU with one of these components:
 
@@ -89,7 +91,7 @@ If your data is stored in another format (AnnData, Seurat,
 |---|---|---|
 | [`convert/from_cellranger_multi_to_h5mu`](../reference/openpipeline/v4.2.0/convert/from_cellranger_multi_to_h5mu.qmd) | [<span class="swatch openpipeline"></span>`openpipeline`]{.pkg-tag .pkg-openpipeline} | Cell Ranger `multi` output → H5MU (preferred: keeps full metadata) |
 | [`convert/from_10xmtx_to_h5mu`](../reference/openpipeline/v4.2.0/convert/from_10xmtx_to_h5mu.qmd) | [<span class="swatch openpipeline"></span>`openpipeline`]{.pkg-tag .pkg-openpipeline} | 10x MEX (MTX) → H5MU |
-| [`convert/from_h5ad_to_h5mu`](../reference/openpipeline/v4.2.0/convert/from_h5ad_to_h5mu.qmd) | [<span class="swatch openpipeline"></span>`openpipeline`]{.pkg-tag .pkg-openpipeline} | AnnData (.h5ad) → H5MU |
+| [`convert/from_h5ad_to_h5mu`](../reference/openpipeline/v4.2.0/convert/from_h5ad_to_h5mu.qmd) | [<span class="swatch openpipeline"></span>`openpipeline`]{.pkg-tag .pkg-openpipeline} | AnnData (`.h5ad`) → H5MU |
 | [`convert/from_seurat_to_h5mu`](../reference/openpipeline/v4.2.0/convert/from_seurat_to_h5mu.qmd) | [<span class="swatch openpipeline"></span>`openpipeline`]{.pkg-tag .pkg-openpipeline} | Seurat → H5MU |
 | [`convert/from_tiledb_to_h5mu`](../reference/openpipeline/v4.2.0/convert/from_tiledb_to_h5mu.qmd) | [<span class="swatch openpipeline"></span>`openpipeline`]{.pkg-tag .pkg-openpipeline} | TileDB → H5MU |
 
@@ -102,7 +104,7 @@ Raw ingested data holds more than real cells or spots: empty droplets that only 
 A QC report profiles these signals across your dataset so you can choose sensible, data-driven filtering thresholds before processing.
 
 ::: {.callout-tip appearance="simple" title="Guides"}
-[QC report](../guides/qc-report.qmd) and [Spatial QC report](../guides/qc-report-spatial.qmd) cover reading the report and choosing thresholds.
+[Generate a QC report](../guides/qc-report.qmd) and [Generate a spatial QC report](../guides/qc-report-spatial.qmd) cover reading the report and choosing thresholds.
 :::
 
 ::: {.panel-tabset}
@@ -111,23 +113,23 @@ A QC report profiles these signals across your dataset so you can choose sensibl
 
 | Workflow | Package | Description |
 |---|---|---|
-| [`generate_qc_report`](../reference/openpipeline_qc/v0.3.0/workflows/generate_qc_report.qmd) | [<span class="swatch openpipeline_qc"></span>`openpipeline_qc`]{.pkg-tag .pkg-openpipeline_qc} | Key QC metrics rendered as a report |
+| [`generate_qc_report`](../reference/openpipeline_qc/v0.4.0/workflows/generate_qc_report.qmd) | [<span class="swatch openpipeline_qc"></span>`openpipeline_qc`]{.pkg-tag .pkg-openpipeline_qc} | Key QC metrics rendered as a report |
 
 ### Spatial
 
 | Workflow | Package | Description |
 |---|---|---|
-| [`qc/spatial_qc`](../reference/openpipeline_spatial/v0.5.0/workflows/qc/spatial_qc.qmd) | [<span class="swatch openpipeline_spatial"></span>`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial} | QC report for spatial data |
+| [`qc/spatial_qc`](../reference/openpipeline_spatial/v0.7.0/workflows/qc/spatial_qc.qmd) | [<span class="swatch openpipeline_spatial"></span>`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial} | QC report for spatial data |
 
 :::
 
 ## Process samples {#process-samples}
 
-These workflows filter out the empty droplets, damaged cells and doublets described above, then continue with the rest of per-sample processing: concatenation across samples, normalization, highly-variable-feature selection, and PCA.
+These workflows filter out the empty droplets, damaged cells and doublets described above, then continue with the rest of per-sample processing: concatenation across samples, normalization, highly variable feature selection, and PCA.
 The result is one processed, normalized cohort object ready for integration.
 
 ::: {.callout-tip appearance="simple" title="Guides"}
-[Sample processing](../guides/process-samples.qmd) and [Spatial sample processing](../guides/process-spatial.qmd) cover filtering strategies, the processing sequence and threshold choices in detail.
+[Process samples](../guides/process-samples.qmd) and [Process spatial samples](../guides/process-spatial.qmd) cover filtering strategies, the processing sequence, and threshold choices in detail.
 :::
 
 ::: {.panel-tabset}
@@ -137,38 +139,38 @@ The result is one processed, normalized cohort object ready for integration.
 | Workflow / component | Package | Description |
 |---|---|---|
 | [`multiomics/process_samples`](../reference/openpipeline/v4.2.0/workflows/multiomics/process_samples.qmd) | [<span class="swatch openpipeline"></span>`openpipeline`]{.pkg-tag .pkg-openpipeline} | End-to-end processing for single-cell data |
-| [`correction/cellbender_remove_background`](../reference/openpipeline/v4.2.0/correction/cellbender_remove_background.qmd) | [<span class="swatch openpipeline"></span>`openpipeline`]{.pkg-tag .pkg-openpipeline} | Optional stand-alone step: remove ambient RNA from raw counts |
+| [`correction/cellbender_remove_background`](../reference/openpipeline/v4.2.0/correction/cellbender_remove_background.qmd) | [<span class="swatch openpipeline"></span>`openpipeline`]{.pkg-tag .pkg-openpipeline} | Optional standalone step: remove ambient RNA from raw counts |
 
-:::{.callout-note}
-`process_samples` processes RNA, protein (ADT) and GDO.
+::: {.callout-note}
+`process_samples` processes RNA, protein (ADT), and GDO.
 Other modalities, such as ATAC and VDJ, are kept in the output unchanged.
-For ATAC QC, use the standalone `calculate_atac_qc_metrics` module.
+For ATAC QC, use the standalone `calculate_atac_qc_metrics` component.
 :::
 
 ### Spatial
 
 | Workflow / component | Package | Description |
 |---|---|---|
-| [`multiomics/spatial_process_samples`](../reference/openpipeline_spatial/v0.5.0/workflows/multiomics/spatial_process_samples.qmd) | [<span class="swatch openpipeline_spatial"></span>`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial} | End-to-end processing for spatial data |
+| [`multiomics/spatial_process_samples`](../reference/openpipeline_spatial/v0.7.0/workflows/multiomics/spatial_process_samples.qmd) | [<span class="swatch openpipeline_spatial"></span>`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial} | End-to-end processing for spatial data |
 
 :::
 
 ## Integration {#integration}
 
-Samples from different donors, sequencing runs or library preparations often include batch effects that complicate analysis.
+Samples from different donors, sequencing runs, or library preparations often include batch effects that complicate analysis.
 Integration workflows remove these effects, producing a clean multi-sample dataset for analysis.
 OpenPipelines supports several integration methods operating on different data representations, each with different assumptions and strengths.
 
 ::: {.callout-tip appearance="simple" title="Guides"}
-[Integration](../guides/integrate.qmd) covers method selection in detail.
+[Integrate across samples](../guides/integrate.qmd) covers method selection in detail.
 :::
 
 ::: {.callout-note appearance="simple"}
 Unlike the sections above, integration currently targets **single-cell data only**.
 :::
 
-::: {.callout-warning appearance="simple" title="Watch for over-correction"}
-Batch integration can remove real biological variation along with technical noise, especially when biology is confounded with batch. For example, in cancer cohorts where each patient or tumor is often its own batch.
+::: {.callout-warning title="Watch for over-correction"}
+Batch integration can remove real biological variation along with technical noise, especially when biology is confounded with batch (for example, in cancer cohorts where each patient or tumor is often its own batch).
 Check integration results against known biology (e.g. expected marker genes or cell-type proportions) before trusting them, and consider comparing an integrated and an unintegrated analysis.
 See Luecken et al., *Nature Methods* (2022) and Büttner et al., *Nature Methods* (2019) for benchmarks of this batch-removal vs. biology-conservation trade-off.
 :::
@@ -188,12 +190,12 @@ These workflows move beyond standard processing to perform biological analysis.
 
 ### Annotation {#annotation}
 
-A key downstream task is annotation, assigning labels to clusters or individual observations.
-In OpenPipelines, this is always reference-based, transferring labels from an in-house model, an open-source model or a reference dataset.
-Which tool to use depends on the available references, the tissue and the biological question.
+A key downstream task is annotation: assigning labels to clusters or individual observations.
+In OpenPipelines, this is always reference-based, transferring labels from an in-house model, an open-source model, or a reference dataset.
+Which tool to use depends on the available references, the tissue, and the biological question.
 
 ::: {.callout-tip appearance="simple" title="Guides"}
-[Cell type annotation](../guides/annotate.qmd) covers method selection for single-cell data.
+[Annotate cell types](../guides/annotate.qmd) covers method selection for single-cell data.
 :::
 
 | Workflow | Package | Description |
@@ -207,20 +209,20 @@ Which tool to use depends on the available references, the tissue and the biolog
 ### Other analyses {#other-analyses}
 
 Beyond annotation, the integrated object is the starting point for a range of
-downstream analyses, available as OpenPipelines workflows or components:
-
-| Workflow / component | Package | Description |
-|---|---|---|
-| [`niche/nichecompass_leiden`](../reference/openpipeline_spatial/v0.5.0/workflows/niche/nichecompass_leiden.qmd) | [<span class="swatch openpipeline_spatial"></span>`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial} | NicheCompass niche identification (spatial only) |
-| [`velocity/scvelo`](../reference/openpipeline/v4.2.0/velocity/scvelo.qmd) | [<span class="swatch openpipeline"></span>`openpipeline`]{.pkg-tag .pkg-openpipeline} | RNA velocity (scVelo) |
-| [`interpret/lianapy`](../reference/openpipeline/v4.2.0/interpret/lianapy.qmd) | [<span class="swatch openpipeline"></span>`openpipeline`]{.pkg-tag .pkg-openpipeline} | Cell-cell communication (LIANA) |
-| [`differential_expression/pseudobulk_deseq2`](../reference/openpipeline/v4.2.0/workflows/differential_expression/pseudobulk_deseq2.qmd) | [<span class="swatch openpipeline"></span>`openpipeline`]{.pkg-tag .pkg-openpipeline} | Pseudobulk differential expression (DESeq2) |
+downstream analyses, available as OpenPipelines workflows or components.
 
 ::: {.callout-tip appearance="simple" title="Guides"}
 See these guides for more details on specific tasks:
 
-- [Differential expression](../guides/differential-expression.qmd)
-- [RNA velocity](../guides/rna-velocity.qmd)
-- [Cell-cell communication](../guides/cell-cell-communication.qmd)
-- [Spatial niches](../guides/spatial-niches.qmd)
+- [Run differential expression](../guides/differential-expression.qmd)
+- [Estimate RNA velocity](../guides/rna-velocity.qmd)
+- [Infer cell-cell communication](../guides/cell-cell-communication.qmd)
+- [Identify spatial niches](../guides/spatial-niches.qmd)
 :::
+
+| Workflow / component | Package | Description |
+|---|---|---|
+| [`niche/nichecompass_leiden`](../reference/openpipeline_spatial/v0.7.0/workflows/niche/nichecompass_leiden.qmd) | [<span class="swatch openpipeline_spatial"></span>`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial} | NicheCompass niche identification (spatial only) |
+| [`velocity/scvelo`](../reference/openpipeline/v4.2.0/velocity/scvelo.qmd) | [<span class="swatch openpipeline"></span>`openpipeline`]{.pkg-tag .pkg-openpipeline} | RNA velocity (scVelo) |
+| [`interpret/lianapy`](../reference/openpipeline/v4.2.0/interpret/lianapy.qmd) | [<span class="swatch openpipeline"></span>`openpipeline`]{.pkg-tag .pkg-openpipeline} | Cell-cell communication (LIANA) |
+| [`differential_expression/pseudobulk_deseq2`](../reference/openpipeline/v4.2.0/workflows/differential_expression/pseudobulk_deseq2.qmd) | [<span class="swatch openpipeline"></span>`openpipeline`]{.pkg-tag .pkg-openpipeline} | Pseudobulk differential expression (DESeq2) |

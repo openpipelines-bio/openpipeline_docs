@@ -1,6 +1,6 @@
 ---
 title: "Speed up with GPUs"
-description: "Enable GPU for GPU-capable components today; rapids-singlecell coming soon."
+description: "Enable GPU acceleration for GPU-capable components today; rapids-singlecell coming soon."
 order: 86
 ---
 
@@ -43,20 +43,20 @@ nextflow run https://packages.viash-hub.com/vsh/openpipeline.git \
   -c gpu.config
 ```
 
-The exact settings depend on your executor (local, AWS Batch, an HPC scheduler)
-and container runtime, see the
+The exact settings depend on your executor (local, AWS Batch, or an HPC scheduler)
+and container runtime. See the
 [Nextflow accelerator / GPU documentation](https://www.nextflow.io/docs/latest/process.html#accelerator)
 for how to configure it on your platform.
 
 ## Coming soon: `openpipeline_rapids`
 
-:::{.callout-important}
+::: {.callout-important}
 ## Coming soon
 `openpipeline_rapids` is not released yet. This section previews what it will add.
 :::
 
-For the compute-heavy steps whose tools have **no native GPU path**: PCA,
-neighbor-graph construction, UMAP, and Leiden clustering, the
+For the compute-heavy steps whose tools have **no native GPU path** (PCA,
+neighbor-graph construction, UMAP, and Leiden clustering), the
 [`openpipeline_rapids`](../concepts/ecosystem.qmd) package will provide
 GPU-accelerated drop-in replacements via
 [rapids-singlecell](https://rapids-singlecell.readthedocs.io/). It pins the core
@@ -68,7 +68,7 @@ GPU acceleration pays off on large cohorts (hundreds of thousands of cells and
 up), where these steps dominate wall-clock time. For small datasets the CPU
 workflows are simpler and fast enough.
 
-:::{.callout-note}
+::: {.callout-note appearance="simple"}
 Until the package is released, the [reference](../reference/index.qmd) shows no
 `openpipeline_rapids` entries. Track progress on the package repo via Viash Hub.
 :::

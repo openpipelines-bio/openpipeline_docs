@@ -28,6 +28,14 @@ $link-color:     $op-accent-ink !default;
 $primary:        $op-accent-ink !default;
 $border-color:   $op-border !default;
 
+// Callout type colours, drawn from the site palette instead of Cosmo's bright
+// defaults. Quarto derives the left edge, icon and header tint from these.
+$callout-color-note:      #2b78c2 !default;
+$callout-color-tip:       #2b8f52 !default;
+$callout-color-warning:   #c9821f !default;
+$callout-color-caution:   #c9821f !default;
+$callout-color-important: #c8414b !default;
+
 $font-family-sans-serif: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 $font-family-monospace:  ui-monospace, "SF Mono", "Cascadia Code", "JetBrains Mono", Menlo, Consolas, monospace;
 
@@ -128,11 +136,13 @@ h1, h2, h3 { letter-spacing: -0.02em; }
   .hero h1 em { font-style: normal; color: var(--accent-ink); }
   .hero p.lede { font-size: clamp(16px, 2vw, 20px); color: var(--muted); margin: 20px 0 0; }
   .modalities { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 22px; }
-  .modalities .m { font-family: var(--mono); font-size: 12px; padding: 5px 10px; border-radius: 20px; background: var(--surface); border: 1px solid var(--border); color: var(--muted); }
+  // Static labels, not controls: plain text with a "·" separator, no pill
+  // border or surface, so they never read like the toggle buttons beside them.
+  .modalities .m { font-family: var(--mono); font-size: 12px; color: var(--muted); cursor: default; }
+  .modalities .m + .m::before { content: "\00b7"; margin-right: 8px; color: var(--muted); }
   .modalities .m b { color: var(--ink); font-weight: 600; }
-  // caption naming what kind of tag the pills are (data modalities vs. tech
-  // platforms) — the two flows tag different things and that distinction
-  // needs to be explicit, not implied by position.
+  // caption naming what the tags are, so their meaning is explicit rather
+  // than implied by position.
   .modalities-label { font-family: var(--mono); font-size: 10px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); margin-right: 2px; }
   // modality tags sitting beside the single-cell/spatial toggle, inside the flow card
   .seg-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
@@ -155,10 +165,12 @@ h1, h2, h3 { letter-spacing: -0.02em; }
 // guides index: split into Analysis vs Over-arching/technical sections
 .guide-section-head { margin-top: 1.6rem; }
 .guide-section-sub { opacity: .7; margin-top: -.5rem; margin-bottom: 1rem; }
+// single-cell / spatial segmented toggle — shared by the flow widget and the
+// guides index filter
+.seg { display: inline-flex; background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 3px; gap: 3px; }
+.seg button { font-family: var(--mono); font-size: 13px; padding: 7px 16px; border-radius: 7px; border: 0; background: none; color: var(--muted); cursor: pointer; }
+.seg button.on { background: var(--surface); color: var(--ink); box-shadow: var(--shadow); }
 .op-home {
-  .seg { display: inline-flex; background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 3px; gap: 3px; }
-  .seg button { font-family: var(--mono); font-size: 13px; padding: 7px 16px; border-radius: 7px; border: 0; background: none; color: var(--muted); cursor: pointer; }
-  .seg button.on { background: var(--surface); color: var(--ink); box-shadow: var(--shadow); }
   .flow-hint { font-size: 13px; color: var(--muted); margin: 14px 0 16px; }
   // padding-top clears the stages' station dots (top:-6px): overflow-x:auto
   // forces overflow-y:auto, which would otherwise clip them.
@@ -215,6 +227,16 @@ h1, h2, h3 { letter-spacing: -0.02em; }
   // vertical layout (architecture page) — stack stages top-to-bottom, arrows point down
   .flow.vertical { grid-auto-flow: row; grid-template-columns: 1fr; }
   .flow.vertical .stage::after { content: "\2193"; right: auto; left: 50%; transform: translateX(-50%); top: auto; bottom: -16px; }
+
+  // overview variant (landing page) — a plain stacked list per stage: no pill
+  // borders (nothing here is clickable), no dashed workflow box. Every item
+  // gets the same dot; in a workflow stage a thin line joins the dots so the
+  // steps read as a sequence (a mini version of the stage rail).
+  .flow.overview .chips, .flow.overview .seq { flex-direction: column; flex-wrap: nowrap; align-items: flex-start; gap: 4px; }
+  .flow.overview .seq { border: none; padding: 0; gap: 8px; position: relative; }
+  .flow.overview .seq::before { content: ""; position: absolute; left: 2px; top: 8px; bottom: 8px; width: 1px; background: var(--path, var(--accent-ink)); opacity: .45; }
+  .flow.overview .chip { border: none; background: none; padding: 0; border-radius: 0; font-size: 12px; color: var(--ink); white-space: normal; position: relative; }
+  .flow.overview .chip.alt::before { opacity: 1; }
 
   // generic sections
   section.block { padding: 46px 0; }
@@ -303,13 +325,14 @@ h1, h2, h3 { letter-spacing: -0.02em; }
 .rcard .tag .swatch { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
 @media (max-width: 820px) { .cards3 { grid-template-columns: 1fr; } }
 
-// Guides task cards — auto-fill grid + facet filter (design/mockup.html)
-.guide-facets { margin: 18px 0 20px; }
+// Guides task cards — auto-fill grid + single-cell / spatial filter
+.guide-filter { margin: 18px 0 20px; }
 .cards-auto { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
-// "applies to all packages" tag — a small conic swatch of the package colours
-.rcard .tag.tag-all .swatch {
-  background: conic-gradient(from 0deg, var(--core), var(--spatial), var(--qc), var(--composed), var(--core));
-}
+// data-type tag swatches, in the flow widget's colours (single-cell green,
+// spatial purple); a guide that covers both gets a half-and-half swatch
+.rcard .tag .swatch.sc { background: var(--accent-ink); }
+.rcard .tag .swatch.sp { background: var(--spatial); }
+.rcard .tag .swatch.both { background: linear-gradient(90deg, var(--accent-ink) 50%, var(--spatial) 50%); }
 
 // ---------------------------------------------------------------------------
 // Concept list — vertical cards with a colored left lining (concepts/index).
@@ -405,15 +428,13 @@ a.concept-card.blue:hover { box-shadow: 0 0 0 1px var(--composed), var(--shadow)
 // tag-pill facets (package + type), in-table package tags, mono table.
 // ---------------------------------------------------------------------------
 .ref-facets { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; margin: 16px 0 4px; }
-// facet-bar is shared between the reference catalog and the guides grid
+// facet-bar: the reference catalog's package filter
 .facet-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .facet-bar .lbl { font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--op-muted); margin-right: 2px; }
 
 // clickable filter pill
 .facet { font-family: var(--mono); font-size: 12.5px; cursor: pointer; user-select: none; padding: 6px 11px; border-radius: 20px; border: 1px solid var(--op-border); background: var(--op-surface); color: var(--op-ink); display: inline-flex; align-items: center; gap: 7px; }
 .facet .swatch { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
-// "All" facet swatch — same conic gradient as the cards' "applies to all packages" tag
-.facet .swatch.swatch-all { background: conic-gradient(from 0deg, var(--core), var(--spatial), var(--qc), var(--composed), var(--core)); }
 .facet[aria-pressed="false"] { opacity: .4; }
 .facet:hover { border-color: currentColor; }
 
@@ -441,7 +462,14 @@ a.concept-card.blue:hover { box-shadow: 0 0 0 1px var(--composed), var(--shadow)
 #listing-ref .listing-type { font-family: var(--mono); font-size: 11px; color: var(--op-muted); }
 #listing-ref .listing-namespace { font-family: var(--mono); font-size: 12px; color: var(--op-muted); overflow-wrap: anywhere; }
 #listing-ref .listing-description { white-space: normal; color: var(--op-muted); }
-.ref-count { display: block; font-family: var(--mono); font-size: 12.5px; color: var(--op-muted); margin-top: 12px; }
+.ref-count { display: block; font-family: var(--mono); font-size: 12.5px; color: var(--op-muted); }
+
+// count on the left, page buttons (reusing the .facet pill) on the right
+.ref-footer { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; justify-content: space-between; margin-top: 12px; }
+.ref-pager { display: flex; flex-wrap: wrap; gap: 6px; }
+.ref-pager .facet { padding: 5px 10px; }
+.ref-pager .facet[aria-current="page"] { border-color: var(--op-brand); background: var(--op-brand); color: #0b1a10; }
+.ref-pager .facet:disabled { opacity: .4; cursor: default; }
 
 // Reference component pages — clean icon links (no solid buttons)
 .vh-icon { height: 1em; width: auto; vertical-align: -0.15em; }
@@ -577,6 +605,9 @@ section#visualisation figure svg { margin-inline: auto; }
 .sidebar-navigation .sidebar-item .sidebar-item-text.active,
 .sidebar-navigation .sidebar-link.active { color: var(--op-accent-ink); font-weight: 600; }
 .sidebar-title, #quarto-sidebar .sidebar-title { font-family: var(--mono); color: var(--op-ink); }
+// heading above each section's list (sidebar `header` in _quarto.yml)
+.quarto-sidebar-header { padding: 0 0 .4rem; }
+.quarto-sidebar-header p { margin: 0; font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--op-muted); }
 
 // ---- page header (title + description read as headline + lede) ----
 #title-block-header .quarto-title .title { font-family: var(--mono); letter-spacing: -.02em; }
@@ -635,6 +666,7 @@ main.content table:not(.quarto-listing-table) {
   border-collapse: collapse;
   width: 100%;
   font-size: 14px;
+  background: var(--surface);
   border: 1px solid var(--op-border);
   border-radius: 12px;
   overflow: hidden;
@@ -659,13 +691,20 @@ main.content table:not(.quarto-listing-table) tbody tr:last-child td { border-bo
 main.content table:not(.quarto-listing-table) tbody tr:hover { background: var(--surface-2); }
 
 // ---- callouts: rounded cards with a mono header, brand-tinted ----
-.callout.callout-style-default {
+// One card shape for both appearances (default and simple), so a page that
+// mixes them still reads as one family. The border shorthand leaves the
+// per-type border-left-color to Quarto's more specific rule; only the width
+// is set here.
+.callout.callout-style-default,
+.callout.callout-style-simple {
+  background: var(--surface);
   border: 1px solid var(--op-border);
+  border-left-width: 4px;
   border-radius: 10px;
   box-shadow: var(--shadow);
   overflow: hidden;
 }
-.callout.callout-style-default .callout-title { font-family: var(--mono); font-weight: 700; }
+.callout .callout-title-container { font-family: var(--mono); font-weight: 700; }
 
 // ---- footer ----
 .nav-footer {

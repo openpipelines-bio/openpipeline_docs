@@ -4,31 +4,31 @@ description: "Get to know the OpenPipelines packages."
 order: 10
 ---
 
-OpenPipeline consists of a core package with extension packages for specific domains and processing steps.
+OpenPipelines consists of a core package with extension packages for specific domains and processing steps.
 Each package uses [Viash](viash.qmd) so components, data format and tooling are shared between them.
 
 | Package | Role |
 |---|---|
-| [`openpipeline`]{.pkg-tag .pkg-openpipeline}<span class="swatch openpipeline"></span> | Core single-cell multi-omics, RNA, protein/ADT, ATAC, VDJ, GDO |
-| [`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial}<span class="swatch openpipeline_spatial"></span> | Spatial transcriptomics, ingests Visium, Visium HD, Xenium, AVITI24, CosMx (or any pre-ingested count matrix) |
-| [`openpipeline_qc`]{.pkg-tag .pkg-openpipeline_qc}<span class="swatch openpipeline_qc"></span> | Quality-control components and standalone reporting |
-| [`openpipeline_rapids`]{.pkg-tag .pkg-openpipeline_rapids}<span class="swatch openpipeline_rapids"></span> | GPU-accelerated drop-ins via rapids-singlecell, *coming soon* |
-| [`openpipeline_composed`]{.pkg-tag .pkg-openpipeline_composed}<span class="swatch openpipeline_composed"></span> | Turnkey composed pipelines that wrap the whole flow |
+| [<span class="swatch openpipeline"></span>`openpipeline`]{.pkg-tag .pkg-openpipeline} | Core single-cell multi-omics: RNA, protein/ADT, ATAC, VDJ, and GDO |
+| [<span class="swatch openpipeline_spatial"></span>`openpipeline_spatial`]{.pkg-tag .pkg-openpipeline_spatial} | Spatial transcriptomics: ingests Visium, Visium HD, Xenium, AVITI24, and CosMx (or any pre-ingested count matrix) |
+| [<span class="swatch openpipeline_qc"></span>`openpipeline_qc`]{.pkg-tag .pkg-openpipeline_qc} | Quality-control components and standalone reporting |
+| [<span class="swatch openpipeline_rapids"></span>`openpipeline_rapids`]{.pkg-tag .pkg-openpipeline_rapids} | GPU-accelerated drop-ins via rapids-singlecell (*coming soon*) |
+| [<span class="swatch openpipeline_composed"></span>`openpipeline_composed`]{.pkg-tag .pkg-openpipeline_composed} | Turnkey composed pipelines that wrap the whole flow |
 
 ## How the packages relate
 
-Each package plays a role in the overall [process](../workflows/index.qmd):
+Each package plays a role in the overall [process](../overview/index.qmd):
 
-- **`openpipeline`** defines most stages for ingestion, QC, processing, integration and downstream analysis for RNA, protein, ATAC, VDJ and GDO modalities.
+- **`openpipeline`** defines most stages for ingestion, QC, processing, integration, and downstream analysis for RNA, protein, ATAC, VDJ, and GDO modalities.
 - **`openpipeline_spatial`** contains functionality for spatial transcriptomics (Xenium, Visium, Visium HD, AVITI24, CosMx).
-- **`openpipeline_qc`** generates interactive HTML reports for visualising quality control metrics and selecting filtering thresholds.
-- **`openpipeline_rapids`** (*coming soon*) provides drop-in GPU replacements for computationally intensive steps using the `rapids-singlecell` package.
+- **`openpipeline_qc`** generates interactive HTML reports for visualizing quality control metrics and selecting filtering thresholds.
+- **`openpipeline_rapids`** (*coming soon*) provides drop-in GPU replacements for computationally intensive steps using the rapids-singlecell package.
 - **`openpipeline_composed`** provides end-to-end processing workflows that combine multiple stages.
 
 Each extension package depends on a pinned version of the core package and uses the same [MuData](mudata.qmd) format so components and workflows from different packages can be chained together.
 
-:::{.callout-note appearance="simple" title="External packages"}
-`biobox` and `craftbox` are external component libraries that some packages depend on. These provide generic components for common bioinformatics tools or data manipulation tasks. You might see them referenced, but they are documented in their own respective projects.
+::: {.callout-note appearance="simple" title="External packages"}
+`biobox` and `craftbox` are external component libraries that some packages depend on. These provide generic components for common bioinformatics tools or data manipulation tasks. You might see them referenced, but they are documented in their own projects.
 :::
 
 Browse every component and workflow across all packages in the [reference](../reference/index.qmd).
