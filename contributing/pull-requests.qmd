@@ -21,12 +21,12 @@ Opening the pull request fills in the repository's
 [pull request template](https://github.com/openpipelines-bio/openpipeline/blob/main/.github/PULL_REQUEST_TEMPLATE.md).
 Work through its checklist. It asks you to:
 
-- self-review your change;
-- link the issue you're closing;
-- categorize the change (breaking, new functionality, documentation, bug fix,
-  and so on);
-- confirm the change is in `CHANGELOG.md`;
-- check that CI passes.
+- Self-review your change
+- Link the issue you're closing
+- Categorize the change (breaking, new functionality, documentation, bug fix,
+  and so on)
+- Confirm the change is in `CHANGELOG.md`
+- Check that CI passes
 
 CI tests run automatically on the pull request.
 

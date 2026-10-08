@@ -212,7 +212,7 @@ re-run a step with different parameters without re-ingesting.
 ## Components exchange data through disk
 
 Components do not share an in-memory object. Each one reads an H5MU file from
-disk, does its work, and writes a new H5MU back out; the next component reads
+disk, does its work, and writes a new H5MU back out. The next component reads
 that file in turn. This on-disk hand-off is what lets Nextflow run independent
 branches in parallel, cache and resume completed steps, and wire **one-to-many**
 (split one multimodal file into per-modality files) or **many-to-one**
