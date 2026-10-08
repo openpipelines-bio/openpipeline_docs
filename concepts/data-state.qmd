@@ -4,6 +4,10 @@ description: "A developer's view: how the data object is organized, changes shap
 order: 70
 ---
 
+::: {.callout-tip appearance="simple" title="New to OpenPipelines?"}
+This page is a developer-level deep dive into how data moves through the pipeline. If terms like *component*, *MuData*, or *`.obs`* are unfamiliar, start with [Components, workflows & modularity](modularity.qmd) and [MuData as a standard data format](mudata.qmd) instead.
+:::
+
 There are two ways to read the pipeline. The [Workflows overview](../overview/index.qmd)
 walks through it by stage, the way an analyst
 thinks. This page reads it the way the workflows are actually built: the view

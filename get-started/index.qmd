@@ -87,8 +87,12 @@ nextflow info
 
 ::: {.callout-warning}
 OpenPipelines workflows don't yet run under the strict language syntax enforced
-by the newest Nextflow releases. Pin a compatible version before running: `export NXF_VER=25.10.2`
+by the newest Nextflow releases. Pin a compatible version before running.
 :::
+
+```bash
+export NXF_VER=25.10.2
+```
 
 ### Docker
 

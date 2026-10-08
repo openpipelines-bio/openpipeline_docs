@@ -11,7 +11,7 @@ This includes ingestion, per-sample processing (filtering, quality control, norm
 The workflows and tools used depend on the data modality and the technology platform.
 
 ::: {.callout-tip appearance="simple" title="New to OpenPipelines?"}
-This page maps all OpenPipelines workflows end to end. If terms like *component*, *workflow*, or *Viash Hub* are unfamiliar, start with [How it works](../concepts/index.qmd) instead.
+This page maps all OpenPipelines workflows end to end. If terms like *component*, *workflow*, or *Viash Hub* are unfamiliar, start with reading the core [Concepts](../concepts/index.qmd) instead.
 :::
 
 ```{=html}
@@ -163,16 +163,6 @@ OpenPipelines supports several integration methods operating on different data r
 
 ::: {.callout-tip appearance="simple" title="Guides"}
 [Integrate across samples](../guides/integrate.qmd) covers method selection in detail.
-:::
-
-::: {.callout-note appearance="simple"}
-Unlike the sections above, integration currently targets **single-cell data only**.
-:::
-
-::: {.callout-warning title="Watch for over-correction"}
-Batch integration can remove real biological variation along with technical noise, especially when biology is confounded with batch (for example, in cancer cohorts where each patient or tumor is often its own batch).
-Check integration results against known biology (e.g. expected marker genes or cell-type proportions) before trusting them, and consider comparing an integrated and an unintegrated analysis.
-See Luecken et al., *Nature Methods* (2022) and Büttner et al., *Nature Methods* (2019) for benchmarks of this batch-removal vs. biology-conservation trade-off.
 :::
 
 | Workflow | Package | Method | Description |
