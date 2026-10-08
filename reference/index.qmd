@@ -45,7 +45,10 @@ below. See [Speed up with GPUs](../guides/gpu.qmd) for what is available today.
 :::
 
 ```{=html}
-<span class="ref-count"></span>
+<div class="ref-footer">
+  <span class="ref-count"></span>
+  <nav class="ref-pager" aria-label="Reference pages"></nav>
+</div>
 <script>
 function initRefListing() {
   var listing = document.getElementById("listing-ref");
@@ -146,6 +149,12 @@ function initRefListing() {
 
   var search = document.querySelector(".ref-search-input");
   var count = document.querySelector(".ref-count");
+  var pager = document.querySelector(".ref-pager");
+
+  // Pagination runs after filtering: facets and search narrow the full row
+  // set, then only one page of the matching rows is displayed.
+  var PAGE_SIZE = 50;
+  var page = 1;
 
   // null = group unrestricted ("All" active or nothing checked); otherwise
   // the list of checked values (OR'd together).
@@ -156,19 +165,60 @@ function initRefListing() {
     return active.length ? active : null;
   }
 
+  function makePageButton(label, target, opts) {
+    var b = document.createElement("button");
+    b.className = "facet";
+    b.textContent = label;
+    if (opts.ariaLabel) b.setAttribute("aria-label", opts.ariaLabel);
+    if (opts.current) b.setAttribute("aria-current", "page");
+    if (opts.disabled) {
+      b.disabled = true;
+    } else {
+      b.addEventListener("click", function () {
+        page = target;
+        render();
+        listing.scrollIntoView({ block: "start" });
+      });
+    }
+    pager.appendChild(b);
+  }
+
+  function renderPager(pages) {
+    pager.innerHTML = "";
+    if (pages <= 1) return;
+    makePageButton("‹ Prev", page - 1, { disabled: page === 1, ariaLabel: "Previous page" });
+    for (var p = 1; p <= pages; p++) {
+      makePageButton(String(p), p, { current: p === page, ariaLabel: "Page " + p });
+    }
+    makePageButton("Next ›", page + 1, { disabled: page === pages, ariaLabel: "Next page" });
+  }
+
+  var matches = [];
+
+  function render() {
+    var pages = Math.max(1, Math.ceil(matches.length / PAGE_SIZE));
+    if (page > pages) page = pages;
+    var start = (page - 1) * PAGE_SIZE, end = start + PAGE_SIZE;
+    rows.forEach(function (r) { r.style.display = "none"; });
+    matches.slice(start, end).forEach(function (r) { r.style.display = ""; });
+    var range = matches.length ? (start + 1) + "–" + Math.min(end, matches.length) : "0";
+    count.textContent = range + " of " + matches.length + " shown"
+      + (matches.length < rows.length ? " (filtered from " + rows.length + ")" : "");
+    renderPager(pages);
+  }
+
   function apply() {
     var rp = restriction(pkgBar), rt = restriction(typeBar);
     var q = (search.value || "").trim().toLowerCase();
-    var shown = 0;
-    rows.forEach(function (r) {
+    matches = rows.filter(function (r) {
       var pkg = r.querySelector(".listing-package").dataset.pkg;
       var typ = r.querySelector(".listing-type").dataset.type;
       var hay = (cellText(r, ".listing-title") + " " + cellText(r, ".listing-namespace") + " " + cellText(r, ".listing-description")).toLowerCase();
-      var vis = (!rp || rp.indexOf(pkg) >= 0) && (!rt || rt.indexOf(typ) >= 0) && (!q || hay.indexOf(q) !== -1);
-      r.style.display = vis ? "" : "none";
-      if (vis) shown++;
+      return (!rp || rp.indexOf(pkg) >= 0) && (!rt || rt.indexOf(typ) >= 0) && (!q || hay.indexOf(q) !== -1);
     });
-    count.textContent = shown + " of " + rows.length + " shown";
+    // any change to the filters starts again from the first page
+    page = 1;
+    render();
   }
 
   search.addEventListener("input", apply);

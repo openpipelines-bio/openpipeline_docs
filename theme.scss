@@ -462,7 +462,14 @@ a.concept-card.blue:hover { box-shadow: 0 0 0 1px var(--composed), var(--shadow)
 #listing-ref .listing-type { font-family: var(--mono); font-size: 11px; color: var(--op-muted); }
 #listing-ref .listing-namespace { font-family: var(--mono); font-size: 12px; color: var(--op-muted); overflow-wrap: anywhere; }
 #listing-ref .listing-description { white-space: normal; color: var(--op-muted); }
-.ref-count { display: block; font-family: var(--mono); font-size: 12.5px; color: var(--op-muted); margin-top: 12px; }
+.ref-count { display: block; font-family: var(--mono); font-size: 12.5px; color: var(--op-muted); }
+
+// count on the left, page buttons (reusing the .facet pill) on the right
+.ref-footer { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; justify-content: space-between; margin-top: 12px; }
+.ref-pager { display: flex; flex-wrap: wrap; gap: 6px; }
+.ref-pager .facet { padding: 5px 10px; }
+.ref-pager .facet[aria-current="page"] { border-color: var(--op-brand); background: var(--op-brand); color: #0b1a10; }
+.ref-pager .facet:disabled { opacity: .4; cursor: default; }
 
 // Reference component pages — clean icon links (no solid buttons)
 .vh-icon { height: 1em; width: auto; vertical-align: -0.15em; }
