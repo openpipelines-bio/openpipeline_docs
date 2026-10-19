@@ -27,7 +27,6 @@ Namespace: `genetic_demux`
 
 :::
 
-
 ## Argument group
 
 ### Arguments

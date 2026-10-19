@@ -35,7 +35,6 @@ will be added in the future. A quick start tutorial can be found here.
 Fleming et al. 2022, bioRxiv.
 :::
 
-
 ## Argument groups
 
 ### Inputs
