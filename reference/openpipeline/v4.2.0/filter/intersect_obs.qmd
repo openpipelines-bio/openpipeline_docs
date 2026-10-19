@@ -31,7 +31,6 @@ Namespace: `filter`
 This component removes any observations which are not present in all modalities.
 :::
 
-
 ## Argument group
 
 ### Arguments

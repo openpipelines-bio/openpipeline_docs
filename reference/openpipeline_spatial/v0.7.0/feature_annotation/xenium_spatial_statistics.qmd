@@ -27,7 +27,6 @@ Namespace: `feature_annotation`
 
 :::
 
-
 ## Argument groups
 
 ### Inputs
