@@ -27,7 +27,6 @@ Namespace: `mapping`
 
 :::
 
-
 ## Argument groups
 
 ### Inputs

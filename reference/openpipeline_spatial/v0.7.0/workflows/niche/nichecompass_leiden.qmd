@@ -26,7 +26,6 @@ Namespace: `workflows/niche`
 [![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline_spatial/v0.7.0/components/workflows/niche/nichecompass_leiden)
 
 :::
-
 ## Visualisation
 
 ```{mermaid}
@@ -48,7 +47,6 @@ flowchart TB
 ```
 
 *Trapezoids split or combine data.*
-
 
 
 ## Argument groups

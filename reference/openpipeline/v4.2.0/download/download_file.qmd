@@ -27,7 +27,6 @@ Namespace: `download`
 
 :::
 
-
 ## Argument group
 
 ### Arguments

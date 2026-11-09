@@ -27,7 +27,6 @@ Namespace: `integrate`
 
 :::
 
-
 ## Argument group
 
 ### Arguments
