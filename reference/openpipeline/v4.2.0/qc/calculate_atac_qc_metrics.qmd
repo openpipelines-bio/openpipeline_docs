@@ -37,7 +37,6 @@ Obs metrics (name in this component -> name in scanpy):
   - total_fragment_counts -> total_counts
 :::
 
-
 ## Argument groups
 
 ### Inputs

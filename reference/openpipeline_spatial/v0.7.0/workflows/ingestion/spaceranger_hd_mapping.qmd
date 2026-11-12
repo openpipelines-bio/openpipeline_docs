@@ -31,7 +31,6 @@ Namespace: `workflows/ingestion`
 Segmentation runs by default when an H&E microscope image (`--image`) is
 provided. Provide `--probe_set` for probe-based Visium HD assays.
 :::
-
 ## Visualisation
 
 ```{mermaid}
@@ -42,7 +41,6 @@ flowchart TB
     style c_convert_from_spaceranger_hd_to_spatialdata fill:#e2f4e7,stroke:#2b8f52,color:#13201a
     style c_mapping_spaceranger_count fill:#e2f4e7,stroke:#2b8f52,color:#13201a
 ```
-
 
 
 ## Argument groups

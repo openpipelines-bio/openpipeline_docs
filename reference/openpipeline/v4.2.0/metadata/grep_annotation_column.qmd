@@ -27,7 +27,6 @@ Namespace: `metadata`
 
 :::
 
-
 ## Argument groups
 
 ### Inputs

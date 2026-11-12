@@ -7,7 +7,7 @@ toc: true
 namespace: "Ingestion qc"
 description: "Generate an HTML report from the QC metrics"
 type: "module"
-latest: "true"
+latest: "false"
 ---
 
 ::: {.column-margin}
@@ -26,7 +26,6 @@ Namespace: `ingestion_qc`
 [![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline_qc/v0.4.0/components/ingestion_qc/generate_html)
 
 :::
-
 
 ## Argument groups
 
