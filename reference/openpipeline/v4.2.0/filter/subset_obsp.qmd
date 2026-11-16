@@ -27,7 +27,6 @@ Namespace: `filter`
 
 :::
 
-
 ## Argument groups
 
 ### Arguments
