@@ -46,7 +46,6 @@ Var metrics (name in this component -> name in scanpy):
     - total_counts -> total_{expr_type}
 :::
 
-
 ## Argument groups
 
 ### Inputs

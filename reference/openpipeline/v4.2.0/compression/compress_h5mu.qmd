@@ -27,7 +27,6 @@ Namespace: `compression`
 
 :::
 
-
 ## Argument group
 
 ### Arguments

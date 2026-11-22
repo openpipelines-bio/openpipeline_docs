@@ -7,7 +7,7 @@ toc: true
 namespace: "Ingestion qc"
 description: "Detects the ingestion method of a dataset. Currently detects either 10X CellRanger Multi, 10X Xenium or Nanostring CosMx, but can be extended to other technologies upon request."
 type: "module"
-latest: "true"
+latest: "false"
 ---
 
 ::: {.column-margin}
@@ -26,7 +26,6 @@ Namespace: `ingestion_qc`
 [![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline_qc/v0.4.0/components/ingestion_qc/detect_ingestion_method)
 
 :::
-
 
 ## Argument groups
 

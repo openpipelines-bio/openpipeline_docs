@@ -7,7 +7,7 @@ toc: true
 namespace: "Workflows"
 description: "Run the ingestion QC report generation"
 type: "workflow"
-latest: "true"
+latest: "false"
 ---
 
 ::: {.column-margin}
@@ -26,7 +26,6 @@ Namespace: `workflows`
 [![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline_qc/v0.4.0/components/workflows/generate_qc_report)
 
 :::
-
 ## Visualisation
 
 ```{mermaid}
@@ -51,7 +50,6 @@ flowchart TB
 ```
 
 *Dashed nodes are optional steps.*
-
 
 
 ## Argument groups

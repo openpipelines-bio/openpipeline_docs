@@ -34,7 +34,6 @@ Namespace: `cluster`
 [Wolf18]: Wolf et al. (2018), Scanpy: large-scale single-cell gene expression data analysis, Genome Biology.
 :::
 
-
 ## Argument group
 
 ### Arguments

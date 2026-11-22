@@ -27,7 +27,6 @@ Namespace: `annotate`
 
 :::
 
-
 ## Argument groups
 
 ### Inputs
