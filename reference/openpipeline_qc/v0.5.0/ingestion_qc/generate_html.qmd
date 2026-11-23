@@ -1,0 +1,152 @@
+---
+package: "openpipeline_qc"
+version: "v0.5.0"
+title: "generate_html"
+subtitle: "openpipeline_qc v0.5.0"
+toc: true
+namespace: "Ingestion qc"
+description: "Generate an HTML report from the QC metrics"
+type: "module"
+latest: "true"
+---
+
+::: {.column-margin}
+
+### Info
+
+ID: `generate_html`  
+Namespace: `ingestion_qc`
+
+### Links
+
+[{{< fa brands github >}} View source code](https://github.com/openpipelines-bio/openpipeline_qc/tree/v0.5.0/src/ingestion_qc/generate_html)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Browse all versions](https://www.viash-hub.com/packages/openpipeline_qc)
+
+[![](/images/viash-hub-logo.svg){.vh-icon} Get run instructions](https://www.viash-hub.com/packages/openpipeline_qc/v0.5.0/components/ingestion_qc/generate_html)
+
+:::
+
+
+## Argument groups
+
+### Inputs
+
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_data`
+:::
+::: {.arg-desc role="cell"}
+The input JSON file containing the QC metrics
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"path/to/file.json"`
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--input_structure`
+:::
+::: {.arg-desc role="cell"}
+The input JSON file containing the structure of the data
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"path/to/file.json"`
+:::
+::::
+:::::
+
+### Outputs
+
+::::: {.arg-table role="table"}
+:::: {.arg-row .arg-head role="row"}
+::: {.arg-name role="columnheader"}
+Name
+:::
+::: {.arg-desc role="columnheader"}
+Description
+:::
+::: {.arg-attrs role="columnheader"}
+Attributes
+:::
+::::
+:::: {.arg-row role="row"}
+::: {.arg-name role="cell"}
+`--output_qc_report`
+:::
+::: {.arg-desc role="cell"}
+The output HTML report
+:::
+::: {.arg-attrs role="cell"}
+`file` [required]{.arg-required}
+
+[Example]{.arg-key} `"path/to/file.html"`
+:::
+::::
+:::::
+
+## Authors
+
+
+  * Jakub Majercik [{{< fa brands github >}}](https://github.com/jakubmajercik) [{{< fa brands linkedin >}}](https://linkedin.com/in/jakubmajercik) (author)
+
+  * Dorien Roosen [{{< fa brands github >}}](https://github.com/dorien-er) [{{< fa brands linkedin >}}](https://linkedin.com/in/dorien-roosen) (author)
+
+  * Robrecht Cannoodt [{{< fa brands github >}}](https://github.com/rcannood) [{{< fa brands orcid >}}](https://orcid.org/0000-0003-3641-729X) [{{< fa brands linkedin >}}](https://linkedin.com/in/robrechtcannoodt) (author)
+
+  * Weiwei Schultz (contributor)
+
+## Example commands
+
+You can run the pipeline using `nextflow run`.
+
+### View help
+
+You can use `--help` as a parameter to get an overview of the possible parameters.
+
+```bash
+nextflow run openpipelines-bio/openpipeline_qc \
+  -r v0.5.0 -latest \
+  -main-script target/nextflow/ingestion_qc/generate_html/main.nf \
+  --help
+```
+
+### Run command
+
+::: {.callout-note appearance="simple" title="Create a params.yaml"}
+The command below reads this component's arguments from a `params.yaml` file. To create one:
+
+- generate it with the form on [Viash Hub](https://www.viash-hub.com/packages/openpipeline_qc/v0.5.0/components/ingestion_qc/generate_html);
+- see examples of using params files in the [guides](/guides/index.qmd);
+- run several samples in one go with a [`param_list`](/guides/process-many-samples.qmd).
+:::
+
+Run locally with:
+
+```bash
+nextflow run openpipelines-bio/openpipeline_qc \
+  -r v0.5.0 -latest \
+  -profile docker \
+  -main-script target/nextflow/ingestion_qc/generate_html/main.nf \
+  -params-file params.yaml
+```
+
+::: {.callout-note appearance="simple" title="Other backends and platforms"}
+Replace `-profile docker` with `-profile podman` or `-profile singularity` depending on the desired backend. To run on Seqera Platform or through Viash Hub, see the [guides](/guides/index.qmd).
+:::

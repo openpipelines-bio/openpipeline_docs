@@ -27,7 +27,6 @@ Namespace: `files`
 
 :::
 
-
 ## Argument group
 
 ### Arguments
